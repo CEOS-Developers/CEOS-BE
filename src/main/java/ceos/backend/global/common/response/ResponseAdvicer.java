@@ -2,6 +2,7 @@ package ceos.backend.global.common.response;
 
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
@@ -19,7 +21,8 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
  * response 형식을 변환해줍니다.
  */
 
-@Component
+@Slf4j
+@RestControllerAdvice
 public class ResponseAdvicer implements ResponseBodyAdvice<Object> {
     // 스웨거 오류날 경우, 이곳에 스웨거 url 추가 바람
     private final String[] SwaggerPatterns = {
