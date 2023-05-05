@@ -10,27 +10,27 @@ import org.springframework.web.bind.annotation.*;
 public class ExampleController {
 
     @GetMapping(value = "/responseGet")
-    public int reponseGet() {
+    public int responseGet() {
         return 1;
     }
 
     @PostMapping(value = "/responsePost")
-    public int reponsePost() {
+    public int responsePost() {
         return 1;
     }
 
     @PutMapping(value = "/responsePut")
-    public int reponsePut() {
+    public int responsePut() {
         return 1;
     }
 
     @PatchMapping(value = "/responsePatch")
-    public int reponsePatch() {
+    public int responsePatch() {
         return 1;
     }
 
     @DeleteMapping(value = "/responseDelete")
-    public int reponseDelete() {
+    public int responseDelete() {
         return 1;
     }
 }
