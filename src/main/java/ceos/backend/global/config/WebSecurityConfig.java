@@ -56,7 +56,6 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/user/**").permitAll()
-                .requestMatchers("/oauth", "/oauth/kakao", "/oauth/callback/kakao", "/oauth/naver/**").permitAll()
                 .requestMatchers("/source/url").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -79,8 +78,7 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
                 Arrays.asList(
-                        "http://localhost:8080",
-                        "http://aws"
+                        "http://localhost:8080"
                 )
         );
         configuration.setAllowedHeaders(List.of("*"));
