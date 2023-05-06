@@ -1,6 +1,7 @@
 package ceos.backend.domain.example;
 
 
+import ceos.backend.domain.example.exception.ExampleNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,21 @@ public class ExampleController {
 
     @DeleteMapping(value = "/responseDelete")
     public int responseDelete() {
+        return 1;
+    }
+
+    @GetMapping(value = "/exampleError")
+    public int exampleError() {
+        throw ExampleNotFoundException.EXCEPTION;
+    }
+
+    @GetMapping(value = "/globalError")
+    public int globalError() {
+        throw new RuntimeException();
+    }
+
+    @GetMapping(value = "/globalError2")
+    public int globalError2(@RequestParam(name = "a") int a) {
         return 1;
     }
 }
