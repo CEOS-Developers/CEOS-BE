@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,14 +30,17 @@ public class TokenProvider implements InitializingBean {
 
     private final CustomUserDetailsService customUserDetailsService;
     private static final String AUTHORITIES_KEY = "auth";
-    private final String secret;
-    private final long accessTokenValidityInMilliseconds;
-    private final long refreshTokenValidityInMilliseconds;
+    @Value("${jwt.secret}")
+    private String secret;
+    @Value("${jwt.accesstoken-validity-in-seconds}")
+    private long accessTokenValidityInMilliseconds;
+    @Value("${jwt.refreshtoken-validity-in-seconds}")
+    private long refreshTokenValidityInMilliseconds;
     private Key key;
 
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
