@@ -6,18 +6,18 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 
 @Getter
 public class SlackErrorMessage {
-    private Exception e;
+    private Exception exception;
     private ContentCachingRequestWrapper contentCachingRequestWrapper;
 
     @Builder
-    public SlackErrorMessage(Exception e, ContentCachingRequestWrapper contentCachingRequestWrapper) {
-        this.e = e;
+    public SlackErrorMessage(Exception exception, ContentCachingRequestWrapper contentCachingRequestWrapper) {
+        this.exception = exception;
         this.contentCachingRequestWrapper = contentCachingRequestWrapper;
     }
 
     public static SlackErrorMessage from(Exception e, ContentCachingRequestWrapper requestWrapper) {
         return SlackErrorMessage.builder()
-                .e(e)
+                .exception(e)
                 .contentCachingRequestWrapper(requestWrapper)
                 .build();
     }

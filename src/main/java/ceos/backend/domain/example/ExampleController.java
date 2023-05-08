@@ -1,6 +1,7 @@
 package ceos.backend.domain.example;
 
 
+import ceos.backend.domain.example.dto.SlackTest;
 import ceos.backend.domain.example.exception.ExampleNotFoundException;
 import ceos.backend.global.common.dto.SlackErrorMessage;
 import ceos.backend.global.common.event.Event;
@@ -53,7 +54,7 @@ public class ExampleController {
     }
 
     @GetMapping(value = "/slack")
-    public int slack(@RequestParam int a, @RequestBody int b) throws Exception {
+    public int slack(@RequestParam int a, @RequestBody SlackTest slackTest) throws Exception {
         throw new Exception();
     }
 }
