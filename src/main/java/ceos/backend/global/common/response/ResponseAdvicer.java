@@ -23,10 +23,8 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 @Slf4j
 @RestControllerAdvice
 public class ResponseAdvicer implements ResponseBodyAdvice<Object> {
-    // 스웨거 오류날 경우, 이곳에 스웨거 url 추가 바람
     private final String[] SwaggerPatterns = {
-            "swagger",
-            "/v2/api-docs"
+            "/v3/api-docs"
     };
 
     @Override
