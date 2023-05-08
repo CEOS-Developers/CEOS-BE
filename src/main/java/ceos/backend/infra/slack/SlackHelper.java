@@ -1,5 +1,6 @@
 package ceos.backend.infra.slack;
 
+import ceos.backend.global.common.helper.SpringEnvironmentHelper;
 import com.slack.api.Slack;
 import com.slack.api.webhook.Payload;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class SlackHelper {
+    private final SpringEnvironmentHelper springEnvironmentHelper;
     @Value("${slack.webhook.dev_url}")
     String devUrl;
 
@@ -21,7 +23,11 @@ public class SlackHelper {
         final Slack slack = Slack.getInstance();
 
         try {
-            slack.send(devUrl, payload);
+            if (springEnvironmentHelper.isDevProfile()) {
+                slack.send(devUrl, payload);
+            } else {
+                slack.send(prodUrl, payload);
+            }
         } catch (IOException e) {
         throw new RuntimeException(e);
         }

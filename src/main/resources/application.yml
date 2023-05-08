@@ -2,6 +2,7 @@ spring:
   profiles:
     include:
       - secret
+    active: prod
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:userdb;DB_CLOSE_DELAY=-1 # userdb 스키마에 mem인 메모리 데이터 베이스로 동작
