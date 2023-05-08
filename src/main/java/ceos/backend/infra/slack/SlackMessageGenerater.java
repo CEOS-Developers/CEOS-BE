@@ -1,7 +1,6 @@
 package ceos.backend.infra.slack;
 
 import ceos.backend.global.common.dto.SlackErrorMessage;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slack.api.model.block.Blocks;
 import com.slack.api.model.block.DividerBlock;
 import com.slack.api.model.block.HeaderBlock;
@@ -29,8 +28,6 @@ import static com.slack.api.model.block.composition.BlockCompositions.plainText;
 @Slf4j
 public class SlackMessageGenerater {
     private final int MaxLen = 500;
-    private final ObjectMapper objectMapper;
-
 
     public Payload generate(SlackErrorMessage slackErrorMessage) throws IOException {
         final ContentCachingRequestWrapper cachedRequest = slackErrorMessage.getContentCachingRequestWrapper();
