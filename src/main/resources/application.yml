@@ -1,22 +1,9 @@
 spring:
-  profiles:
-    include:
-      - secret
-  datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:userdb;DB_CLOSE_DELAY=-1 # userdb 스키마에 mem인 메모리 데이터 베이스로 동작
-    username: sa
-    password:
-  console:
-    enabled: true                            # h2 콘솔 사용
-    path: /h2                                    # localhost:port/h2 로 접근 가능
-    settings:
-      trace: false                        # Print additional trace information
-      web-allow-others: true    # 브라우저로 접근가능하게 하기
+  -  secret
 
 jwt:
   -  secret
 
 logging.level:
   org.hibernate.SQL: debug
-  org.hibernate.orm.jdbc.bind: trace # ?? ???? ?? ???
+  org.hibernate.orm.jdbc.bind: trace
