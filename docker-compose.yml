@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  backend-dev:
+    image: ceos/ceos-server-dev:dev
+    container_name: backend-dev
+    hostname: backend-dev
+    expose:
+      - "8080"
+
+  nginx:
+    depends_on:
+      - backend-dev
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./config/nginx
+    ports:
+      - "80:80"
