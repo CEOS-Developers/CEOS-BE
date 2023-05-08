@@ -29,7 +29,9 @@ public class SlackSendMessageHandler {
     @EventListener(SlackErrorMessage.class)
     public void Handle(SlackErrorMessage slackErrorMessage) throws IOException {
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
-        layoutBlocks.add(HeaderBlock.builder().text(plainText(Integer.toString(slackErrorMessage.getN()))).build());
+        layoutBlocks.add(HeaderBlock.builder().text(plainText(slackErrorMessage.getContentCachingRequestWrapper().getRemoteAddr().toString())).build());
+        layoutBlocks.add(HeaderBlock.builder().text(plainText(slackErrorMessage.getContentCachingRequestWrapper().getMethod().toString())).build());
+        layoutBlocks.add(HeaderBlock.builder().text(plainText(slackErrorMessage.getContentCachingRequestWrapper().getRequestURL().toString())).build());
         final Payload payload =
                 Payload.builder()
                         .text("에러 알림")

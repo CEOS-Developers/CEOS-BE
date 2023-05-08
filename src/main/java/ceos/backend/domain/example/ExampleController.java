@@ -53,8 +53,7 @@ public class ExampleController {
     }
 
     @GetMapping(value = "/slack")
-    public int slack() {
-        Event.raise(SlackErrorMessage.of(1));
-        return 1;
+    public int slack(@RequestParam int a, @RequestBody int b) throws Exception {
+        throw new Exception();
     }
 }

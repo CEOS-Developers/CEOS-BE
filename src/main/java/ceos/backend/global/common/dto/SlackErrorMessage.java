@@ -2,19 +2,23 @@ package ceos.backend.global.common.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 @Getter
 public class SlackErrorMessage {
-    private int n;
+    private Exception e;
+    private ContentCachingRequestWrapper contentCachingRequestWrapper;
 
     @Builder
-    private SlackErrorMessage(int n) {
-        this.n = n;
+    public SlackErrorMessage(Exception e, ContentCachingRequestWrapper contentCachingRequestWrapper) {
+        this.e = e;
+        this.contentCachingRequestWrapper = contentCachingRequestWrapper;
     }
 
-    public static SlackErrorMessage of(int n) {
+    public static SlackErrorMessage from(Exception e, ContentCachingRequestWrapper requestWrapper) {
         return SlackErrorMessage.builder()
-                .n(n)
+                .e(e)
+                .contentCachingRequestWrapper(requestWrapper)
                 .build();
     }
 }
