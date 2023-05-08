@@ -1,6 +1,8 @@
 package ceos.backend.global.error;
 
 import ceos.backend.global.common.dto.ErrorReason;
+import ceos.backend.global.common.dto.SlackErrorMessage;
+import ceos.backend.global.common.event.Event;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -8,11 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -47,6 +49,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ErrorResponse> handleException(Exception e, HttpServletRequest request) {
         log.error("Exception", e);
+
+        // 슬랙 에러 알림
+        final ContentCachingRequestWrapper cachingRequest = new ContentCachingRequestWrapper(request);
+        final SlackErrorMessage errorMessage = SlackErrorMessage.from(e, cachingRequest);
+        Event.raise(errorMessage);
+
         final GlobalErrorCode globalErrorCode = GlobalErrorCode._INTERNAL_SERVER_ERROR;
         final ErrorReason errorReason = globalErrorCode.getErrorReason();
         final ErrorResponse errorResponse = ErrorResponse.of(errorReason);

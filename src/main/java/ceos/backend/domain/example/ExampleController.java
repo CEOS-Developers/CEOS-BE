@@ -1,7 +1,10 @@
 package ceos.backend.domain.example;
 
 
+import ceos.backend.domain.example.dto.SlackTest;
 import ceos.backend.domain.example.exception.ExampleNotFoundException;
+import ceos.backend.global.common.dto.SlackErrorMessage;
+import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,5 +51,10 @@ public class ExampleController {
     @GetMapping(value = "/globalError2")
     public int globalError2(@RequestParam(name = "a") int a) {
         return 1;
+    }
+
+    @GetMapping(value = "/slack")
+    public int slack(@RequestParam int a, @RequestBody SlackTest slackTest) throws Exception {
+        throw new Exception();
     }
 }
