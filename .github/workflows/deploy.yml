@@ -37,7 +37,7 @@ jobs:
       - name: Make application-secret.yml
         run: |
           touch ./src/main/resources/application-secret.yml
-          echo "$APPLICATION_SECRET" > ./src/main/resources/application-secret.yml
+          echo "${{ secrets.APPLICATION_SECRET }}" > ./src/main/resources/application-secret.yml
         env:
           PROPERTIES_DEV: ${{ secrets.APPLICATION_SECRET }}
 
