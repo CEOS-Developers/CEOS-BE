@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - feat/deploy
+      - origin/feat/deploy
 
 permissions:
   contents: read
