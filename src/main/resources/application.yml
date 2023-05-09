@@ -26,6 +26,7 @@ springdoc:
   default-consumes-media-type: application/json # media-type 디폴트값 설정
   default-produces-media-type: application/json
   swagger-ui:
+    operations-sorter: alpha # 오름차순
     path: /swagger-ui.html
 
 logging.level:
