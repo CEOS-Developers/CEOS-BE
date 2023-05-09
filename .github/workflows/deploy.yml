@@ -1,0 +1,102 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - dev
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 기본 체크아웃
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # JDK version 설정
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 그래들 캐싱
+      - name: Gradle Caching
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Make application-secret.yml
+        run: |
+          touch ./src/main/resources/application-secret.yml
+          echo "${{ secrets.APPLICATION_SECRET }}" > ./src/main/resources/application-secret.yml
+        env:
+          PROPERTIES_DEV: ${{ secrets.APPLICATION_SECRET }}
+
+      # Gradle build
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: Docker meta
+        id: docker_meta
+        uses: crazy-max/ghaction-docker-meta@v1
+        with:
+          images: ceos/ceos-server-dev
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Docker build & push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/ceos-backend-dev
+
+      - name: create remote directory
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          script: mkdir -p ~/srv/ubuntu/ceos_web_dev
+
+      - name: copy source via ssh key
+        uses: burnett01/rsync-deployments@4.1
+        with:
+          switches: -avzr --delete
+          remote_path: ~/srv/ubuntu/
+          remote_host: ${{ secrets.EC2_HOST }}
+          remote_user: ubuntu
+          remote_key: ${{ secrets.EC2_KEY }}
+
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            sh ~/srv/ubuntu/config/scripts/deploy.sh
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker rm $(sudo docker ps -a -q)
+            sudo docker rmi $(sudo docker images -q)
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml pull
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml up --build -d
+

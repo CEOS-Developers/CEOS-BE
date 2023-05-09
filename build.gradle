@@ -31,12 +31,10 @@ dependencies {
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
 	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	// slack
 	implementation("com.slack.api:slack-api-client:1.28.0")
-
-	// h2 DB
-	// 안쓰면 지워주세요!
-	runtimeOnly 'com.h2database:h2'
 
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.0'
