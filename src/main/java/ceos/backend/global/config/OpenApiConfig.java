@@ -3,6 +3,8 @@ package ceos.backend.global.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -18,9 +20,21 @@ public class OpenApiConfig {
                 .version(springdocVersion)
                 .description("CEOS WEB API 입니다.");
 
+        // JWT 설정
+        String jwtSchemeName = "jwtAuth";
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwtSchemeName);
+        Components components = new Components()
+                .addSecuritySchemes(jwtSchemeName, new SecurityScheme()
+                        .name(jwtSchemeName)
+                        .type(SecurityScheme.Type.HTTP) // HTTP 방식
+                        .scheme("bearer")
+                        .bearerFormat("JWT"));
+
         return new OpenAPI()
-                .components(new Components())
-                .info(info);
+                .info(info)
+                .addSecurityItem(securityRequirement)
+                .components(components);
+
     }
 
     // 공개용
@@ -30,19 +44,7 @@ public class OpenApiConfig {
         return GroupedOpenApi.builder()
                 .group("ceos")
                 .packagesToScan("ceos.backend")
-                .pathsToMatch("/api/**")
-                .build();
-    }
-
-    // 확인용
-    // TODO: 확인용 group 삭제
-    @Bean
-    public GroupedOpenApi test()
-    {
-        return GroupedOpenApi.builder()
-                .group("test")
-                .packagesToScan("ceos.backend")
-                .pathsToMatch("/example/**")
+                .pathsToMatch("/**")
                 .build();
     }
 }
