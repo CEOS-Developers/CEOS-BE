@@ -37,6 +37,11 @@ dependencies {
 	// h2 DB
 	// 안쓰면 지워주세요!
 	runtimeOnly 'com.h2database:h2'
+
+	// swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.0.0'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {
