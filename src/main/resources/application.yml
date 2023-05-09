@@ -5,6 +5,13 @@ spring:
     include:
       - secret
 
+springdoc:
+  version: 0.0.1
+  default-consumes-media-type: application/json # media-type 디폴트값 설정
+  default-produces-media-type: application/json
+  swagger-ui:
+    path: /swagger-ui.html
+
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.orm.jdbc.bind: trace
