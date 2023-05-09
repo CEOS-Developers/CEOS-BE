@@ -34,6 +34,9 @@ public class WebSecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
+    private final String[] SwaggerPatterns = {
+            "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs"
+    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -57,7 +60,7 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .requestMatchers("/**").permitAll()
+                .requestMatchers(SwaggerPatterns).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable();
