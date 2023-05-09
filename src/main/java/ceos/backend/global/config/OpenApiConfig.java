@@ -34,7 +34,6 @@ public class OpenApiConfig {
                 .info(info)
                 .addSecurityItem(securityRequirement)
                 .components(components);
-
     }
 
     // 공개용
