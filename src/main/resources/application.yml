@@ -1,11 +1,9 @@
 spring:
-  -  secret
-
-jwt:
-  -  secret
-
-slack:
-  -  secret
+  profiles:
+    active:
+      - dev
+    include:
+      - secret
 
 logging.level:
   org.hibernate.SQL: debug
