@@ -34,12 +34,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Make application-dev.yml
+      - name: Make application-secret.yml
         run: |
-          touch ./src/main/resources/application-dev.yml
-          echo "$APPLICATION_DEV" > ./src/main/resources/application-dev.yml
+          touch ./src/main/resources/application-secret.yml
+          echo "$APPLICATION_SECRET" > ./src/main/resources/application-secret.yml
         env:
-          PROPERTIES_DEV: ${{ secrets.APPLICATION_DEV }}
+          PROPERTIES_DEV: ${{ secrets.APPLICATION_SECRET }}
 
       # Gradle build
       - name: Build with Gradle
