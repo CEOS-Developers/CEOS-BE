@@ -4,6 +4,14 @@ spring:
       - dev
     include:
       - secret
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+#        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000
 
 springdoc:
   version: 0.0.1
