@@ -34,6 +34,9 @@ dependencies {
 
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	// slack
+	implementation("com.slack.api:slack-api-client:1.28.0")
+
 }
 
 tasks.named('test') {
