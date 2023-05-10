@@ -38,13 +38,14 @@ public class Project extends BaseEntity {
 
     private String githubUrl;
 
-    // Project : ProjectImage = 1:1 (단방향)
-    @OneToOne
+    // Project : ProjectImage = 1:N (단방향)
+    @OneToMany
     @JoinColumn(name = "project_image_id")
-    private ProjectImage projectImage;
+    private List<ProjectImage> projectImages = new ArrayList<>();
 
     // Project : Participant = 1:N (단방향)
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @OneToMany
+    @JoinColumn(name = "participant_id")
     private List<Participant> participants = new ArrayList<>();
 
     // 연관관계 메서드
@@ -61,7 +62,7 @@ public class Project extends BaseEntity {
                     String instagramUrl,
                     String behanceUrl,
                     String githubUrl,
-                    ProjectImage projectImage,
+                    List<ProjectImage> projectImages,
                     List<Participant> participants) {
         this.name = name;
         this.description = description;
@@ -70,7 +71,7 @@ public class Project extends BaseEntity {
         this.instagramUrl = instagramUrl;
         this.behanceUrl = behanceUrl;
         this.githubUrl = githubUrl;
-        this.projectImage = projectImage;
+        this.projectImages = projectImages;
         this.participants = participants;
     }
 
