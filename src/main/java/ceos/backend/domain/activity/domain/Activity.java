@@ -7,9 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Activity extends BaseEntity {
 
@@ -32,4 +30,20 @@ public class Activity extends BaseEntity {
     @NotNull
     @Column(unique = true)
     private int number;
+
+
+    // 생성자
+    @Builder
+    private Activity(String name,
+                  String content,
+                  String imageUrl,
+                  int number) {
+
+        this.name = name;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.number = number;
+    }
+
+    // 정적 팩토리 메서드
 }

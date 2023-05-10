@@ -1,6 +1,7 @@
 package ceos.backend.domain.application.domain;
 
 import ceos.backend.global.common.entity.BaseEntity;
+import ceos.backend.global.common.entity.Part;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,54 +9,29 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @DynamicInsert
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Application extends BaseEntity{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_id")
     private Long id;
 
-    @NotNull
-    @Size(max = 30)
-    private String name;
-
-    @NotNull
-    private char gender; // enum
-
-    @NotNull
-    private LocalDate birth;
-
-    @NotNull
-    @Size(max = 255)
-    @Column(unique = true)
-    private String email;
-
-    @NotNull
-    @Size(max = 11)
-    @Column(unique = true)
-    private String phoneNumber;
-
-    @NotNull
-    @Size(max = 10)
-    private String university; // enum
-
-    @NotNull
-    @Size(max = 20)
-    private String major;
+    @Embedded
+    private ApplicantInfo applicantInfo;
 
     @NotNull
     private int generation;
 
     @NotNull
     @Size(max = 10)
-    private String part; // enum
+    @Enumerated(EnumType.STRING)
+    private Part part;
 
     @NotNull
     private int semestersLeftNumber;
@@ -63,16 +39,10 @@ public class Application extends BaseEntity{
     @Size(max = 100)
     private String otherActivities;
 
-    @Size(max = 100)
-    @Column(unique = true)
-    private String uuid;
-
     @NotNull
-    @ColumnDefault("false")
     private boolean otCheck;
 
     @NotNull
-    @ColumnDefault("false")
     private boolean demodayCheck;
 
     private LocalDateTime interviewDatetime;
@@ -94,6 +64,34 @@ public class Application extends BaseEntity{
     private boolean finalCheck;
 
 
-// TODO : 생성자 UUID 만들기
-// @Builder
+    // 생성자
+    @Builder
+    private Application(ApplicantInfo applicantInfo,
+                        int generation,
+                        Part part,
+                        int semestersLeftNumber,
+                        String otherActivities,
+                        boolean otCheck,
+                        boolean demodayCheck,
+                        LocalDateTime interviewDatetime,
+                        boolean interviewCheck,
+                        boolean documentPass,
+                        boolean finalPass,
+                        boolean finalCheck) {
+
+        this.applicantInfo = applicantInfo;
+        this.generation = generation;
+        this.part = part;
+        this.semestersLeftNumber = semestersLeftNumber;
+        this.otherActivities = otherActivities;
+        this.otCheck = otCheck;
+        this.demodayCheck = demodayCheck;
+        this.interviewDatetime = interviewDatetime;
+        this.interviewCheck = interviewCheck;
+        this.documentPass = documentPass;
+        this.finalPass = finalPass;
+        this.finalCheck = finalCheck;
+    }
+
+    // 정적 팩토리 메서드
 }

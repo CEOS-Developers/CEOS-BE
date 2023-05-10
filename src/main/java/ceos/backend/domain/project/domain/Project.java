@@ -4,18 +4,13 @@ import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Project extends BaseEntity {
 
@@ -43,16 +38,41 @@ public class Project extends BaseEntity {
 
     private String githubUrl;
 
-    @OneToOne(mappedBy = "project")
+    // Project : ProjectImage = 1:1 (단방향)
+    @OneToOne
+    @JoinColumn(name = "project_image_id")
     private ProjectImage projectImage;
 
-    // Project : Participant = 1:N (양방향)
+    // Project : Participant = 1:N (단방향)
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Participant> participants = new ArrayList<>();
 
     // 연관관계 메서드
     public void addParticipant(Participant participant) {
         participants.add(participant);
-        participant.setProject(this);
     }
+
+    // 생성자
+    @Builder
+    private Project(String name,
+                    String description,
+                    int generation,
+                    String serviceUrl,
+                    String instagramUrl,
+                    String behanceUrl,
+                    String githubUrl,
+                    ProjectImage projectImage,
+                    List<Participant> participants) {
+        this.name = name;
+        this.description = description;
+        this.generation = generation;
+        this.serviceUrl = serviceUrl;
+        this.instagramUrl = instagramUrl;
+        this.behanceUrl = behanceUrl;
+        this.githubUrl = githubUrl;
+        this.projectImage = projectImage;
+        this.participants = participants;
+    }
+
+    // 정적 팩토리 메서드
 }

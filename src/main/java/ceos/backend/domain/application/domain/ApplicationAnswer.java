@@ -3,14 +3,11 @@ package ceos.backend.domain.application.domain;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 public class ApplicationAnswer extends BaseEntity {
 
@@ -33,5 +30,16 @@ public class ApplicationAnswer extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String answer;
 
+    // 생성자
+    @Builder
+    private ApplicationAnswer(ApplicationQuestion applicationQuestion,
+                              Application application,
+                              String answer)
+    {
+        this.applicationQuestion = applicationQuestion;
+        this.application = application;
+        this.answer = answer;
+    }
 
+    // 정적 팩토리 메서드
 }

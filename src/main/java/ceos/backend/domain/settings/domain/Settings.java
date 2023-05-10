@@ -3,17 +3,12 @@ package ceos.backend.domain.settings.domain;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Settings extends BaseEntity {
 
@@ -62,11 +57,51 @@ public class Settings extends BaseEntity {
     private LocalDate resultDateFinal;
 
     @NotNull
-    private LocalDate openChatUrl;
+    private String openChatUrl;
 
     @NotNull
     private LocalDate otDate;
 
     @NotNull
     private LocalDate demodayDate;
+
+    // private LocalDate hackatonDate;
+
+    // 생성자
+    @Builder
+    private Settings(int generation,
+                     String prodImg,
+                     String designImg,
+                     String devImg,
+                     String prodStudyUrl,
+                     String designStudyUrl,
+                     String devStudyUrl,
+                     LocalDate startDateDoc,
+                     LocalDate endDateDoc,
+                     LocalDate resultDateDoc,
+                     LocalDate startDateInterview,
+                     LocalDate endDateInterview,
+                     LocalDate resultDateFinal,
+                     String openChatUrl,
+                     LocalDate otDate,
+                     LocalDate demodayDate) {
+        this.generation = generation;
+        this.prodImg = prodImg;
+        this.designImg = designImg;
+        this.devImg = devImg;
+        this.prodStudyUrl = prodStudyUrl;
+        this.designStudyUrl = designStudyUrl;
+        this.devStudyUrl = devStudyUrl;
+        this.startDateDoc = startDateDoc;
+        this.endDateDoc = endDateDoc;
+        this.resultDateDoc = resultDateDoc;
+        this.startDateInterview = startDateInterview;
+        this.endDateInterview = endDateInterview;
+        this.resultDateFinal = resultDateFinal;
+        this.openChatUrl = openChatUrl;
+        this.otDate = otDate;
+        this.demodayDate = demodayDate;
+    }
+
+    // 정적 팩토리 메서드
 }

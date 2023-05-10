@@ -1,16 +1,14 @@
 package ceos.backend.domain.project.domain;
 
 import ceos.backend.global.common.entity.BaseEntity;
+import ceos.backend.global.common.entity.Part;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Participant extends BaseEntity {
 
@@ -19,16 +17,22 @@ public class Participant extends BaseEntity {
     @Column(name = "participant_id")
     private Long id;
 
-    // Participant : Project = N:1 (양방향)
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
-    private Project project;
-
     @NotNull
     @Size(max = 20)
-    private String part; // enum (global)
+    @Enumerated(EnumType.STRING)
+    private Part part;
 
     @NotNull
     @Size(max = 30)
     private String name;
+
+
+    // 생성자
+    @Builder
+    private Participant(Part part, String name) {
+        this.part = part;
+        this.name = name;
+    }
+
+    // 정적 팩토리 메서드
 }

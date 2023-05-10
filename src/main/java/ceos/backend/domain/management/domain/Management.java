@@ -1,18 +1,15 @@
 package ceos.backend.domain.management.domain;
 
 import ceos.backend.global.common.entity.BaseEntity;
+import ceos.backend.global.common.entity.University;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Management extends BaseEntity {
 
@@ -27,7 +24,8 @@ public class Management extends BaseEntity {
 
     @NotNull
     @Size(max = 10)
-    private String role; // enum
+    @Enumerated(EnumType.STRING)
+    private ManagementRole role;
 
     @NotNull
     @Size(max = 20)
@@ -40,7 +38,8 @@ public class Management extends BaseEntity {
 
     @NotNull
     @Size(max = 10)
-    private String university; // enum
+    @Enumerated(EnumType.STRING)
+    private University university;
 
     @NotNull
     @Size(max = 20)
@@ -51,4 +50,29 @@ public class Management extends BaseEntity {
     private String company;
 
     private String imageUrl;
+
+    // 생성자
+    @Builder
+    private Management(String name,
+                       ManagementRole role,
+                       String part,
+                       int generation,
+                       int managementGeneration,
+                       University university,
+                       String major,
+                       String company,
+                       String imageUrl)
+    {
+        this.name = name;
+        this.role = role;
+        this.part = part;
+        this.generation = generation;
+        this.managementGeneration = managementGeneration;
+        this.university = university;
+        this.major = major;
+        this.company = company;
+        this.imageUrl = imageUrl;
+    }
+
+    // 정적 팩토리 메서드
 }

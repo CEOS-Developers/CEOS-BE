@@ -4,15 +4,10 @@ import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Sponsor extends BaseEntity {
 
@@ -27,4 +22,15 @@ public class Sponsor extends BaseEntity {
 
     @NotNull
     private String imageUrl;
+
+    // 생성자
+    @Builder
+    private Sponsor(String name,
+                    String imageUrl)
+    {
+        this.name = name;
+        this.imageUrl = imageUrl;
+    }
+
+    // 정적 팩토리 메서드
 }

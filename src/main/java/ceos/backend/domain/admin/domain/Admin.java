@@ -1,18 +1,14 @@
 package ceos.backend.domain.admin.domain;
 
 import ceos.backend.global.common.entity.BaseEntity;
+import ceos.backend.global.common.entity.Part;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Admin extends BaseEntity {
     @Id
@@ -38,13 +34,36 @@ public class Admin extends BaseEntity {
 
     @NotNull
     @Size(max = 20)
-    private String part; // enum
+    @Enumerated(EnumType.STRING)
+    private Part part;
 
     @NotNull
     @Size(max = 10)
-    private String role; // enum
+    @Enumerated(EnumType.STRING)
+    private AdminRole role;
 
     @NotNull
     @Size(max = 255)
     private String email;
+
+    // 생성자
+    @Builder
+    private Admin(String username,
+                  String password,
+                  int generation,
+                  String name,
+                  Part part,
+                  AdminRole role,
+                  String email) {
+
+        this.username = username;
+        this.password = password;
+        this.generation = generation;
+        this.name = name;
+        this.part = part;
+        this.role = role;
+        this.email = email;
+    }
+
+    // 정적 팩토리 메서드
 }

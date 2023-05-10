@@ -4,15 +4,10 @@ import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ProjectImage extends BaseEntity {
 
@@ -21,15 +16,21 @@ public class ProjectImage extends BaseEntity {
     @Column(name = "project_image_id")
     private Long id;
 
-    // Project : ProjectImage = 1:1 (양방향)
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_id")
-    private Project project;
-
     @NotNull
     @Size(max = 20)
-    private String category; // enum
+    @Enumerated(EnumType.STRING)
+    private ProjectImageCategory category;
 
     @NotNull
     private String imageUrl;
+
+    // 생성자
+    @Builder
+    private ProjectImage(ProjectImageCategory category,
+                    String imageUrl) {
+        this.category = category;
+        this.imageUrl = imageUrl;
+    }
+
+    // 정적 팩토리 메서드
 }

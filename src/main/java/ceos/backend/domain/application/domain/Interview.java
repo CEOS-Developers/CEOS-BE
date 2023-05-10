@@ -3,15 +3,12 @@ package ceos.backend.domain.application.domain;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Interview extends BaseEntity {
 
@@ -22,4 +19,13 @@ public class Interview extends BaseEntity {
 
     @NotNull
     private LocalDateTime date;
+
+    // 생성자
+    @Builder
+    private Interview(LocalDateTime date)
+    {
+        this.date = date;
+    }
+
+    // 정적 팩토리 메서드
 }

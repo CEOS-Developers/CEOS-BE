@@ -4,13 +4,10 @@ import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ApplicationQuestion extends BaseEntity {
 
@@ -29,5 +26,19 @@ public class ApplicationQuestion extends BaseEntity {
 
     @NotNull
     @Size(max = 20)
-    private String category; // enum
+    @Enumerated(EnumType.STRING)
+    private QuestionCategory category;
+
+    // 생성자
+    @Builder
+    private ApplicationQuestion(int number,
+                                String question,
+                                QuestionCategory category)
+    {
+        this.number = number;
+        this.question = question;
+        this.category = category;
+    }
+
+    // 정적 팩토리 메서드
 }

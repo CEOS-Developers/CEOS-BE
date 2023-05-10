@@ -1,19 +1,16 @@
 package ceos.backend.domain.faq.domain;
 
+import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Faq {
+public class Faq extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +19,8 @@ public class Faq {
 
     @NotNull
     @Size(max = 20)
-    private String category; // enum
+    @Enumerated(EnumType.STRING)
+    private FaqCategory category;
 
     @NotNull
     @Size(max = 255)
@@ -31,4 +29,17 @@ public class Faq {
     @NotNull
     @Size(max = 255)
     private String answer;
+
+    // 생성자
+    @Builder
+    private Faq(FaqCategory category,
+                   String question,
+                   String answer)
+    {
+        this.category = category;
+        this.question = question;
+        this.answer = answer;
+    }
+
+    // 정적 팩토리 메서드
 }
