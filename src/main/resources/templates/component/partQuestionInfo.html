@@ -1,0 +1,72 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+</head>
+<div th:fragment="partQuestionInfo(partQuestionInfo)">
+    <div style="
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 10px;
+        ">
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 170%;
+                color: #3E4CF7;">
+                    파트별 질문 -
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 170%;
+                color: #3E4CF7;"
+                  th:text="${partQuestionInfo.part}">
+                    파트
+            </span>
+        </div>
+
+        <table>
+            <tr th:each="q, index : ${partQuestionInfo.questions}">
+                <td>
+                    <div style="height: 16px; width: 680px"></div>
+                    <div style="width: 680px">
+                        <span style="
+                            text-decoration: none;
+                            outline: 0px;
+                            font-style: normal;
+                            font-weight: 600;
+                            font-size: 16px;
+                            line-height: 150%;
+                            color: #232527;"
+                              th:text="${q}">
+                                질문
+                        </span>
+                    </div>
+                    <div style="height: 10px; width: 680px"></div>
+                    <div style="width: 680px">
+                        <span style="
+                            text-decoration: none;
+                            outline: 0px;
+                            font-style: normal;
+                            font-weight: 500;
+                            font-size: 16px;
+                            line-height: 170%;
+                            color: #232527;"
+                              th:text="${partQuestionInfo.answers[__${index.index}__]}">
+                                답
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</html>

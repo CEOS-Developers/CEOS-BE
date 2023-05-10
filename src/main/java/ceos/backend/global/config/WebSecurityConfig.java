@@ -61,6 +61,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers(SwaggerPatterns).permitAll()
+                .requestMatchers("**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable();

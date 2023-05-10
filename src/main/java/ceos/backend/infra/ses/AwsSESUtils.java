@@ -5,13 +5,12 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import software.amazon.awssdk.services.ses.SesAsyncClient;
-import software.amazon.awssdk.services.ses.SesClient;
 import software.amazon.awssdk.services.ses.model.*;
 
 @Component
 @RequiredArgsConstructor
 public class AwsSESUtils {
-    private final SesClient sesClient;
+    private final SesAsyncClient sesAsyncClient;
     private final SpringTemplateEngine templateEngine;
 
     public void singleEmailRequest(String to, String subject, String template, Context context) {
@@ -28,7 +27,7 @@ public class AwsSESUtils {
                 .source("ceos@ceos-sinchon.com")
                 .build();
 
-        sesClient.sendEmail(sendEmailRequestBuilder.build());
+        sesAsyncClient.sendEmail(sendEmailRequestBuilder.build());
     }
 
     private Message newMessage(String subject, String html) {

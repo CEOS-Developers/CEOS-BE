@@ -1,0 +1,172 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+</head>
+<div th:fragment="greetInfo(greetInfo)">
+    <div style="
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 10px;
+        ">
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+                    noto sans korean, noto sans korean regular, noto sans cjk kr,
+                    noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+                    helvetica, MS Gothic, sans-serif;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 150%;
+                color: #3E4CF7;">
+                CEOS
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+                    noto sans korean, noto sans korean regular, noto sans cjk kr,
+                    noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+                    helvetica, MS Gothic, sans-serif;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 150%;
+                color: #3E4CF7;"
+                    th:text="${greetInfo.generation}"
+                >
+                18</span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+                    noto sans korean, noto sans korean regular, noto sans cjk kr,
+                    noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+                    helvetica, MS Gothic, sans-serif;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 150%;
+                color: #3E4CF7;">
+                기 지원서 제출 완료
+            </span>
+        </div>
+
+        <div style="height: 16px; width: 680px"></div>
+
+        <div style="width: 680px">
+        <span style="
+        text-decoration: none;
+        outline: 0px;
+        font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+            noto sans korean, noto sans korean regular, noto sans cjk kr,
+            noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+            helvetica, MS Gothic, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 170%;
+        color: #232527;">
+            안녕하세요,
+        </span>
+        <span style="
+        text-decoration: none;
+        outline: 0px;
+        font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+            noto sans korean, noto sans korean regular, noto sans cjk kr,
+            noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+            helvetica, MS Gothic, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 170%;
+        color: #232527;"
+              th:text="${greetInfo.name}">
+            000
+        </span>
+        <span style="
+        text-decoration: none;
+        outline: 0px;
+        font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+            noto sans korean, noto sans korean regular, noto sans cjk kr,
+            noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+            helvetica, MS Gothic, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 170%;
+        color: #232527;">
+            님. 세오스
+        </span>
+        <span style="
+        text-decoration: none;
+        outline: 0px;
+        font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+            noto sans korean, noto sans korean regular, noto sans cjk kr,
+            noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+            helvetica, MS Gothic, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 170%;
+        color: #232527;"
+          th:text="${greetInfo.generation}">
+            18
+        </span>
+            <span style="
+        text-decoration: none;
+        outline: 0px;
+        font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+            noto sans korean, noto sans korean regular, noto sans cjk kr,
+            noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+            helvetica, MS Gothic, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 170%;
+        color: #232527;">
+            기 지원서가 정상적으로 접수되었습니다.
+            <br>
+            작성하신 메일 주소로
+        </span>
+        <span style="
+        text-decoration: none;
+        outline: 0px;
+        font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+            noto sans korean, noto sans korean regular, noto sans cjk kr,
+            noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+            helvetica, MS Gothic, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 170%;
+        color: #232527;"
+                  th:text="${greetInfo.name}">
+            000
+        </span>
+
+            <span style="
+        text-decoration: none;
+        outline: 0px;
+        font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+            noto sans korean, noto sans korean regular, noto sans cjk kr,
+            noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+            helvetica, MS Gothic, sans-serif;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 170%;
+        color: #232527;">
+            님의 고유번호와 지원서 작성 내용을 전달드립니다.
+            <br>
+            하단의 고유번호를 통해 홈페이지에서 합격 결과 확인이 가능합니다.
+            <br>
+            세오스에 관심을 갖고 지원해주셔서 감사드립니다.
+        </span>
+        </div>
+    </div>
+</div>
+</html>

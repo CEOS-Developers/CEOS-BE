@@ -1,0 +1,141 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+</head>
+<div th:fragment="personalInfo(personalInfo)">
+    <div style="
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 10px;
+        ">
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 150%;
+                color: #232527;">
+                    이름 :
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 170%;
+                color: #232527;"
+                  th:text="${personalInfo.name}">
+                    000
+            </span>
+        </div>
+
+        <div style="height: 12px; width: 680px"></div>
+
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 150%;
+                color: #232527;">
+                    성별 :
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 170%;
+                color: #232527;"
+                  th:text="${personalInfo.gender}">
+                    성별
+            </span>
+        </div>
+
+        <div style="height: 12px; width: 680px"></div>
+
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 150%;
+                color: #232527;">
+                    생년월일 :
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 170%;
+                color: #232527;"
+                  th:text="${personalInfo.birth}">
+                    생년월일
+            </span>
+        </div>
+
+        <div style="height: 12px; width: 680px"></div>
+
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 150%;
+                color: #232527;">
+                    이메일 :
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 170%;
+                color: #232527;"
+                  th:text="${personalInfo.email}">
+                    이메일
+            </span>
+        </div>
+
+        <div style="height: 12px; width: 680px"></div>
+
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 150%;
+                color: #232527;">
+                    전화번호 :
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 170%;
+                color: #232527;"
+                  th:text="${personalInfo.phone}">
+                    전화번호
+            </span>
+        </div>
+    </div>
+</div>
+</html>

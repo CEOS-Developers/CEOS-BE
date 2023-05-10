@@ -1,0 +1,89 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+</head>
+<div th:fragment="ceosQuestionInfo(ceosQuestionInfo)">
+    <div style="
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 10px;
+        ">
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 150%;
+                color: #232527;">
+                    CEOS OT 날짜는? :
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 170%;
+                color: #232527;"
+                  th:text="${ceosQuestionInfo.ot}">
+                    오티 날짜
+            </span>
+        </div>
+
+        <div style="height: 12px; width: 680px"></div>
+
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 150%;
+                color: #232527;">
+                    CEOS 데모데이 날짜는? :
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 170%;
+                color: #232527;"
+                  th:text="${ceosQuestionInfo.demo}">
+                    데모
+            </span>
+        </div>
+
+        <div style="height: 12px; width: 680px"></div>
+
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 16px;
+                line-height: 150%;
+                color: #232527;">
+                    이번 학기 세오스 활동 외 어떤 활동을 하는지 간략히 적어주세요 :
+            </span>
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 16px;
+                line-height: 170%;
+                color: #232527;"
+                  th:text="${ceosQuestionInfo.otherActivities}">
+                    백수
+            </span>
+        </div>
+    </div>
+</div>
+</html>
