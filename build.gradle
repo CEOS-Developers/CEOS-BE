@@ -40,6 +40,10 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.0'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.0.0'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// ses
+	implementation group: 'software.amazon.awssdk', name: 'ses', version: "2.19.29"
+	implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
 }
 
 tasks.named('test') {
