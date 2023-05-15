@@ -14,7 +14,6 @@ public class UuidInfo {
         this.uuid = uuid;
     }
 
-    // TODO: 엔티티보고 재정의하기
     public static UuidInfo of(String name, String uuid) {
         return UuidInfo.builder()
                 .uuid(uuid)

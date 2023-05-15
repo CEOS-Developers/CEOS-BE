@@ -5,23 +5,21 @@ import lombok.Getter;
 
 @Getter
 public class CeosQuestionInfo {
-    private String ot;
-    private String demo;
+    private String otDate;
+    private String demodayDate;
     private String otherActivities;
 
     @Builder
-    public CeosQuestionInfo(String ot, String demo, String otherActivities) {
-        this.ot = ot;
-        this.demo = demo;
+    private CeosQuestionInfo(String otDate, String demodayDate, String otherActivities) {
+        this.otDate = otDate;
+        this.demodayDate = demodayDate;
         this.otherActivities = otherActivities;
     }
 
-
-    // TODO: 엔티티보고 재정의하기
-    public static CeosQuestionInfo of(String ot, String demo, String otherActivities) {
+    public static CeosQuestionInfo of(String otDate, String demodayDate, String otherActivities) {
         return CeosQuestionInfo.builder()
-                .ot(ot)
-                .demo(demo)
+                .otDate(otDate)
+                .demodayDate(demodayDate)
                 .otherActivities(otherActivities)
                 .build();
     }

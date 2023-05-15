@@ -9,25 +9,24 @@ public class PersonalInfo {
     private String gender;
     private String birth;
     private String email;
-    private String phone;
+    private String phoneNumber;
 
     @Builder
-    public PersonalInfo(String name, String gender, String birth, String email, String phone) {
+    private PersonalInfo(String name, String gender, String birth, String email, String phoneNumber) {
         this.name = name;
         this.gender = gender;
         this.birth = birth;
         this.email = email;
-        this.phone = phone;
+        this.phoneNumber = phoneNumber;
     }
 
-    // TODO: 엔티티보고 재정의하기
-    public static PersonalInfo of(String name, String gender, String birth, String email, String phone) {
+    public static PersonalInfo of(String name, String gender, String birth, String email, String phoneNumber) {
         return PersonalInfo.builder()
                 .name(name)
                 .gender(gender)
                 .birth(birth)
                 .email(email)
-                .phone(phone)
+                .phoneNumber(phoneNumber)
                 .build();
     }
 }

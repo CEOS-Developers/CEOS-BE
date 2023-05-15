@@ -5,23 +5,22 @@ import lombok.Getter;
 
 @Getter
 public class SchoolInfo {
-    private String schoolName;
+    private String university;
     private String major;
-    private String remainSemester;
+    private String semestersLeftNumber;
 
     @Builder
-    public SchoolInfo(String schoolName, String major, String remainSemester) {
-        this.schoolName = schoolName;
+    private SchoolInfo(String university, String major, String semestersLeftNumber) {
+        this.university = university;
         this.major = major;
-        this.remainSemester = remainSemester;
+        this.semestersLeftNumber = semestersLeftNumber;
     }
 
-    // TODO: 엔티티보고 재정의하기
-    public static SchoolInfo of(String schoolName, String major, String remainSemester) {
+    public static SchoolInfo of(String university, String major, String semestersLeftNumber) {
         return SchoolInfo.builder()
-                .schoolName(schoolName)
+                .university(university)
                 .major(major)
-                .remainSemester(remainSemester)
+                .semestersLeftNumber(semestersLeftNumber)
                 .build();
     }
 }
