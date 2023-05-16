@@ -1,11 +1,11 @@
 package ceos.backend.domain.application.domain;
 
 import ceos.backend.global.common.entity.BaseEntity;
-import ceos.backend.global.common.entity.Part;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -25,25 +25,8 @@ public class Application extends BaseEntity{
     @Embedded
     private ApplicantInfo applicantInfo;
 
-    @NotNull
-    private int generation;
-
-    @NotNull
-    @Size(max = 10)
-    @Enumerated(EnumType.STRING)
-    private Part part;
-
-    @NotNull
-    private int semestersLeftNumber;
-
-    @Size(max = 100)
-    private String otherActivities;
-
-    @NotNull
-    private boolean otCheck;
-
-    @NotNull
-    private boolean demodayCheck;
+    @Embedded
+    private ApplicationDetail applicationDetail;
 
     private LocalDateTime interviewDatetime;
 
@@ -57,41 +40,16 @@ public class Application extends BaseEntity{
 
     @NotNull
     @ColumnDefault("false")
-    private boolean finalPass;
+    private boolean finalCheck;
 
     @NotNull
     @ColumnDefault("false")
-    private boolean finalCheck;
+    private boolean finalPass;
+
 
 
     // 생성자
-    @Builder
-    private Application(ApplicantInfo applicantInfo,
-                        int generation,
-                        Part part,
-                        int semestersLeftNumber,
-                        String otherActivities,
-                        boolean otCheck,
-                        boolean demodayCheck,
-                        LocalDateTime interviewDatetime,
-                        boolean interviewCheck,
-                        boolean documentPass,
-                        boolean finalPass,
-                        boolean finalCheck) {
-
-        this.applicantInfo = applicantInfo;
-        this.generation = generation;
-        this.part = part;
-        this.semestersLeftNumber = semestersLeftNumber;
-        this.otherActivities = otherActivities;
-        this.otCheck = otCheck;
-        this.demodayCheck = demodayCheck;
-        this.interviewDatetime = interviewDatetime;
-        this.interviewCheck = interviewCheck;
-        this.documentPass = documentPass;
-        this.finalPass = finalPass;
-        this.finalCheck = finalCheck;
-    }
+//    @Builder
 
     // 정적 팩토리 메서드
 }
