@@ -9,6 +9,7 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @DynamicInsert
@@ -40,10 +41,10 @@ public class Application extends BaseEntity{
     private String otherActivities;
 
     @NotNull
-    private boolean otCheck;
+    private LocalDate otDate;
 
     @NotNull
-    private boolean demodayCheck;
+    private LocalDate demodayDate;
 
     private LocalDateTime interviewDatetime;
 
@@ -71,8 +72,8 @@ public class Application extends BaseEntity{
                         Part part,
                         int semestersLeftNumber,
                         String otherActivities,
-                        boolean otCheck,
-                        boolean demodayCheck,
+                        LocalDate otDate,
+                        LocalDate demodayDate,
                         LocalDateTime interviewDatetime,
                         boolean interviewCheck,
                         boolean documentPass,
@@ -84,8 +85,8 @@ public class Application extends BaseEntity{
         this.part = part;
         this.semestersLeftNumber = semestersLeftNumber;
         this.otherActivities = otherActivities;
-        this.otCheck = otCheck;
-        this.demodayCheck = demodayCheck;
+        this.otDate = otDate;
+        this.demodayDate = demodayDate;
         this.interviewDatetime = interviewDatetime;
         this.interviewCheck = interviewCheck;
         this.documentPass = documentPass;
