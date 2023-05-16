@@ -3,6 +3,8 @@ package ceos.backend.domain.example;
 
 import ceos.backend.domain.example.dto.SlackTest;
 import ceos.backend.domain.example.exception.ExampleNotFoundException;
+import ceos.backend.global.common.dto.AwsSESMail;
+import ceos.backend.global.common.event.Event;
 import ceos.backend.global.common.response.SuccessResponse;
 import ceos.backend.global.error.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -87,9 +89,15 @@ public class ExampleController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = SuccessResponse.class))),
             @ApiResponse(responseCode = "400", description = "bad request operation", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
+
     @PostMapping(value = "/swagger")
     public String swagger(@Parameter(description = "Swagger") String swagger) {
         return "Hi," + swagger;
     }
 
+    @GetMapping(value = "/mail")
+    public int slack(){
+        Event.raise(AwsSESMail.from(1));
+        return 1;
+    }
 }

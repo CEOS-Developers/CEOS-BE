@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns="http://www.w3.org/1999/xhtml"
+>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.cdnfonts.com/css/gilroy-bold" rel="stylesheet">
+    <title></title>
+    <style>
+        * {
+            font-family: Pretendard ,AppleSDGothic, apple sd gothic neo, noto sans korean,
+            noto sans korean regular, noto sans cjk kr, noto sans cjk,
+            nanum gothic, malgun gothic, dotum, arial, helvetica, MS Gothic,
+            sans-serif !important;
+            mso-line-height-rule: exactly;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body style="width: 100%;
+    margin: 0;
+    padding: 0;">
+<div style="width: 680px;
+    margin: 0 auto;
+    padding: 0;">
+    <div th:replace="~{component/title}">title</div>
+    <div th:replace="~{component/divider}">divider</div>
+    <div th:replace="~{component/greeting :: greetInfo(greetInfo=${greetInfo})}">greeting</div>
+    <div style="height: 30px; width: 680px"></div>
+    <div th:replace="~{component/uuid :: uuidInfo(uuidInfo=${uuidInfo})}">uuid</div>
+    <div th:replace="~{component/divider}">divider</div>
+    <div th:replace="~{component/personalInfo :: personalInfo(personalInfo=${personalInfo})}">uuid</div>
+    <div th:replace="~{component/divider}">divider</div>
+    <div th:replace="~{component/schoolInfo :: schoolInfo(schoolInfo=${schoolInfo})}">school</div>
+    <div th:replace="~{component/divider}">divider</div>
+    <div th:replace="~{component/ceosQuestionInfo :: ceosQuestionInfo(ceosQuestionInfo=${ceosQuestionInfo})}">ceos question</div>
+    <div th:replace="~{component/divider}">divider</div>
+    <div th:replace="~{component/commonQuestionInfo :: commonQuestionInfo(commonQuestionInfo=${commonQuestionInfo})}">common question</div>
+    <div th:replace="~{component/divider}">divider</div>
+    <div th:replace="~{component/partQuestionInfo :: partQuestionInfo(partQuestionInfo=${partQuestionInfo})}">part question</div>
+    <div th:replace="~{component/divider}">divider</div>
+    <div th:replace="~{component/interviewDateInfo :: interviewDateInfo(interviewDateInfo=${interviewDateInfo})}">part question</div>
+    <div style="height: 90px; width: 680px"></div>
+    <div th:replace="~{component/button}">
+        button
+    </div>
+    <div style="height: 40px; width: 680px"></div>
+    <div th:replace="~{component/copyright}">copyright</div>
+</div>
+</body>
+</html>

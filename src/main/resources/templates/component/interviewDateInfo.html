@@ -1,0 +1,82 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+</head>
+<div th:fragment="interviewDateInfo(interviewDateInfo)">
+    <div style="
+        width: 100%;
+        box-sizing: border-box;
+        border-radius: 10px;
+        ">
+        <div style="width: 680px">
+            <span style="
+                text-decoration: none;
+                outline: 0px;
+                font-style: normal;
+                font-weight: 600;
+                font-size: 18px;
+                line-height: 170%;
+                color: #3E4CF7;">
+                    면접 날짜 - 불가능한 시간
+            </span>
+        </div>
+
+        <div style="height: 16px; width: 680px"></div>
+
+        <div th:each="times, index: ${interviewDateInfo.notAvailabletime}">
+            <div style="
+                display: flex;
+                flex-direction: row;
+                width: 680px;
+                ">
+                <span style="
+                    text-decoration: none;
+                    outline: 0px;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 150%;
+                    color: #232527;"
+                      th:text="${interviewDateInfo.date[__${index.index}__]}">
+                        날짜
+                </span>
+                <span style="
+                    text-decoration: none;
+                    outline: 0px;
+                    font-style: normal;
+                    font-weight: 600;
+                    font-size: 16px;
+                    line-height: 150%;
+                    color: #232527;">
+                    &nbsp;:&nbsp;
+                </span>
+                <div th:each="time, innerIndex: ${times}">
+                    <span style="
+                        text-decoration: none;
+                        outline: 0px;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 16px;
+                        line-height: 170%;
+                        color: #232527;"
+                          th:if="${innerIndex.index} != 0">
+                            ,
+                    </span>
+                    <span style="
+                        text-decoration: none;
+                        outline: 0px;
+                        font-style: normal;
+                        font-weight: 500;
+                        font-size: 16px;
+                        line-height: 170%;
+                        color: #232527;"
+                          th:text="${time}">
+                            시간
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

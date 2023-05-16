@@ -1,0 +1,36 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+</head>
+<div th:fragment="uuid(uuid)">
+    <div style="
+        background-color: #F4F6F9;
+        width: 680px;
+        box-sizing: border-box;
+        text-align: center;
+        border-radius: 10px;
+        margin: 0px;
+        padding: 24px 0px;
+        ">
+        <span style="
+                font-style: normal;
+                font-weight: 600;
+                font-size: 24px;
+                line-height: 150%;
+                text-align: center;
+                color: #232527;
+                text-decoration: none;
+                outline: 0px;
+                font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+                    noto sans korean, noto sans korean regular, noto sans cjk kr,
+                    noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+                    helvetica, MS Gothic, sans-serif;
+                margin: 0 auto;
+                "
+              th:text="${uuid}">
+            UUID
+        </span>
+    </div>
+</div>
+</html>

@@ -1,0 +1,41 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+</head>
+<div th:fragment="uuidInfo(uuidInfo)">
+<div style="
+    width: 680px;
+    ">
+    <span style="
+        text-decoration: none;
+        outline: 0px;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 150%;
+        color: #232527;"
+          th:text="${uuidInfo.name}">
+            000
+    </span>
+    <span style="
+        text-decoration: none;
+        outline: 0px;
+        font-family: Pretendard, AppleSDGothic, apple sd gothic neo,
+            noto sans korean, noto sans korean regular, noto sans cjk kr,
+            noto sans cjk, nanum gothic, malgun gothic, dotum, arial,
+            helvetica, MS Gothic, sans-serif;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 150%;
+        color: #232527;"
+          >
+            님의 고유번호
+    </span>
+
+    <div style="height: 16px; width: 680px"></div>
+
+    <div th:replace="~{component/uuidBox :: uuid(uuid=${uuidInfo.uuid})}">uuid</div>
+</div>
+</html>
