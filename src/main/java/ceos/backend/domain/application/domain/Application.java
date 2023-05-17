@@ -28,6 +28,7 @@ public class Application extends BaseEntity{
     @Embedded
     private ApplicationDetail applicationDetail;
 
+    @Embedded
     private LocalDateTime interviewDatetime;
 
     @NotNull
