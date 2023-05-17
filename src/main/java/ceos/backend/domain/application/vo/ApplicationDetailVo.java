@@ -13,6 +13,11 @@ import java.time.LocalDate;
 
 @Getter
 public class ApplicationDetailVo {
+    @Schema(defaultValue = "99999999", description = "지원 기수")
+    @NotNull(message = "지원 기수를 입력해주세요")
+    @Positive
+    private int generation;
+
     @Schema(defaultValue = "99999999", description = "지원자 남은 학기 수")
     @NotNull(message = "지원자 남은 학기 수를 입력해주세요")
     @Positive

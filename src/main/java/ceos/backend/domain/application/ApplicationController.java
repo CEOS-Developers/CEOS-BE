@@ -1,6 +1,7 @@
 package ceos.backend.domain.application;
 
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.service.ApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,10 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Application")
 public class ApplicationController {
 
+    private final ApplicationService applicationService;
+
     @Operation(summary = "지원하기")
     @PostMapping
     public void createApplication(@RequestBody @Valid CreateApplicationRequest createApplicationRequest) {
-
+        log.info("지원하기");
+        applicationService.createApplication(createApplicationRequest);
     }
 
 }

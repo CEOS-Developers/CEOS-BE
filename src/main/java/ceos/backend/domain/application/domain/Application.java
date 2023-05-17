@@ -1,9 +1,11 @@
 package ceos.backend.domain.application.domain;
 
+import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
@@ -47,10 +49,18 @@ public class Application extends BaseEntity{
     @ColumnDefault("false")
     private boolean finalPass;
 
-
-
-    // 생성자
-//    @Builder
+    @Builder
+    private Application(ApplicantInfo applicantInfo, ApplicationDetail applicationDetail) {
+        this.applicantInfo = applicantInfo;
+        this.applicationDetail = applicationDetail;
+        this.interviewDatetime = null;
+    }
 
     // 정적 팩토리 메서드
+    public static Application from(CreateApplicationRequest createApplicationRequest, String UUID) {
+        return Application.builder()
+                .applicantInfo(ApplicantInfo.of(createApplicationRequest.getApplicantInfoVo(), UUID))
+                .applicationDetail(ApplicationDetail.of(createApplicationRequest.getApplicationDetailVo()))
+                .build();
+    }
 }

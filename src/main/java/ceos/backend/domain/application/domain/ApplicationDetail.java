@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.domain;
 
+import ceos.backend.domain.application.vo.ApplicationDetailVo;
 import ceos.backend.global.common.entity.Part;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -13,7 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Embeddable
@@ -37,14 +38,14 @@ public class ApplicationDetail {
     private String otherActivities;
 
     @NotNull
-    private LocalDateTime otDate;
+    private LocalDate otDate;
 
     @NotNull
-    private LocalDateTime demodayDate;
+    private LocalDate demodayDate;
 
     @Builder
     private ApplicationDetail(int generation, Part part, int semestersLeftNumber, String otherActivities,
-                             LocalDateTime otDate, LocalDateTime demodayDate) {
+                             LocalDate otDate, LocalDate demodayDate) {
         this.generation = generation;
         this.part = part;
         this.semestersLeftNumber = semestersLeftNumber;
@@ -53,16 +54,14 @@ public class ApplicationDetail {
         this.demodayDate = demodayDate;
     }
 
-    public static ApplicationDetail of(int generation, Part part, int semestersLeftNumber,
-                                       String otherActivities, LocalDateTime otDate,
-                                       LocalDateTime demodayDate) {
+    public static ApplicationDetail of(ApplicationDetailVo applicationDetailVo) {
         return ApplicationDetail.builder()
-                .generation(generation)
-                .part(part)
-                .semestersLeftNumber(semestersLeftNumber)
-                .otherActivities(otherActivities)
-                .otDate(otDate)
-                .demodayDate(demodayDate)
+                .generation(applicationDetailVo.getGeneration())
+                .part(applicationDetailVo.getPart())
+                .semestersLeftNumber(applicationDetailVo.getSemestersLeftNumber())
+                .otherActivities(applicationDetailVo.getOtherActivities())
+                .otDate(applicationDetailVo.getOtDate())
+                .demodayDate(applicationDetailVo.getDemodayDate())
                 .build();
     }
 }

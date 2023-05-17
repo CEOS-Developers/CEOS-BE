@@ -1,24 +1,14 @@
 package ceos.backend.domain.application.dto.request;
 
-import ceos.backend.domain.application.domain.Gender;
 import ceos.backend.domain.application.vo.AnswerVo;
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.domain.application.vo.ApplicationDetailVo;
-import ceos.backend.global.common.annotation.*;
-import ceos.backend.global.common.entity.Part;
-import ceos.backend.global.common.entity.University;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ceos.backend.global.common.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

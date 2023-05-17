@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.domain;
 
+import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.global.common.entity.University;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -7,12 +8,16 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 import java.time.LocalDate;
 @Getter
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ApplicantInfo {
 
     @NotNull
@@ -49,19 +54,9 @@ public class ApplicantInfo {
     @Column(unique = true)
     private String uuid;
 
-    // 생성자
-    protected ApplicantInfo() {
-
-    }
-
-    public ApplicantInfo(String name,
-                         Gender gender,
-                         LocalDate birth,
-                         String email,
-                         String phoneNumber,
-                         University university,
-                         String major,
-                         String uuid) {
+    @Builder
+    private ApplicantInfo(String name, Gender gender, LocalDate birth, String email,
+                         String phoneNumber, University university, String major, String uuid) {
         this.name = name;
         this.gender = gender;
         this.birth = birth;
@@ -70,5 +65,18 @@ public class ApplicantInfo {
         this.university = university;
         this.major = major;
         this.uuid = uuid;
+    }
+
+    public static ApplicantInfo of(ApplicantInfoVo applicantInfoVo, String uuid) {
+        return ApplicantInfo.builder()
+                .name(applicantInfoVo.getName())
+                .gender(applicantInfoVo.getGender())
+                .birth(applicantInfoVo.getBirth())
+                .email(applicantInfoVo.getEmail())
+                .phoneNumber(applicantInfoVo.getPhoneNumber())
+                .university(applicantInfoVo.getUniversity())
+                .major(applicantInfoVo.getMajor())
+                .uuid(uuid)
+                .build();
     }
 }
