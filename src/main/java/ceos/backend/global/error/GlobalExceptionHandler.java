@@ -8,10 +8,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ValidationException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.lang.Nullable;
 import org.springframework.validation.FieldError;
@@ -41,32 +39,41 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode statusCode,
             WebRequest request) {
         log.error("HandleInternalException", ex);
-        if(ex instanceof MethodArgumentNotValidException Mex){
-            final ErrorResponse errorResponse = this.handleMethodArgumentNotValid(Mex, headers,(HttpStatus)statusCode, request);
-            return super.handleExceptionInternal(ex, errorResponse, headers, HttpStatus.BAD_REQUEST, request);
-        }
         final HttpStatus status = (HttpStatus) statusCode;
         final ErrorReason errorReason = ErrorReason.from(status.value(), status.name(), ex.getMessage());
         final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
         return super.handleExceptionInternal(ex, errorResponse, headers, status, request);
     }
 
+    @Nullable
+    @Override
     @SneakyThrows
-    private ErrorResponse handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatus status,
-            WebRequest request) {
-        List<FieldError> errors = ex.getBindingResult().getFieldErrors();
-        Map<String, Object> fieldAndErrorMessages =
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        final HttpStatus httpStatus = (HttpStatus)status;
+        final List<FieldError> errors = ex.getBindingResult().getFieldErrors();
+        final Map<String, Object> fieldAndErrorMessages =
                 errors.stream()
                         .collect(
                                 Collectors.toMap(
                                         FieldError::getField, FieldError::getDefaultMessage));
-        final String errorsToJsonString = new ObjectMapper().writeValueAsString(fieldAndErrorMessages);
-        final ErrorReason errorReason = ErrorReason.from(status.value(), status.name(), errorsToJsonString);
+        final String errorsToJsonString = fieldAndErrorMessages.entrySet().stream().map(e -> e.getKey() + " : " + e.getValue())
+                .collect(Collectors.joining("|"));
+        final ErrorReason errorReason = ErrorReason.from(status.value(), httpStatus.name(), errorsToJsonString);
         final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
-        return errorResponse;
+        return ResponseEntity.status(HttpStatus.valueOf(errorReason.getStatus()))
+                .body(errorResponse);
+    }
+
+    @Nullable
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        log.error("HttpMessageNotReadableException", ex);
+        final GlobalErrorCode globalErrorCode = GlobalErrorCode.HTTP_MESSAGE_NOT_READABLE;
+        final ErrorReason errorReason = globalErrorCode.getErrorReason();
+        final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
     // 비즈니스 로직 에러 처리

@@ -11,8 +11,9 @@ import static org.springframework.http.HttpStatus.*;
 @AllArgsConstructor
 public enum GlobalErrorCode implements BaseErrorCode{
 
+    /* global error */
+    HTTP_MESSAGE_NOT_READABLE(BAD_REQUEST,"GLOBAL_400_1", "잘못된 형식의 값을 입력했습니다."),
     _INTERNAL_SERVER_ERROR(INTERNAL_SERVER_ERROR, "GLOBAL_500_1", "서버 오류. 관리자에게 문의 부탁드립니다."),
-    EXAMPLE_GLOBAL_NOT_FOUND(NOT_FOUND, "EXAMPLEGLOBAL_404_1", "예시를 찾을 수 없는 오류입니다."),
 
     /*토큰 에러*/
     NO_TOKEN(UNAUTHORIZED, "AUTH_401_1", "토큰이 존재하지 않습니다"),
