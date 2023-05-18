@@ -7,6 +7,7 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -54,9 +55,13 @@ public class ApplicantInfo {
     @Column(unique = true)
     private String uuid;
 
+    @NotNull
+    @Positive
+    private int semestersLeftNumber;
+
     @Builder
-    private ApplicantInfo(String name, Gender gender, LocalDate birth, String email,
-                         String phoneNumber, University university, String major, String uuid) {
+    private ApplicantInfo(String name, Gender gender, LocalDate birth, String email, String phoneNumber,
+                          University university, String major, String uuid, int semestersLeftNumber) {
         this.name = name;
         this.gender = gender;
         this.birth = birth;
@@ -65,6 +70,7 @@ public class ApplicantInfo {
         this.university = university;
         this.major = major;
         this.uuid = uuid;
+        this.semestersLeftNumber = semestersLeftNumber;
     }
 
     public static ApplicantInfo of(ApplicantInfoVo applicantInfoVo, String uuid) {
@@ -77,6 +83,7 @@ public class ApplicantInfo {
                 .university(applicantInfoVo.getUniversity())
                 .major(applicantInfoVo.getMajor())
                 .uuid(uuid)
+                .semestersLeftNumber(applicantInfoVo.getSemestersLeftNumber())
                 .build();
     }
 }

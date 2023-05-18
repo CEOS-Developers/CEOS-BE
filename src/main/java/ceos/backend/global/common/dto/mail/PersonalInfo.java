@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto.mail;
 
+import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -20,13 +21,13 @@ public class PersonalInfo {
         this.phoneNumber = phoneNumber;
     }
 
-    public static PersonalInfo of(String name, String gender, String birth, String email, String phoneNumber) {
+    public static PersonalInfo from(ApplicantInfoVo applicantInfoVo) {
         return PersonalInfo.builder()
-                .name(name)
-                .gender(gender)
-                .birth(birth)
-                .email(email)
-                .phoneNumber(phoneNumber)
+                .name(applicantInfoVo.getName())
+                .gender(applicantInfoVo.getGender().toString())
+                .birth(applicantInfoVo.getBirth().toString())
+                .email(applicantInfoVo.getEmail())
+                .phoneNumber(applicantInfoVo.getPhoneNumber())
                 .build();
     }
 }

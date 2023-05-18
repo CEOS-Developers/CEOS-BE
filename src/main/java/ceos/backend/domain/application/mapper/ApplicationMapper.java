@@ -7,6 +7,7 @@ import ceos.backend.domain.application.exception.QuestionNotFound;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,16 +41,23 @@ public class ApplicationMapper {
         return answers;
     }
 
-    public List<ApplicationInterview> toInterviewList(List<LocalDateTime> unableTimes,
+    public List<ApplicationInterview> toInterviewList(List<String> unableTimes,
                                                       Application application,
                                                       List<Interview> interviews) {
+
+
         List<ApplicationInterview> applicationInterviews = interviews.stream()
-                .filter(interview -> unableTimes.contains(interview.getDate()))
+                .filter(interview -> unableTimes.contains(interviewDateFormatter(interview)))
                 .map(interview -> ApplicationInterview.of(application, interview))
                 .toList();
         if (applicationInterviews.isEmpty()) {
             throw InterviewNotFound.EXCEPTION;
         }
         return applicationInterviews;
+    }
+
+    private String interviewDateFormatter(Interview interview) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        return interview.getFromDate().format(formatter) + " - " + interview.getToDate().format(formatter);
     }
 }

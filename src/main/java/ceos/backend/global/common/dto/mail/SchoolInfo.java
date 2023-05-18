@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto.mail;
 
+import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,11 +17,11 @@ public class SchoolInfo {
         this.semestersLeftNumber = semestersLeftNumber;
     }
 
-    public static SchoolInfo of(String university, String major, String semestersLeftNumber) {
+    public static SchoolInfo from(ApplicantInfoVo applicantInfoVo) {
         return SchoolInfo.builder()
-                .university(university)
-                .major(major)
-                .semestersLeftNumber(semestersLeftNumber)
+                .university(applicantInfoVo.getUniversity().toString())
+                .major(applicantInfoVo.getMajor())
+                .semestersLeftNumber(Integer.toString(applicantInfoVo.getSemestersLeftNumber()))
                 .build();
     }
 }

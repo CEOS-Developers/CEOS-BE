@@ -5,6 +5,8 @@ import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
+import ceos.backend.global.common.dto.AwsSESMail;
+import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +32,8 @@ public class ApplicationService {
         // 중복 검사
         applicationHelper.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
 
+        // 제출 기간, 기수 검사
+
         // 엔티티 생성 및 저장
         final String UUID = applicationHelper.generateUUID();
         final Application application = applicationMapper.toEntity(createApplicationRequest, UUID);
@@ -43,10 +47,10 @@ public class ApplicationService {
         final List<Interview> interviews = interviewRepository.findAll();
         final List<ApplicationInterview> applicationInterviews
                 = applicationMapper.toInterviewList(createApplicationRequest.getUnableTimes(),
-                                                    application,interviews);
+                                                    application, interviews);
         applicationInterviewRepository.saveAll(applicationInterviews);
 
         // 이메일 전송
-//        Event.raise(AwsSESMail.from(1));
+        applicationHelper.sendEmail(createApplicationRequest, UUID);
     }
 }

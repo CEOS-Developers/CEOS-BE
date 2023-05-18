@@ -9,6 +9,7 @@ import ceos.backend.global.common.entity.University;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -46,4 +47,9 @@ public class ApplicantInfoVo {
     @Schema(defaultValue = "컴퓨터 공학과", description = "지원자 전공")
     @NotEmpty(message = "지원자 전공을 입력해주세요")
     private String major;
+
+    @Schema(defaultValue = "99999999", description = "지원자 남은 학기 수")
+    @NotNull(message = "지원자 남은 학기 수를 입력해주세요")
+    @Positive
+    private int semestersLeftNumber;
 }

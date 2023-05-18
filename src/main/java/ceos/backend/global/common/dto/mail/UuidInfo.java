@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto.mail;
 
+import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,10 +15,10 @@ public class UuidInfo {
         this.uuid = uuid;
     }
 
-    public static UuidInfo of(String name, String uuid) {
+    public static UuidInfo of(ApplicantInfoVo applicantInfoVo, String UUID) {
         return UuidInfo.builder()
-                .uuid(uuid)
-                .name(name)
+                .uuid(UUID)
+                .name(applicantInfoVo.getName())
                 .build();
     }
 }

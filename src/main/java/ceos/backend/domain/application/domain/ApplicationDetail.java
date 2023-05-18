@@ -29,10 +29,6 @@ public class ApplicationDetail {
     @Enumerated(EnumType.STRING)
     private Part part;
 
-    @NotNull
-    @Positive
-    private int semestersLeftNumber;
-
     @Size(max = 100)
     @Column(columnDefinition = "TEXT")
     private String otherActivities;
@@ -44,11 +40,10 @@ public class ApplicationDetail {
     private LocalDate demodayDate;
 
     @Builder
-    private ApplicationDetail(int generation, Part part, int semestersLeftNumber, String otherActivities,
+    private ApplicationDetail(int generation, Part part, String otherActivities,
                              LocalDate otDate, LocalDate demodayDate) {
         this.generation = generation;
         this.part = part;
-        this.semestersLeftNumber = semestersLeftNumber;
         this.otherActivities = otherActivities;
         this.otDate = otDate;
         this.demodayDate = demodayDate;
@@ -58,7 +53,6 @@ public class ApplicationDetail {
         return ApplicationDetail.builder()
                 .generation(applicationDetailVo.getGeneration())
                 .part(applicationDetailVo.getPart())
-                .semestersLeftNumber(applicationDetailVo.getSemestersLeftNumber())
                 .otherActivities(applicationDetailVo.getOtherActivities())
                 .otDate(applicationDetailVo.getOtDate())
                 .demodayDate(applicationDetailVo.getDemodayDate())

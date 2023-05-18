@@ -18,11 +18,6 @@ public class ApplicationDetailVo {
     @Positive
     private int generation;
 
-    @Schema(defaultValue = "99999999", description = "지원자 남은 학기 수")
-    @NotNull(message = "지원자 남은 학기 수를 입력해주세요")
-    @Positive
-    private int semestersLeftNumber;
-
     @Schema(type = "string",
             pattern = "yyyy.MM.dd",
             defaultValue = "2023.03.20",

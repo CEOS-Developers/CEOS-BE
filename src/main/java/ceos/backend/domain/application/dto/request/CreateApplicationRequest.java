@@ -26,7 +26,6 @@ public class CreateApplicationRequest {
     @Valid
     private List<AnswerVo> partAnswers;
 
-    @Schema(description = "불가능 시간 선택 \"yyyy.MM.dd HH:mm:ss\" 형식으로 적어주세요!")
-    @DateTimeFormat
-    private List<LocalDateTime> unableTimes;
+    @Schema(description = "불가능 시간 선택 \"yyyy.MM.dd HH:mm:ss - yyyy.MM.dd HH:mm:ss\" 형식으로 적어주세요!")
+    private List<String> unableTimes;
 }
