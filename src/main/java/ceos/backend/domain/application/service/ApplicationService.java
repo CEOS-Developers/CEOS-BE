@@ -29,10 +29,11 @@ public class ApplicationService {
 
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
+        // 제출 기간, 기수 검사
+        applicationHelper.validateRecruitOption(createApplicationRequest.getApplicationDetailVo().getGeneration());
+
         // 중복 검사
         applicationHelper.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
-
-        // 제출 기간, 기수 검사
 
         // 엔티티 생성 및 저장
         final String UUID = applicationHelper.generateUUID();
