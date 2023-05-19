@@ -5,6 +5,7 @@ import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.domain.application.vo.ApplicationDetailVo;
 import ceos.backend.global.common.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class CreateApplicationRequest {
     @Valid
     private List<AnswerVo> partAnswers;
 
-    @Schema(description = "불가능 시간 선택 \"yyyy.MM.dd HH:mm:ss - yyyy.MM.dd HH:mm:ss\" 형식으로 적어주세요!")
+    @ArraySchema(schema = @Schema(description = "불가능 시간 선택 ", type = "string",
+            defaultValue = "2023.03.20 00:00:00 - 2023.03.20 00:00:00"))
     private List<String> unableTimes;
 }
