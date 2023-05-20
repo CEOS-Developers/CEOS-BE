@@ -47,6 +47,8 @@ dependencies {
 
     //s3
     implementation group: 'software.amazon.awssdk', name: 's3', version: "2.20.68"
+
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
 }
 
 tasks.named('test') {

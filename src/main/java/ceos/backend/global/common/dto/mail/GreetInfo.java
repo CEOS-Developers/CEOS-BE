@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto.mail;
 
+import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,11 +15,10 @@ public class GreetInfo {
         this.generation = generation;
     }
 
-    // TODO: 엔티티보고 재정의하기
-    public static GreetInfo of(String name, String generation) {
+    public static GreetInfo from(CreateApplicationRequest request) {
         return GreetInfo.builder()
-                .generation(generation)
-                .name(name)
+                .generation(Integer.toString(request.getApplicationDetailVo().getGeneration()))
+                .name(request.getApplicantInfoVo().getName())
                 .build();
     }
 }

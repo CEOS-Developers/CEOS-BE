@@ -30,7 +30,6 @@ public class ApplicationAnswer extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String answer;
 
-    // 생성자
     @Builder
     private ApplicationAnswer(ApplicationQuestion applicationQuestion,
                               Application application,
@@ -41,5 +40,13 @@ public class ApplicationAnswer extends BaseEntity {
         this.answer = answer;
     }
 
-    // 정적 팩토리 메서드
+    public static ApplicationAnswer of(ApplicationQuestion applicationQuestion,
+                                         Application application,
+                                         String answer) {
+        return ApplicationAnswer.builder()
+                .applicationQuestion(applicationQuestion)
+                .application(application)
+                .answer(answer)
+                .build();
+    }
 }
