@@ -2,13 +2,11 @@ package ceos.backend.domain.application.service;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.dto.request.UpdateInterviewAttendanceRequest;
+import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
-import ceos.backend.domain.application.exception.ApplicantNotFound;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
-import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +70,7 @@ public class ApplicationService {
     }
 
     @Transactional
-    public void updateInterviewAttendance(String uuid, String email, UpdateInterviewAttendanceRequest request) {
+    public void updateInterviewAttendance(String uuid, String email, UpdateAttendanceRequest request) {
         // 서류 합격 기간 검증
         applicationHelper.validateDocumentResultOption();
 
@@ -109,7 +107,7 @@ public class ApplicationService {
     }
 
     @Transactional
-    public void updateActivityAvailability(String uuid, String email, UpdateInterviewAttendanceRequest request) {
+    public void updateActivityAvailability(String uuid, String email, UpdateAttendanceRequest request) {
         // 최종 합격 기간 검증
         applicationHelper.validateFinalResultOption();
 

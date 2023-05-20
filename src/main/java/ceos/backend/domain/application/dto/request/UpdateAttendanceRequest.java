@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class UpdateInterviewAttendanceRequest {
+public class UpdateAttendanceRequest {
     @Schema(defaultValue = "true", description = "면접 가능 여부")
     @NotNull
     private boolean available;
