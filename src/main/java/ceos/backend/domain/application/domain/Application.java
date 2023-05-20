@@ -65,4 +65,12 @@ public class Application extends BaseEntity{
                 .applicationDetail(ApplicationDetail.of(createApplicationRequest.getApplicationDetailVo()))
                 .build();
     }
+
+    public void updateInterviewCheck(boolean check) {
+        this.interviewCheck = check;
+    }
+
+    public void updateFinalCheck(boolean check) {
+        this.finalCheck = check;
+    }
 }

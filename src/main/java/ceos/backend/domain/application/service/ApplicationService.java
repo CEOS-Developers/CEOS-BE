@@ -2,6 +2,7 @@ package ceos.backend.domain.application.service;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.dto.request.UpdateInterviewAttendanceRequest;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.exception.ApplicantNotFound;
 import ceos.backend.domain.application.helper.ApplicationHelper;
@@ -69,9 +70,29 @@ public class ApplicationService {
         return applicationMapper.toGetResultResponse(application, true);
     }
 
+    @Transactional
+    public void updateInterviewAttendance(String uuid, String email, UpdateInterviewAttendanceRequest request) {
+        // 서류 합격 기간 검증
+        applicationHelper.validateDocumentResultOption();
+
+        // 유저 검증
+        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+
+        // 유저 확인 여부 검증
+        applicationHelper.validateApplicantInterviewCheckStatus(application);
+
+        // 슬랙
+        if (request.isAvailable()) {
+            application.updateInterviewCheck(true);
+            applicationRepository.save(application);
+        } else {
+//            Event.raise();
+        }
+    }
+
     @Transactional(readOnly = true)
     public GetResultResponse getFinalResult(String uuid, String email) {
-        // 서류 합격 기간 검증
+        // 최종 합격 기간 검증
         applicationHelper.validateFinalResultOption();
 
         // 유저 검증
@@ -83,4 +104,25 @@ public class ApplicationService {
         // dto 생성
         return applicationMapper.toGetResultResponse(application, false);
     }
+
+    @Transactional
+    public void updateActivityAvailability(String uuid, String email, UpdateInterviewAttendanceRequest request) {
+        // 최종 합격 기간 검증
+        applicationHelper.validateFinalResultOption();
+
+        // 유저 검증
+        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+
+        // 유저 확인 여부 검증
+        applicationHelper.validateApplicantActivityCheckStatus(application);
+
+        // 슬랙
+        if (request.isAvailable()) {
+            application.updateFinalCheck(true);
+            applicationRepository.save(application);
+        } else {
+//            Event.raise();
+        }
+    }
+    // TODO : slack 연결, requestbody dto 수정
 }

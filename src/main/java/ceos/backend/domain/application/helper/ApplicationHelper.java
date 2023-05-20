@@ -4,9 +4,7 @@ import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.domain.Pass;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.exception.ApplicantNotFound;
-import ceos.backend.domain.application.exception.DuplicateApplicant;
-import ceos.backend.domain.application.exception.NotPassDocument;
+import ceos.backend.domain.application.exception.*;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.domain.settings.domain.Settings;
@@ -84,6 +82,27 @@ public class ApplicationHelper {
     public void validateApplicantDocumentPass(Application application) {
         if (application.getDocumentPass() == Pass.FAIL) {
             throw NotPassDocument.EXCEPTION;
+        }
+    }
+
+    public void validateApplicantInterviewCheckStatus(Application application) {
+        if (application.getDocumentPass() == Pass.FAIL) {
+            throw NotPassDocument.EXCEPTION;
+        }
+        if (application.isInterviewCheck()) {
+            throw AlreadyCheckInterview.EXCEPTION;
+        }
+    }
+
+    public void validateApplicantActivityCheckStatus(Application application) {
+        if (application.getDocumentPass() != Pass.PASS) {
+            throw NotPassDocument.EXCEPTION;
+        }
+        if (application.getFinalPass() != Pass.PASS) {
+            throw NotPassFinal.EXCEPTION;
+        }
+        if (application.isFinalCheck()) {
+            throw AlreadyCheckFinal.EXCEPTION;
         }
     }
 }
