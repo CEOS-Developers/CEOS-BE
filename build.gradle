@@ -44,6 +44,9 @@ dependencies {
 	// ses
 	implementation group: 'software.amazon.awssdk', name: 'ses', version: "2.19.29"
 	implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+
+    //s3
+    implementation group: 'software.amazon.awssdk', name: 's3', version: "2.20.68"
 }
 
 tasks.named('test') {
