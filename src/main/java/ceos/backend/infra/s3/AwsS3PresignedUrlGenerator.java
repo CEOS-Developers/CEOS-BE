@@ -1,21 +1,26 @@
 package ceos.backend.infra.s3;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
-import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 import java.time.Duration;
+import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class AwsS3PresignedUrlGenerator {
     @Value("${aws.s3.bucket}")
     private String BUCKET;
+    private final AwsS3Config awsS3Config;
 
-    public String getPresignedUrl(S3Presigner presigner, String prefix, String filename){
+    public String getPresignedUrl(String prefix){
+        String filename = UUID.randomUUID().toString();
+
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(BUCKET)
                 .key(prefix + "/" + filename)
@@ -26,7 +31,7 @@ public class AwsS3PresignedUrlGenerator {
                 .getObjectRequest(getObjectRequest)
                 .build();
 
-        PresignedGetObjectRequest presignedGetObjectRequest = presigner.presignGetObject(getObjectPresignRequest);
+        PresignedGetObjectRequest presignedGetObjectRequest = awsS3Config.s3Presigner().presignGetObject(getObjectPresignRequest);
         return presignedGetObjectRequest.url().toString();
     }
 }
