@@ -15,6 +15,7 @@ public enum ApplicationErrorCode implements BaseErrorCode {
     DUPLICATE_APPLICANT(BAD_REQUEST, "APPLICATION_400_1", "이미 지원한 지원자입니다."),
     WRONG_GENERATION(BAD_REQUEST, "APPLICATION_400_2", "해당 기수를 지원할 수 없습니다."),
     APPLICANT_NOT_FOUND(BAD_REQUEST, "APPLICATION_400_3", "존재하지 않는 지원자입니다."),
+    NOT_PASS_DOCUMENT(BAD_REQUEST, "APPLICATION_400_4", "서류 합격 상태가 아닙니다."),
 
     /* Question */
     QUESTION_NOT_FOUND(BAD_REQUEST, "QUESTION_400_1", "존재하지 않는 질문입니다."),

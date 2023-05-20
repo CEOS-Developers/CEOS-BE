@@ -63,14 +63,9 @@ public class ApplicationService {
         applicationHelper.validateDocumentResultOption();
 
         // 유저 검증
-        applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
 
-        // dto 생성
-        final Application application = applicationRepository
-                .findByUuidAndEmail(uuid, email)
-                .orElseThrow(() -> {
-                    throw ApplicantNotFound.EXCEPTION;
-                });
+        // dto
         return applicationMapper.toGetResultResponse(application, true);
     }
 
@@ -80,14 +75,12 @@ public class ApplicationService {
         applicationHelper.validateFinalResultOption();
 
         // 유저 검증
-        applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+
+        // 유저 서류 합격 여부 검증
+        applicationHelper.validateApplicantDocumentPass(application);
 
         // dto 생성
-        final Application application = applicationRepository
-                .findByUuidAndEmail(uuid, email)
-                .orElseThrow(() -> {
-                    throw ApplicantNotFound.EXCEPTION;
-                });
         return applicationMapper.toGetResultResponse(application, false);
     }
 }

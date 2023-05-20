@@ -18,7 +18,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             " where a.applicantInfo.uuid = :uuid")
     Optional<Application> findByUuid(@Param("uuid") String uuid);
 
-    @Query("select distinct a from Application a" +
+    @Query("select a from Application a" +
             " where a.applicantInfo.uuid = :uuid" +
             " and a.applicantInfo.email = :email")
     Optional<Application> findByUuidAndEmail(@Param("uuid") String uuid,

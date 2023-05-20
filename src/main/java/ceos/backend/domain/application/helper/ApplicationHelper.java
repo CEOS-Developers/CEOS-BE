@@ -2,9 +2,11 @@ package ceos.backend.domain.application.helper;
 
 import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
+import ceos.backend.domain.application.domain.Pass;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.exception.ApplicantNotFound;
 import ceos.backend.domain.application.exception.DuplicateApplicant;
+import ceos.backend.domain.application.exception.NotPassDocument;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.domain.settings.domain.Settings;
@@ -58,8 +60,8 @@ public class ApplicationHelper {
         settings.validateApplyDuration(now);
     }
 
-    public void validateApplicantAccessable(String uuid, String email) {
-        applicationRepository
+    public Application validateApplicantAccessable(String uuid, String email) {
+        return applicationRepository
                 .findByUuidAndEmail(uuid, email)
                 .orElseThrow(() -> {
                     throw ApplicantNotFound.EXCEPTION;
@@ -76,5 +78,12 @@ public class ApplicationHelper {
         Settings settings = settingsHelper.takeSetting();
         LocalDate now = LocalDate.now();
         settings.validateFinalResultDuration(now);
+    }
+
+
+    public void validateApplicantDocumentPass(Application application) {
+        if (application.getDocumentPass() == Pass.FAIL) {
+            throw NotPassDocument.EXCEPTION;
+        }
     }
 }
