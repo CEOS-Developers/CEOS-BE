@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
@@ -13,12 +12,12 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class AwsS3PresignedUrlGenerator {
+public class AwsS3UrlGenerator {
     @Value("${aws.s3.bucket}")
     private String BUCKET;
     private final AwsS3Config awsS3Config;
 
-    public String getPresignedUrl(String prefix){
+    public String generateUrl(String prefix){
         String filename = UUID.randomUUID().toString();
 
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
