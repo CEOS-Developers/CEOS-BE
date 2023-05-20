@@ -1,4 +1,4 @@
-package ceos.backend.domain.settings.service;
+package ceos.backend.domain.settings.repository;
 
 import ceos.backend.domain.settings.domain.Settings;
 import org.springframework.data.jpa.repository.JpaRepository;

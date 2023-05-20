@@ -94,10 +94,4 @@ public class ExampleController {
     public String swagger(@Parameter(description = "Swagger") String swagger) {
         return "Hi," + swagger;
     }
-
-    @GetMapping(value = "/mail")
-    public int slack(){
-        Event.raise(AwsSESMail.from(1));
-        return 1;
-    }
 }

@@ -25,14 +25,17 @@ public class ApplicationInterview extends BaseEntity {
     @JoinColumn(name = "interview_id")
     private Interview interview;
 
-    // 생성자
     @Builder
-    private ApplicationInterview(Application application,
-                                 Interview interview)
+    private ApplicationInterview(Application application, Interview interview)
     {
         this.application = application;
         this.interview = interview;
     }
 
-    // 정적 팩토리 메서드
+    public static ApplicationInterview of(Application application, Interview interview) {
+        return ApplicationInterview.builder()
+                .application(application)
+                .interview(interview)
+                .build();
+    }
 }

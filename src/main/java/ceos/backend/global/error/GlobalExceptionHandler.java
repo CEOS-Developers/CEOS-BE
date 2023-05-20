@@ -3,18 +3,28 @@ package ceos.backend.global.error;
 import ceos.backend.global.common.dto.ErrorReason;
 import ceos.backend.global.common.dto.SlackErrorMessage;
 import ceos.backend.global.common.event.Event;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ValidationException;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.lang.Nullable;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -33,6 +43,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         final ErrorReason errorReason = ErrorReason.from(status.value(), status.name(), ex.getMessage());
         final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
         return super.handleExceptionInternal(ex, errorResponse, headers, status, request);
+    }
+
+    @Nullable
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        final HttpStatus httpStatus = (HttpStatus)status;
+        final List<FieldError> errors = ex.getBindingResult().getFieldErrors();
+        final Map<String, Object> fieldAndErrorMessages =
+                errors.stream()
+                        .collect(
+                                Collectors.toMap(
+                                        FieldError::getField, FieldError::getDefaultMessage));
+        final String errorsToJsonString = fieldAndErrorMessages.entrySet().stream().map(e -> e.getKey() + " : " + e.getValue())
+                .collect(Collectors.joining("|"));
+        final ErrorReason errorReason = ErrorReason.from(status.value(), httpStatus.name(), errorsToJsonString);
+        final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
+        return ResponseEntity.status(HttpStatus.valueOf(errorReason.getStatus()))
+                .body(errorResponse);
+    }
+
+    @Nullable
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(
+            HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        log.error("HttpMessageNotReadableException", ex);
+        final GlobalErrorCode globalErrorCode = GlobalErrorCode.HTTP_MESSAGE_NOT_READABLE;
+        final ErrorReason errorReason = globalErrorCode.getErrorReason();
+        final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
     // 비즈니스 로직 에러 처리
