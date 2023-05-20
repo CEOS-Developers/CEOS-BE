@@ -8,6 +8,7 @@ import lombok.Getter;
 public class AwsS3Url {
     private final String url;
 
+
     @Builder
     private AwsS3Url(String url) {
         this.url = url;
