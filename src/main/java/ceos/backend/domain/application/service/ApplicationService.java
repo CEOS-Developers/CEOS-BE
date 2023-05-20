@@ -2,7 +2,7 @@ package ceos.backend.domain.application.service;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.dto.response.GetDocumentResultResponse;
+import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.exception.ApplicantNotFound;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
@@ -58,7 +58,7 @@ public class ApplicationService {
     }
 
     @Transactional(readOnly = true)
-    public GetDocumentResultResponse getDocumentResult(String uuid, String email) {
+    public GetResultResponse getDocumentResult(String uuid, String email) {
         // 서류 합격 기간 검증
         applicationHelper.validateDocumentResultOption();
 
@@ -71,6 +71,23 @@ public class ApplicationService {
                 .orElseThrow(() -> {
                     throw ApplicantNotFound.EXCEPTION;
                 });
-        return applicationMapper.toGetDocumentResultResponse(application);
+        return applicationMapper.toGetResultResponse(application, true);
+    }
+
+    @Transactional(readOnly = true)
+    public GetResultResponse getFinalResult(String uuid, String email) {
+        // 서류 합격 기간 검증
+        applicationHelper.validateFinalResultOption();
+
+        // 유저 검증
+        applicationHelper.validateApplicantAccessable(uuid, email);
+
+        // dto 생성
+        final Application application = applicationRepository
+                .findByUuidAndEmail(uuid, email)
+                .orElseThrow(() -> {
+                    throw ApplicantNotFound.EXCEPTION;
+                });
+        return applicationMapper.toGetResultResponse(application, false);
     }
 }

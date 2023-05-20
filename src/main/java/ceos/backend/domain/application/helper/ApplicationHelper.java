@@ -71,4 +71,10 @@ public class ApplicationHelper {
         LocalDate now = LocalDate.now();
         settings.validateDocumentResultDuration(now);
     }
+
+    public void validateFinalResultOption() {
+        Settings settings = settingsHelper.takeSetting();
+        LocalDate now = LocalDate.now();
+        settings.validateFinalResultDuration(now);
+    }
 }
