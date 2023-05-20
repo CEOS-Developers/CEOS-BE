@@ -1,6 +1,7 @@
 package ceos.backend.domain.application.domain;
 
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.global.common.annotation.DateTimeFormat;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -30,7 +31,6 @@ public class Application extends BaseEntity{
     @Embedded
     private ApplicationDetail applicationDetail;
 
-    @Embedded
     private LocalDateTime interviewDatetime;
 
     @NotNull
