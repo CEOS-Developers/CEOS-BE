@@ -38,22 +38,24 @@ public class Application extends BaseEntity{
     private boolean interviewCheck;
 
     @NotNull
-    @ColumnDefault("false")
-    private boolean documentPass;
+    @Enumerated(EnumType.STRING)
+    private Pass documentPass;
 
     @NotNull
     @ColumnDefault("false")
     private boolean finalCheck;
 
     @NotNull
-    @ColumnDefault("false")
-    private boolean finalPass;
+    @Enumerated(EnumType.STRING)
+    private Pass finalPass;
 
     @Builder
     private Application(ApplicantInfo applicantInfo, ApplicationDetail applicationDetail) {
         this.applicantInfo = applicantInfo;
         this.applicationDetail = applicationDetail;
         this.interviewDatetime = null;
+        this.documentPass = Pass.FAIL;
+        this.finalPass = Pass.FAIL;
     }
 
     // 정적 팩토리 메서드

@@ -1,24 +1,25 @@
 package ceos.backend.domain.application.helper;
 
+import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.exception.ApplicantNotFound;
 import ceos.backend.domain.application.exception.DuplicateApplicant;
-import ceos.backend.domain.application.exception.NotApplicationDuration;
-import ceos.backend.domain.application.exception.WrongGeneration;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.domain.settings.domain.Settings;
 import ceos.backend.domain.settings.helper.SettingsHelper;
-import ceos.backend.domain.settings.repository.SettingsRepository;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ApplicationHelper {
@@ -52,18 +53,22 @@ public class ApplicationHelper {
 
     public void validateRecruitOption(int generation) {
         Settings settings = settingsHelper.takeSetting();
-
-        if (settings.getGeneration() != generation) {
-            throw WrongGeneration.EXCEPTION;
-        }
-
+        settings.validateGeneration(generation);
         LocalDate now = LocalDate.now();
-        if (now.compareTo(settings.getStartDateDoc()) < 0) {
-            throw NotApplicationDuration.EXCEPTION;
-        }
-        if (now.isAfter(settings.getEndDateDoc())) {
-            throw NotApplicationDuration.EXCEPTION;
-        }
+        settings.validateApplyDuration(now);
+    }
 
+    public void validateApplicantAccessable(String uuid, String email) {
+        applicationRepository
+                .findByUuidAndEmail(uuid, email)
+                .orElseThrow(() -> {
+                    throw ApplicantNotFound.EXCEPTION;
+                });
+    }
+
+    public void validateDocumentResultOption() {
+        Settings settings = settingsHelper.takeSetting();
+        LocalDate now = LocalDate.now();
+        settings.validateDocumentResultDuration(now);
     }
 }

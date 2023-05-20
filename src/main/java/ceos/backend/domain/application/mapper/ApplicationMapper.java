@@ -2,6 +2,7 @@ package ceos.backend.domain.application.mapper;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.dto.response.GetDocumentResultResponse;
 import ceos.backend.domain.application.exception.InterviewNotFound;
 import ceos.backend.domain.application.exception.QuestionNotFound;
 import org.springframework.stereotype.Component;
@@ -59,5 +60,9 @@ public class ApplicationMapper {
     private String interviewDateFormatter(Interview interview) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
         return interview.getFromDate().format(formatter) + " - " + interview.getToDate().format(formatter);
+    }
+
+    public GetDocumentResultResponse toGetDocumentResultResponse(Application application) {
+        return GetDocumentResultResponse.from(application);
     }
 }
