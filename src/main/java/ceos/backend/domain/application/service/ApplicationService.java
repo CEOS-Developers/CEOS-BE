@@ -9,6 +9,7 @@ import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.global.common.dto.AwsSESMail;
+import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +52,7 @@ public class ApplicationService {
         final List<Interview> interviews = interviewRepository.findAll();
         final List<ApplicationInterview> applicationInterviews
                 = applicationMapper.toInterviewList(createApplicationRequest.getUnableTimes(),
-                                                    application, interviews);
+                application, interviews);
         applicationInterviewRepository.saveAll(applicationInterviews);
 
         // 이메일 전송
@@ -86,7 +87,9 @@ public class ApplicationService {
             application.updateInterviewCheck(true);
             applicationRepository.save(application);
         } else {
-//            Event.raise();
+            final SlackUnavailableReason reason =
+                    SlackUnavailableReason.of(application, request.getReason(), false);
+            Event.raise(reason);
         }
     }
 
@@ -121,8 +124,9 @@ public class ApplicationService {
             application.updateFinalCheck(true);
             applicationRepository.save(application);
         } else {
-//            Event.raise();
+            final SlackUnavailableReason reason
+                    = SlackUnavailableReason.of(application, request.getReason(), true);
+            Event.raise(reason);
         }
     }
-    // TODO : slack 연결, requestbody dto 수정
 }

@@ -1,10 +1,10 @@
 package ceos.backend.infra.slack;
 
+import ceos.backend.domain.application.domain.ApplicantInfo;
+import ceos.backend.domain.application.domain.Application;
 import ceos.backend.global.common.dto.SlackErrorMessage;
-import com.slack.api.model.block.Blocks;
-import com.slack.api.model.block.DividerBlock;
-import com.slack.api.model.block.HeaderBlock;
-import com.slack.api.model.block.LayoutBlock;
+import ceos.backend.global.common.dto.SlackUnavailableReason;
+import com.slack.api.model.block.*;
 import com.slack.api.model.block.composition.MarkdownTextObject;
 import com.slack.api.model.block.composition.TextObject;
 import com.slack.api.webhook.Payload;
@@ -29,7 +29,7 @@ import static com.slack.api.model.block.composition.BlockCompositions.plainText;
 public class SlackMessageGenerater {
     private final int MaxLen = 500;
 
-    public Payload generate(SlackErrorMessage slackErrorMessage) throws IOException {
+    public Payload generateErrorMsg(SlackErrorMessage slackErrorMessage) throws IOException {
         final ContentCachingRequestWrapper cachedRequest = slackErrorMessage.getContentCachingRequestWrapper();
         final Exception e = slackErrorMessage.getException();
 
@@ -95,5 +95,50 @@ public class SlackMessageGenerater {
         int cutLength = Math.min(exceptionAsString.length(), MaxLen);
         String errorStack = exceptionAsString.substring(0, cutLength);
         return MarkdownTextObject.builder().text("* Stack Trace :*\n" + errorStack).build();
+    }
+
+    public Payload generateUnavailableReason(SlackUnavailableReason slackUnavailableReason) {
+        final ApplicantInfo info = slackUnavailableReason.getApplication().getApplicantInfo();
+        final String reason = slackUnavailableReason.getReason();
+        final boolean isFinal = slackUnavailableReason.isFinal();
+
+        final String title = isFinal ? "활동 불가능" : "면접 불가능";
+
+        List<LayoutBlock> layoutBlocks = new ArrayList<>();
+        // 제목
+        layoutBlocks.add(HeaderBlock.builder().text(plainText(title)).build());
+        // 구분선
+        layoutBlocks.add(new DividerBlock());
+        // name + uuid
+        layoutBlocks.add(makeSection(getName(info), getUuid(info)));
+        // reason
+        layoutBlocks.add(getReason(reason));
+
+
+        final Payload payload =
+                Payload.builder()
+                        .text(title)
+                        .username(title)
+                        .iconEmoji(":dog:")
+                        .blocks(layoutBlocks)
+                        .build();
+        return payload;
+    }
+
+    private MarkdownTextObject getName(ApplicantInfo applicantInfo) {
+        final String name = applicantInfo.getName();
+        return MarkdownTextObject.builder().text("* Name :*\n" + name).build();
+    }
+
+    private MarkdownTextObject getUuid(ApplicantInfo applicantInfo) {
+        final String UUID = applicantInfo.getUuid();
+        return MarkdownTextObject.builder().text("* UUID :*\n" + UUID).build();
+    }
+
+    private SectionBlock getReason(String reason) {
+        TextObject reasonObj = (TextObject) MarkdownTextObject.builder()
+                .text("* Reason :*\n" + reason)
+                .build();
+        return Blocks.section(section -> section.fields(List.of(reasonObj)));
     }
 }
