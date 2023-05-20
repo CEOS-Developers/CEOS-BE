@@ -7,18 +7,20 @@ import ceos.backend.domain.application.vo.AnswerVo;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.dto.mail.*;
+import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.ParsingDuration;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class AwsSESMailGenerator {
 
     public Context generateApplicationMailContext(AwsSESMail awsSESMail) {
@@ -36,13 +38,13 @@ public class AwsSESMailGenerator {
                 });
 
         List<String> partQ = new ArrayList<>(), partA = new ArrayList<>();
+        final Part part = request.getApplicationDetailVo().getPart();
         questions.stream()
-                .filter(question -> question.getCategory()
-                        .validateCategory(request.getApplicationDetailVo().getPart().toString()))
+                .filter(question -> question.getCategory().toString().equals(part.toString()))
                 .sorted(Comparator.comparing(ApplicationQuestion::getNumber))
                 .forEach(question -> {
                     partQ.add(generateQuestion(question));
-                    partA.add(generateAnswer(request.getCommonAnswers(), question));
+                    partA.add(generateAnswer(request.getPartAnswers(), question));
                 });
 
         List<ParsedDuration> parsedDurations = request.getUnableTimes().stream()
@@ -61,7 +63,6 @@ public class AwsSESMailGenerator {
                         .filter(parsedDuration -> Objects.equals(parsedDuration.getDate(), date))
                         .map(ParsedDuration::getDuration)
                         .collect(Collectors.toList())));
-
 
         Context context = new Context();
         context.setVariable("greetInfo", GreetInfo.from(request));
@@ -82,9 +83,8 @@ public class AwsSESMailGenerator {
     }
 
     private String generateAnswer(List<AnswerVo> answerVos, ApplicationQuestion applicationQuestion) {
-        // 이전에 이미 예외처리 했기 때문에 이렇게 진행해도 문제 없음
         final AnswerVo ans = answerVos.stream()
-                .filter(answerVo -> Objects.equals(applicationQuestion.getId(), answerVo.getQuestionId()))
+                .filter(answerVo -> applicationQuestion.getId().equals(answerVo.getQuestionId()))
                 .findFirst()
                 .orElseThrow();
         return ans.getAnswer();
