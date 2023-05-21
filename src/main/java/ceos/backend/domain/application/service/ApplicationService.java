@@ -1,10 +1,7 @@
 package ceos.backend.domain.application.service;
 
 import ceos.backend.domain.application.domain.*;
-import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
-import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
-import ceos.backend.domain.application.dto.request.UpdatePassStatus;
+import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
@@ -60,6 +57,11 @@ public class ApplicationService {
 
         // 이메일 전송
         applicationHelper.sendEmail(createApplicationRequest, UUID);
+    }
+
+    @Transactional
+    public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
+        //
     }
 
     @Transactional(readOnly = true)
