@@ -8,27 +8,14 @@ import lombok.Getter;
 public class AwsS3Url {
     private final String url;
 
-
     @Builder
     private AwsS3Url(String url) {
         this.url = url;
     }
 
-    public static AwsS3Url managementImageUrl(AwsS3UrlGenerator awsS3UrlGenerator) {
+    public static AwsS3Url to(String url) {
         return AwsS3Url.builder()
-                .url(awsS3UrlGenerator.generateUrl("managements"))
-                .build();
-    }
-
-    public static AwsS3Url sponsorImageUrl(AwsS3UrlGenerator awsS3UrlGenerator) {
-        return AwsS3Url.builder()
-                .url(awsS3UrlGenerator.generateUrl("sponsors"))
-                .build();
-    }
-
-    public static AwsS3Url activityImageUrl(AwsS3UrlGenerator awsS3UrlGenerator) {
-        return AwsS3Url.builder()
-                .url(awsS3UrlGenerator.generateUrl("activities"))
+                .url(url)
                 .build();
     }
 
