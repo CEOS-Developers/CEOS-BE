@@ -19,7 +19,10 @@ public class SlackHelper {
     @Value("${slack.webhook.prod_url}")
     String prodUrl;
 
-    public void sendNotification(Payload payload) {
+    @Value("${slack.webhook.unavailable_url}")
+    String unavailableUrl;
+
+    public void sendErrorNotification(Payload payload) {
         final Slack slack = Slack.getInstance();
 
         try {
@@ -30,6 +33,16 @@ public class SlackHelper {
             }
         } catch (IOException e) {
         throw new RuntimeException(e);
+        }
+    }
+
+    public void sendUnavailableReason(Payload payload) {
+        final Slack slack = Slack.getInstance();
+
+        try {
+            slack.send(unavailableUrl, payload);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

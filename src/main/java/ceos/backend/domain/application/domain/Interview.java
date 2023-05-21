@@ -24,7 +24,7 @@ public class Interview extends BaseEntity {
 
     // 생성자
     @Builder
-    public Interview(Long id, LocalDateTime fromDate, LocalDateTime toDate) {
+    private Interview(Long id, LocalDateTime fromDate, LocalDateTime toDate) {
         this.id = id;
         this.fromDate = fromDate;
         this.toDate = toDate;

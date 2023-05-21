@@ -1,9 +1,16 @@
 package ceos.backend.domain.settings.domain;
 
+import ceos.backend.domain.application.exception.WrongGeneration;
+import ceos.backend.domain.settings.exception.NotApplicationDuration;
+import ceos.backend.domain.settings.exception.NotDocumentResultCheckDuration;
+import ceos.backend.domain.settings.exception.NotFinalResultCheckDuration;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -104,4 +111,37 @@ public class Settings extends BaseEntity {
     }
 
     // 정적 팩토리 메서드
+
+    public void validateGeneration(int generation) {
+        if (generation != this.generation) {
+            throw WrongGeneration.EXCEPTION;
+        }
+    }
+
+    public void validateApplyDuration(LocalDate now) {
+        if (now.compareTo(this.getStartDateDoc()) < 0) {
+            throw NotApplicationDuration.EXCEPTION;
+        }
+        if (now.isAfter(this.getEndDateDoc())) {
+            throw NotApplicationDuration.EXCEPTION;
+        }
+    }
+
+    public void validateDocumentResultDuration(LocalDate now) {
+        if (now.compareTo(this.resultDateDoc) < 0) {
+            throw NotDocumentResultCheckDuration.EXCEPTION;
+        }
+        if (now.compareTo(this.resultDateFinal) >= 0) {
+            throw NotDocumentResultCheckDuration.EXCEPTION;
+        }
+    }
+
+    public void validateFinalResultDuration(LocalDate now) {
+        if (now.compareTo(this.resultDateFinal.plusDays(5)) >= 0) {
+            throw NotFinalResultCheckDuration.EXCEPTION;
+        }
+        if (now.compareTo(this.resultDateFinal) < 0) {
+            throw NotFinalResultCheckDuration.EXCEPTION;
+        }
+    }
 }
