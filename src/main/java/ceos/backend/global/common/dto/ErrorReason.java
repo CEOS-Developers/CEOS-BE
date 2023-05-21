@@ -16,7 +16,7 @@ public class ErrorReason {
         this.reason = reason;
     }
 
-    public static ErrorReason from(Integer status, String code, String reason) {
+    public static ErrorReason of(Integer status, String code, String reason) {
         return ErrorReason.builder()
                 .status(status)
                 .code(code)

@@ -10,12 +10,12 @@ public class SlackErrorMessage {
     private ContentCachingRequestWrapper contentCachingRequestWrapper;
 
     @Builder
-    public SlackErrorMessage(Exception exception, ContentCachingRequestWrapper contentCachingRequestWrapper) {
+    private SlackErrorMessage(Exception exception, ContentCachingRequestWrapper contentCachingRequestWrapper) {
         this.exception = exception;
         this.contentCachingRequestWrapper = contentCachingRequestWrapper;
     }
 
-    public static SlackErrorMessage from(Exception e, ContentCachingRequestWrapper requestWrapper) {
+    public static SlackErrorMessage of(Exception e, ContentCachingRequestWrapper requestWrapper) {
         return SlackErrorMessage.builder()
                 .exception(e)
                 .contentCachingRequestWrapper(requestWrapper)

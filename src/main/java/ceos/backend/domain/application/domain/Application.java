@@ -38,29 +38,39 @@ public class Application extends BaseEntity{
     private boolean interviewCheck;
 
     @NotNull
-    @ColumnDefault("false")
-    private boolean documentPass;
+    @Enumerated(EnumType.STRING)
+    private Pass documentPass;
 
     @NotNull
     @ColumnDefault("false")
     private boolean finalCheck;
 
     @NotNull
-    @ColumnDefault("false")
-    private boolean finalPass;
+    @Enumerated(EnumType.STRING)
+    private Pass finalPass;
 
     @Builder
     private Application(ApplicantInfo applicantInfo, ApplicationDetail applicationDetail) {
         this.applicantInfo = applicantInfo;
         this.applicationDetail = applicationDetail;
         this.interviewDatetime = null;
+        this.documentPass = Pass.FAIL;
+        this.finalPass = Pass.FAIL;
     }
 
     // 정적 팩토리 메서드
-    public static Application from(CreateApplicationRequest createApplicationRequest, String UUID) {
+    public static Application of(CreateApplicationRequest createApplicationRequest, String UUID) {
         return Application.builder()
                 .applicantInfo(ApplicantInfo.of(createApplicationRequest.getApplicantInfoVo(), UUID))
-                .applicationDetail(ApplicationDetail.of(createApplicationRequest.getApplicationDetailVo()))
+                .applicationDetail(ApplicationDetail.from(createApplicationRequest.getApplicationDetailVo()))
                 .build();
+    }
+
+    public void updateInterviewCheck(boolean check) {
+        this.interviewCheck = check;
+    }
+
+    public void updateFinalCheck(boolean check) {
+        this.finalCheck = check;
     }
 }

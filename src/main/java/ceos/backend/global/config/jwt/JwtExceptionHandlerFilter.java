@@ -37,7 +37,7 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
 
     private ErrorResponse getErrorResponse(BaseErrorCode errorCode) {
 
-        return ErrorResponse.of(errorCode.getErrorReason());
+        return ErrorResponse.from(errorCode.getErrorReason());
     }
 
     private void responseToClient(HttpServletResponse response, ErrorResponse errorResponse)
