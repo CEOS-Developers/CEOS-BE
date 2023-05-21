@@ -19,6 +19,7 @@ public enum ApplicationErrorCode implements BaseErrorCode {
     ALREADY_CHECK_INTERVIEW(BAD_REQUEST, "APPLICATION_400_5", "면접 참여 여부를 이미 선택했습니다."),
     NOT_PASS_FINAL(BAD_REQUEST, "APPLICATION_400_6", "최종 합격 상태가 아닙니다."),
     ALREADY_CHECK_FINAL(BAD_REQUEST, "APPLICATION_400_7", "활동 여부를 이미 선택했습니다."),
+    SAME_PASS_STATUS(BAD_REQUEST, "APPLICATION_400_8", "같은 상태로 변경할 수 없습니다."),
 
     /* Question */
     QUESTION_NOT_FOUND(BAD_REQUEST, "QUESTION_400_1", "존재하지 않는 질문입니다."),

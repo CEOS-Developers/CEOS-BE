@@ -3,6 +3,7 @@ package ceos.backend.domain.application.service;
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
+import ceos.backend.domain.application.dto.request.UpdatePassStatus;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
@@ -126,5 +127,32 @@ public class ApplicationService {
                     = SlackUnavailableReason.of(application, request.getReason(), true);
             Event.raise(reason);
         }
+    }
+
+    @Transactional
+    public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
+        // 기간 검증
+        applicationHelper.validateDocumentPassDuration();
+
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // status 변경
+        application.updateDocumentPass(updatePassStatus.getPass());
+    }
+
+    @Transactional
+    public void updateFinalPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
+        // 기간 검증
+        applicationHelper.validateFinalPassDuration();
+
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // 서류 통과 검증
+        applicationHelper.validateDocumentPassStatus(application);
+
+        // status 변경
+        application.updateFinalPass(updatePassStatus.getPass());
     }
 }

@@ -1,9 +1,7 @@
 package ceos.backend.domain.settings.domain;
 
 import ceos.backend.domain.application.exception.WrongGeneration;
-import ceos.backend.domain.settings.exception.NotApplicationDuration;
-import ceos.backend.domain.settings.exception.NotDocumentResultCheckDuration;
-import ceos.backend.domain.settings.exception.NotFinalResultCheckDuration;
+import ceos.backend.domain.settings.exception.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -142,6 +140,24 @@ public class Settings extends BaseEntity {
         }
         if (now.compareTo(this.resultDateFinal) < 0) {
             throw NotFinalResultCheckDuration.EXCEPTION;
+        }
+    }
+
+    public void validateDocumentPassDuration(LocalDate now) {
+        if (now.compareTo(this.startDateDoc) < 0) {
+            throw NotDocumentPassDuration.EXCEPTION;
+        }
+        if (now.compareTo(this.resultDateDoc) >= 0) {
+            throw NotDocumentPassDuration.EXCEPTION;
+        }
+    }
+
+    public void validateFinalPassDuration(LocalDate now) {
+        if (now.compareTo(this.resultDateDoc) < 0) {
+            throw NotFinalPassDuration.EXCEPTION;
+        }
+        if (now.compareTo(this.resultDateFinal) >= 0) {
+            throw NotFinalPassDuration.EXCEPTION;
         }
     }
 }

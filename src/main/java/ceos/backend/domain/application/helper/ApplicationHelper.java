@@ -105,4 +105,28 @@ public class ApplicationHelper {
             throw AlreadyCheckFinal.EXCEPTION;
         }
     }
+
+    public void validateDocumentPassDuration() {
+        Settings settings = settingsHelper.takeSetting();
+        LocalDate now = LocalDate.now();
+        settings.validateDocumentPassDuration(now);
+    }
+
+    public Application validateExistingApplicant(Long applicationId) {
+        return applicationRepository
+                .findById(applicationId)
+                .orElseThrow(() -> {
+                    throw ApplicantNotFound.EXCEPTION;
+                });
+    }
+
+    public void validateFinalPassDuration() {
+        Settings settings = settingsHelper.takeSetting();
+        LocalDate now = LocalDate.now();
+        settings.validateFinalPassDuration(now);
+    }
+
+    public void validateDocumentPassStatus(Application application) {
+        application.validateDocumentPass();
+    }
 }
