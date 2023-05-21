@@ -3,11 +3,13 @@ package ceos.backend.domain.application.service;
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
+import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
 import ceos.backend.domain.application.dto.request.UpdatePassStatus;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
+import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -127,6 +131,25 @@ public class ApplicationService {
                     = SlackUnavailableReason.of(application, request.getReason(), true);
             Event.raise(reason);
         }
+    }
+
+    @Transactional
+    public void updateInterviewTime(Long applicationId, UpdateInterviewTime updateInterviewTime) {
+        // 기간 검증
+        applicationHelper.validateDocumentPassDuration();
+
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // 서류 통과 검증
+        applicationHelper.validateDocumentPassStatus(application);
+
+        // 인터뷰 시간 검증
+        final List<Interview> interviews = interviewRepository.findAll();
+        applicationHelper.validateInterviewTime(interviews, updateInterviewTime.getInterviewTime());
+
+         // status 변경
+        application.updateInterviewTime(updateInterviewTime.getInterviewTime());
     }
 
     @Transactional

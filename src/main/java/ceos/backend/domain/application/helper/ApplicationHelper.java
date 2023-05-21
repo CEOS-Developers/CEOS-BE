@@ -1,8 +1,6 @@
 package ceos.backend.domain.application.helper;
 
-import ceos.backend.domain.application.domain.Application;
-import ceos.backend.domain.application.domain.ApplicationQuestion;
-import ceos.backend.domain.application.domain.Pass;
+import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.exception.*;
 import ceos.backend.domain.application.repository.*;
@@ -11,6 +9,7 @@ import ceos.backend.domain.settings.domain.Settings;
 import ceos.backend.domain.settings.helper.SettingsHelper;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.event.Event;
+import ceos.backend.global.util.InterviewDateFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -128,5 +127,13 @@ public class ApplicationHelper {
 
     public void validateDocumentPassStatus(Application application) {
         application.validateDocumentPass();
+    }
+
+    public void validateInterviewTime(List<Interview> interviews, String interviewTime) {
+        if(interviews.stream()
+                .noneMatch(interview -> interviewTime
+                        .equals(InterviewDateFormatter.interviewDateFormatter(interview)))) {
+            throw InterviewNotFound.EXCEPTION;
+        }
     }
 }

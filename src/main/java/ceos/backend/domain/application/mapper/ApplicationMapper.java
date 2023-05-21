@@ -5,6 +5,7 @@ import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.exception.InterviewNotFound;
 import ceos.backend.domain.application.exception.QuestionNotFound;
+import ceos.backend.global.util.InterviewDateFormatter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -46,18 +47,14 @@ public class ApplicationMapper {
                                                       Application application,
                                                       List<Interview> interviews) {
         List<ApplicationInterview> applicationInterviews = interviews.stream()
-                .filter(interview -> unableTimes.contains(interviewDateFormatter(interview)))
+                .filter(interview -> unableTimes
+                        .contains(InterviewDateFormatter.interviewDateFormatter(interview)))
                 .map(interview -> ApplicationInterview.of(application, interview))
                 .toList();
         if (applicationInterviews.isEmpty()) {
             throw InterviewNotFound.EXCEPTION;
         }
         return applicationInterviews;
-    }
-
-    private String interviewDateFormatter(Interview interview) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
-        return interview.getFromDate().format(formatter) + " - " + interview.getToDate().format(formatter);
     }
 
     public GetResultResponse toGetResultResponse(Application application, boolean isDocument) {

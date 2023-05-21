@@ -33,7 +33,7 @@ public class Application extends BaseEntity{
     @Embedded
     private ApplicationDetail applicationDetail;
 
-    private LocalDateTime interviewDatetime;
+    private String interviewDatetime;
 
     @NotNull
     @ColumnDefault("false")
@@ -94,5 +94,9 @@ public class Application extends BaseEntity{
         if (this.documentPass == Pass.FAIL) {
             throw NotPassDocument.EXCEPTION;
         }
+    }
+
+    public void updateInterviewTime(String interviewTime) {
+        this.interviewDatetime = interviewTime;
     }
 }

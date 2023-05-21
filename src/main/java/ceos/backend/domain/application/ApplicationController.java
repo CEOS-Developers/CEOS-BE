@@ -2,6 +2,7 @@ package ceos.backend.domain.application;
 
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
+import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
 import ceos.backend.domain.application.dto.request.UpdatePassStatus;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.service.ApplicationService;
@@ -59,6 +60,14 @@ public class ApplicationController {
                                            @RequestBody @Valid UpdateAttendanceRequest request) {
         log.info("활동 가능 여부 선택");
         applicationService.updateActivityAvailability(uuid, email, request);
+    }
+
+    @Operation(summary = "면접 시간 결정하기, 서류 접수 날짜 ~ 서류 결과 발표 전 날")
+    @PatchMapping(value = "/{applicationId}/interview")
+    public void updateInterviewTime(@PathVariable("applicationId") Long applicationId,
+                                    @RequestBody @Valid UpdateInterviewTime updateInterviewTime) {
+        log.info("면접 시간 결정하기");
+        applicationService.updateInterviewTime(applicationId, updateInterviewTime);
     }
 
     @Operation(summary = "서류 합격 여부 변경, 서류 접수 날짜 ~ 서류 결과 발표 전 날")
