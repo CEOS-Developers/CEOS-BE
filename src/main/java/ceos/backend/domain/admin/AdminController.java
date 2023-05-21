@@ -1,6 +1,8 @@
 package ceos.backend.domain.admin;
 
+import ceos.backend.domain.admin.dto.request.FindIdRequest;
 import ceos.backend.domain.admin.dto.request.SignUpRequest;
+import ceos.backend.domain.admin.dto.response.FindIdResponse;
 import ceos.backend.domain.admin.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,4 +30,10 @@ public class AdminController {
         adminService.signUp(signUpRequest);
     }
 
+    @Operation(summary = "아이디 찾기")
+    @PostMapping("/findid")
+    public FindIdResponse findId(@RequestBody @Valid FindIdRequest findIdRequest) {
+        log.info("아이디 찾기");
+        return adminService.findId(findIdRequest);
+    }
 }
