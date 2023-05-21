@@ -22,7 +22,7 @@ public class ErrorResponse {
         this.reason = reason;
     }
 
-    public static ErrorResponse of(ErrorReason errorReason) {
+    public static ErrorResponse from(ErrorReason errorReason) {
         return ErrorResponse.builder()
                 .code(errorReason.getCode())
                 .status(errorReason.getStatus().toString())

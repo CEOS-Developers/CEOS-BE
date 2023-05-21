@@ -49,7 +49,7 @@ public class ApplicationDetail {
         this.demodayDate = demodayDate;
     }
 
-    public static ApplicationDetail of(ApplicationDetailVo applicationDetailVo) {
+    public static ApplicationDetail from(ApplicationDetailVo applicationDetailVo) {
         return ApplicationDetail.builder()
                 .generation(applicationDetailVo.getGeneration())
                 .part(applicationDetailVo.getPart())

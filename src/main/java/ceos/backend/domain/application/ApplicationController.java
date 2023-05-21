@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/applications")
 @Tag(name = "Application")
 public class ApplicationController {
-
     private final ApplicationService applicationService;
 
     @Operation(summary = "지원하기")

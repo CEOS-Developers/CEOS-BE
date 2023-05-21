@@ -48,7 +48,7 @@ public class ApplicationHelper {
 
     public void sendEmail(CreateApplicationRequest request, String UUID) {
         final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
-        Event.raise(AwsSESMail.from(request, applicationQuestions, UUID));
+        Event.raise(AwsSESMail.of(request, applicationQuestions, UUID));
     }
 
     public void validateRecruitOption(int generation) {

@@ -34,13 +34,11 @@ public class AwsSESUtils {
         final Content content = Content.builder()
                 .data(subject)
                 .build();
-        final Message message = Message.builder()
+        return Message.builder()
                 .subject(content)
                 .body(Body.builder()
                         .html(builder -> builder.data(html))
                         .build())
                 .build();
-
-        return message;
     }
 }

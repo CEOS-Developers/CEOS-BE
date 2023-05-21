@@ -15,7 +15,7 @@ import java.util.Objects;
 @Component
 public class ApplicationMapper {
     public Application toEntity(CreateApplicationRequest request, String UUID) {
-        return Application.from(request, UUID);
+        return Application.of(request, UUID);
     }
 
     public List<ApplicationAnswer> toAnswerList(CreateApplicationRequest request,
@@ -45,8 +45,6 @@ public class ApplicationMapper {
     public List<ApplicationInterview> toInterviewList(List<String> unableTimes,
                                                       Application application,
                                                       List<Interview> interviews) {
-
-
         List<ApplicationInterview> applicationInterviews = interviews.stream()
                 .filter(interview -> unableTimes.contains(interviewDateFormatter(interview)))
                 .map(interview -> ApplicationInterview.of(application, interview))

@@ -47,14 +47,12 @@ public class SlackMessageGenerater {
         // IP + Method, Addr
         layoutBlocks.add(makeSection(getErrMessage(e), getErrStack(e)));
 
-        final Payload payload =
-                Payload.builder()
-                        .text("에러 알림")
-                        .username("에러")
-                        .iconEmoji(":dog:")
-                        .blocks(layoutBlocks)
-                        .build();
-        return payload;
+        return Payload.builder()
+                .text("에러 알림")
+                .username("에러")
+                .iconEmoji(":dog:")
+                .blocks(layoutBlocks)
+                .build();
     }
 
     private LayoutBlock makeSection(TextObject first, TextObject second ) {
@@ -114,15 +112,12 @@ public class SlackMessageGenerater {
         // reason
         layoutBlocks.add(getReason(reason));
 
-
-        final Payload payload =
-                Payload.builder()
-                        .text(title)
-                        .username(title)
-                        .iconEmoji(":dog:")
-                        .blocks(layoutBlocks)
-                        .build();
-        return payload;
+        return Payload.builder()
+                .text(title)
+                .username(title)
+                .iconEmoji(":dog:")
+                .blocks(layoutBlocks)
+                .build();
     }
 
     private MarkdownTextObject getName(ApplicantInfo applicantInfo) {

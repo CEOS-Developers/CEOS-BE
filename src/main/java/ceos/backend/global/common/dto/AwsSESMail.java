@@ -21,7 +21,7 @@ public class AwsSESMail {
         this.UUID = UUID;
     }
 
-    public static AwsSESMail from(CreateApplicationRequest createApplicationRequest,
+    public static AwsSESMail of(CreateApplicationRequest createApplicationRequest,
                                   List<ApplicationQuestion> applicationQuestions, String UUID) {
         return AwsSESMail.builder()
                 .createApplicationRequest(createApplicationRequest)

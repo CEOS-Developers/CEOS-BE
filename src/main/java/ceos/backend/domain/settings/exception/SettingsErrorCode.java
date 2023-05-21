@@ -22,7 +22,7 @@ public enum SettingsErrorCode implements BaseErrorCode {
 
     @Override
     public ErrorReason getErrorReason() {
-        return ErrorReason.from(status.value(), code, reason);
+        return ErrorReason.of(status.value(), code, reason);
 
     }
 }

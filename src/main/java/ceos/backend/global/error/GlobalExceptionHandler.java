@@ -40,8 +40,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request) {
         log.error("HandleInternalException", ex);
         final HttpStatus status = (HttpStatus) statusCode;
-        final ErrorReason errorReason = ErrorReason.from(status.value(), status.name(), ex.getMessage());
-        final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
+        final ErrorReason errorReason = ErrorReason.of(status.value(), status.name(), ex.getMessage());
+        final ErrorResponse errorResponse = ErrorResponse.from(errorReason);
         return super.handleExceptionInternal(ex, errorResponse, headers, status, request);
     }
 
@@ -58,8 +58,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                         FieldError::getField, FieldError::getDefaultMessage));
         final String errorsToJsonString = fieldAndErrorMessages.entrySet().stream().map(e -> e.getKey() + " : " + e.getValue())
                 .collect(Collectors.joining("|"));
-        final ErrorReason errorReason = ErrorReason.from(status.value(), httpStatus.name(), errorsToJsonString);
-        final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
+        final ErrorReason errorReason = ErrorReason.of(status.value(), httpStatus.name(), errorsToJsonString);
+        final ErrorResponse errorResponse = ErrorResponse.from(errorReason);
         return ResponseEntity.status(HttpStatus.valueOf(errorReason.getStatus()))
                 .body(errorResponse);
     }
@@ -71,7 +71,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("HttpMessageNotReadableException", ex);
         final GlobalErrorCode globalErrorCode = GlobalErrorCode.HTTP_MESSAGE_NOT_READABLE;
         final ErrorReason errorReason = globalErrorCode.getErrorReason();
-        final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
+        final ErrorResponse errorResponse = ErrorResponse.from(errorReason);
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
@@ -80,7 +80,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleBaseErrorException(BaseErrorException e, HttpServletRequest request) {
         log.error("BaseErrorException", e);
         final ErrorReason errorReason = e.getErrorCode().getErrorReason();
-        final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
+        final ErrorResponse errorResponse = ErrorResponse.from(errorReason);
         return ResponseEntity.status(HttpStatus.valueOf(errorReason.getStatus()))
                 .body(errorResponse);
     }
@@ -92,12 +92,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         // 슬랙 에러 알림
         final ContentCachingRequestWrapper cachingRequest = new ContentCachingRequestWrapper(request);
-        final SlackErrorMessage errorMessage = SlackErrorMessage.from(e, cachingRequest);
+        final SlackErrorMessage errorMessage = SlackErrorMessage.of(e, cachingRequest);
         Event.raise(errorMessage);
 
         final GlobalErrorCode globalErrorCode = GlobalErrorCode._INTERNAL_SERVER_ERROR;
         final ErrorReason errorReason = globalErrorCode.getErrorReason();
-        final ErrorResponse errorResponse = ErrorResponse.of(errorReason);
+        final ErrorResponse errorResponse = ErrorResponse.from(errorReason);
         return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 }

@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 public class UpdateAttendanceRequest {
-    @Schema(defaultValue = "true", description = "면접 가능 여부")
+    @Schema(defaultValue = "true", description = "참여 가능 여부")
     @NotNull
     private boolean available;
 
-    @Schema(defaultValue = "null", description = "면접 불가능 사유")
+    @Schema(defaultValue = "null", description = "참여 불가능 사유")
     private String reason;
 }
