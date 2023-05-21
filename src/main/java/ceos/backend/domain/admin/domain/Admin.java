@@ -1,5 +1,6 @@
 package ceos.backend.domain.admin.domain;
 
+import ceos.backend.domain.admin.dto.request.SignUpRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.Part;
 import jakarta.persistence.*;
@@ -33,12 +34,10 @@ public class Admin extends BaseEntity {
     private String name;
 
     @NotNull
-    @Size(max = 20)
     @Enumerated(EnumType.STRING)
     private Part part;
 
     @NotNull
-    @Size(max = 10)
     @Enumerated(EnumType.STRING)
     private AdminRole role;
 
@@ -65,5 +64,15 @@ public class Admin extends BaseEntity {
         this.email = email;
     }
 
-    // 정적 팩토리 메서드
+    public static Admin of(SignUpRequest signUpRequest, String hashedPassword, int generation) {
+        return Admin.builder()
+                .username(signUpRequest.getAdminVo().getUsername())
+                .password(hashedPassword)
+                .generation(generation)
+                .name(signUpRequest.getAdminVo().getName())
+                .part(signUpRequest.getAdminVo().getPart())
+                .role(AdminRole.ANONYMOUS)
+                .email(signUpRequest.getAdminVo().getEmail())
+                .build();
+    }
 }
