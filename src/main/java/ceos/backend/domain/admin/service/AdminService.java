@@ -1,19 +1,20 @@
 package ceos.backend.domain.admin.service;
 
 import ceos.backend.domain.admin.domain.Admin;
-import ceos.backend.domain.admin.dto.request.FindIdRequest;
-import ceos.backend.domain.admin.dto.request.SignUpRequest;
+import ceos.backend.domain.admin.dto.request.*;
+import ceos.backend.domain.admin.dto.response.CheckUsernameResponse;
 import ceos.backend.domain.admin.dto.response.FindIdResponse;
+import ceos.backend.domain.admin.dto.response.SignInResponse;
 import ceos.backend.domain.admin.helper.AdminHelper;
 import ceos.backend.domain.admin.repository.AdminMapper;
 import ceos.backend.domain.admin.repository.AdminRepository;
-import ceos.backend.global.common.entity.Part;
+import ceos.backend.global.config.jwt.TokenProvider;
+import ceos.backend.global.config.user.AdminDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -25,33 +26,87 @@ public class AdminService {
     private final AdminRepository adminRepository;
 
     @Transactional
+    public CheckUsernameResponse checkUsername(CheckUsernameRequest checkUsernameRequest){
+        //중복 아이디 검사
+        adminHelper.findDuplicateUsername(checkUsernameRequest.getUsername());
+
+        return adminMapper.toCheckUsernameResponse(true);
+    }
+
+    @Transactional
     public void signUp(SignUpRequest signUpRequest) {
-        //중복 아이디 검사를 어디서 할까요 API를 새로 만들까요 아님 여기서 exception 던져서 처리할까요
+        //중복 어드민 검사
+        adminHelper.findDuplicateAdmin(signUpRequest.getAdminVo());
 
-        //중복 가입 검사
-        adminHelper.validateDuplicateAdmin(signUpRequest.getAdminVo());
-
-        final String hashedPassword = adminHelper.encodePassword(signUpRequest.getAdminVo().getPassword());
+        //어드민 생성 및 저장
+        final String encodedPassword = adminHelper.encodePassword(signUpRequest.getAdminVo().getPassword());
         final int generation = adminHelper.takeGeneration();
-        final Admin admin = adminMapper.toEntity(signUpRequest, hashedPassword, generation);
+        final Admin admin = adminMapper.toEntity(signUpRequest, encodedPassword, generation);
         adminRepository.save(admin);
     }
 
     @Transactional
-    public FindIdResponse findId(FindIdRequest findIdRequest) {
+    public SignInResponse signIn(SignInRequest signInRequest) {
 
-        final String name = findIdRequest.getName();
-        final String email = findIdRequest.getEmail();
-        final Part part = findIdRequest.getPart();
+        final Admin admin = adminHelper.findForSignIn(signInRequest);
+        final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
 
-        Optional<Admin> admin = adminRepository.findIdBy(name, email, part);
-        if (admin.isPresent()) {
-            final String username = admin.get().getUsername();
-            return FindIdResponse.from(username);
-        }
-        //throw WrongInput.EXCEPTION;
-        //throw new Exception()
-        final String username = admin.get().getUsername();
-        return FindIdResponse.from(username);
+        //토큰 발급
+        final String accessToken = adminHelper.getAccessToken(admin, authentication);
+        final String refreshToken = adminHelper.getRefreshToken(admin, authentication);
+
+        return adminMapper.toSignInResponse(accessToken, refreshToken);
     }
+
+    @Transactional
+    public FindIdResponse findId(FindIdRequest findIdRequest) {
+        //어드민 검증
+        final Admin admin = adminHelper.findForFindId(findIdRequest);
+
+        return adminMapper.toFindIdResponse(admin.getUsername());
+    }
+
+    @Transactional
+    public void findPwd(SendRandomPwdRequest sendRandomPwdRequest) {
+        final Admin admin = adminHelper.findForSendRandomPwd(sendRandomPwdRequest);
+        final String randomPwd = adminHelper.generateRandomPwd();
+
+        //임시 비밀번호 DB 저장
+        adminHelper.setRandomPwd(admin, randomPwd);
+
+        //메일 전송
+        adminHelper.sendEmail(admin.getEmail(), admin.getName(), randomPwd);
+    }
+
+    @Transactional
+    public void resetPwd(ResetPwdRequest resetPwdRequest, AdminDetails adminUser) {
+        final Admin admin = adminUser.getAdmin();
+
+        //입력값 검증
+        adminHelper.validateForResetPwd(resetPwdRequest, admin);
+
+        //비밀번호 재설정
+        adminHelper.resetPwd(resetPwdRequest, admin);
+    }
+
+    @Transactional
+    public void logout(AdminDetails adminUser) {
+        final Admin admin = adminUser.getAdmin();
+
+        adminHelper.deleteRefreshToken(admin);
+    }
+
+//    @Transactional
+//    public RefreshTokenResponse refreshToken(String refreshToken, AdminDetails adminUser) {
+//        final Admin admin = adminUser.getAdmin();
+//        final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
+//        //리프레시 토큰 검증
+//        tokenProvider.validateToken(refreshToken);
+//        adminHelper.matchesRefreshToken()
+//
+//        //토큰 재발급
+//        final String accessToken = adminHelper.getAccessToken(admin, authentication);
+//
+//        return adminMapper.toRefreshTokenResponse(accessToken);
+//    }
 }
