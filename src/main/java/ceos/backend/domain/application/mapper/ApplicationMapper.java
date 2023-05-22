@@ -5,6 +5,7 @@ import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.exception.InterviewNotFound;
 import ceos.backend.domain.application.exception.QuestionNotFound;
+import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.InterviewDateFormatter;
 import org.springframework.stereotype.Component;
 
@@ -22,10 +23,12 @@ public class ApplicationMapper {
     public List<ApplicationAnswer> toAnswerList(CreateApplicationRequest request,
                                                 Application application,
                                                 List<ApplicationQuestion> questions) {
+        final Part part = request.getApplicationDetailVo().getPart();
         // common
         List<ApplicationAnswer> answers = new java.util.ArrayList<>(request.getCommonAnswers().stream()
                 .map(answerVo -> {
                     ApplicationQuestion question = questions.stream()
+                            .filter(q -> q.getCategory() == QuestionCategory.COMMON)
                             .filter(q -> Objects.equals(q.getId(), answerVo.getQuestionId()))
                             .findFirst()
                             .orElseThrow(() -> QuestionNotFound.EXCEPTION);
@@ -35,6 +38,7 @@ public class ApplicationMapper {
         request.getPartAnswers()
                 .forEach(answerVo -> {
                     ApplicationQuestion question = questions.stream()
+                            .filter(q -> q.getCategory().toString().equals(part.toString()))
                             .filter(q -> Objects.equals(q.getId(), answerVo.getQuestionId()))
                             .findFirst()
                             .orElseThrow(() -> QuestionNotFound.EXCEPTION);
