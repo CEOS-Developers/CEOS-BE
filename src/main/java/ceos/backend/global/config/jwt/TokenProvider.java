@@ -1,7 +1,7 @@
 package ceos.backend.global.config.jwt;
 
-import ceos.backend.global.config.user.CustomUserDetails;
-import ceos.backend.global.config.user.CustomUserDetailsService;
+import ceos.backend.global.config.user.AdminDetails;
+import ceos.backend.global.config.user.AdminDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -13,13 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -28,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
-    private final CustomUserDetailsService customUserDetailsService;
+    private final AdminDetailsService adminDetailsService;
     private static final String AUTHORITIES_KEY = "auth";
     @Value("${jwt.secret}")
     private String secret;
@@ -53,7 +49,7 @@ public class TokenProvider implements InitializingBean {
         return null;
     }
 
-    public String createAccessToken(Authentication authentication) {
+    public String createAccessToken(Long id, Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -62,10 +58,11 @@ public class TokenProvider implements InitializingBean {
         Date validity = new Date(now + this.accessTokenValidityInMilliseconds);
 
         return Jwts.builder()
-                .setSubject(authentication.getName())
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setSubject(id.toString())
                 .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -85,29 +82,18 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-    public Long getTokenUserId(String token) {
-        return (Long) Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody().get("userId");
-    }
-
-    public Authentication getAuthentication(String token) {
-        Claims claims = Jwts
-                .parserBuilder()
+    public String getTokenUserId(String token) {
+        return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody();
-
-        Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-
-        User principal = new User(claims.getSubject(), "", authorities);
-
-        CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailsService.loadUserByUsername(principal.getUsername());
-        return new UsernamePasswordAuthenticationToken(customUserDetails, token, authorities);
+                .getBody().getSubject();
     }
 
+    public Authentication getAuthentication(String token) {
+        AdminDetails adminDetails = (AdminDetails) adminDetailsService.loadAdminByUsername(Long.parseLong(getTokenUserId(token)));
+        return new UsernamePasswordAuthenticationToken(adminDetails, token, adminDetails.getAuthorities());
+    }
 
     public boolean validateToken(String token) {
         try {
