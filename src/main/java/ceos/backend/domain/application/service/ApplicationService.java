@@ -48,7 +48,7 @@ public class ApplicationService {
 
         final List<Interview> interviews = interviewRepository.findAll();
         final List<ApplicationInterview> applicationInterviews
-                = applicationMapper.toInterviewList(createApplicationRequest.getUnableTimes(),
+                = applicationMapper.toApplicationInterviewList(createApplicationRequest.getUnableTimes(),
                 application, interviews);
         applicationInterviewRepository.saveAll(applicationInterviews);
 
@@ -58,7 +58,22 @@ public class ApplicationService {
 
     @Transactional
     public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
-        //
+        // 기간 확인
+        applicationHelper.validateBeforeStartDateDoc();
+
+        // 남은 응답 확인
+        applicationHelper.validateRemainApplications();
+
+        // 변경
+        applicationQuestionRepository.deleteAll();
+        interviewRepository.deleteAll();
+
+        final List<ApplicationQuestion> questions = applicationMapper.toQuestionList(updateApplicationQuestion);
+        applicationQuestionRepository.saveAll(questions);
+
+        final List<Interview> interviews = applicationMapper.toInterviewList(updateApplicationQuestion);
+        interviewRepository.saveAll(interviews);
+
     }
 
     @Transactional(readOnly = true)

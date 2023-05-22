@@ -24,6 +24,8 @@ import java.util.UUID;
 public class ApplicationHelper {
     private final ApplicationRepository applicationRepository;
     private final ApplicationQuestionRepository applicationQuestionRepository;
+    private final ApplicationInterviewRepository applicationInterviewRepository;
+    private final ApplicationAnswerRepository applicationAnswerRepository;
     private final SettingsHelper settingsHelper;
 
     public void validateFirstApplication(ApplicantInfoVo applicantInfoVo) {
@@ -134,6 +136,21 @@ public class ApplicationHelper {
                 .noneMatch(interview -> interviewTime
                         .equals(InterviewDateFormatter.interviewDateFormatter(interview)))) {
             throw InterviewNotFound.EXCEPTION;
+        }
+    }
+
+    public void validateBeforeStartDateDoc() {
+        Settings settings = settingsHelper.takeSetting();
+        LocalDate now = LocalDate.now();
+        settings.validateBeforeStartDateDoc(now);
+    }
+
+    public void validateRemainApplications() {
+        if (applicationAnswerRepository.count() != 0) {
+            throw AnswerStillExist.EXCEPTION;
+        }
+        if (applicationInterviewRepository.count() != 0) {
+            throw ApplicationInterviewStillExist.EXCEPTION;
         }
     }
 }

@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.domain;
 
+import ceos.backend.domain.application.vo.QuestionVo;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -24,11 +25,9 @@ public class ApplicationQuestion extends BaseEntity {
     private String question;
 
     @NotNull
-    @Size(max = 20)
     @Enumerated(EnumType.STRING)
     private QuestionCategory category;
 
-    // 생성자
     @Builder
     private ApplicationQuestion(int number,
                                 String question,
@@ -39,5 +38,11 @@ public class ApplicationQuestion extends BaseEntity {
         this.category = category;
     }
 
-    // 정적 팩토리 메서드
+    public static ApplicationQuestion of(QuestionVo questionVo, QuestionCategory category) {
+        return ApplicationQuestion.builder()
+                .category(category)
+                .question(questionVo.getQuestion())
+                .number(questionVo.getQuestionIndex())
+                .build();
+    }
 }

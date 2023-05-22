@@ -160,4 +160,10 @@ public class Settings extends BaseEntity {
             throw NotFinalPassDuration.EXCEPTION;
         }
     }
+
+    public void validateBeforeStartDateDoc(LocalDate now) {
+        if (now.compareTo(this.startDateDoc) >= 0) {
+            throw AlreadyApplicationDuration.EXCEPTION;
+        }
+    }
 }

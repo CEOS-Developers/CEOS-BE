@@ -25,6 +25,12 @@ public enum ApplicationErrorCode implements BaseErrorCode {
     /* Question */
     QUESTION_NOT_FOUND(BAD_REQUEST, "QUESTION_404_1", "존재하지 않는 질문입니다."),
 
+    /* Answer */
+    ANSWERS_STILL_EXIST(BAD_REQUEST, "ANSWER_400_1", "기존 질문에 대한 답변이 존재합니다."),
+
+    /* Application Interview */
+    APPLICATION_INTERVIEW_STILL_EXIST(BAD_REQUEST, "ANSWER_400_1", "기존 면접 시간에 대한 답변이 존재합니다."),
+
     /* Interview */
     INTERVIEW_NOT_FOUND(BAD_REQUEST, "INTERVIEW_404_1", "존재하지 않는 면접 시간입니다.");
 
