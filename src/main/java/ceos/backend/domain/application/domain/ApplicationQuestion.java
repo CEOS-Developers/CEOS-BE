@@ -17,7 +17,6 @@ public class ApplicationQuestion extends BaseEntity {
     private Long id;
 
     @NotNull
-    @Column
     private int number;
 
     @NotNull

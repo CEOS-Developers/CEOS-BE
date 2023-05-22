@@ -28,7 +28,7 @@ public class ApplicationHelper {
 
     public void validateFirstApplication(ApplicantInfoVo applicantInfoVo) {
         if (applicationRepository
-                .findByNameAndPhoneNumber(applicantInfoVo.getName(), applicantInfoVo.getPhoneNumber())
+                .findByEmail(applicantInfoVo.getEmail())
                 .isPresent()) {
             throw DuplicateApplicant.EXCEPTION;
         }
@@ -57,7 +57,7 @@ public class ApplicationHelper {
         settings.validateApplyDuration(now);
     }
 
-    public Application validateApplicantAccessable(String uuid, String email) {
+    public Application validateApplicantAccessible(String uuid, String email) {
         return applicationRepository
                 .findByUuidAndEmail(uuid, email)
                 .orElseThrow(() -> {

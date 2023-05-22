@@ -6,7 +6,6 @@ import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
-import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -70,7 +67,7 @@ public class ApplicationService {
         applicationHelper.validateDocumentResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
 
         // dto
         return applicationMapper.toGetResultResponse(application, true);
@@ -82,7 +79,7 @@ public class ApplicationService {
         applicationHelper.validateDocumentResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
 
         // 유저 확인 여부 검증
         applicationHelper.validateApplicantInterviewCheckStatus(application);
@@ -104,7 +101,7 @@ public class ApplicationService {
         applicationHelper.validateFinalResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
 
         // 유저 서류 합격 여부 검증
         applicationHelper.validateApplicantDocumentPass(application);
@@ -119,7 +116,7 @@ public class ApplicationService {
         applicationHelper.validateFinalResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
 
         // 유저 확인 여부 검증
         applicationHelper.validateApplicantActivityCheckStatus(application);

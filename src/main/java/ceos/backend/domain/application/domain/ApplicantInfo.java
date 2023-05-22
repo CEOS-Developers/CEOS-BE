@@ -39,7 +39,6 @@ public class ApplicantInfo {
 
     @NotNull
     @Size(max = 11)
-    @Column(unique = true)
     private String phoneNumber;
 
     @NotNull
