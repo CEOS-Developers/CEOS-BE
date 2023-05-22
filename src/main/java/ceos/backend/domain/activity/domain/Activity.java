@@ -1,5 +1,6 @@
 package ceos.backend.domain.activity.domain;
 
+import ceos.backend.domain.activity.dto.ActivityDto;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -27,23 +28,28 @@ public class Activity extends BaseEntity {
     @NotNull
     private String imageUrl;
 
-    @NotNull
-    @Column(unique = true)
-    private int number;
-
-
     // 생성자
     @Builder
-    private Activity(String name,
-                  String content,
-                  String imageUrl,
-                  int number) {
+    private Activity(String name, String content, String imageUrl) {
 
         this.name = name;
         this.content = content;
         this.imageUrl = imageUrl;
-        this.number = number;
     }
 
     // 정적 팩토리 메서드
+    public static Activity from(ActivityDto activityDto) {
+        return Activity.builder()
+                .name(activityDto.getName())
+                .content(activityDto.getContent())
+                .imageUrl(activityDto.getImageUrl())
+                .build();
+    }
+
+    // Update
+    public void updateActivity(ActivityDto activityDto) {
+        name = activityDto.getName();
+        content = activityDto.getContent();
+        imageUrl = activityDto.getImageUrl();
+    }
 }
