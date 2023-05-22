@@ -1,22 +1,24 @@
 package ceos.backend.domain.admin.dto.response;
 
-import ceos.backend.domain.admin.dto.Token;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class SignInResponse {
 
-    private Token token;
+    private String accessToken;
+    private String refreshToken;
 
     @Builder
-    private SignInResponse(Token token){
-        this.token = token;
+    private SignInResponse(String accessToken, String refreshToken){
+        this.accessToken = accessToken;
+        this.refreshToken =refreshToken;
     }
 
-    public static SignInResponse from(Token token){
+    public static SignInResponse of(String accessToken, String refreshToken){
         return SignInResponse.builder()
-                .token(token)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 }
