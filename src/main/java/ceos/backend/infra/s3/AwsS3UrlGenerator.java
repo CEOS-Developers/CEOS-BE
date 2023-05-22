@@ -3,9 +3,9 @@ package ceos.backend.infra.s3;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -20,17 +20,18 @@ public class AwsS3UrlGenerator {
     public String generateUrl(String prefix){
         String filename = UUID.randomUUID().toString();
 
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(BUCKET)
                 .key(prefix + "/" + filename)
                 .build();
 
-        GetObjectPresignRequest getObjectPresignRequest = GetObjectPresignRequest.builder()
-                .signatureDuration(Duration.ofMinutes(60))
-                .getObjectRequest(getObjectRequest)
+        PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
+                .signatureDuration(Duration.ofMinutes(10))
+                .putObjectRequest(objectRequest)
                 .build();
 
-        PresignedGetObjectRequest presignedGetObjectRequest = awsS3Config.s3Presigner().presignGetObject(getObjectPresignRequest);
-        return presignedGetObjectRequest.url().toString();
+        PresignedPutObjectRequest presignedRequest = awsS3Config.s3Presigner().presignPutObject(presignRequest);
+
+        return presignedRequest.url().toString();
     }
 }
