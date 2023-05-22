@@ -16,6 +16,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -28,10 +29,6 @@ public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
     @Value("${jwt.secret}")
     private String secret;
-    @Value("${jwt.accesstoken-validity-in-seconds}")
-    private long accessTokenValidityInMilliseconds;
-    @Value("${jwt.refreshtoken-validity-in-seconds}")
-    private long refreshTokenValidityInMilliseconds;
     private Key key;
 
 
@@ -54,13 +51,17 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.accessTokenValidityInMilliseconds);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.HOUR, 6);  // 만료일 14일
+
+        final Date issuedAt = new Date();
+        final Date validity = new Date(cal.getTimeInMillis());
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setSubject(id.toString())
                 .claim(AUTHORITIES_KEY, authorities)
+                .setIssuedAt(issuedAt)
                 .setExpiration(validity)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -71,14 +72,19 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = (new Date()).getTime();
-        Date validity = new Date(now + this.refreshTokenValidityInMilliseconds);
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, 14);  // 만료일 14일
+
+        final Date issuedAt = new Date();
+        final Date validity = new Date(cal.getTimeInMillis());
+
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .setIssuedAt(issuedAt)
                 .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -102,6 +108,7 @@ public class TokenProvider implements InitializingBean {
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
+            log.info(e.toString());
             log.info("만료된 JWT 토큰입니다.");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
