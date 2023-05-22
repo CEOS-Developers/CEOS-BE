@@ -1,24 +1,26 @@
 package ceos.backend.global.common.dto.mail;
 
-import ceos.backend.domain.admin.domain.Admin;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class PasswordInfo {
+    private String email;
     private String name;
-    private String uuid;
+    private String randomPwd;
 
     @Builder
-    private PasswordInfo(String name, String uuid) {
+    private PasswordInfo(String email, String name, String randomPwd) {
+        this.email = email;
         this.name = name;
-        this.uuid = uuid;
+        this.randomPwd = randomPwd;
     }
 
-    public static PasswordInfo of(Admin admin, String UUID) {
+    public static PasswordInfo of(String email, String name, String randomPwd) {
         return PasswordInfo.builder()
-                .name(admin.getName())
-                .uuid(UUID)
+                .email(email)
+                .name(name)
+                .randomPwd(randomPwd)
                 .build();
     }
 }
