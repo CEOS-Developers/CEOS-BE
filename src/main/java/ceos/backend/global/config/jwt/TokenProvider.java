@@ -80,7 +80,7 @@ public class TokenProvider implements InitializingBean {
 
 
         return Jwts.builder()
-                .setSubject(authentication.getName())
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .claim(AUTHORITIES_KEY, authorities)
                 .setIssuedAt(issuedAt)
                 .setExpiration(validity)
