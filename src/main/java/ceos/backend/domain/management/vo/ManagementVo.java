@@ -45,6 +45,6 @@ public class ManagementVo {
     @NotEmpty(message = "임원진 소속을 입력해주세요")
     private String company;
 
-    @Schema(defaultValue = "imimimimi", description = "사진 url")
+    @Schema(defaultValue = "https://s3.ap-northeast-2.amazonaws.com/ceos-sinchon.com-image/image/2490u509u020f", description = "사진 url")
     private String imageUrl;
 }
