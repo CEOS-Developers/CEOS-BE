@@ -6,8 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @Getter
 @AllArgsConstructor
@@ -18,7 +17,9 @@ public enum AdminErrorCode implements BaseErrorCode {
     ADMIN_NOT_SIGN_UP(NOT_FOUND, "ADMIN_404_1", "회원으로 가입된 유저가 아닙니다"),
 
     /* Data */
-    INVALID_PASSWORD(BAD_REQUEST, "ADMIN_400_1", "비밀번호가 일치하지 않습니다");
+    MISMATCH_NEW_PASSWORD(BAD_REQUEST, "ADMIN_400_3", "새비밀번호가 일치하지 않습니다"),
+    MISMATCH_PASSWORD(BAD_REQUEST, "ADMIN_400_4", "비밀번호가 일치하지 않습니다"),
+    DUPLICATE_DATA(CONFLICT, "ADMIN_409_1", "이미 존재하는 데이터입니다");
     private HttpStatus status;
     private String code;
     private String reason;
