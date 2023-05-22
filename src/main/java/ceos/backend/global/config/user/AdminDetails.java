@@ -1,38 +1,38 @@
 package ceos.backend.global.config.user;
 
+import ceos.backend.domain.admin.domain.Admin;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
-public class CustomUserDetails implements UserDetails {
+public class AdminDetails implements UserDetails {
 
-    private User user;
+    private Admin admin;
 
-    public CustomUserDetails(User user) {
-        this.user = user;
+    public AdminDetails(Admin admin) {
+        this.admin = admin;
     }
 
     //나중에 더 구체화 할 수 있을 것 같음
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add((GrantedAuthority) () -> "ROLE_USER");
+        collection.add((GrantedAuthority) () -> "ANONYMOUS");
         return collection;
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return admin.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return null;
     }
 
     @Override
