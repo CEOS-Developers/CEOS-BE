@@ -21,10 +21,13 @@ class SettingsTest {
     @DisplayName("지원 기간에는 수정할 수 없음")
     void validAmenablePeriod_X() {
         //given
-        LocalDate date = LocalDate.of(2023, 5, 17);
+        Settings settings = settingsHelper.takeSetting();
 
         //when
-        Settings settings = settingsHelper.takeSetting();
+        LocalDate startDateDoc = settings.getStartDateDoc();
+        LocalDate date = LocalDate.of(startDateDoc.getYear(),
+                startDateDoc.getMonth(),
+                startDateDoc.getDayOfMonth()+1);
 
         //then
         assertThrows(NotAllowedToModify.class, () -> {
@@ -37,10 +40,13 @@ class SettingsTest {
     @DisplayName("지원 기간이 아닐 때는 수정할 수 있음")
     void validAmenablePeriod_O() {
         //given
-        LocalDate date = LocalDate.of(2023, 5, 16);
+        Settings settings = settingsHelper.takeSetting();
 
         //when
-        Settings settings = settingsHelper.takeSetting();
+        LocalDate startDateDoc = settings.getStartDateDoc();
+        LocalDate date = LocalDate.of(startDateDoc.getYear(),
+                startDateDoc.getMonth(),
+                startDateDoc.getDayOfMonth()-1);
 
         //then
         settings.validAmenablePeriod(date);
