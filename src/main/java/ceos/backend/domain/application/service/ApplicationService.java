@@ -2,6 +2,8 @@ package ceos.backend.domain.application.service;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.*;
+import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
+import ceos.backend.domain.application.dto.response.GetInterviewTime;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
@@ -54,6 +56,15 @@ public class ApplicationService {
 
         // 이메일 전송
         applicationHelper.sendEmail(createApplicationRequest, UUID);
+    }
+
+    @Transactional(readOnly = true)
+    public GetApplicationQuestion getApplicationQuestion() {
+        // dto
+        final List<ApplicationQuestion> applicationQuestions
+                = applicationQuestionRepository.findAll();
+        final List<Interview> interviews = interviewRepository.findAll();
+        return applicationMapper.toGetApplicationQuestion(applicationQuestions, interviews);
     }
 
     @Transactional
@@ -145,6 +156,21 @@ public class ApplicationService {
                     = SlackUnavailableReason.of(application, request.getReason(), true);
             Event.raise(reason);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public GetInterviewTime getInterviewTime(Long applicationId) {
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // 서류 통과 검증
+        applicationHelper.validateDocumentPassStatus(application);
+
+        // dto
+        final List<Interview> interviews = interviewRepository.findAll();
+        final List<ApplicationInterview> applicationInterviews
+                = applicationInterviewRepository.findAllByApplication(application);
+        return applicationMapper.toGetInterviewTime(interviews, applicationInterviews);
     }
 
     @Transactional

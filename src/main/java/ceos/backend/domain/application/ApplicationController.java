@@ -1,6 +1,8 @@
 package ceos.backend.domain.application;
 
 import ceos.backend.domain.application.dto.request.*;
+import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
+import ceos.backend.domain.application.dto.response.GetInterviewTime;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.service.ApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,8 +27,15 @@ public class ApplicationController {
         applicationService.createApplication(createApplicationRequest);
     }
 
+    @Operation(summary = "지원서 질문 가져오기")
+    @GetMapping(value = "/question")
+    public GetApplicationQuestion getApplicationQuestion() {
+        log.info("지원서 질문 가져오기");
+        return applicationService.getApplicationQuestion();
+    }
+
     @Operation(summary = "지원서 질문 수정")
-    @PutMapping
+    @PutMapping(value = "/question")
     public void updateApplicationQuestion(@RequestBody @Valid UpdateApplicationQuestion updateApplicationQuestion) {
         log.info("지원서 질문 수정");
         applicationService.updateApplicationQuestion(updateApplicationQuestion);
@@ -64,6 +73,13 @@ public class ApplicationController {
                                            @RequestBody @Valid UpdateAttendanceRequest request) {
         log.info("활동 가능 여부 선택");
         applicationService.updateActivityAvailability(uuid, email, request);
+    }
+
+    @Operation(summary = "면접 시간 정보 가져오기")
+    @GetMapping(value = "/{applicationId}/interview")
+    public GetInterviewTime getInterviewTime(@PathVariable("applicationId") Long applicationId) {
+        log.info("면접 시간 정보 가져오기");
+        return applicationService.getInterviewTime(applicationId);
     }
 
     @Operation(summary = "면접 시간 결정하기, 서류 접수 날짜 ~ 서류 결과 발표 전 날")
