@@ -4,6 +4,9 @@ import ceos.backend.domain.activity.domain.Activity;
 import ceos.backend.domain.activity.dto.ActivityDto;
 import ceos.backend.domain.activity.exception.ActivityNotFound;
 import ceos.backend.domain.activity.repository.ActivityRepository;
+import ceos.backend.global.common.dto.AwsS3Url;
+import ceos.backend.global.common.event.Event;
+import ceos.backend.infra.s3.AwsS3UrlHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import java.util.List;
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final AwsS3UrlHandler awsS3UrlHandler;
 
     /**
      * 활동 추가
@@ -75,5 +79,11 @@ public class ActivityService {
         Activity activity = activityRepository.findById(id).orElseThrow(() -> new ActivityNotFound());
 
         activityRepository.delete(activity);
+    }
+    
+
+    @Transactional(readOnly = true)
+    public AwsS3Url getImageUrl(){
+        return awsS3UrlHandler.handle("activities");
     }
 }

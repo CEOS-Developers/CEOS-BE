@@ -3,6 +3,9 @@ package ceos.backend.domain.activity;
 import ceos.backend.domain.activity.domain.Activity;
 import ceos.backend.domain.activity.dto.ActivityDto;
 import ceos.backend.domain.activity.service.ActivityService;
+import ceos.backend.global.common.dto.AwsS3Url;
+import ceos.backend.global.common.event.Event;
+import ceos.backend.infra.s3.AwsS3UrlGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,7 +23,6 @@ import java.util.List;
 public class ActivityController {
 
     private final ActivityService activityService;
-
 
     @Operation(summary = "활동 생성하기")
     @PostMapping
@@ -61,4 +63,11 @@ public class ActivityController {
         activityService.deleteActivity(id);
     }
 
+
+    @Operation(summary = "활동 이미지 url 생성하기")
+    @GetMapping("/image")
+    public AwsS3Url getImageUrl() {
+        log.info("활동 이미지 url 생성하기");
+        return activityService.getImageUrl();
+    }
 }
