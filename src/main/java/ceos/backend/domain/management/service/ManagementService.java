@@ -5,6 +5,7 @@ import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.CreateManagementRequest;
 import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
+import ceos.backend.domain.management.exception.ManagerNotFound;
 import ceos.backend.domain.management.helper.ManagementHelper;
 import ceos.backend.domain.management.mapper.ManagementMapper;
 import ceos.backend.domain.management.repository.ManagementRepository;
@@ -51,13 +52,13 @@ public class ManagementService {
 
     @Transactional
     public ManagementDto getManagement(Long id) {
-        Management findManagement = managementRepository.findById(id).orElseThrow();
+        Management findManagement = managementRepository.findById(id).orElseThrow(() -> {throw ManagerNotFound.EXCEPTION;});
         return ManagementDto.entityToDto(findManagement);
     }
 
     @Transactional
     public ManagementDto updateManagementInfo(Long id, UpdateManagementRequest updateManagementRequest) {
-        Management findManagement = managementRepository.findById(id).orElseThrow();
+        Management findManagement = managementRepository.findById(id).orElseThrow(() -> {throw ManagerNotFound.EXCEPTION;});
         return managementHelper.update(findManagement, updateManagementRequest);
     }
 
