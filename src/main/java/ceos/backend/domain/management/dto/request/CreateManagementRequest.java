@@ -1,6 +1,6 @@
 package ceos.backend.domain.management.dto.request;
 
-import ceos.backend.domain.management.vo.ManagementVo;
+import ceos.backend.domain.management.Vo.ManagementVo;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Getter;
 
