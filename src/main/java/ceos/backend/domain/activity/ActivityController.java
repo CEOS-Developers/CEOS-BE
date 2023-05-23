@@ -33,7 +33,7 @@ public class ActivityController {
 
     @Operation(summary = "활동 조회하기")
     @GetMapping("/{id}")
-    public ActivityResponse getActivity(@PathVariable @Valid Long id) {
+    public ActivityResponse getActivity(@PathVariable Long id) {
         log.info("활동 조회하기");
         return activityService.getActivity(id);
     }
@@ -49,7 +49,7 @@ public class ActivityController {
 
     @Operation(summary = "활동 수정하기")
     @PutMapping("/{id}")
-    public ActivityResponse updateActivity(@PathVariable @Valid Long id, @RequestBody @Valid ActivityRequest activityRequest) {
+    public ActivityResponse updateActivity(@PathVariable Long id, @RequestBody @Valid ActivityRequest activityRequest) {
         log.info("활동 수정하기");
         return activityService.updateActivity(id, activityRequest);
     }
@@ -57,7 +57,7 @@ public class ActivityController {
 
     @Operation(summary = "활동 삭제하기")
     @DeleteMapping("/{id}")
-    public void deleteActivity(@PathVariable @Valid Long id) {
+    public void deleteActivity(@PathVariable Long id) {
         log.info("활동 삭제하기");
         activityService.deleteActivity(id);
     }
