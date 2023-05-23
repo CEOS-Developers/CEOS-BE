@@ -1,11 +1,16 @@
 package ceos.backend.domain.admin.domain;
 
+import ceos.backend.domain.admin.dto.request.SignUpRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.Part;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,18 +38,20 @@ public class Admin extends BaseEntity {
     private String name;
 
     @NotNull
-    @Size(max = 20)
     @Enumerated(EnumType.STRING)
     private Part part;
 
     @NotNull
-    @Size(max = 10)
     @Enumerated(EnumType.STRING)
     private AdminRole role;
 
     @NotNull
     @Size(max = 255)
     private String email;
+
+    @Nullable
+    @Size(max = 255)
+    private String refreshToken;
 
     // 생성자
     @Builder
@@ -65,5 +72,31 @@ public class Admin extends BaseEntity {
         this.email = email;
     }
 
-    // 정적 팩토리 메서드
+    public static Admin of(SignUpRequest signUpRequest, String encodedPassword, int generation) {
+        return Admin.builder()
+                .username(signUpRequest.getAdminVo().getUsername())
+                .password(encodedPassword)
+                .generation(generation)
+                .name(signUpRequest.getAdminVo().getName())
+                .part(signUpRequest.getAdminVo().getPart())
+                .role(AdminRole.ANONYMOUS)
+                .email(signUpRequest.getAdminVo().getEmail())
+                .build();
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void updateRandomPwd(String randomPwd) {
+        this.password = randomPwd;
+    }
+    
+    public void updatePwd(String encodedPassword) {
+        this.password = encodedPassword;
+    }
+
+    public void deleteRefreshToken() {
+        this.refreshToken = null;
+    }
 }
