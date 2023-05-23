@@ -22,7 +22,6 @@ public class GetRecruitmentResponse {
     private LocalDate startDateInterview;
     private LocalDate endDateInterview;
     private LocalDate resultDateFinal;
-    private String openChatUrl;
     private LocalDate otDate;
     private LocalDate demodayDate;
 
@@ -41,7 +40,6 @@ public class GetRecruitmentResponse {
                 .startDateInterview(recruitment.getStartDateInterview())
                 .endDateInterview(recruitment.getEndDateInterview())
                 .resultDateFinal(recruitment.getResultDateFinal())
-                .openChatUrl(recruitment.getOpenChatUrl())
                 .otDate(recruitment.getOtDate())
                 .demodayDate(recruitment.getDemodayDate())
                 .build();
