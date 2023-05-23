@@ -130,12 +130,12 @@ public class AdminHelper {
         final String newPassword1 = resetPwdRequest.getNewPassword1();
         final String newPassword2 = resetPwdRequest.getNewPassword2();
 
-        if (!newPassword1.equals(newPassword2)) {
-            throw MismatchNewPassword.EXCEPTION;
-        }
-
         if (matchesPassword(password, admin.getPassword())) {
             throw MismatchPassword.EXCEPTION;
+        }
+
+        if (!newPassword1.equals(newPassword2)) {
+            throw MismatchNewPassword.EXCEPTION;
         }
     }
 
