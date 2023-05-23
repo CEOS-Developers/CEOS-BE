@@ -11,7 +11,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @Getter
 @AllArgsConstructor
 public enum ActivityErrorCode implements BaseErrorCode {
-    ACTIVITY_NOT_FOUND(BAD_REQUEST, "ACTIVITY_400_1", "존재하지 않는 활동입니다.");
+    ACTIVITY_NOT_FOUND(BAD_REQUEST, "ACTIVITY_404_1", "존재하지 않는 활동입니다.");
 
     private HttpStatus status;
     private String code;
