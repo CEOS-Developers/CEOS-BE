@@ -61,6 +61,11 @@ public class ManagementService {
         return managementHelper.update(findManagement, updateManagementRequest);
     }
 
+    @Transactional
+    public void deleteManagement(Long id) {
+        managementRepository.deleteById(id);
+    }
+
     @Transactional(readOnly = true)
     public AwsS3Url getImageUrl(){
         return awsS3UrlHandler.handle("managements");

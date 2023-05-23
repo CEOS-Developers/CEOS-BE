@@ -58,6 +58,13 @@ public class ManagementController {
         return managementService.updateManagementInfo(managerId, updateManagementRequest);
     }
 
+    @Operation(summary = "임원진 삭제")
+    @DeleteMapping("/{managerId}")
+    public void deleteManagement(@PathVariable(name = "managerId") Long managerId) {
+        log.info("임원진 삭제");
+        managementService.deleteManagement(managerId);
+    }
+
     @Operation(summary = "임원진 이미지 url 생성하기")
     @GetMapping("/image")
     public AwsS3Url getImageUrl() {
