@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ActivityDto {
+public class ActivityRequest {
     @Schema(defaultValue = "데모데이", description = "활동 이름")
     @NotEmpty(message = "활동 이름을 입력해주세요")
     @Valid
@@ -24,9 +24,17 @@ public class ActivityDto {
     private String imageUrl;
 
     @Builder
-    public ActivityDto(String name, String content, String imageUrl) {
+    private ActivityRequest(String name, String content, String imageUrl) {
         this.name = name;
         this.content = content;
         this.imageUrl = imageUrl;
+    }
+
+    public static ActivityRequest of(String name, String content, String imageUrl) {
+        return ActivityRequest.builder()
+                .name(name)
+                .content(content)
+                .imageUrl(imageUrl)
+                .build();
     }
 }
