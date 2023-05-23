@@ -9,10 +9,8 @@ import java.util.Optional;
 
 public interface ApplicationRepository extends JpaRepository<Application, Long> {
     @Query("select distinct a from Application a" +
-            " where a.applicantInfo.name = :name" +
-            " and a.applicantInfo.phoneNumber = :phoneNumber")
-    Optional<Application> findByNameAndPhoneNumber(@Param("name") String name,
-                                                   @Param("phoneNumber") String phoneNumber);
+            " where a.applicantInfo.email = :email")
+    Optional<Application> findByEmail(@Param("email") String email);
 
     @Query("select distinct a from Application a" +
             " where a.applicantInfo.uuid = :uuid")

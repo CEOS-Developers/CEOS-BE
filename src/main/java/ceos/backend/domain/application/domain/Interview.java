@@ -4,6 +4,7 @@ import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.data.relational.core.sql.In;
 
 import java.time.LocalDateTime;
 
@@ -22,12 +23,17 @@ public class Interview extends BaseEntity {
     @NotNull
     private LocalDateTime toDate;
 
-    // 생성자
     @Builder
     private Interview(Long id, LocalDateTime fromDate, LocalDateTime toDate) {
         this.id = id;
         this.fromDate = fromDate;
         this.toDate = toDate;
     }
-    // 정적 팩토리 메서드
+
+    public static Interview of(LocalDateTime fromDate, LocalDateTime toDate) {
+        return Interview.builder()
+                .fromDate(fromDate)
+                .toDate(toDate)
+                .build();
+    }
 }
