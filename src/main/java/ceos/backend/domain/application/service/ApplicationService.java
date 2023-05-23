@@ -10,9 +10,13 @@ import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -191,5 +195,27 @@ public class ApplicationService {
 
         // status 변경
         application.updateFinalPass(updatePassStatus.getPass());
+    }
+
+    @Transactional
+    public void createExcelFile() throws IOException {
+        // 새로운 워크북 생성
+        Workbook workbook = new XSSFWorkbook();
+
+        // 새로운 시트 생성
+        Sheet sheet = workbook.createSheet("Sheet1");
+
+        // 데이터 행 생성 및 데이터 작성
+        Row row = sheet.createRow(0);
+        Cell cell = row.createCell(0);
+        cell.setCellValue("Hello, World!");
+
+        // 파일로 저장
+        FileOutputStream fileOutputStream = new FileOutputStream("example.xlsx");
+        workbook.write(fileOutputStream);
+        fileOutputStream.close();
+
+        // 워크북 및 자원 해제
+        workbook.close();
     }
 }
