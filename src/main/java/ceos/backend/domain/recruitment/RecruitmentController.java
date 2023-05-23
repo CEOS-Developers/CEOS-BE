@@ -1,6 +1,7 @@
 package ceos.backend.domain.recruitment;
 
 import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
+import ceos.backend.domain.recruitment.dto.response.GetRecruitmentResponse;
 import ceos.backend.domain.recruitment.service.RecruitmentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,9 +21,9 @@ public class RecruitmentController {
 
     @Operation(summary = "리크루팅 정보 보기")
     @GetMapping
-    public void getRecruitment() {
+    public GetRecruitmentResponse getRecruitment() {
         log.info("리크루팅 정보 보기");
-        recruitmentService.getRecruitment();
+        return recruitmentService.getRecruitment();
     }
 
     @Operation(summary = "리크루팅 정보 수정")
