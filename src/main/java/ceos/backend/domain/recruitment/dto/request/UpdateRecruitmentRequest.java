@@ -6,7 +6,6 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Getter
-@Setter
 public class UpdateRecruitmentRequest {
     private int generation;
     private String prodImg;

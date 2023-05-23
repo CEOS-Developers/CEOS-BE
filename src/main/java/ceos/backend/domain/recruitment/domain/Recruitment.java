@@ -1,6 +1,7 @@
 package ceos.backend.domain.recruitment.domain;
 
 import ceos.backend.domain.application.exception.WrongGeneration;
+import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
 import ceos.backend.domain.recruitment.exception.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -109,6 +110,27 @@ public class Recruitment extends BaseEntity {
     }
 
     // 정적 팩토리 메서드
+    public static Recruitment from(UpdateRecruitmentRequest updateRecruitmentRequest) {
+        return Recruitment.builder()
+                .generation(updateRecruitmentRequest.getGeneration())
+                .prodImg(updateRecruitmentRequest.getProdImg())
+                .designImg(updateRecruitmentRequest.getDesignImg())
+                .devImg(updateRecruitmentRequest.getDevImg())
+                .prodStudyUrl(updateRecruitmentRequest.getProdStudyUrl())
+                .designStudyUrl(updateRecruitmentRequest.getDesignStudyUrl())
+                .devStudyUrl(updateRecruitmentRequest.getDevStudyUrl())
+                .startDateDoc(updateRecruitmentRequest.getStartDateDoc())
+                .endDateDoc(updateRecruitmentRequest.getEndDateDoc())
+                .resultDateDoc(updateRecruitmentRequest.getResultDateDoc())
+                .startDateInterview(updateRecruitmentRequest.getStartDateInterview())
+                .endDateInterview(updateRecruitmentRequest.getEndDateInterview())
+                .resultDateFinal(updateRecruitmentRequest.getResultDateFinal())
+                .openChatUrl(updateRecruitmentRequest.getOpenChatUrl())
+                .otDate(updateRecruitmentRequest.getOtDate())
+                .demodayDate(updateRecruitmentRequest.getDemodayDate())
+                .build();
+    }
+
 
     public void validateGeneration(int generation) {
         if (generation != this.generation) {

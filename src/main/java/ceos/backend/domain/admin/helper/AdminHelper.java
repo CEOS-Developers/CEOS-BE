@@ -6,7 +6,7 @@ import ceos.backend.domain.admin.dto.request.ResetPwdRequest;
 import ceos.backend.domain.admin.dto.request.SendRandomPwdRequest;
 import ceos.backend.domain.admin.dto.request.SignInRequest;
 import ceos.backend.domain.admin.exception.*;
-import ceos.backend.domain.settings.helper.SettingsHelper;
+import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.event.Event;
 import ceos.backend.global.config.jwt.TokenProvider;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AdminHelper {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final SettingsHelper settingsHelper;
+    private final RecruitmentHelper recruitmentHelper;
     private final AdminRepository adminRepository;
     private final AdminDetailsService adminDetailsService;
     private final TokenProvider tokenProvider;
@@ -41,7 +41,7 @@ public class AdminHelper {
     }
 
     public int takeGeneration() {
-        return settingsHelper.takeSetting().getGeneration();
+        return recruitmentHelper.takeRecruitment().getGeneration();
     }
 
     public Authentication adminAuthorizationInput(Admin admin) {
