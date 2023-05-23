@@ -1,7 +1,7 @@
-package ceos.backend.domain.settings.domain;
+package ceos.backend.domain.recruitment.domain;
 
 import ceos.backend.domain.application.exception.WrongGeneration;
-import ceos.backend.domain.settings.exception.*;
+import ceos.backend.domain.recruitment.exception.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -15,11 +15,11 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Settings extends BaseEntity {
+public class Recruitment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "settings_id")
+    @Column(name = "recruitment_id")
     private Long id;
 
     @NotNull
@@ -74,22 +74,22 @@ public class Settings extends BaseEntity {
 
     // 생성자
     @Builder
-    private Settings(int generation,
-                     String prodImg,
-                     String designImg,
-                     String devImg,
-                     String prodStudyUrl,
-                     String designStudyUrl,
-                     String devStudyUrl,
-                     LocalDate startDateDoc,
-                     LocalDate endDateDoc,
-                     LocalDate resultDateDoc,
-                     LocalDate startDateInterview,
-                     LocalDate endDateInterview,
-                     LocalDate resultDateFinal,
-                     String openChatUrl,
-                     LocalDate otDate,
-                     LocalDate demodayDate) {
+    private Recruitment(int generation,
+                        String prodImg,
+                        String designImg,
+                        String devImg,
+                        String prodStudyUrl,
+                        String designStudyUrl,
+                        String devStudyUrl,
+                        LocalDate startDateDoc,
+                        LocalDate endDateDoc,
+                        LocalDate resultDateDoc,
+                        LocalDate startDateInterview,
+                        LocalDate endDateInterview,
+                        LocalDate resultDateFinal,
+                        String openChatUrl,
+                        LocalDate otDate,
+                        LocalDate demodayDate) {
         this.generation = generation;
         this.prodImg = prodImg;
         this.designImg = designImg;
