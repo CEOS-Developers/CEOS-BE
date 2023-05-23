@@ -1,6 +1,7 @@
 package ceos.backend.domain.management;
 
 import ceos.backend.domain.management.dto.request.CreateManagementRequest;
+import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
 import ceos.backend.domain.management.service.ManagementService;
 import ceos.backend.global.common.dto.AwsS3Url;
 
@@ -26,6 +27,16 @@ public class ManagementController {
     public void createManagement(@RequestBody @Valid CreateManagementRequest createManagementRequest) {
         log.info("임원진 추가히기");
         managementService.createManagement(createManagementRequest);
+    }
+
+    @Operation(summary = "임원진 전체 보기")
+    @GetMapping
+    public GetAllManagementsResponse getAllManagements(
+            @RequestParam("pageNum") int pageNum,
+            @RequestParam("limit") int limit
+    ) {
+        log.info("임원진 전체 보기");
+        return managementService.getAllManagements(pageNum, limit);
     }
 
     @Operation(summary = "임원진 이미지 url 생성하기")

@@ -1,6 +1,6 @@
 package ceos.backend.domain.management.domain;
 
-import ceos.backend.domain.management.vo.ManagementVo;
+import ceos.backend.domain.management.Vo.ManagementVo;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.University;
 import jakarta.persistence.*;

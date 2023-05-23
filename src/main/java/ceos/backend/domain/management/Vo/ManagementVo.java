@@ -1,4 +1,4 @@
-package ceos.backend.domain.management.vo;
+package ceos.backend.domain.management.Vo;
 
 import ceos.backend.domain.management.domain.ManagementRole;
 import ceos.backend.global.common.annotation.ValidEnum;
