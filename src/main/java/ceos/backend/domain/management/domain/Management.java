@@ -1,6 +1,7 @@
 package ceos.backend.domain.management.domain;
 
 import ceos.backend.domain.management.Vo.ManagementVo;
+import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.University;
 import jakarta.persistence.*;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 @DynamicInsert
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Management extends BaseEntity {

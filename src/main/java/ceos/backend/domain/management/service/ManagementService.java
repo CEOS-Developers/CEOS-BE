@@ -3,7 +3,9 @@ package ceos.backend.domain.management.service;
 import ceos.backend.domain.management.domain.Management;
 import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.CreateManagementRequest;
+import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
+import ceos.backend.domain.management.helper.ManagementHelper;
 import ceos.backend.domain.management.mapper.ManagementMapper;
 import ceos.backend.domain.management.repository.ManagementRepository;
 import ceos.backend.global.common.dto.AwsS3Url;
@@ -24,6 +26,7 @@ public class ManagementService {
 
     private final ManagementRepository managementRepository;
     private final ManagementMapper managementMapper;
+    private final ManagementHelper managementHelper;
     private final AwsS3UrlHandler awsS3UrlHandler;
 
     @Transactional
@@ -50,6 +53,12 @@ public class ManagementService {
     public ManagementDto getManagement(Long id) {
         Management findManagement = managementRepository.findById(id).orElseThrow();
         return ManagementDto.entityToDto(findManagement);
+    }
+
+    @Transactional
+    public ManagementDto updateManagementInfo(Long id, UpdateManagementRequest updateManagementRequest) {
+        Management findManagement = managementRepository.findById(id).orElseThrow();
+        return managementHelper.update(findManagement, updateManagementRequest);
     }
 
     @Transactional(readOnly = true)

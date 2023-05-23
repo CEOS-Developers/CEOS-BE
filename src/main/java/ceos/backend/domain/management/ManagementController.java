@@ -2,6 +2,7 @@ package ceos.backend.domain.management;
 
 import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.CreateManagementRequest;
+import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
 import ceos.backend.domain.management.service.ManagementService;
 import ceos.backend.global.common.dto.AwsS3Url;
@@ -45,6 +46,16 @@ public class ManagementController {
     public ManagementDto getManagement(@PathVariable(name = "managerId") Long managerId) {
         log.info("임원진 하나 보기");
         return managementService.getManagement(managerId);
+    }
+
+    @Operation(summary = "임원진 정보 수정")
+    @PatchMapping("/{managerId}")
+    public ManagementDto updateManagement(
+            @PathVariable(name = "managerId") Long managerId,
+            @RequestBody UpdateManagementRequest updateManagementRequest
+    ) {
+        log.info("임원진 정보 수정");
+        return managementService.updateManagementInfo(managerId, updateManagementRequest);
     }
 
     @Operation(summary = "임원진 이미지 url 생성하기")
