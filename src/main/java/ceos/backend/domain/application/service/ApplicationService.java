@@ -1,8 +1,7 @@
 package ceos.backend.domain.application.service;
 
 import ceos.backend.domain.application.domain.*;
-import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
+import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
@@ -49,12 +48,32 @@ public class ApplicationService {
 
         final List<Interview> interviews = interviewRepository.findAll();
         final List<ApplicationInterview> applicationInterviews
-                = applicationMapper.toInterviewList(createApplicationRequest.getUnableTimes(),
+                = applicationMapper.toApplicationInterviewList(createApplicationRequest.getUnableTimes(),
                 application, interviews);
         applicationInterviewRepository.saveAll(applicationInterviews);
 
         // 이메일 전송
         applicationHelper.sendEmail(createApplicationRequest, UUID);
+    }
+
+    @Transactional
+    public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
+        // 기간 확인
+        applicationHelper.validateBeforeStartDateDoc();
+
+        // 남은 응답 확인
+        applicationHelper.validateRemainApplications();
+
+        // 변경
+        applicationQuestionRepository.deleteAll();
+        interviewRepository.deleteAll();
+
+        final List<ApplicationQuestion> questions = applicationMapper.toQuestionList(updateApplicationQuestion);
+        applicationQuestionRepository.saveAll(questions);
+
+        final List<Interview> interviews = applicationMapper.toInterviewList(updateApplicationQuestion);
+        interviewRepository.saveAll(interviews);
+
     }
 
     @Transactional(readOnly = true)
@@ -63,7 +82,7 @@ public class ApplicationService {
         applicationHelper.validateDocumentResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
 
         // dto
         return applicationMapper.toGetResultResponse(application, true);
@@ -75,7 +94,7 @@ public class ApplicationService {
         applicationHelper.validateDocumentResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
 
         // 유저 확인 여부 검증
         applicationHelper.validateApplicantInterviewCheckStatus(application);
@@ -97,7 +116,7 @@ public class ApplicationService {
         applicationHelper.validateFinalResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
 
         // 유저 서류 합격 여부 검증
         applicationHelper.validateApplicantDocumentPass(application);
@@ -112,7 +131,7 @@ public class ApplicationService {
         applicationHelper.validateFinalResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessable(uuid, email);
+        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
 
         // 유저 확인 여부 검증
         applicationHelper.validateApplicantActivityCheckStatus(application);
@@ -126,5 +145,51 @@ public class ApplicationService {
                     = SlackUnavailableReason.of(application, request.getReason(), true);
             Event.raise(reason);
         }
+    }
+
+    @Transactional
+    public void updateInterviewTime(Long applicationId, UpdateInterviewTime updateInterviewTime) {
+        // 기간 검증
+        applicationHelper.validateDocumentPassDuration();
+
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // 서류 통과 검증
+        applicationHelper.validateDocumentPassStatus(application);
+
+        // 인터뷰 시간 검증
+        final List<Interview> interviews = interviewRepository.findAll();
+        applicationHelper.validateInterviewTime(interviews, updateInterviewTime.getInterviewTime());
+
+         // status 변경
+        application.updateInterviewTime(updateInterviewTime.getInterviewTime());
+    }
+
+    @Transactional
+    public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
+        // 기간 검증
+        applicationHelper.validateDocumentPassDuration();
+
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // status 변경
+        application.updateDocumentPass(updatePassStatus.getPass());
+    }
+
+    @Transactional
+    public void updateFinalPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
+        // 기간 검증
+        applicationHelper.validateFinalPassDuration();
+
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // 서류 통과 검증
+        applicationHelper.validateDocumentPassStatus(application);
+
+        // status 변경
+        application.updateFinalPass(updatePassStatus.getPass());
     }
 }

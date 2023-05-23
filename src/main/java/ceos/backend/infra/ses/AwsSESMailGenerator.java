@@ -3,8 +3,10 @@ package ceos.backend.infra.ses;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.domain.QuestionCategory;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.exception.QuestionNotFound;
 import ceos.backend.domain.application.vo.AnswerVo;
 import ceos.backend.global.common.dto.AwsSESMail;
+import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.dto.mail.*;
 import ceos.backend.global.common.entity.Part;
@@ -86,11 +88,24 @@ public class AwsSESMailGenerator {
         final AnswerVo ans = answerVos.stream()
                 .filter(answerVo -> applicationQuestion.getId().equals(answerVo.getQuestionId()))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> {
+                    throw QuestionNotFound.EXCEPTION;
+                });
         return ans.getAnswer();
     }
 
     public String generateApplicationMailSubject(int generation) {
         return "세오스 "+ Integer.toString(generation) +"기 지원 알림드립니다.";
+    }
+
+    public Context generatePasswordMailContext(AwsSESPasswordMail awsSESPasswordMail) {
+        Context context = new Context();
+        context.setVariable("passwordInfo", PasswordInfo.from(awsSESPasswordMail));
+
+        return context;
+    }
+
+    public String generatePasswordMailSubject() {
+        return "세오스 관리자 페이지 임시 비밀번호 발급";
     }
 }
