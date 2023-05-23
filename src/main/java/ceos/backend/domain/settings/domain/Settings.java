@@ -2,9 +2,7 @@ package ceos.backend.domain.settings.domain;
 
 import ceos.backend.domain.admin.exception.NotAllowedToModify;
 import ceos.backend.domain.application.exception.WrongGeneration;
-import ceos.backend.domain.settings.exception.NotApplicationDuration;
-import ceos.backend.domain.settings.exception.NotDocumentResultCheckDuration;
-import ceos.backend.domain.settings.exception.NotFinalResultCheckDuration;
+import ceos.backend.domain.settings.exception.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -146,9 +144,33 @@ public class Settings extends BaseEntity {
         }
     }
 
-    public void validAmenablePeriod(LocalDate now) {
-        if (now.compareTo(this.startDateDoc) >= 0 && now.compareTo(this.resultDateFinal) <= 0) {
-            throw NotAllowedToModify.EXCEPTION;
+    public void validateDocumentPassDuration(LocalDate now) {
+        if (now.compareTo(this.startDateDoc) < 0) {
+            throw NotDocumentPassDuration.EXCEPTION;
         }
+        if (now.compareTo(this.resultDateDoc) >= 0) {
+            throw NotDocumentPassDuration.EXCEPTION;
+        }
+    }
+
+    public void validateFinalPassDuration(LocalDate now) {
+        if (now.compareTo(this.resultDateDoc) < 0) {
+            throw NotFinalPassDuration.EXCEPTION;
+        }
+        if (now.compareTo(this.resultDateFinal) >= 0) {
+            throw NotFinalPassDuration.EXCEPTION;
+        }
+    }
+
+    public void validateBeforeStartDateDoc(LocalDate now) {
+        if (now.compareTo(this.startDateDoc) >= 0) {
+            throw AlreadyApplicationDuration.EXCEPTION;
+        }
+    }
+  
+    public void validAmenablePeriod(LocalDate now) {
+      if (now.compareTo(this.startDateDoc) >= 0 && now.compareTo(this.resultDateFinal) <= 0) {
+          throw NotAllowedToModify.EXCEPTION;
+      }
     }
 }

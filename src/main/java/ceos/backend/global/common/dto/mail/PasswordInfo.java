@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto.mail;
 
+import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,11 +17,11 @@ public class PasswordInfo {
         this.randomPwd = randomPwd;
     }
 
-    public static PasswordInfo of(String email, String name, String randomPwd) {
+    public static PasswordInfo from(AwsSESPasswordMail awsSESPasswordMail) {
         return PasswordInfo.builder()
-                .email(email)
-                .name(name)
-                .randomPwd(randomPwd)
+                .email(awsSESPasswordMail.getEmail())
+                .name(awsSESPasswordMail.getName())
+                .randomPwd(awsSESPasswordMail.getRandomPwd())
                 .build();
     }
 }
