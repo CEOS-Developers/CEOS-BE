@@ -42,7 +42,7 @@ public class ActivityService {
     /**
      * 활동 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public ActivityResponse getActivity(Long id) {
         return activityConverter.toDTO(activityRepository.findById(id).orElseThrow(()-> new ActivityNotFound()));
     }
@@ -50,7 +50,7 @@ public class ActivityService {
     /**
      * 활동 전체 조회
      */
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ActivityResponse> getAllActivities() {
         List<Activity> activities = activityRepository.findAll();
         List<ActivityResponse> activitiesAsDto = new ArrayList<>();
