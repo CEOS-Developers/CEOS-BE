@@ -1,5 +1,6 @@
 package ceos.backend.domain.recruitment.domain;
 
+import ceos.backend.domain.admin.exception.NotAllowedToModify;
 import ceos.backend.domain.application.exception.WrongGeneration;
 import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
 import ceos.backend.domain.recruitment.exception.*;
@@ -108,7 +109,7 @@ public class Recruitment extends BaseEntity {
         this.otDate = otDate;
         this.demodayDate = demodayDate;
     }
-
+    
     // 정적 팩토리 메서드
     public static Recruitment from(UpdateRecruitmentRequest updateRecruitmentRequest) {
         return Recruitment.builder()
@@ -132,6 +133,7 @@ public class Recruitment extends BaseEntity {
     }
 
 
+    // Validation 관련
     public void validateGeneration(int generation) {
         if (generation != this.generation) {
             throw WrongGeneration.EXCEPTION;
@@ -187,5 +189,11 @@ public class Recruitment extends BaseEntity {
         if (now.compareTo(this.startDateDoc) >= 0) {
             throw AlreadyApplicationDuration.EXCEPTION;
         }
+    }
+  
+    public void validAmenablePeriod(LocalDate now) {
+      if (now.compareTo(this.startDateDoc) >= 0 && now.compareTo(this.resultDateFinal) <= 0) {
+          throw NotAllowedToModify.EXCEPTION;
+      }
     }
 }
