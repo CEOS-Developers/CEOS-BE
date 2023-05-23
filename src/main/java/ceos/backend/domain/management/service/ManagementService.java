@@ -1,6 +1,7 @@
 package ceos.backend.domain.management.service;
 
 import ceos.backend.domain.management.domain.Management;
+import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.CreateManagementRequest;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
 import ceos.backend.domain.management.mapper.ManagementMapper;
@@ -43,6 +44,12 @@ public class ManagementService {
         GetAllManagementsResponse response = managementMapper.toManagementsPage(pageManagements.getContent(), pageInfo);
 
         return response;
+    }
+
+    @Transactional
+    public ManagementDto getManagement(Long id) {
+        Management findManagement = managementRepository.findById(id).orElseThrow();
+        return ManagementDto.entityToDto(findManagement);
     }
 
     @Transactional(readOnly = true)
