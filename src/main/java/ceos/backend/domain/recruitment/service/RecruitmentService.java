@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 
 @Slf4j
 @Service
@@ -29,6 +31,11 @@ public class RecruitmentService {
     @Transactional
     public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest){
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
+
+        //지원 기간동안 수정할 수 없음
+        recruitment.validAmenablePeriod(LocalDate.now());
+
+        // 객체 삭제 후 새 객체 생성
         recruitmentRepository.delete(recruitment);
         Recruitment updatedRecruitment = Recruitment.from(updateRecruitmentRequest);
         recruitmentRepository.save(updatedRecruitment);
