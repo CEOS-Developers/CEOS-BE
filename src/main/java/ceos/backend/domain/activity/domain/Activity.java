@@ -1,6 +1,6 @@
 package ceos.backend.domain.activity.domain;
 
-import ceos.backend.domain.activity.dto.ActivityDto;
+import ceos.backend.domain.activity.dto.ActivityRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -28,7 +28,6 @@ public class Activity extends BaseEntity {
     @NotNull
     private String imageUrl;
 
-    // 생성자
     @Builder
     private Activity(String name, String content, String imageUrl) {
 
@@ -37,19 +36,17 @@ public class Activity extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
-    // 정적 팩토리 메서드
-    public static Activity from(ActivityDto activityDto) {
+    public static Activity from(ActivityRequest activityRequest) {
         return Activity.builder()
-                .name(activityDto.getName())
-                .content(activityDto.getContent())
-                .imageUrl(activityDto.getImageUrl())
+                .name(activityRequest.getName())
+                .content(activityRequest.getContent())
+                .imageUrl(activityRequest.getImageUrl())
                 .build();
     }
 
-    // Update
-    public void updateActivity(ActivityDto activityDto) {
-        name = activityDto.getName();
-        content = activityDto.getContent();
-        imageUrl = activityDto.getImageUrl();
+    public void updateActivity(ActivityRequest activityRequest) {
+        name = activityRequest.getName();
+        content = activityRequest.getContent();
+        imageUrl = activityRequest.getImageUrl();
     }
 }

@@ -1,11 +1,10 @@
 package ceos.backend.domain.activity;
 
 import ceos.backend.domain.activity.domain.Activity;
-import ceos.backend.domain.activity.dto.ActivityDto;
+import ceos.backend.domain.activity.dto.ActivityRequest;
+import ceos.backend.domain.activity.dto.ActivityResponse;
 import ceos.backend.domain.activity.service.ActivityService;
 import ceos.backend.global.common.dto.AwsS3Url;
-import ceos.backend.global.common.event.Event;
-import ceos.backend.infra.s3.AwsS3UrlGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,15 +25,15 @@ public class ActivityController {
 
     @Operation(summary = "활동 생성하기")
     @PostMapping
-    public Activity createActivity(@RequestBody @Valid ActivityDto activityDto) {
+    public ActivityResponse createActivity(@RequestBody @Valid ActivityRequest activityRequest) {
         log.info("활동 생성하기");
-        return activityService.createActivity(activityDto);
+        return activityService.createActivity(activityRequest);
     }
 
 
     @Operation(summary = "활동 조회하기")
     @GetMapping("/{id}")
-    public Activity getActivity(@PathVariable @Valid Long id) {
+    public ActivityResponse getActivity(@PathVariable @Valid Long id) {
         log.info("활동 조회하기");
         return activityService.getActivity(id);
     }
@@ -42,7 +41,7 @@ public class ActivityController {
 
     @Operation(summary = "활동 전체 조회하기")
     @GetMapping
-    public List<Activity> getAllActivities() {
+    public List<ActivityResponse> getAllActivities() {
         log.info("활동 전체 조회하기");
         return activityService.getAllActivities();
     }
@@ -50,9 +49,9 @@ public class ActivityController {
 
     @Operation(summary = "활동 수정하기")
     @PutMapping("/{id}")
-    public Activity updateActivity(@PathVariable @Valid Long id, @RequestBody @Valid ActivityDto activityDto) {
+    public ActivityResponse updateActivity(@PathVariable @Valid Long id, @RequestBody @Valid ActivityRequest activityRequest) {
         log.info("활동 수정하기");
-        return activityService.updateActivity(id, activityDto);
+        return activityService.updateActivity(id, activityRequest);
     }
 
 

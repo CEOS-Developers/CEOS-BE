@@ -1,7 +1,7 @@
 package ceos.backend.domain.activity.service;
 
-import ceos.backend.domain.activity.domain.Activity;
-import ceos.backend.domain.activity.dto.ActivityDto;
+import ceos.backend.domain.activity.dto.ActivityRequest;
+import ceos.backend.domain.activity.dto.ActivityResponse;
 import ceos.backend.domain.activity.exception.ActivityNotFound;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,56 +23,56 @@ class ActivityServiceTest {
     @DisplayName("활동 추가")
     void createActivity() {
         //given
-        ActivityDto activityDto = ActivityDto.builder()
+        ActivityRequest activityRequest = ActivityRequest.builder()
                 .name("해커톤")
                 .content("해커톤은 좋아요")
                 .imageUrl("hackathon.jpg")
                 .build();
 
         //when
-        Long id = activityService.createActivity(activityDto).getId();
-        Activity activity = activityService.getActivity(id);
+        Long id = activityService.createActivity(activityRequest).getId();
+        ActivityResponse activityResponse = activityService.getActivity(id);
 
         //then
-        assertThat(activity.getName()).isEqualTo("해커톤");
+        assertThat(activityResponse.getName()).isEqualTo("해커톤");
     }
 
     @Test
     @DisplayName("활동 수정")
     void updateActivity() {
         //given
-        ActivityDto activityDto = ActivityDto.builder()
+        ActivityRequest activityRequest = ActivityRequest.builder()
                 .name("데모데이")
                 .content("데모데이는 좋아요")
                 .imageUrl("demoday.jpg")
                 .build();
 
-        Long id = activityService.createActivity(activityDto).getId();
+        Long id = activityService.createActivity(activityRequest).getId();
 
         //when
-        ActivityDto activityDto2 = ActivityDto.builder()
+        ActivityRequest activityRequest2 = ActivityRequest.builder()
                 .name("데모데이")
                 .content("데모데이는 정말 좋아요")
                 .imageUrl("demoday.jpg")
                 .build();
 
-        Activity activity = activityService.updateActivity(id, activityDto2);
+        ActivityResponse activityResponse = activityService.updateActivity(id, activityRequest2);
 
         //then
-        assertThat(activity.getContent()).isEqualTo("데모데이는 정말 좋아요");
+        assertThat(activityResponse.getContent()).isEqualTo("데모데이는 정말 좋아요");
     }
 
     @Test
     @DisplayName("활동 삭제")
     void deleteActivity() {
         //given
-        ActivityDto activityDto = ActivityDto.builder()
+        ActivityRequest activityRequest = ActivityRequest.builder()
                 .name("데모데이")
                 .content("데모데이는 좋아요")
                 .imageUrl("demoday.jpg")
                 .build();
 
-        Long id = activityService.createActivity(activityDto).getId();
+        Long id = activityService.createActivity(activityRequest).getId();
 
         //when
         activityService.deleteActivity(id);
