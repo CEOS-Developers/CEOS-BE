@@ -53,7 +53,7 @@ public class ApplicationHelper {
     }
 
     public void validateRecruitOption(int generation) {
-        Recruitment recruitment = recruitmentHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         recruitment.validateGeneration(generation);
         LocalDate now = LocalDate.now();
         recruitment.validateApplyDuration(now);
@@ -68,13 +68,13 @@ public class ApplicationHelper {
     }
 
     public void validateDocumentResultOption() {
-        Recruitment recruitment = recruitmentHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
         recruitment.validateDocumentResultDuration(now);
     }
 
     public void validateFinalResultOption() {
-        Recruitment recruitment = recruitmentHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
         recruitment.validateFinalResultDuration(now);
     }
@@ -108,7 +108,7 @@ public class ApplicationHelper {
     }
 
     public void validateDocumentPassDuration() {
-        Recruitment recruitment = recruitmentHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
         recruitment.validateDocumentPassDuration(now);
     }
@@ -122,7 +122,7 @@ public class ApplicationHelper {
     }
 
     public void validateFinalPassDuration() {
-        Recruitment recruitment = recruitmentHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
         recruitment.validateFinalPassDuration(now);
     }
@@ -140,7 +140,7 @@ public class ApplicationHelper {
     }
 
     public void validateBeforeStartDateDoc() {
-        Recruitment recruitment = recruitmentHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
         recruitment.validateBeforeStartDateDoc(now);
     }

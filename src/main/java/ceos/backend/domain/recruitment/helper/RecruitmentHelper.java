@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class RecruitmentHelper {
     private final RecruitmentRepository recruitmentRepository;
 
-    public Recruitment takeSetting() {
+    public Recruitment takeRecruitment() {
         return recruitmentRepository.findAll().stream()
                 .findFirst()
                 .orElseThrow(() -> RecruitmentNotFound.EXCEPTION);
