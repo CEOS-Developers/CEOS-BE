@@ -1,5 +1,6 @@
 package ceos.backend.domain.settings.domain;
 
+import ceos.backend.domain.admin.exception.NotAllowedToModify;
 import ceos.backend.domain.application.exception.WrongGeneration;
 import ceos.backend.domain.settings.exception.*;
 import ceos.backend.global.common.entity.BaseEntity;
@@ -108,7 +109,7 @@ public class Settings extends BaseEntity {
         this.demodayDate = demodayDate;
     }
 
-    // 정적 팩토리 메서드
+    // Validation 관련
 
     public void validateGeneration(int generation) {
         if (generation != this.generation) {
@@ -165,5 +166,11 @@ public class Settings extends BaseEntity {
         if (now.compareTo(this.startDateDoc) >= 0) {
             throw AlreadyApplicationDuration.EXCEPTION;
         }
+    }
+  
+    public void validAmenablePeriod(LocalDate now) {
+      if (now.compareTo(this.startDateDoc) >= 0 && now.compareTo(this.resultDateFinal) <= 0) {
+          throw NotAllowedToModify.EXCEPTION;
+      }
     }
 }
