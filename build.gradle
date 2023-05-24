@@ -21,6 +21,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -44,6 +45,9 @@ dependencies {
 	// ses
 	implementation group: 'software.amazon.awssdk', name: 'ses', version: "2.19.29"
 	implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+
+	//s3
+	implementation group: 'software.amazon.awssdk', name: 's3', version: "2.20.68"
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
 }

@@ -28,10 +28,10 @@ public class ApplicationService {
     private final ApplicationMapper applicationMapper;
     private final ApplicationHelper applicationHelper;
 
-    @Transactional(readOnly = true)
-    public GetApplications getApplications(int pageNum, int limit) {
-
-    }
+//    @Transactional(readOnly = true)
+//    public GetApplications getApplications(int pageNum, int limit) {
+//
+//    }
 
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
