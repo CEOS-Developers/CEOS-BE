@@ -109,28 +109,26 @@ public class Recruitment extends BaseEntity {
         this.otDate = otDate;
         this.demodayDate = demodayDate;
     }
-    
-    // 정적 팩토리 메서드
-    public static Recruitment from(UpdateRecruitmentRequest updateRecruitmentRequest) {
-        return Recruitment.builder()
-                .generation(updateRecruitmentRequest.getGeneration())
-                .prodImg(updateRecruitmentRequest.getProdImg())
-                .designImg(updateRecruitmentRequest.getDesignImg())
-                .devImg(updateRecruitmentRequest.getDevImg())
-                .prodStudyUrl(updateRecruitmentRequest.getProdStudyUrl())
-                .designStudyUrl(updateRecruitmentRequest.getDesignStudyUrl())
-                .devStudyUrl(updateRecruitmentRequest.getDevStudyUrl())
-                .startDateDoc(updateRecruitmentRequest.getStartDateDoc())
-                .endDateDoc(updateRecruitmentRequest.getEndDateDoc())
-                .resultDateDoc(updateRecruitmentRequest.getResultDateDoc())
-                .startDateInterview(updateRecruitmentRequest.getStartDateInterview())
-                .endDateInterview(updateRecruitmentRequest.getEndDateInterview())
-                .resultDateFinal(updateRecruitmentRequest.getResultDateFinal())
-                .openChatUrl(updateRecruitmentRequest.getOpenChatUrl())
-                .otDate(updateRecruitmentRequest.getOtDate())
-                .demodayDate(updateRecruitmentRequest.getDemodayDate())
-                .build();
+
+    public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest) {
+        this.generation = updateRecruitmentRequest.getGeneration();
+        this.prodImg = updateRecruitmentRequest.getProdImg();
+        this.designImg = updateRecruitmentRequest.getDesignImg();
+        this.devImg = updateRecruitmentRequest.getDevImg();
+        this.prodStudyUrl = updateRecruitmentRequest.getProdStudyUrl();
+        this.designStudyUrl = updateRecruitmentRequest.getDesignStudyUrl();
+        this.devStudyUrl = updateRecruitmentRequest.getDevStudyUrl();
+        this.startDateDoc = updateRecruitmentRequest.getStartDateDoc();
+        this.endDateDoc = updateRecruitmentRequest.getEndDateDoc();
+        this.resultDateDoc = updateRecruitmentRequest.getResultDateDoc();
+        this.startDateInterview = updateRecruitmentRequest.getStartDateInterview();
+        this.endDateInterview = updateRecruitmentRequest.getEndDateInterview();
+        this.resultDateFinal = updateRecruitmentRequest.getResultDateFinal();
+        this.openChatUrl = updateRecruitmentRequest.getOpenChatUrl();
+        this.otDate = updateRecruitmentRequest.getOtDate();
+        this.demodayDate = updateRecruitmentRequest.getDemodayDate();
     }
+
 
 
     // Validation 관련
