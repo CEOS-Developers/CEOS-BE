@@ -6,8 +6,8 @@ import ceos.backend.domain.activity.dto.ActivityResponse;
 import ceos.backend.domain.activity.exception.ActivityNotFound;
 import ceos.backend.domain.activity.converter.ActivityConverter;
 import ceos.backend.domain.activity.repository.ActivityRepository;
-import ceos.backend.domain.settings.domain.Settings;
-import ceos.backend.domain.settings.helper.SettingsHelper;
+import ceos.backend.domain.recruitment.domain.Recruitment;
+import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsS3Url;
 import ceos.backend.infra.s3.AwsS3UrlHandler;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +27,7 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
     private final ActivityConverter activityConverter;
     private final AwsS3UrlHandler awsS3UrlHandler;
-    private final SettingsHelper settingsHelper;
-
+    private final RecruitmentHelper recruitmentHelper;
 
 
     /**
@@ -40,8 +39,8 @@ public class ActivityService {
     public ActivityResponse createActivity(ActivityRequest activityRequest) {
 
         // 지원 기간 동안 수정할 수 없음
-        Settings settings = settingsHelper.takeSetting();
-        settings.validAmenablePeriod(LocalDate.now());
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
+        recruitment.validAmenablePeriod(LocalDate.now());
 
         Activity activity = Activity.from(activityRequest);
         activityRepository.save(activity);
@@ -80,8 +79,9 @@ public class ActivityService {
     public ActivityResponse updateActivity(Long id, ActivityRequest activityRequest) {
 
         // 지원 기간 동안 수정할 수 없음
-        Settings settings = settingsHelper.takeSetting();
-        settings.validAmenablePeriod(LocalDate.now());
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
+        recruitment.validAmenablePeriod(LocalDate.now());
+
 
         Activity activity = activityRepository.findById(id).orElseThrow(() -> new ActivityNotFound());
 
@@ -100,8 +100,8 @@ public class ActivityService {
     public void deleteActivity(Long id) {
 
         // 지원 기간 동안 수정할 수 없음
-        Settings settings = settingsHelper.takeSetting();
-        settings.validAmenablePeriod(LocalDate.now());
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
+        recruitment.validAmenablePeriod(LocalDate.now());
 
         Activity activity = activityRepository.findById(id).orElseThrow(() -> new ActivityNotFound());
 

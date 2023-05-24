@@ -1,8 +1,9 @@
-package ceos.backend.domain.settings.domain;
+package ceos.backend.domain.recruitment.domain;
 
 import ceos.backend.domain.admin.exception.NotAllowedToModify;
 import ceos.backend.domain.application.exception.WrongGeneration;
-import ceos.backend.domain.settings.exception.*;
+import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
+import ceos.backend.domain.recruitment.exception.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -16,11 +17,11 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Settings extends BaseEntity {
+public class Recruitment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "settings_id")
+    @Column(name = "recruitment_id")
     private Long id;
 
     @NotNull
@@ -75,22 +76,22 @@ public class Settings extends BaseEntity {
 
     // 생성자
     @Builder
-    private Settings(int generation,
-                     String prodImg,
-                     String designImg,
-                     String devImg,
-                     String prodStudyUrl,
-                     String designStudyUrl,
-                     String devStudyUrl,
-                     LocalDate startDateDoc,
-                     LocalDate endDateDoc,
-                     LocalDate resultDateDoc,
-                     LocalDate startDateInterview,
-                     LocalDate endDateInterview,
-                     LocalDate resultDateFinal,
-                     String openChatUrl,
-                     LocalDate otDate,
-                     LocalDate demodayDate) {
+    private Recruitment(int generation,
+                        String prodImg,
+                        String designImg,
+                        String devImg,
+                        String prodStudyUrl,
+                        String designStudyUrl,
+                        String devStudyUrl,
+                        LocalDate startDateDoc,
+                        LocalDate endDateDoc,
+                        LocalDate resultDateDoc,
+                        LocalDate startDateInterview,
+                        LocalDate endDateInterview,
+                        LocalDate resultDateFinal,
+                        String openChatUrl,
+                        LocalDate otDate,
+                        LocalDate demodayDate) {
         this.generation = generation;
         this.prodImg = prodImg;
         this.designImg = designImg;
@@ -109,8 +110,28 @@ public class Settings extends BaseEntity {
         this.demodayDate = demodayDate;
     }
 
-    // Validation 관련
 
+    public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest) {
+        this.generation = updateRecruitmentRequest.getGeneration();
+        this.prodImg = updateRecruitmentRequest.getProdImg();
+        this.designImg = updateRecruitmentRequest.getDesignImg();
+        this.devImg = updateRecruitmentRequest.getDevImg();
+        this.prodStudyUrl = updateRecruitmentRequest.getProdStudyUrl();
+        this.designStudyUrl = updateRecruitmentRequest.getDesignStudyUrl();
+        this.devStudyUrl = updateRecruitmentRequest.getDevStudyUrl();
+        this.startDateDoc = updateRecruitmentRequest.getStartDateDoc();
+        this.endDateDoc = updateRecruitmentRequest.getEndDateDoc();
+        this.resultDateDoc = updateRecruitmentRequest.getResultDateDoc();
+        this.startDateInterview = updateRecruitmentRequest.getStartDateInterview();
+        this.endDateInterview = updateRecruitmentRequest.getEndDateInterview();
+        this.resultDateFinal = updateRecruitmentRequest.getResultDateFinal();
+        this.openChatUrl = updateRecruitmentRequest.getOpenChatUrl();
+        this.otDate = updateRecruitmentRequest.getOtDate();
+        this.demodayDate = updateRecruitmentRequest.getDemodayDate();
+    }
+
+
+    // Validation 관련
     public void validateGeneration(int generation) {
         if (generation != this.generation) {
             throw WrongGeneration.EXCEPTION;
