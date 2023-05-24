@@ -13,10 +13,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 
 @Getter
+@RequiredArgsConstructor
 public class ApplicantInfoVo {
     @Schema(defaultValue = "김영한", description = "지원자 이름")
     @NotEmpty(message = "지원자 이름을 입력해주세요")

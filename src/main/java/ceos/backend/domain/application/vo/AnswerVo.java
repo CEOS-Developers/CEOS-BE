@@ -7,8 +7,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 public class AnswerVo {
     @Schema(defaultValue = "1", description = "질문 고유번호")
     @NotNull(message = "질문의 고유번호를 입력해주세요")

@@ -6,10 +6,14 @@ import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
+import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +32,18 @@ public class ApplicationService {
     private final ApplicationMapper applicationMapper;
     private final ApplicationHelper applicationHelper;
 
-//    @Transactional(readOnly = true)
-//    public GetApplications getApplications(int pageNum, int limit) {
-//
-//    }
+    @Transactional(readOnly = true)
+    public GetApplications getApplications(int pageNum, int limit) {
+        //페이징 요청 정보
+        PageRequest pageRequest = PageRequest.of(pageNum, limit);
+
+        Page<Application> pageManagements = applicationRepository.findAll(pageRequest);
+
+        //페이징 정보
+        PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(), pageManagements.getTotalElements());
+
+        return applicationMapper.toGetApplications(pageManagements, pageInfo);
+    }
 
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {

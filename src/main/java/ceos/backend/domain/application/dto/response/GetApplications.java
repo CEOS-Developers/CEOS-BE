@@ -2,27 +2,31 @@ package ceos.backend.domain.application.dto.response;
 
 import ceos.backend.domain.application.domain.ApplicantInfo;
 import ceos.backend.domain.application.domain.Pass;
+import ceos.backend.domain.application.vo.ApplicationBriefInfoVo;
+import ceos.backend.global.common.dto.PageInfo;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class GetApplications {
-    @JsonUnwrapped
-    private ApplicantInfo applicantInfo;
-
-    private Long id;
-    private Pass documentPass;
-    private Pass finalPass;
-    private String interviewTime;
+    private List<ApplicationBriefInfoVo> applicationBriefInfoVos;
+    PageInfo pageInfo;
 
     @Builder
-    private GetApplications(ApplicantInfo applicantInfo, Long id, Pass documentPass,
-                           Pass finalPass, String interviewTime) {
-        this.applicantInfo = applicantInfo;
-        this.id = id;
-        this.documentPass = documentPass;
-        this.finalPass = finalPass;
-        this.interviewTime = interviewTime;
+    private GetApplications(List<ApplicationBriefInfoVo> applicationBriefInfoVos, PageInfo pageInfo) {
+        this.applicationBriefInfoVos = applicationBriefInfoVos;
+        this.pageInfo = pageInfo;
     }
+
+    public static GetApplications of(List<ApplicationBriefInfoVo> applicationBriefInfoVos,
+                                     PageInfo pageInfo) {
+        return GetApplications.builder()
+                .applicationBriefInfoVos(applicationBriefInfoVos)
+                .pageInfo(pageInfo)
+                .build();
+    }
+
 }

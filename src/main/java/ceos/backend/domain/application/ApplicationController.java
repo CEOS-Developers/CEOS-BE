@@ -1,8 +1,7 @@
 package ceos.backend.domain.application;
 
-import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
-import ceos.backend.domain.application.dto.response.GetResultResponse;
+import ceos.backend.domain.application.dto.request.*;
+import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.service.ApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,13 +18,13 @@ import org.springframework.web.bind.annotation.*;
 public class ApplicationController {
     private final ApplicationService applicationService;
 
-//    @Operation(summary = "지원자 목록 보기")
-//    @GetMapping
-//    public GetApplications getApplications(@RequestParam("pageNum") int pageNum,
-//                                           @RequestParam("limit") int limit) {
-//        log.info("지원자 목록 보기");
-//        return applicationService.getApplications(pageNum, limit);
-//    }
+    @Operation(summary = "지원자 목록 보기")
+    @GetMapping
+    public GetApplications getApplications(@RequestParam("pageNum") int pageNum,
+                                           @RequestParam("limit") int limit) {
+        log.info("지원자 목록 보기");
+        return applicationService.getApplications(pageNum, limit);
+    }
 
     @Operation(summary = "지원하기")
     @PostMapping
