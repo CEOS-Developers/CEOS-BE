@@ -35,9 +35,8 @@ public class RecruitmentService {
         //지원 기간동안 수정할 수 없음
         recruitment.validAmenablePeriod(LocalDate.now());
 
-        // 객체 삭제 후 새 객체 생성
-        recruitmentRepository.delete(recruitment);
-        Recruitment updatedRecruitment = Recruitment.from(updateRecruitmentRequest);
-        recruitmentRepository.save(updatedRecruitment);
+        // 객체 업데이트
+        recruitment.updateRecruitment(updateRecruitmentRequest);
+        recruitmentRepository.save(recruitment);
     }
 }
