@@ -2,10 +2,7 @@ package ceos.backend.domain.application.service;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.*;
-import ceos.backend.domain.application.dto.response.GetApplication;
-import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
-import ceos.backend.domain.application.dto.response.GetInterviewTime;
-import ceos.backend.domain.application.dto.response.GetResultResponse;
+import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
@@ -30,6 +27,11 @@ public class ApplicationService {
 
     private final ApplicationMapper applicationMapper;
     private final ApplicationHelper applicationHelper;
+
+    @Transactional(readOnly = true)
+    public GetApplications getApplications(int pageNum, int limit) {
+
+    }
 
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
