@@ -1,7 +1,6 @@
 package ceos.backend.infra.slack;
 
 import ceos.backend.domain.application.domain.ApplicantInfo;
-import ceos.backend.domain.application.domain.Application;
 import ceos.backend.global.common.dto.SlackErrorMessage;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import com.slack.api.model.block.*;
@@ -49,8 +48,6 @@ public class SlackMessageGenerater {
 
         return Payload.builder()
                 .text("에러 알림")
-                .username("에러")
-                .iconEmoji(":dog:")
                 .blocks(layoutBlocks)
                 .build();
     }
@@ -114,8 +111,6 @@ public class SlackMessageGenerater {
 
         return Payload.builder()
                 .text(title)
-                .username(title)
-                .iconEmoji(":dog:")
                 .blocks(layoutBlocks)
                 .build();
     }
