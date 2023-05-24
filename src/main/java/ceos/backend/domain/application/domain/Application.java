@@ -1,6 +1,8 @@
 package ceos.backend.domain.application.domain;
 
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.exception.NotPassDocument;
+import ceos.backend.domain.application.exception.SamePassStatus;
 import ceos.backend.global.common.annotation.DateTimeFormat;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -31,7 +33,7 @@ public class Application extends BaseEntity{
     @Embedded
     private ApplicationDetail applicationDetail;
 
-    private LocalDateTime interviewDatetime;
+    private String interviewDatetime;
 
     @NotNull
     @ColumnDefault("false")
@@ -72,5 +74,29 @@ public class Application extends BaseEntity{
 
     public void updateFinalCheck(boolean check) {
         this.finalCheck = check;
+    }
+
+    public void updateDocumentPass(Pass pass) {
+        if (this.documentPass == pass) {
+            throw SamePassStatus.EXCEPTION;
+        }
+        this.documentPass = pass;
+    }
+
+    public void updateFinalPass(Pass pass) {
+        if (this.finalPass == pass) {
+            throw SamePassStatus.EXCEPTION;
+        }
+        this.finalPass = pass;
+    }
+
+    public void validateDocumentPass() {
+        if (this.documentPass == Pass.FAIL) {
+            throw NotPassDocument.EXCEPTION;
+        }
+    }
+
+    public void updateInterviewTime(String interviewTime) {
+        this.interviewDatetime = interviewTime;
     }
 }

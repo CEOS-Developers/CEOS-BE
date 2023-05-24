@@ -3,6 +3,7 @@ package ceos.backend.infra.ses;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.domain.QuestionCategory;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.exception.QuestionNotFound;
 import ceos.backend.domain.application.vo.AnswerVo;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
@@ -87,7 +88,9 @@ public class AwsSESMailGenerator {
         final AnswerVo ans = answerVos.stream()
                 .filter(answerVo -> applicationQuestion.getId().equals(answerVo.getQuestionId()))
                 .findFirst()
-                .orElseThrow();
+                .orElseThrow(() -> {
+                    throw QuestionNotFound.EXCEPTION;
+                });
         return ans.getAnswer();
     }
 
