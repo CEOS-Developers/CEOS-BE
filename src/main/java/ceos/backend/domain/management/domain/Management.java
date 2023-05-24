@@ -1,14 +1,18 @@
 package ceos.backend.domain.management.domain;
 
+import ceos.backend.domain.management.Vo.ManagementVo;
+import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.University;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
 
-
+@DynamicInsert
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Management extends BaseEntity {
@@ -23,7 +27,6 @@ public class Management extends BaseEntity {
     private String name;
 
     @NotNull
-    @Size(max = 10)
     @Enumerated(EnumType.STRING)
     private ManagementRole role;
 
@@ -37,7 +40,6 @@ public class Management extends BaseEntity {
     private int managementGeneration;
 
     @NotNull
-    @Size(max = 10)
     @Enumerated(EnumType.STRING)
     private University university;
 
@@ -75,4 +77,17 @@ public class Management extends BaseEntity {
     }
 
     // 정적 팩토리 메서드
+    public static Management from(ManagementVo managementVo) {
+        return Management.builder()
+                .name(managementVo.getName())
+                .role(managementVo.getRole())
+                .part(managementVo.getPart())
+                .generation(managementVo.getGeneration())
+                .managementGeneration(managementVo.getManagementGeneration())
+                .university(managementVo.getUniversity())
+                .major(managementVo.getMajor())
+                .company(managementVo.getCompany())
+                .imageUrl(managementVo.getImageUrl())
+                .build();
+    }
 }

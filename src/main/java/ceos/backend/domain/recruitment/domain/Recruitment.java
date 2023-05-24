@@ -110,6 +110,7 @@ public class Recruitment extends BaseEntity {
         this.demodayDate = demodayDate;
     }
 
+
     public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest) {
         this.generation = updateRecruitmentRequest.getGeneration();
         this.prodImg = updateRecruitmentRequest.getProdImg();
@@ -128,7 +129,6 @@ public class Recruitment extends BaseEntity {
         this.otDate = updateRecruitmentRequest.getOtDate();
         this.demodayDate = updateRecruitmentRequest.getDemodayDate();
     }
-
 
 
     // Validation 관련

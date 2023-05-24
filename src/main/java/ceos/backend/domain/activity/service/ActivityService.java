@@ -30,7 +30,6 @@ public class ActivityService {
     private final RecruitmentHelper recruitmentHelper;
 
 
-
     /**
      * 활동 추가
      *
@@ -82,6 +81,7 @@ public class ActivityService {
         // 지원 기간 동안 수정할 수 없음
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
         recruitment.validAmenablePeriod(LocalDate.now());
+
 
         Activity activity = activityRepository.findById(id).orElseThrow(() -> new ActivityNotFound());
 
