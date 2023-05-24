@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.vo;
 
+import ceos.backend.domain.application.domain.ApplicantInfo;
 import ceos.backend.domain.application.domain.Gender;
 import ceos.backend.global.common.annotation.DateFormat;
 import ceos.backend.global.common.annotation.ValidEmail;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -52,4 +54,31 @@ public class ApplicantInfoVo {
     @NotNull(message = "지원자 남은 학기 수를 입력해주세요")
     @Positive
     private int semestersLeftNumber;
+
+    @Builder
+    private ApplicantInfoVo(String name, Gender gender, LocalDate birth, String email,
+                            String phoneNumber, University university, String major,
+                            int semestersLeftNumber) {
+        this.name = name;
+        this.gender = gender;
+        this.birth = birth;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.university = university;
+        this.major = major;
+        this.semestersLeftNumber = semestersLeftNumber;
+    }
+
+    public static ApplicantInfoVo from(ApplicantInfo applicantInfo) {
+        return ApplicantInfoVo.builder()
+                .name(applicantInfo.getName())
+                .gender(applicantInfo.getGender())
+                .birth(applicantInfo.getBirth())
+                .email(applicantInfo.getEmail())
+                .phoneNumber(applicantInfo.getPhoneNumber())
+                .university(applicantInfo.getUniversity())
+                .major(applicantInfo.getMajor())
+                .semestersLeftNumber(applicantInfo.getSemestersLeftNumber())
+                .build();
+    }
 }

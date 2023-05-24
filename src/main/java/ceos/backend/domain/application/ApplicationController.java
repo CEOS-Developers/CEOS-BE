@@ -1,6 +1,7 @@
 package ceos.backend.domain.application;
 
 import ceos.backend.domain.application.dto.request.*;
+import ceos.backend.domain.application.dto.response.GetApplication;
 import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
 import ceos.backend.domain.application.dto.response.GetInterviewTime;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
@@ -73,6 +74,13 @@ public class ApplicationController {
                                            @RequestBody @Valid UpdateAttendanceRequest request) {
         log.info("활동 가능 여부 선택");
         applicationService.updateActivityAvailability(uuid, email, request);
+    }
+
+    @Operation(summary = "지원자 자기소개서 보기")
+    @GetMapping(value = "/{applicationId}")
+    public GetApplication getApplication(@PathVariable("applicationId") Long applicationId) {
+        log.info("지원자 자기소개서 보기");
+        return applicationService.getApplication(applicationId);
     }
 
     @Operation(summary = "면접 시간 정보 가져오기")

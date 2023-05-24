@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.vo;
 
+import ceos.backend.domain.application.domain.ApplicationDetail;
 import ceos.backend.global.common.annotation.DateFormat;
 import ceos.backend.global.common.annotation.ValidEnum;
 import ceos.backend.global.common.entity.Part;
@@ -7,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -41,4 +43,24 @@ public class ApplicationDetailVo {
     @Schema(defaultValue = "백엔드", description = "지원자 파트")
     @ValidEnum(target = Part.class)
     private Part part;
+
+    @Builder
+    private ApplicationDetailVo(int generation, LocalDate otDate, LocalDate demodayDate,
+                               String otherActivities, Part part) {
+        this.generation = generation;
+        this.otDate = otDate;
+        this.demodayDate = demodayDate;
+        this.otherActivities = otherActivities;
+        this.part = part;
+    }
+
+    public static ApplicationDetailVo from(ApplicationDetail applicationDetail) {
+        return ApplicationDetailVo.builder()
+                .generation(applicationDetail.getGeneration())
+                .otDate(applicationDetail.getOtDate())
+                .demodayDate(applicationDetail.getDemodayDate())
+                .otherActivities(applicationDetail.getOtherActivities())
+                .part(applicationDetail.getPart())
+                .build();
+    }
 }

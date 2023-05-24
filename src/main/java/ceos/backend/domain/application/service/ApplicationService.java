@@ -2,6 +2,7 @@ package ceos.backend.domain.application.service;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.*;
+import ceos.backend.domain.application.dto.response.GetApplication;
 import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
 import ceos.backend.domain.application.dto.response.GetInterviewTime;
 import ceos.backend.domain.application.dto.response.GetResultResponse;
@@ -156,6 +157,23 @@ public class ApplicationService {
                     = SlackUnavailableReason.of(application, request.getReason(), true);
             Event.raise(reason);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public GetApplication getApplication(Long applicationId) {
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // dto
+        final List<Interview> interviews = interviewRepository.findAll();
+        final List<ApplicationInterview> applicationInterviews
+                = applicationInterviewRepository.findAllByApplication(application);
+        final List<ApplicationQuestion> applicationQuestions
+                = applicationQuestionRepository.findAll();
+        final List<ApplicationAnswer> applicationAnswers
+                = applicationAnswerRepository.findAllByApplication(application);
+        return applicationMapper.toGetApplication(application, interviews, applicationInterviews,
+                applicationQuestions, applicationAnswers);
     }
 
     @Transactional(readOnly = true)
