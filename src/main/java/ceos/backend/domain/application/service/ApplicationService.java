@@ -8,6 +8,7 @@ import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
+import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -259,15 +257,13 @@ public class ApplicationService {
 
     @Transactional
     public void createExcelFile() throws IOException {
-        // 새로운 워크북 생성
-        Workbook workbook = new XSSFWorkbook();
 
-        // 새로운 시트 생성
+        Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Sheet1");
 
         // Header
-        List<String> headers = new ArrayList<>(List.of("파트", "이름", "성별", "생년월일", "email", "전화번호",
-                "대학교", "전공", "남은 학기 수", "기수", "OT", "데모데이", "다른 활동"));
+        List<String> headers = new ArrayList<>(List.of("", "파트", "이름", "성별", "생년월일", "email", "전화번호",
+                "대학교", "전공", "남은 학기 수", "OT", "데모데이", "다른 활동"));
 
         // Header : 지원서 질문
         List<ApplicationQuestion> questionList = applicationQuestionRepository.findAll();
@@ -284,11 +280,55 @@ public class ApplicationService {
         headers.addAll(List.of("면접 가능한 시간", "서류 합격 여부", "면접 시간"));
 
         // Header 입력
-        int i = 0;
-        Row row = sheet.createRow(0);
+        int colIndex = 0;
+        int rowIndex = 0;
+        Row row = sheet.createRow(rowIndex++);
 
         for (String header : headers) {
-            row.createCell(i++).setCellValue(header);
+            row.createCell(colIndex++).setCellValue(header);
+        }
+
+        // Date Style
+        CellStyle cellStyle = workbook.createCellStyle();
+        CreationHelper creationHelper = workbook.getCreationHelper();
+        cellStyle.setDataFormat(creationHelper.createDataFormat().getFormat("yyyy-mm-dd")); // 날짜 형식 설정
+
+        // Application
+        List<Application> applicationList = applicationRepository.findAll();
+        Cell cell;
+
+        for (Application application : applicationList) {
+
+            Part part = application.getApplicationDetail().getPart();
+
+            colIndex = 0;
+            row = sheet.createRow(rowIndex);
+            row.createCell(colIndex++).setCellValue(rowIndex);
+            row.createCell(colIndex++).setCellValue(application.getApplicationDetail().getPart().getPart());
+            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getName());
+            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getGender().getGender());
+
+            cell = row.createCell(colIndex++);
+            cell.setCellValue(application.getApplicantInfo().getBirth());
+            cell.setCellStyle(cellStyle);
+
+            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getEmail());
+            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getPhoneNumber());
+            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getUniversity().getUniversity());
+            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getMajor());
+            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getSemestersLeftNumber());
+
+            cell = row.createCell(colIndex++);
+            cell.setCellValue(application.getApplicationDetail().getOtDate());
+            cell.setCellStyle(cellStyle);
+
+            cell = row.createCell(colIndex++);
+            cell.setCellValue(application.getApplicationDetail().getDemodayDate());
+            cell.setCellStyle(cellStyle);
+
+            row.createCell(colIndex++).setCellValue((application.getApplicationDetail().getOtherActivities()));
+
+            rowIndex++;
         }
 
         // 파일로 저장
