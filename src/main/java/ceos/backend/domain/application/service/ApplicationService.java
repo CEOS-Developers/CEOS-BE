@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -262,10 +265,31 @@ public class ApplicationService {
         // 새로운 시트 생성
         Sheet sheet = workbook.createSheet("Sheet1");
 
-        // 데이터 행 생성 및 데이터 작성
+        // Header
+        List<String> headers = new ArrayList<>(List.of("파트", "이름", "성별", "생년월일", "email", "전화번호",
+                "대학교", "전공", "남은 학기 수", "기수", "OT", "데모데이", "다른 활동"));
+
+        // Header : 지원서 질문
+        List<ApplicationQuestion> questionList = applicationQuestionRepository.findAll();
+
+        // 공통질문, 기획, 디자인, 프론트, 백엔드로 정렬
+        questionList.sort(Comparator.comparing(ApplicationQuestion::getCategory)
+                .thenComparing(ApplicationQuestion::getNumber));
+
+        for (ApplicationQuestion applicationQuestion : questionList) {
+            headers.add(applicationQuestion.getQuestion());
+        }
+
+        // Header
+        headers.addAll(List.of("면접 가능한 시간", "서류 합격 여부", "면접 시간"));
+
+        // Header 입력
+        int i = 0;
         Row row = sheet.createRow(0);
-        Cell cell = row.createCell(0);
-        cell.setCellValue("Hello, World!");
+
+        for (String header : headers) {
+            row.createCell(i++).setCellValue(header);
+        }
 
         // 파일로 저장
         FileOutputStream fileOutputStream = new FileOutputStream("example.xlsx");
