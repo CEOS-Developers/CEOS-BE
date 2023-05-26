@@ -85,7 +85,7 @@ public class ApplicationMapper {
                     questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.COMMON));
                 });
         productQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.PRODUCT));
+            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.STRATEGY));
         });
         designQuestions.forEach(questionVo -> {
             questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.DESIGN));
@@ -132,7 +132,7 @@ public class ApplicationMapper {
         applicationQuestions.forEach(applicationQuestion -> {
             if (applicationQuestion.getCategory() == QuestionCategory.COMMON) {
                 commonQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else if (applicationQuestion.getCategory() == QuestionCategory.PRODUCT) {
+            } else if (applicationQuestion.getCategory() == QuestionCategory.STRATEGY) {
                 productQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
             } else if (applicationQuestion.getCategory() == QuestionCategory.FRONTEND) {
                 frontendQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
