@@ -1,6 +1,7 @@
 package ceos.backend.domain.application.vo;
 
 import ceos.backend.domain.application.domain.ApplicationDetail;
+import ceos.backend.domain.application.domain.Application;
 import ceos.backend.global.common.annotation.DateFormat;
 import ceos.backend.global.common.annotation.ValidEnum;
 import ceos.backend.global.common.entity.Part;
@@ -64,6 +65,16 @@ public class ApplicationDetailVo {
                 .demodayDate(applicationDetail.getDemodayDate())
                 .otherActivities(applicationDetail.getOtherActivities())
                 .part(applicationDetail.getPart())
+                .build();
+    }
+
+    public static ApplicationDetailVo from(Application application) {
+        return ApplicationDetailVo.builder()
+                .generation(application.getApplicationDetail().getGeneration())
+                .otDate(application.getApplicationDetail().getOtDate())
+                .demodayDate(application.getApplicationDetail().getDemodayDate())
+                .otherActivities(application.getApplicationDetail().getOtherActivities())
+                .part(application.getApplicationDetail().getPart())
                 .build();
     }
 }
