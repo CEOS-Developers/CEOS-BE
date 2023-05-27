@@ -85,7 +85,8 @@ public class WebSecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
                 Arrays.asList(
-                        "http://localhost:8080"
+                        "http://localhost:8080",
+                        "http://www.ceos-sinchon.com"
                 )
         );
         configuration.setAllowedHeaders(List.of("*"));
