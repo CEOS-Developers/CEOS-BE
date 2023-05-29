@@ -2,14 +2,18 @@ package ceos.backend.domain.application.service;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.*;
-import ceos.backend.domain.application.dto.response.GetResultResponse;
+import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
+import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +31,19 @@ public class ApplicationService {
 
     private final ApplicationMapper applicationMapper;
     private final ApplicationHelper applicationHelper;
+
+    @Transactional(readOnly = true)
+    public GetApplications getApplications(int pageNum, int limit) {
+        //페이징 요청 정보
+        PageRequest pageRequest = PageRequest.of(pageNum, limit);
+
+        Page<Application> pageManagements = applicationRepository.findAll(pageRequest);
+
+        //페이징 정보
+        PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(), pageManagements.getTotalElements());
+
+        return applicationMapper.toGetApplications(pageManagements, pageInfo);
+    }
 
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
@@ -54,6 +71,15 @@ public class ApplicationService {
 
         // 이메일 전송
         applicationHelper.sendEmail(createApplicationRequest, UUID);
+    }
+
+    @Transactional(readOnly = true)
+    public GetApplicationQuestion getApplicationQuestion() {
+        // dto
+        final List<ApplicationQuestion> applicationQuestions
+                = applicationQuestionRepository.findAll();
+        final List<Interview> interviews = interviewRepository.findAll();
+        return applicationMapper.toGetApplicationQuestion(applicationQuestions, interviews);
     }
 
     @Transactional
@@ -145,6 +171,38 @@ public class ApplicationService {
                     = SlackUnavailableReason.of(application, request.getReason(), true);
             Event.raise(reason);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public GetApplication getApplication(Long applicationId) {
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // dto
+        final List<Interview> interviews = interviewRepository.findAll();
+        final List<ApplicationInterview> applicationInterviews
+                = applicationInterviewRepository.findAllByApplication(application);
+        final List<ApplicationQuestion> applicationQuestions
+                = applicationQuestionRepository.findAll();
+        final List<ApplicationAnswer> applicationAnswers
+                = applicationAnswerRepository.findAllByApplication(application);
+        return applicationMapper.toGetApplication(application, interviews, applicationInterviews,
+                applicationQuestions, applicationAnswers);
+    }
+
+    @Transactional(readOnly = true)
+    public GetInterviewTime getInterviewTime(Long applicationId) {
+        // 유저 검증
+        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+
+        // 서류 통과 검증
+        applicationHelper.validateDocumentPassStatus(application);
+
+        // dto
+        final List<Interview> interviews = interviewRepository.findAll();
+        final List<ApplicationInterview> applicationInterviews
+                = applicationInterviewRepository.findAllByApplication(application);
+        return applicationMapper.toGetInterviewTime(interviews, applicationInterviews);
     }
 
     @Transactional

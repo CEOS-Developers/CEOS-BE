@@ -5,8 +5,8 @@ import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.exception.*;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
-import ceos.backend.domain.settings.domain.Settings;
-import ceos.backend.domain.settings.helper.SettingsHelper;
+import ceos.backend.domain.recruitment.domain.Recruitment;
+import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.event.Event;
 import ceos.backend.global.util.InterviewDateFormatter;
@@ -26,7 +26,7 @@ public class ApplicationHelper {
     private final ApplicationQuestionRepository applicationQuestionRepository;
     private final ApplicationInterviewRepository applicationInterviewRepository;
     private final ApplicationAnswerRepository applicationAnswerRepository;
-    private final SettingsHelper settingsHelper;
+    private final RecruitmentHelper recruitmentHelper;
 
     public void validateFirstApplication(ApplicantInfoVo applicantInfoVo) {
         if (applicationRepository
@@ -53,10 +53,10 @@ public class ApplicationHelper {
     }
 
     public void validateRecruitOption(int generation) {
-        Settings settings = settingsHelper.takeSetting();
-        settings.validateGeneration(generation);
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
+        recruitment.validateGeneration(generation);
         LocalDate now = LocalDate.now();
-        settings.validateApplyDuration(now);
+        recruitment.validateApplyDuration(now);
     }
 
     public Application validateApplicantAccessible(String uuid, String email) {
@@ -68,15 +68,15 @@ public class ApplicationHelper {
     }
 
     public void validateDocumentResultOption() {
-        Settings settings = settingsHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
-        settings.validateDocumentResultDuration(now);
+        recruitment.validateDocumentResultDuration(now);
     }
 
     public void validateFinalResultOption() {
-        Settings settings = settingsHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
-        settings.validateFinalResultDuration(now);
+        recruitment.validateFinalResultDuration(now);
     }
 
 
@@ -108,9 +108,9 @@ public class ApplicationHelper {
     }
 
     public void validateDocumentPassDuration() {
-        Settings settings = settingsHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
-        settings.validateDocumentPassDuration(now);
+        recruitment.validateDocumentPassDuration(now);
     }
 
     public Application validateExistingApplicant(Long applicationId) {
@@ -122,9 +122,9 @@ public class ApplicationHelper {
     }
 
     public void validateFinalPassDuration() {
-        Settings settings = settingsHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
-        settings.validateFinalPassDuration(now);
+        recruitment.validateFinalPassDuration(now);
     }
 
     public void validateDocumentPassStatus(Application application) {
@@ -140,9 +140,9 @@ public class ApplicationHelper {
     }
 
     public void validateBeforeStartDateDoc() {
-        Settings settings = settingsHelper.takeSetting();
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
-        settings.validateBeforeStartDateDoc(now);
+        recruitment.validateBeforeStartDateDoc(now);
     }
 
     public void validateRemainApplications() {
