@@ -1,10 +1,9 @@
 package ceos.backend.domain.sponsor;
 
+import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
 import ceos.backend.domain.sponsor.service.SponsorService;
 import ceos.backend.domain.sponsor.vo.SponsorVo;
 import ceos.backend.global.common.dto.AwsS3Url;
-import ceos.backend.global.common.event.Event;
-import ceos.backend.infra.s3.AwsS3UrlGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,6 +26,16 @@ public class SponsorController {
     public void createSponsor(@RequestBody @Valid SponsorVo sponsorVo) {
         log.info("스폰서 추가하기");
         sponsorService.createSponsor(sponsorVo);
+    }
+
+    @Operation(summary = "스폰서 전체 보기")
+    @GetMapping
+    public GetAllSponsorsResponse getAllSponsors(
+            @RequestParam("pageNum") int pageNum,
+            @RequestParam("limit") int limit
+    ) {
+        log.info("스폰서 전체 보기");
+        return sponsorService.getAllSponsors(pageNum, limit);
     }
 
     @Operation(summary = "스폰서 이미지 url 생성하기")
