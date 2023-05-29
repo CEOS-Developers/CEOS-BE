@@ -36,7 +36,7 @@ public class ManagementService {
         managementRepository.save(newManagement);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public GetAllManagementsResponse getAllManagements(int pageNum, int limit) {
         //페이징 요청 정보
         PageRequest pageRequest = PageRequest.of(pageNum, limit, Sort.by("managementGeneration").descending());
