@@ -49,6 +49,13 @@ public class SponsorController {
         return sponsorService.updateSponsor(sponsorId, sponsorVo);
     }
 
+    @Operation(summary = "스폰서 삭제")
+    @DeleteMapping("/{sponsorId}")
+    public void deleteSponsor(@PathVariable(name = "sponsorId") Long sponsorId) {
+        log.info("스폰서 삭제");
+        sponsorService.deleteSponsor(sponsorId);
+    }
+
     @Operation(summary = "스폰서 이미지 url 생성하기")
     @GetMapping("/image")
     public AwsS3Url getImageUrl() {

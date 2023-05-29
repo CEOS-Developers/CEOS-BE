@@ -57,6 +57,12 @@ public class SponsorService {
         return SponsorDto.entityToDto(findSponsor);
     }
 
+    @Transactional
+    public void deleteSponsor(Long id) {
+        Sponsor findSponsor = sponsorRepository.findById(id).orElseThrow(() -> {throw SponsorNotFound.EXCEPTION;});
+        sponsorRepository.delete(findSponsor);
+    }
+
     @Transactional(readOnly = true)
     public AwsS3Url getImageUrl(){
         return awsS3UrlHandler.handle("sponsors");
