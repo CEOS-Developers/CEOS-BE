@@ -64,7 +64,8 @@ public class ManagementService {
 
     @Transactional
     public void deleteManagement(Long id) {
-        managementRepository.deleteById(id);
+        Management findManagement = managementRepository.findById(id).orElseThrow(() -> {throw ManagerNotFound.EXCEPTION;});
+        managementRepository.delete(findManagement);
     }
 
     @Transactional(readOnly = true)
