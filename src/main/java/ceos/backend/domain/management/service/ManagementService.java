@@ -36,7 +36,7 @@ public class ManagementService {
         managementRepository.save(newManagement);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public GetAllManagementsResponse getAllManagements(int pageNum, int limit) {
         //페이징 요청 정보
         PageRequest pageRequest = PageRequest.of(pageNum, limit, Sort.by("managementGeneration").descending());
@@ -59,12 +59,14 @@ public class ManagementService {
     @Transactional
     public ManagementDto updateManagementInfo(Long id, UpdateManagementRequest updateManagementRequest) {
         Management findManagement = managementRepository.findById(id).orElseThrow(() -> {throw ManagerNotFound.EXCEPTION;});
-        return managementHelper.update(findManagement, updateManagementRequest);
+        findManagement.update(updateManagementRequest);
+        return ManagementDto.entityToDto(findManagement);
     }
 
     @Transactional
     public void deleteManagement(Long id) {
-        managementRepository.deleteById(id);
+        Management findManagement = managementRepository.findById(id).orElseThrow(() -> {throw ManagerNotFound.EXCEPTION;});
+        managementRepository.delete(findManagement);
     }
 
     @Transactional(readOnly = true)
