@@ -59,7 +59,8 @@ public class ManagementService {
     @Transactional
     public ManagementDto updateManagementInfo(Long id, UpdateManagementRequest updateManagementRequest) {
         Management findManagement = managementRepository.findById(id).orElseThrow(() -> {throw ManagerNotFound.EXCEPTION;});
-        return managementHelper.update(findManagement, updateManagementRequest);
+        findManagement.update(updateManagementRequest);
+        return ManagementDto.entityToDto(findManagement);
     }
 
     @Transactional

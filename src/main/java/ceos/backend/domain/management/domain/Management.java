@@ -1,6 +1,7 @@
 package ceos.backend.domain.management.domain;
 
 import ceos.backend.domain.management.Vo.ManagementVo;
+import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.University;
@@ -10,9 +11,10 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.Optional;
+
 @DynamicInsert
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Management extends BaseEntity {
@@ -89,5 +91,36 @@ public class Management extends BaseEntity {
                 .company(managementVo.getCompany())
                 .imageUrl(managementVo.getImageUrl())
                 .build();
+    }
+
+    public void update(UpdateManagementRequest request) {
+        ManagementVo managementInfo = request.getManagementVo();
+        if (managementInfo.getName() != null) {
+            this.name = managementInfo.getName();
+        }
+        if (managementInfo.getRole() != null) {
+            this.role = managementInfo.getRole();
+        }
+        if (managementInfo.getPart() != null) {
+            this.part = managementInfo.getPart();
+        }
+        if (Optional.ofNullable(managementInfo.getGeneration()).orElse(0) != 0) {
+            this.generation = managementInfo.getGeneration();
+        }
+        if (Optional.ofNullable(managementInfo.getManagementGeneration()).orElse(0) != 0) {
+            this.managementGeneration = managementInfo.getManagementGeneration();
+        }
+        if (managementInfo.getUniversity() != null) {
+            this.university = managementInfo.getUniversity();
+        }
+        if (managementInfo.getMajor() != null) {
+            this.major = managementInfo.getMajor();
+        }
+        if (managementInfo.getCompany() != null) {
+            this.company = managementInfo.getCompany();
+        }
+        if (managementInfo.getImageUrl() != null) {
+            this.imageUrl = managementInfo.getImageUrl();
+        }
     }
 }
