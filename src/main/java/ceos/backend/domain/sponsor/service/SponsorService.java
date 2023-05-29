@@ -1,5 +1,8 @@
 package ceos.backend.domain.sponsor.service;
 
+import ceos.backend.domain.sponsor.domain.Sponsor;
+import ceos.backend.domain.sponsor.repository.SponsorRepository;
+import ceos.backend.domain.sponsor.vo.SponsorVo;
 import ceos.backend.global.common.dto.AwsS3Url;
 import ceos.backend.global.common.event.Event;
 import ceos.backend.infra.s3.AwsS3UrlHandler;
@@ -13,7 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SponsorService {
 
+    private final SponsorRepository sponsorRepository;
     private final AwsS3UrlHandler awsS3UrlHandler;
+
+    @Transactional
+    public void createSponsor(SponsorVo sponsorVo) {
+        Sponsor newSponsor = Sponsor.from(sponsorVo);
+        sponsorRepository.save(newSponsor);
+    }
 
     @Transactional(readOnly = true)
     public AwsS3Url getImageUrl(){

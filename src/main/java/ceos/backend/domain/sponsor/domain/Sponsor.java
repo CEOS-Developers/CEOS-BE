@@ -1,5 +1,6 @@
 package ceos.backend.domain.sponsor.domain;
 
+import ceos.backend.domain.sponsor.vo.SponsorVo;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -33,4 +34,10 @@ public class Sponsor extends BaseEntity {
     }
 
     // 정적 팩토리 메서드
+    public static Sponsor from(SponsorVo sponsorVo) {
+        return Sponsor.builder()
+                .name(sponsorVo.getName())
+                .imageUrl(sponsorVo.getImageUrl())
+                .build();
+    }
 }
