@@ -1,5 +1,6 @@
 package ceos.backend.domain.sponsor;
 
+import ceos.backend.domain.management.dto.SponsorDto;
 import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
 import ceos.backend.domain.sponsor.service.SponsorService;
 import ceos.backend.domain.sponsor.vo.SponsorVo;
@@ -36,6 +37,16 @@ public class SponsorController {
     ) {
         log.info("스폰서 전체 보기");
         return sponsorService.getAllSponsors(pageNum, limit);
+    }
+
+    @Operation(summary = "스폰서 정보 수정")
+    @PatchMapping("/{sponsorId}")
+    public SponsorDto updateSponsor(
+            @PathVariable(name = "sponsorId") Long sponsorId,
+            @RequestBody SponsorVo sponsorVo
+    ) {
+        log.info("스폰서 정보 수정");
+        return sponsorService.updateSponsor(sponsorId, sponsorVo);
     }
 
     @Operation(summary = "스폰서 이미지 url 생성하기")

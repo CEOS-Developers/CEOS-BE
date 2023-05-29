@@ -1,9 +1,11 @@
 package ceos.backend.domain.sponsor.service;
 
 import ceos.backend.domain.management.domain.Management;
+import ceos.backend.domain.management.dto.SponsorDto;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
 import ceos.backend.domain.sponsor.domain.Sponsor;
 import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
+import ceos.backend.domain.sponsor.exception.SponsorNotFound;
 import ceos.backend.domain.sponsor.mapper.SponsorMapper;
 import ceos.backend.domain.sponsor.repository.SponsorRepository;
 import ceos.backend.domain.sponsor.vo.SponsorVo;
@@ -46,6 +48,13 @@ public class SponsorService {
         GetAllSponsorsResponse response = sponsorMapper.toManagementsPage(pageSponsors.getContent(), pageInfo);
 
         return response;
+    }
+
+    @Transactional
+    public SponsorDto updateSponsor(Long id, SponsorVo sponsorVo) {
+        Sponsor findSponsor = sponsorRepository.findById(id).orElseThrow(() -> {throw SponsorNotFound.EXCEPTION;});
+        findSponsor.update(sponsorVo);
+        return SponsorDto.entityToDto(findSponsor);
     }
 
     @Transactional(readOnly = true)

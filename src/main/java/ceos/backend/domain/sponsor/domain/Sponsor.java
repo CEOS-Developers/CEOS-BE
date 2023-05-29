@@ -40,4 +40,13 @@ public class Sponsor extends BaseEntity {
                 .imageUrl(sponsorVo.getImageUrl())
                 .build();
     }
+
+    public void update(SponsorVo sponsorVo) {
+        if (sponsorVo.getName() != null) {
+            this.name = sponsorVo.getName();
+        }
+        if (sponsorVo.getImageUrl() != null) {
+            this.imageUrl = sponsorVo.getImageUrl();
+        }
+    }
 }
