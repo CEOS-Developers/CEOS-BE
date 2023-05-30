@@ -2,7 +2,6 @@ package ceos.backend.domain.faq.vo;
 
 import ceos.backend.domain.faq.domain.FaqCategory;
 import ceos.backend.global.common.annotation.ValidEnum;
-import ceos.backend.global.common.entity.University;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.Getter;
 @Getter
 public class FaqVo {
 
-    @Schema(defaultValue = "파트", description = "질문 카테고리")
+    @Schema(defaultValue = "PART", description = "질문 카테고리")
     @ValidEnum(target = FaqCategory.class)
     private FaqCategory category;
 
