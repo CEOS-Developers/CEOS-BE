@@ -55,6 +55,9 @@ public class Application extends BaseEntity{
     @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
     private List<ApplicationAnswer> applicationAnswers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+    private List<ApplicationInterview> applicationInterviews = new ArrayList<>();
+
     @Builder
     private Application(ApplicantInfo applicantInfo, ApplicationDetail applicationDetail) {
         this.applicantInfo = applicantInfo;
@@ -75,6 +78,11 @@ public class Application extends BaseEntity{
     public void addApplicationAnswers(ApplicationAnswer answer) {
         applicationAnswers.add(answer);
         answer.setApplication(this);
+    }
+
+    public void addApplicationInterviews(ApplicationInterview interview) {
+        applicationInterviews.add(interview);
+        interview.setApplication(this);
     }
 
     public void updateInterviewCheck(boolean check) {
