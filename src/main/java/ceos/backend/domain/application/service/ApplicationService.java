@@ -336,16 +336,32 @@ public class ApplicationService {
 
             row.createCell(colIndex++).setCellValue((application.getApplicationDetail().getOtherActivities()));
 
-            // 공통 질문 입력
-
-            final List<ApplicationAnswer> applicationAnswers
-                    = applicationAnswerRepository.findAllByApplication(application);
+            // 질문 답변 입력
+            List<ApplicationAnswer> applicationAnswers = application.getApplicationAnswers();
 
             for (ApplicationAnswer answer : applicationAnswers) {
                 Long id = answer.getApplicationQuestion().getId();
                 int index = (int) questionIndex.get(id);
                 row.createCell(index).setCellValue(answer.getAnswer());
             }
+
+            colIndex += questionList.size();
+
+            // 면접 가능한 시간
+            List<ApplicationInterview> applicationInterviews = application.getApplicationInterviews();
+
+            String possibleInterview = "";
+            for (ApplicationInterview interview : applicationInterviews) {
+                possibleInterview += interview.getInterview().getId() + " ";
+            }
+
+            row.createCell(colIndex++).setCellValue(possibleInterview);
+
+            // 서류 합격 여부
+            row.createCell(colIndex++).setCellValue(application.getDocumentPass().getResult());
+
+            // 면접 시간
+            row.createCell(colIndex++).setCellValue(application.getInterviewDatetime());
 
             rowIndex++;
         }
