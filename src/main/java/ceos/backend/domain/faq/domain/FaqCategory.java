@@ -10,10 +10,13 @@ import java.util.stream.Stream;
 @Getter
 @RequiredArgsConstructor
 public enum FaqCategory {
-    RECRUIT("리쿠르팅"), ACTIVITY("활동"), PART("파트");
+    RECRUIT("RECRUIT", "리쿠르팅"),
+    ACTIVITY("ACTIVITY", "활동"),
+    PART("PART", "파트");
 
     @JsonValue
     private final String faqCategory;
+    private final String label;
 
     @JsonCreator
     public static FaqCategory parsing(String inputValue) {
