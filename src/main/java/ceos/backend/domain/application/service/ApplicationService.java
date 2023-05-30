@@ -269,18 +269,26 @@ public class ApplicationService {
         List<ApplicationQuestion> questionList = applicationQuestionRepository.findAll();
 
         // 공통질문, 기획, 디자인, 프론트, 백엔드로 정렬
+
+        // Map : Key (question_id), Value (colIndex)
+        Map<Long, Integer> questionIndex = new HashMap<>();
+
         questionList.sort(Comparator.comparing(ApplicationQuestion::getCategory)
                 .thenComparing(ApplicationQuestion::getNumber));
 
+        int colIndex = headers.size();
         for (ApplicationQuestion applicationQuestion : questionList) {
             headers.add(applicationQuestion.getQuestion());
+            questionIndex.put(applicationQuestion.getId(), colIndex++);
         }
+
+        System.out.println("questionIndex = " + questionIndex);
 
         // Header
         headers.addAll(List.of("면접 가능한 시간", "서류 합격 여부", "면접 시간"));
 
         // Header 입력
-        int colIndex = 0;
+        colIndex = 0;
         int rowIndex = 0;
         Row row = sheet.createRow(rowIndex++);
 
@@ -327,6 +335,17 @@ public class ApplicationService {
             cell.setCellStyle(cellStyle);
 
             row.createCell(colIndex++).setCellValue((application.getApplicationDetail().getOtherActivities()));
+
+            // 공통 질문 입력
+
+            final List<ApplicationAnswer> applicationAnswers
+                    = applicationAnswerRepository.findAllByApplication(application);
+
+            for (ApplicationAnswer answer : applicationAnswers) {
+                Long id = answer.getApplicationQuestion().getId();
+                int index = (int) questionIndex.get(id);
+                row.createCell(index).setCellValue(answer.getAnswer());
+            }
 
             rowIndex++;
         }
