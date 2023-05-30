@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @DynamicInsert
 @Getter
@@ -51,6 +52,9 @@ public class Application extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Pass finalPass;
 
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+    private List<ApplicationAnswer> applicationAnswers = new ArrayList<>();
+
     @Builder
     private Application(ApplicantInfo applicantInfo, ApplicationDetail applicationDetail) {
         this.applicantInfo = applicantInfo;
@@ -66,6 +70,11 @@ public class Application extends BaseEntity{
                 .applicantInfo(ApplicantInfo.of(createApplicationRequest.getApplicantInfoVo(), UUID))
                 .applicationDetail(ApplicationDetail.from(createApplicationRequest.getApplicationDetailVo()))
                 .build();
+    }
+
+    public void addApplicationAnswers(ApplicationAnswer answer) {
+        applicationAnswers.add(answer);
+        answer.setApplication(this);
     }
 
     public void updateInterviewCheck(boolean check) {
