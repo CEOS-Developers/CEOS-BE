@@ -1,4 +1,4 @@
-package ceos.backend.domain.management.exception;
+package ceos.backend.domain.sponsor.exception;
 
 import ceos.backend.global.common.dto.ErrorReason;
 import ceos.backend.global.error.BaseErrorCode;
@@ -10,9 +10,9 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Getter
 @AllArgsConstructor
-public enum ManagementErrorCode implements BaseErrorCode {
-    /* Management */
-    MANAGER_NOT_FOUND(BAD_REQUEST, "MANAGEMENT_404_1", "해당 임원진이 존재하지 않습니다");
+public enum SponsorErrorCode implements BaseErrorCode {
+    /* Sponsor */
+    SPONSOR_NOT_FOUND(BAD_REQUEST, "SPONSOR_404_1", "해당 후원사는 존재하지 않습니다");
 
     private HttpStatus status;
     private String code;

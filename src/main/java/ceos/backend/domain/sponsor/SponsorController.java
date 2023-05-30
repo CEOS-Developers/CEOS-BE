@@ -1,16 +1,16 @@
 package ceos.backend.domain.sponsor;
 
+import ceos.backend.domain.management.dto.SponsorDto;
+import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
 import ceos.backend.domain.sponsor.service.SponsorService;
+import ceos.backend.domain.sponsor.vo.SponsorVo;
 import ceos.backend.global.common.dto.AwsS3Url;
-import ceos.backend.global.common.event.Event;
-import ceos.backend.infra.s3.AwsS3UrlGenerator;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
@@ -21,6 +21,40 @@ import org.springframework.web.bind.annotation.RestController;
 public class SponsorController {
 
     private final SponsorService sponsorService;
+
+    @Operation(summary = "스폰서 추가하기")
+    @PostMapping
+    public void createSponsor(@RequestBody @Valid SponsorVo sponsorVo) {
+        log.info("스폰서 추가하기");
+        sponsorService.createSponsor(sponsorVo);
+    }
+
+    @Operation(summary = "스폰서 전체 보기")
+    @GetMapping
+    public GetAllSponsorsResponse getAllSponsors(
+            @RequestParam("pageNum") int pageNum,
+            @RequestParam("limit") int limit
+    ) {
+        log.info("스폰서 전체 보기");
+        return sponsorService.getAllSponsors(pageNum, limit);
+    }
+
+    @Operation(summary = "스폰서 정보 수정")
+    @PatchMapping("/{sponsorId}")
+    public SponsorDto updateSponsor(
+            @PathVariable(name = "sponsorId") Long sponsorId,
+            @RequestBody SponsorVo sponsorVo
+    ) {
+        log.info("스폰서 정보 수정");
+        return sponsorService.updateSponsor(sponsorId, sponsorVo);
+    }
+
+    @Operation(summary = "스폰서 삭제")
+    @DeleteMapping("/{sponsorId}")
+    public void deleteSponsor(@PathVariable(name = "sponsorId") Long sponsorId) {
+        log.info("스폰서 삭제");
+        sponsorService.deleteSponsor(sponsorId);
+    }
 
     @Operation(summary = "스폰서 이미지 url 생성하기")
     @GetMapping("/image")
