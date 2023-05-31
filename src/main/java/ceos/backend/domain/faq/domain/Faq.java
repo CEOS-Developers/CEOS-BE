@@ -1,6 +1,7 @@
 package ceos.backend.domain.faq.domain;
 
 import ceos.backend.domain.faq.vo.FaqVo;
+import ceos.backend.domain.faq.vo.UpdateFaqRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -48,5 +49,14 @@ public class Faq extends BaseEntity {
                 .question(faqVo.getQuestion())
                 .answer(faqVo.getAnswer())
                 .build();
+    }
+
+    public void update(UpdateFaqRequest updateFaqRequest) {
+        if (updateFaqRequest.getQuestion() != null) {
+            this.question = updateFaqRequest.getQuestion();
+        }
+        if (updateFaqRequest.getAnswer() != null) {
+            this.answer = updateFaqRequest.getAnswer();
+        }
     }
 }

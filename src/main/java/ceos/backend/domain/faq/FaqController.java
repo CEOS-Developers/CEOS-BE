@@ -1,8 +1,10 @@
 package ceos.backend.domain.faq;
 
+import ceos.backend.domain.faq.dto.FaqDto;
 import ceos.backend.domain.faq.dto.response.GetCategoryFaqResponse;
 import ceos.backend.domain.faq.service.FaqService;
 import ceos.backend.domain.faq.vo.FaqVo;
+import ceos.backend.domain.faq.vo.UpdateFaqRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,5 +33,15 @@ public class FaqController {
     public GetCategoryFaqResponse getCategoryFaq(@RequestParam(value = "category", defaultValue = "RECRUIT") String faqCategory) {
         log.info("카테고리별 질문, 답변 불러오기");
         return faqService.getCategoryFaq(faqCategory);
+    }
+
+    @Operation(summary = "FAQ 수정하기")
+    @PatchMapping("/{faqId}")
+    public FaqDto updateFaq(
+            @PathVariable("faqId") Long faqId,
+            @RequestBody UpdateFaqRequest updateFaqRequest
+            ) {
+        log.info("FAQ 수정하기");
+        return faqService.updateFaq(faqId, updateFaqRequest);
     }
 }
