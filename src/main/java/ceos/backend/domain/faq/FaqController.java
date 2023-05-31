@@ -40,8 +40,15 @@ public class FaqController {
     public FaqDto updateFaq(
             @PathVariable("faqId") Long faqId,
             @RequestBody UpdateFaqRequest updateFaqRequest
-            ) {
+    ) {
         log.info("FAQ 수정하기");
         return faqService.updateFaq(faqId, updateFaqRequest);
+    }
+
+    @Operation(summary = "FAQ 삭제하기")
+    @DeleteMapping("/{faqId}")
+    public void deleteFaq(@PathVariable("faqId") Long faqId) {
+        log.info("FAQ 삭제하기");
+        faqService.deleteFaq(faqId);
     }
 }

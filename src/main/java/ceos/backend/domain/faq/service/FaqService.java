@@ -42,4 +42,10 @@ public class FaqService {
         findFaq.update(updateFaqRequest);
         return FaqDto.entityToDto(findFaq);
     }
+
+    @Transactional
+    public void deleteFaq(Long id) {
+        Faq findFaq = faqRepository.findById(id).orElseThrow(() -> {throw FaqNotFound.EXCEPTION;});
+        faqRepository.delete(findFaq);
+    }
 }
