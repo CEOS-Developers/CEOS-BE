@@ -1,6 +1,6 @@
 package ceos.backend.domain.awards.domain;
 
-import ceos.backend.domain.awards.dto.CreateAwardsRequest;
+import ceos.backend.domain.awards.dto.request.CreateAwardsRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

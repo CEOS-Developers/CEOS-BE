@@ -1,13 +1,11 @@
-package ceos.backend.domain.awards.dto;
+package ceos.backend.domain.awards.dto.request;
 
-import ceos.backend.global.common.annotation.DateFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -23,7 +21,7 @@ public class CreateAwardsRequest {
     @Valid
     private String content;
 
-    @Schema(defaultValue = "2023-03-01", description = "활동 시작 시기")
+    @Schema(description = "활동 시작 시기")
     @NotNull(message = "활동 시작 시기를 입력해주세요")
     @Valid
     private LocalDate startDate;

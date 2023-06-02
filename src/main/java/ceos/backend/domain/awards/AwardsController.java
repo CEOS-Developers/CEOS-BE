@@ -1,6 +1,7 @@
 package ceos.backend.domain.awards;
 
-import ceos.backend.domain.awards.dto.CreateAwardsRequest;
+import ceos.backend.domain.awards.dto.request.CreateAwardsRequest;
+import ceos.backend.domain.awards.dto.response.GetAllAwardsResponse;
 import ceos.backend.domain.awards.service.AwardsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,8 +28,9 @@ public class AwardsController {
 
     @Operation(summary = "수상이력 전체보기")
     @GetMapping
-    public void getAllAwards(){
+    public GetAllAwardsResponse getAllAwards(@RequestParam("pageNum") int pageNum, @RequestParam("limit") int limit){
         log.info("수상이력 전체보기");
+        return awardsService.getAllAwards(pageNum, limit);
     }
 
     @Operation(summary = "수상이력 하나보기")
