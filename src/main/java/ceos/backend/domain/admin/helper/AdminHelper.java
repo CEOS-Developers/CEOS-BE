@@ -1,6 +1,7 @@
 package ceos.backend.domain.admin.helper;
 
 import ceos.backend.domain.admin.domain.Admin;
+import ceos.backend.domain.admin.domain.AdminRole;
 import ceos.backend.domain.admin.dto.request.FindIdRequest;
 import ceos.backend.domain.admin.dto.request.ResetPwdRequest;
 import ceos.backend.domain.admin.dto.request.SendRandomPwdRequest;
@@ -93,7 +94,7 @@ public class AdminHelper {
                     throw AdminNotFound.EXCEPTION;
                 });
 
-        if (matchesPassword(
+        if (!matchesPassword(
                 signInRequest.getPassword(),
                 findAdmin.getPassword())) {
             throw MismatchPassword.EXCEPTION;
@@ -130,7 +131,7 @@ public class AdminHelper {
         final String newPassword1 = resetPwdRequest.getNewPassword1();
         final String newPassword2 = resetPwdRequest.getNewPassword2();
 
-        if (matchesPassword(password, admin.getPassword())) {
+        if (!matchesPassword(password, admin.getPassword())) {
             throw MismatchPassword.EXCEPTION;
         }
 
@@ -168,4 +169,17 @@ public class AdminHelper {
 //            throw .Exception;
 //        }
 //    }
+
+
+    public Admin findAdmin(Long adminId){
+        return adminRepository
+                .findById(adminId)
+                .orElseThrow(() -> {
+                    throw AdminNotFound.EXCEPTION;
+                });
+    }
+
+    public void changeRole(Admin admin, AdminRole adminRole) {
+        admin.updateRole(AdminRole.ROLE_ADMIN);
+    }
 }

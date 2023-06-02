@@ -1,6 +1,7 @@
 package ceos.backend.domain.admin.service;
 
 import ceos.backend.domain.admin.domain.Admin;
+import ceos.backend.domain.admin.domain.AdminRole;
 import ceos.backend.domain.admin.dto.request.*;
 import ceos.backend.domain.admin.dto.response.CheckUsernameResponse;
 import ceos.backend.domain.admin.dto.response.FindIdResponse;
@@ -8,7 +9,6 @@ import ceos.backend.domain.admin.dto.response.SignInResponse;
 import ceos.backend.domain.admin.helper.AdminHelper;
 import ceos.backend.domain.admin.repository.AdminMapper;
 import ceos.backend.domain.admin.repository.AdminRepository;
-import ceos.backend.global.config.jwt.TokenProvider;
 import ceos.backend.global.config.user.AdminDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class AdminService {
     private final AdminRepository adminRepository;
 
     @Transactional
-    public CheckUsernameResponse checkUsername(CheckUsernameRequest checkUsernameRequest){
+    public CheckUsernameResponse checkUsername(CheckUsernameRequest checkUsernameRequest) {
         //중복 아이디 검사
         adminHelper.findDuplicateUsername(checkUsernameRequest.getUsername());
 
@@ -109,4 +109,19 @@ public class AdminService {
 //
 //        return adminMapper.toRefreshTokenResponse(accessToken);
 //    }
+
+    @Transactional
+    public void getAdmins(AdminDetails adminUser) {
+        final Admin superAdmin = adminUser.getAdmin();
+
+    }
+
+    @Transactional
+    public void grantAuthority(AdminDetails adminUser, GrantAuthorityRequest grantAuthorityRequest) {
+        final Admin admin = adminHelper.findAdmin(grantAuthorityRequest.getId());
+        final AdminRole adminRole = grantAuthorityRequest.getAdminRole();
+
+        //권한 변경
+        adminHelper.changeRole(admin, adminRole);
+    }
 }
