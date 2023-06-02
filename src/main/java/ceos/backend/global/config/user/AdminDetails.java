@@ -17,11 +17,12 @@ public class AdminDetails implements UserDetails {
         this.admin = admin;
     }
 
-    //나중에 더 구체화 할 수 있을 것 같음
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        collection.add((GrantedAuthority) () -> "ANONYMOUS");
+        //collection.add((GrantedAuthority) () -> String.valueOf(admin.getRole()));
+        collection.add((GrantedAuthority) () -> String.valueOf(admin.getRole()));
+
         return collection;
     }
 
