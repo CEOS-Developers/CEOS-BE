@@ -173,7 +173,7 @@ public class AdminHelper {
 //    }
 
 
-    public Admin findAdmin(Long adminId){
+    public Admin findAdmin(Long adminId) {
         return adminRepository
                 .findById(adminId)
                 .orElseThrow(() -> {
@@ -181,11 +181,17 @@ public class AdminHelper {
                 });
     }
 
-    public List<Admin> findAdmins(Admin superAdmin){
+    public List<Admin> findAdmins(Admin superAdmin) {
         return adminRepository.findAllByIdNot(superAdmin.getId());
     }
 
     public void changeRole(Admin admin, AdminRole adminRole) {
         admin.updateRole(adminRole);
+    }
+
+    public void validateAdmin(Admin superAdmin, Admin admin) {
+        if (superAdmin.getId().equals(admin.getId())) {
+            throw InvalidAction.EXCEPTION;
+        }
     }
 }
