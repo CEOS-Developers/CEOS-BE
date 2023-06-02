@@ -5,6 +5,7 @@ import ceos.backend.domain.admin.domain.AdminRole;
 import ceos.backend.domain.admin.dto.request.*;
 import ceos.backend.domain.admin.dto.response.CheckUsernameResponse;
 import ceos.backend.domain.admin.dto.response.FindIdResponse;
+import ceos.backend.domain.admin.dto.response.GetAdminsResponse;
 import ceos.backend.domain.admin.dto.response.SignInResponse;
 import ceos.backend.domain.admin.helper.AdminHelper;
 import ceos.backend.domain.admin.repository.AdminMapper;
@@ -111,9 +112,9 @@ public class AdminService {
 //    }
 
     @Transactional
-    public void getAdmins(AdminDetails adminUser) {
+    public GetAdminsResponse getAdmins(AdminDetails adminUser) {
         final Admin superAdmin = adminUser.getAdmin();
-
+        return adminMapper.toGetAdmins(adminHelper.findAdmins(superAdmin));
     }
 
     @Transactional
