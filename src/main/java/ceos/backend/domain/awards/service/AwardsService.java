@@ -55,4 +55,10 @@ public class AwardsService {
         awards.updateAward(awardsRequest);
         return AwardsResponse.to(awards);
     }
+
+    @Transactional
+    public void deleteAward(Long id){
+        Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
+        awardsRepository.delete(awards);
+    }
 }

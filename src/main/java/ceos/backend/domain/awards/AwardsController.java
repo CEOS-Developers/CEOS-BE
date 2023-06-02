@@ -53,5 +53,6 @@ public class AwardsController {
     @DeleteMapping("/{awardId}")
     public void deleteAwards(@PathVariable(name = "awardId") Long awardID){
         log.info("수상이력 삭제하기");
+        awardsService.deleteAward(awardID);
     }
 }
