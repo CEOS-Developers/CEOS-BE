@@ -101,12 +101,12 @@ public class AdminController {
         adminService.grantAuthority(adminUser, grantAuthorityRequest);
     }
 
-//    @Operation(summary = "슈퍼유저 - 유저 권한 변경")
-//    @DeleteMapping("/super")
-//    public void grantAuthority(
-//            @AuthenticationPrincipal AdminDetails adminUser,
-//            Long adminId ) {
-//        log.info("슈퍼유저 - 유저 권한 변경");
-//        adminService.grantAuthority(adminUser, adminId);
-//    }
+    @Operation(summary = "슈퍼유저 - 유저 삭제")
+    @DeleteMapping("/super")
+    public void deleteAdmin(
+            @AuthenticationPrincipal AdminDetails adminUser,
+            Long adminId ) {
+        log.info("슈퍼유저 - 유저 삭제");
+        adminService.deleteAdmin(adminUser, adminId);
+    }
 }

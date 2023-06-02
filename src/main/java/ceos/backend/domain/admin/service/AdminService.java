@@ -119,10 +119,26 @@ public class AdminService {
 
     @Transactional
     public void grantAuthority(AdminDetails adminUser, GrantAuthorityRequest grantAuthorityRequest) {
+        final Admin superAdmin = adminUser.getAdmin();
         final Admin admin = adminHelper.findAdmin(grantAuthorityRequest.getId());
         final AdminRole adminRole = grantAuthorityRequest.getAdminRole();
 
+        //어드민 작업 검증
+        adminHelper.validateAdmin(superAdmin, admin);
+
         //권한 변경
         adminHelper.changeRole(admin, adminRole);
+    }
+
+    @Transactional
+    public void deleteAdmin(AdminDetails adminUser, Long adminId) {
+        final Admin superAdmin = adminUser.getAdmin();
+        final Admin admin = adminHelper.findAdmin(adminId);
+
+        //어드민 작업 검증
+        adminHelper.validateAdmin(superAdmin, admin);
+
+        //어드민 삭제
+        adminRepository.delete(admin);
     }
 }
