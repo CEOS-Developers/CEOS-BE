@@ -38,6 +38,15 @@ public class WebSecurityConfig {
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs"
     };
 
+    private final String[] AdminPatterns = {
+            "/admin/password", "/admin/newpassword", "/admin/logout", "admin/refresh",
+            "/applications/**", "recruitments/**"
+    };
+
+    private final String[] RootPatterns = {
+            "/admin/super"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfigurationSource())
@@ -45,8 +54,9 @@ public class WebSecurityConfig {
                 .csrf().disable()
 
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+
 
                 .and()
                 .headers()
@@ -61,8 +71,9 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers(SwaggerPatterns).permitAll()
-                .requestMatchers("**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(AdminPatterns).hasAnyRole("ROOT", "ADMIN")
+                .requestMatchers(RootPatterns).hasRole("ROOT")
+                .anyRequest().permitAll()
                 .and()
                 .headers().frameOptions().disable();
 
