@@ -1,5 +1,6 @@
 package ceos.backend.domain.awards;
 
+import ceos.backend.domain.awards.dto.AwardsDto;
 import ceos.backend.domain.awards.dto.request.CreateAwardsRequest;
 import ceos.backend.domain.awards.dto.response.GetAllAwardsResponse;
 import ceos.backend.domain.awards.service.AwardsService;
@@ -35,8 +36,9 @@ public class AwardsController {
 
     @Operation(summary = "수상이력 하나보기")
     @GetMapping("/{awardId}")
-    public void getAwards(@PathVariable(name = "awardId") Long awardID){
+    public AwardsDto getAwards(@PathVariable(name = "awardId") Long awardID){
         log.info("수상이력 하나보기");
+        return awardsService.getAward(awardID);
     }
 
     @Operation(summary = "수상이력 수정하기")

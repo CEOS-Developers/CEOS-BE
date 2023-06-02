@@ -7,24 +7,24 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class AwardsDTO {
+public class AwardsDto {
 
     private int generation;
     private String content;
     private LocalDate startDate;
 
     @Builder
-    private AwardsDTO(int generation,
-                   String content,
-                   LocalDate startDate)
+    private AwardsDto(int generation,
+                      String content,
+                      LocalDate startDate)
     {
         this.generation = generation;
         this.content = content;
         this.startDate = startDate;
     }
 
-    public static AwardsDTO to(Awards awards){
-        return AwardsDTO.builder()
+    public static AwardsDto to(Awards awards){
+        return AwardsDto.builder()
                 .generation(awards.getGeneration())
                 .content(awards.getContent())
                 .startDate(awards.getStartDate())

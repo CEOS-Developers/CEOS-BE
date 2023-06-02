@@ -1,10 +1,13 @@
 package ceos.backend.domain.awards.service;
 
 import ceos.backend.domain.awards.domain.Awards;
+import ceos.backend.domain.awards.dto.AwardsDto;
 import ceos.backend.domain.awards.dto.request.CreateAwardsRequest;
 import ceos.backend.domain.awards.dto.response.GetAllAwardsResponse;
+import ceos.backend.domain.awards.exception.AwardNotFound;
 import ceos.backend.domain.awards.mapper.AwardsMapper;
 import ceos.backend.domain.awards.repository.AwardsRepository;
+import ceos.backend.domain.management.exception.ManagerNotFound;
 import ceos.backend.global.common.dto.PageInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,5 +42,11 @@ public class AwardsService {
         PageInfo pageInfo = PageInfo.of(pageNum, limit, pageAwards.getTotalPages(), pageAwards.getTotalElements());
 
         return awardsMapper.toAwardsPage(pageAwards.getContent(), pageInfo);
+    }
+
+    @Transactional(readOnly = true)
+    public AwardsDto getAward(Long id) {
+        Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
+        return AwardsDto.to(awards);
     }
 }
