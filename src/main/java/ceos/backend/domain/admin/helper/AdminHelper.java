@@ -24,6 +24,8 @@ import ceos.backend.domain.admin.vo.AdminVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class AdminHelper {
@@ -179,7 +181,11 @@ public class AdminHelper {
                 });
     }
 
+    public List<Admin> findAdmins(Admin superAdmin){
+        return adminRepository.findAllByIdNot(superAdmin.getId());
+    }
+
     public void changeRole(Admin admin, AdminRole adminRole) {
-        admin.updateRole(AdminRole.ROLE_ADMIN);
+        admin.updateRole(adminRole);
     }
 }
