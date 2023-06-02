@@ -36,15 +36,17 @@ public class AwardsController {
 
     @Operation(summary = "수상이력 하나보기")
     @GetMapping("/{awardId}")
-    public AwardsResponse getAwards(@PathVariable(name = "awardId") Long awardID){
+    public AwardsResponse getAward(@PathVariable(name = "awardId") Long awardID){
         log.info("수상이력 하나보기");
         return awardsService.getAward(awardID);
     }
 
     @Operation(summary = "수상이력 수정하기")
     @PatchMapping("/{awardId}")
-    public void updateAwards(@PathVariable(name = "awardId") Long awardID){
+    public AwardsResponse updateAward(@PathVariable(name = "awardId") Long awardID,
+                                       @RequestBody AwardsRequest awardsRequest){
         log.info("수상이력 수정하기");
+        return awardsService.updateAward(awardID, awardsRequest);
     }
 
     @Operation(summary = "수상이력 삭제하기")

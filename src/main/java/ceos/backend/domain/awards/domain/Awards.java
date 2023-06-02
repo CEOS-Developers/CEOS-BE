@@ -47,4 +47,10 @@ public class Awards {
                 .startDate(awardsRequest.getStartDate())
                 .build();
     }
+
+    public void updateAward(AwardsRequest awardsRequest){
+        this.generation = awardsRequest.getGeneration();
+        this.content = awardsRequest.getContent();
+        this.startDate = awardsRequest.getStartDate();
+    }
 }

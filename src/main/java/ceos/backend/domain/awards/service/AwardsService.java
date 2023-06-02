@@ -48,5 +48,11 @@ public class AwardsService {
         Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
         return AwardsResponse.to(awards);
     }
-    
+
+    @Transactional
+    public AwardsResponse updateAward(Long id, AwardsRequest awardsRequest) {
+        Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
+        awards.updateAward(awardsRequest);
+        return AwardsResponse.to(awards);
+    }
 }
