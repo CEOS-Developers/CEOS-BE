@@ -1,13 +1,12 @@
 package ceos.backend.domain.awards.service;
 
 import ceos.backend.domain.awards.domain.Awards;
-import ceos.backend.domain.awards.dto.AwardsDto;
-import ceos.backend.domain.awards.dto.request.CreateAwardsRequest;
-import ceos.backend.domain.awards.dto.response.GetAllAwardsResponse;
+import ceos.backend.domain.awards.dto.response.AwardsResponse;
+import ceos.backend.domain.awards.dto.request.AwardsRequest;
+import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
 import ceos.backend.domain.awards.exception.AwardNotFound;
 import ceos.backend.domain.awards.mapper.AwardsMapper;
 import ceos.backend.domain.awards.repository.AwardsRepository;
-import ceos.backend.domain.management.exception.ManagerNotFound;
 import ceos.backend.global.common.dto.PageInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +25,13 @@ public class AwardsService {
     private final AwardsMapper awardsMapper;
 
     @Transactional
-    public void createAwards(CreateAwardsRequest createAwardsRequest) {
-        Awards awards = Awards.from(createAwardsRequest);
+    public void createAwards(AwardsRequest awardsRequest) {
+        Awards awards = Awards.from(awardsRequest);
         awardsRepository.save(awards);
     }
 
     @Transactional(readOnly = true)
-    public GetAllAwardsResponse getAllAwards(int pageNum, int limit) {
+    public AllAwardsResponse getAllAwards(int pageNum, int limit) {
         //페이징 요청 정보
         PageRequest pageRequest = PageRequest.of(pageNum, limit, Sort.by("generation").descending());
 
@@ -45,8 +44,9 @@ public class AwardsService {
     }
 
     @Transactional(readOnly = true)
-    public AwardsDto getAward(Long id) {
+    public AwardsResponse getAward(Long id) {
         Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
-        return AwardsDto.to(awards);
+        return AwardsResponse.to(awards);
     }
+    
 }

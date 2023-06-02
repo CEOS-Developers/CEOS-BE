@@ -10,7 +10,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class CreateAwardsRequest {
+public class AwardsRequest {
     @Schema(defaultValue = "17", description = "수상 팀 활동 기수")
     @NotNull(message = "수상 팀의 활동 기수를 입력해주세요")
     @Valid
@@ -27,14 +27,14 @@ public class CreateAwardsRequest {
     private LocalDate startDate;
 
     @Builder
-    private CreateAwardsRequest(int generation, String content, LocalDate startDate) {
+    private AwardsRequest(int generation, String content, LocalDate startDate) {
         this.generation = generation;
         this.content = content;
         this.startDate = startDate;
     }
 
-    public static CreateAwardsRequest of(int generation, String content, LocalDate startDate){
-        return CreateAwardsRequest.builder()
+    public static AwardsRequest of(int generation, String content, LocalDate startDate){
+        return AwardsRequest.builder()
                 .generation(generation)
                 .content(content)
                 .startDate(startDate)
