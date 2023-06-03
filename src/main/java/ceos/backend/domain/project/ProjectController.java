@@ -1,5 +1,6 @@
 package ceos.backend.domain.project;
 
+import ceos.backend.domain.project.dto.response.GetProjectResponse;
 import ceos.backend.domain.project.dto.response.GetProjectsResponse;
 import ceos.backend.domain.project.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -7,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,5 +26,14 @@ public class ProjectController {
     public GetProjectsResponse getProjects() {
         log.info("프로젝트 목록 보기");
         return projectService.getProjects();
+    }
+
+    @Operation(summary = "프로젝트 하나 보기")
+    @GetMapping("/{projectId}")
+    public GetProjectResponse getProject(
+            @PathVariable("projectId") Long projectId
+    ) {
+        log.info("프로젝트 하나 보기");
+        return projectService.getProject(projectId);
     }
 }

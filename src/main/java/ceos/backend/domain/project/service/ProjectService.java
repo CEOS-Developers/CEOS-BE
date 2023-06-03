@@ -1,5 +1,6 @@
 package ceos.backend.domain.project.service;
 
+import ceos.backend.domain.project.dto.response.GetProjectResponse;
 import ceos.backend.domain.project.dto.response.GetProjectsResponse;
 import ceos.backend.domain.project.helper.ProjectHelper;
 import ceos.backend.domain.project.repository.ProjectMapper;
@@ -21,5 +22,10 @@ public class ProjectService {
     @Transactional
     public GetProjectsResponse getProjects() {
         return projectMapper.toGetProjects(projectRepository.findAll());
+    }
+
+    @Transactional
+    public GetProjectResponse getProject(Long projectId) {
+        return projectMapper.toGetProject(projectHelper.findById(projectId));
     }
 }
