@@ -1,12 +1,16 @@
 package ceos.backend.domain.project.domain;
 
+import ceos.backend.domain.project.vo.ProjectInfoVo;
 import ceos.backend.global.common.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,50 +34,37 @@ public class Project extends BaseEntity {
     @NotNull
     private int generation;
 
-    private String serviceUrl;
+    // Project : ProjectUrl = 1:N
+    @OneToMany(mappedBy = "project")
+    @JsonManagedReference
+    private List<ProjectUrl> projectUrls;
 
-    private String instagramUrl;
+    // Project : ProjectImage = 1:N
+    @OneToMany(mappedBy = "project")
+    @JsonManagedReference
+    private List<ProjectImage> projectImages;
 
-    private String behanceUrl;
-
-    private String githubUrl;
-
-    // Project : ProjectImage = 1:N (단방향)
-    @OneToMany
-    @JoinColumn(name = "project_image_id")
-    private List<ProjectImage> projectImages = new ArrayList<>();
-
-    // Project : Participant = 1:N (단방향)
-    @OneToMany
-    @JoinColumn(name = "participant_id")
-    private List<Participant> participants = new ArrayList<>();
-
-    // 연관관계 메서드
-    public void addParticipant(Participant participant) {
-        participants.add(participant);
-    }
+    // Project : Participant = 1:N
+    @OneToMany(mappedBy = "project")
+    @JsonManagedReference
+    private List<Participant> participants;
 
     // 생성자
     @Builder
     private Project(String name,
                     String description,
-                    int generation,
-                    String serviceUrl,
-                    String instagramUrl,
-                    String behanceUrl,
-                    String githubUrl,
-                    List<ProjectImage> projectImages,
-                    List<Participant> participants) {
+                    int generation) {
         this.name = name;
         this.description = description;
         this.generation = generation;
-        this.serviceUrl = serviceUrl;
-        this.instagramUrl = instagramUrl;
-        this.behanceUrl = behanceUrl;
-        this.githubUrl = githubUrl;
-        this.projectImages = projectImages;
-        this.participants = participants;
     }
 
     // 정적 팩토리 메서드
+    public static Project from(ProjectInfoVo projectInfoVo) {
+        return Project.builder()
+                .name(projectInfoVo.getName())
+                .description(projectInfoVo.getDescription())
+                .generation(projectInfoVo.getGeneration())
+                .build();
+    }
 }
