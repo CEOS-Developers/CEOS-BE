@@ -3,6 +3,7 @@ package ceos.backend.domain.project.dto.response;
 import ceos.backend.domain.project.domain.Participant;
 import ceos.backend.domain.project.domain.Project;
 import ceos.backend.domain.project.domain.ProjectImage;
+import ceos.backend.domain.project.domain.ProjectUrl;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,9 +16,7 @@ public class GetProjectResponse {
     private String name;
     private String description;
     private int generation;
-    private String serviceUrl;
-    private String behanceUrl;
-    private String githubUrl;
+    private List<ProjectUrl> projectUrls;
     private List<ProjectImage> projectImages;
     private List<Participant> participants;
 
@@ -26,9 +25,7 @@ public class GetProjectResponse {
                               String name,
                               String description,
                               int generation,
-                              String serviceUrl,
-                              String behanceUrl,
-                              String githubUrl,
+                              List<ProjectUrl> projectUrls,
                               List<ProjectImage> projectImages,
                               List<Participant> participants
     ) {
@@ -36,9 +33,7 @@ public class GetProjectResponse {
         this.name = name;
         this.description = description;
         this.generation = generation;
-        this.serviceUrl = serviceUrl;
-        this.behanceUrl = behanceUrl;
-        this.githubUrl = githubUrl;
+        this.projectUrls = projectUrls;
         this.projectImages = projectImages;
         this.participants = participants;
     }
@@ -49,9 +44,7 @@ public class GetProjectResponse {
                 .name(project.getName())
                 .description(project.getDescription())
                 .generation(project.getGeneration())
-                .serviceUrl(project.getServiceUrl())
-                .behanceUrl(project.getBehanceUrl())
-                .githubUrl(project.getGithubUrl())
+                .projectUrls(project.getProjectUrls())
                 .projectImages(project.getProjectImages())
                 .participants(project.getParticipants())
                 .build();
