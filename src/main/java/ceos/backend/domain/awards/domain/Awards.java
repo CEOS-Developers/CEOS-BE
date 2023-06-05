@@ -1,5 +1,6 @@
 package ceos.backend.domain.awards.domain;
 
+import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -39,4 +40,17 @@ public class Awards {
     }
 
     // 정적 팩토리 메서드
+    public static Awards from(AwardsRequest awardsRequest){
+        return Awards.builder()
+                .generation(awardsRequest.getGeneration())
+                .content(awardsRequest.getContent())
+                .startDate(awardsRequest.getStartDate())
+                .build();
+    }
+
+    public void updateAward(AwardsRequest awardsRequest){
+        this.generation = awardsRequest.getGeneration();
+        this.content = awardsRequest.getContent();
+        this.startDate = awardsRequest.getStartDate();
+    }
 }
