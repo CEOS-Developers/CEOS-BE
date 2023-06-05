@@ -1,14 +1,15 @@
 package ceos.backend.domain.admin.service;
 
 import ceos.backend.domain.admin.domain.Admin;
+import ceos.backend.domain.admin.domain.AdminRole;
 import ceos.backend.domain.admin.dto.request.*;
 import ceos.backend.domain.admin.dto.response.CheckUsernameResponse;
 import ceos.backend.domain.admin.dto.response.FindIdResponse;
+import ceos.backend.domain.admin.dto.response.GetAdminsResponse;
 import ceos.backend.domain.admin.dto.response.SignInResponse;
 import ceos.backend.domain.admin.helper.AdminHelper;
 import ceos.backend.domain.admin.repository.AdminMapper;
 import ceos.backend.domain.admin.repository.AdminRepository;
-import ceos.backend.global.config.jwt.TokenProvider;
 import ceos.backend.global.config.user.AdminDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,7 @@ public class AdminService {
     private final AdminRepository adminRepository;
 
     @Transactional
-    public CheckUsernameResponse checkUsername(CheckUsernameRequest checkUsernameRequest){
+    public CheckUsernameResponse checkUsername(CheckUsernameRequest checkUsernameRequest) {
         //중복 아이디 검사
         adminHelper.findDuplicateUsername(checkUsernameRequest.getUsername());
 
@@ -109,4 +110,35 @@ public class AdminService {
 //
 //        return adminMapper.toRefreshTokenResponse(accessToken);
 //    }
+
+    @Transactional(readOnly = true)
+    public GetAdminsResponse getAdmins(AdminDetails adminUser) {
+        final Admin superAdmin = adminUser.getAdmin();
+        return adminMapper.toGetAdmins(adminHelper.findAdmins(superAdmin));
+    }
+
+    @Transactional
+    public void grantAuthority(AdminDetails adminUser, GrantAuthorityRequest grantAuthorityRequest) {
+        final Admin superAdmin = adminUser.getAdmin();
+        final Admin admin = adminHelper.findAdmin(grantAuthorityRequest.getId());
+        final AdminRole adminRole = grantAuthorityRequest.getAdminRole();
+
+        //어드민 작업 검증
+        adminHelper.validateAdmin(superAdmin, admin);
+
+        //권한 변경
+        adminHelper.changeRole(admin, adminRole);
+    }
+
+    @Transactional
+    public void deleteAdmin(AdminDetails adminUser, Long adminId) {
+        final Admin superAdmin = adminUser.getAdmin();
+        final Admin admin = adminHelper.findAdmin(adminId);
+
+        //어드민 작업 검증
+        adminHelper.validateAdmin(superAdmin, admin);
+
+        //어드민 삭제
+        adminRepository.delete(admin);
+    }
 }
