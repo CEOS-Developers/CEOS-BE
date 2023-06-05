@@ -1,7 +1,7 @@
 package ceos.backend.domain.project.service;
 
 import ceos.backend.domain.project.domain.*;
-import ceos.backend.domain.project.dto.request.CreateProjectRequest;
+import ceos.backend.domain.project.dto.request.ProjectRequest;
 import ceos.backend.domain.project.dto.response.GetProjectResponse;
 import ceos.backend.domain.project.dto.response.GetProjectsResponse;
 import ceos.backend.domain.project.helper.ProjectHelper;
@@ -40,24 +40,30 @@ public class ProjectService {
     }
 
     @Transactional
-    public void createProject(CreateProjectRequest createProjectRequest) {
+    public void createProject(ProjectRequest projectRequest) {
         //프로젝트 중복 검사
-        projectHelper.findDuplicateProject(createProjectRequest.getProjectInfoVo());
+        projectHelper.findDuplicateProject(projectRequest.getProjectInfoVo());
+
+        //프로젝트 이미지 검사
+        projectHelper.validateProjectImages(projectRequest.getProjectImages());
+
+        //프로젝트 링크 검사
+        projectHelper.validateProjectUrls(projectRequest.getProjectUrls());
 
         //프로젝트 생성
-        final Project project = projectMapper.toEntity(createProjectRequest);
+        final Project project = projectMapper.toEntity(projectRequest);
         projectRepository.save(project);
 
         //프로젝트 이미지 저장
-        final List<ProjectImageVo> projectImageVos = createProjectRequest.getProjectImages();
+        final List<ProjectImageVo> projectImageVos = projectRequest.getProjectImages();
         projectImageRepository.saveAll(projectMapper.toProjectImageList(project, projectImageVos));
 
         //프로젝트 Url 저장
-        final List<ProjectUrlVo> projectUrlVos = createProjectRequest.getProjectUrls();
+        final List<ProjectUrlVo> projectUrlVos = projectRequest.getProjectUrls();
         projectUrlRepository.saveAll(projectMapper.toProjectUrlList(project, projectUrlVos));
 
         //프로젝트 팀원 저장
-        final List<ParticipantVo> participantVos = createProjectRequest.getParticipants();
+        final List<ParticipantVo> participantVos = projectRequest.getParticipants();
         participantRepository.saveAll(projectMapper.toParticipantList(project, participantVos));
     }
 
@@ -67,7 +73,28 @@ public class ProjectService {
     }
 
     @Transactional
-    public void updateProject(Long projectId) {
+    public void updateProject(Long projectId, ProjectRequest projectRequest) {
+        Project project = projectHelper.findById(projectId);
 
+        //프로젝트 이미지 검사
+        projectHelper.validateProjectImages(projectRequest.getProjectImages());
+
+        //프로젝트 링크 검사
+        projectHelper.validateProjectUrls(projectRequest.getProjectUrls());
+
+        //프로젝트 업데이트
+        project.update(projectRequest.getProjectInfoVo());
+
+        projectHelper.updateImages(project, projectRequest.getProjectImages());
+        projectHelper.updateUrls(project, projectRequest.getProjectUrls());
+        projectHelper.updateParticipants(project, projectRequest.getParticipants());
+    }
+
+    @Transactional
+    public void deleteProject(Long projectId) {
+        Project project = projectHelper.findById(projectId);
+
+        //프로젝트 삭제
+        projectRepository.delete(project);
     }
 }
