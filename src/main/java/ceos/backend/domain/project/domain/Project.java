@@ -59,12 +59,17 @@ public class Project extends BaseEntity {
         this.generation = generation;
     }
 
-    // 정적 팩토리 메서드
     public static Project from(ProjectInfoVo projectInfoVo) {
         return Project.builder()
                 .name(projectInfoVo.getName())
                 .description(projectInfoVo.getDescription())
                 .generation(projectInfoVo.getGeneration())
                 .build();
+    }
+
+    public void update(ProjectInfoVo projectInfoVo) {
+        this.name = projectInfoVo.getName();
+        this.description = projectInfoVo.getDescription();
+        this.generation = projectInfoVo.getGeneration();
     }
 }

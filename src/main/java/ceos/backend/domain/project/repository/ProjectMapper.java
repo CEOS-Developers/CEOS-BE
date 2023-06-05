@@ -4,7 +4,7 @@ import ceos.backend.domain.project.domain.Participant;
 import ceos.backend.domain.project.domain.Project;
 import ceos.backend.domain.project.domain.ProjectImage;
 import ceos.backend.domain.project.domain.ProjectUrl;
-import ceos.backend.domain.project.dto.request.CreateProjectRequest;
+import ceos.backend.domain.project.dto.request.ProjectRequest;
 import ceos.backend.domain.project.dto.response.GetProjectResponse;
 import ceos.backend.domain.project.dto.response.GetProjectsResponse;
 import ceos.backend.domain.project.vo.ParticipantVo;
@@ -35,8 +35,8 @@ public class ProjectMapper {
         return GetProjectResponse.from(project);
     }
 
-    public Project toEntity(CreateProjectRequest createProjectRequest) {
-        return Project.from(createProjectRequest.getProjectInfoVo());
+    public Project toEntity(ProjectRequest projectRequest) {
+        return Project.from(projectRequest.getProjectInfoVo());
     }
 
     public List<ProjectImage> toProjectImageList(Project project, List<ProjectImageVo> projectImageVos) {

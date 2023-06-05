@@ -50,4 +50,8 @@ public class ProjectUrl {
                 .project(project)
                 .build();
     }
+
+    public void update(String linkUrl) {
+        this.linkUrl = linkUrl;
+    }
 }

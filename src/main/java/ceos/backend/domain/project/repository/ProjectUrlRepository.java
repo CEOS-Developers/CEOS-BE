@@ -1,8 +1,12 @@
 package ceos.backend.domain.project.repository;
 
-import ceos.backend.domain.project.domain.ProjectUrl;
+import ceos.backend.domain.project.domain.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProjectUrlRepository extends JpaRepository<ProjectUrl, Long> {
+import java.util.List;
+import java.util.Optional;
 
+public interface ProjectUrlRepository extends JpaRepository<ProjectUrl, Long> {
+    Optional<ProjectUrl> findByProjectAndCategory(Project project, ProjectUrlCategory category);
+    List<ProjectUrl> findByCategory(ProjectUrlCategory category);
 }

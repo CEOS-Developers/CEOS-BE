@@ -49,4 +49,8 @@ public class ProjectImage extends BaseEntity {
                 .project(project)
                 .build();
     }
+
+    public void update(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

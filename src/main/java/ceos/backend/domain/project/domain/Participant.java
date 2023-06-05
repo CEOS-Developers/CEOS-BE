@@ -48,4 +48,8 @@ public class Participant extends BaseEntity {
                 .project(project)
                 .build();
     }
+
+    public void update(String name) {
+        this.name = name;
+    }
 }
