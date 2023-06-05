@@ -13,10 +13,14 @@ import static org.springframework.http.HttpStatus.*;
 public enum ProjectErrorCode implements BaseErrorCode {
     /* Project */
     DUPLICATE_PROJECT(BAD_REQUEST, "PROJECT_400_1", "이미 존재하는 프로젝트입니다."),
-    PROJECT_NOT_FOUND(NOT_FOUND, "ADMIN_404_1", "존재하지 않는 프로젝트입니다."),
+    PROJECT_NOT_FOUND(NOT_FOUND, "PROJECT_404_1", "존재하지 않는 프로젝트입니다."),
 
     /* Data */
-    DUPLICATE_DATA(CONFLICT, "PROJECT_409_1", "이미 존재하는 데이터입니다");
+    DUPLICATE_DATA(CONFLICT, "PROJECT_409_1", "이미 존재하는 데이터입니다"),
+    DATA_NOT_FOUND(CONFLICT, "PROJECT_404_1", "존재하지 않는 데이터입니다"),
+    INVALID_DATA(BAD_REQUEST, "PROJECT_400_2", "데이터 유효성 검증에 실패하였습니다.");
+
+
     private HttpStatus status;
     private String code;
     private String reason;
