@@ -28,13 +28,6 @@ public class ProjectController {
         return projectService.getProjects(pageNum, limit);
     }
 
-    @Operation(summary = "프로젝트 생성하기")
-    @PostMapping("/")
-    public void createProject(@RequestBody @Valid ProjectRequest projectRequest) {
-        log.info("프로젝트 생성하기");
-        projectService.createProject(projectRequest);
-    }
-
     @Operation(summary = "프로젝트 하나 보기")
     @GetMapping("/{projectId}")
     public GetProjectResponse getProject(
@@ -42,6 +35,13 @@ public class ProjectController {
     ) {
         log.info("프로젝트 하나 보기");
         return projectService.getProject(projectId);
+    }
+
+    @Operation(summary = "프로젝트 생성하기")
+    @PostMapping("/")
+    public void createProject(@RequestBody @Valid ProjectRequest projectRequest) {
+        log.info("프로젝트 생성하기");
+        projectService.createProject(projectRequest);
     }
 
     @Operation(summary = "프로젝트 수정하기")

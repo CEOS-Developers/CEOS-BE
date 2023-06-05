@@ -39,6 +39,11 @@ public class ProjectService {
         return projectMapper.toGetProjects(projectList, pageInfo);
     }
 
+    @Transactional(readOnly = true)
+    public GetProjectResponse getProject(Long projectId) {
+        return projectMapper.toGetProject(projectHelper.findById(projectId));
+    }
+
     @Transactional
     public void createProject(ProjectRequest projectRequest) {
         //프로젝트 중복 검사
@@ -65,11 +70,6 @@ public class ProjectService {
         //프로젝트 팀원 저장
         final List<ParticipantVo> participantVos = projectRequest.getParticipants();
         participantRepository.saveAll(projectMapper.toParticipantList(project, participantVos));
-    }
-
-    @Transactional(readOnly = true)
-    public GetProjectResponse getProject(Long projectId) {
-        return projectMapper.toGetProject(projectHelper.findById(projectId));
     }
 
     @Transactional
