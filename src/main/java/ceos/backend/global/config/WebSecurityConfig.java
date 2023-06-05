@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -40,7 +41,7 @@ public class WebSecurityConfig {
 
     private final String[] AdminPatterns = {
             "/admin/password", "/admin/newpassword", "/admin/logout", "admin/refresh",
-            "/applications/**", "recruitments/**"
+            "/applications/**", "recruitments/**", "projects/**"
     };
 
     private final String[] RootPatterns = {
@@ -70,6 +71,7 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
                 .requestMatchers(SwaggerPatterns).permitAll()
                 .requestMatchers(AdminPatterns).hasAnyRole("ROOT", "ADMIN")
                 .requestMatchers(RootPatterns).hasRole("ROOT")
