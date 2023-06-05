@@ -111,7 +111,7 @@ public class AdminService {
 //        return adminMapper.toRefreshTokenResponse(accessToken);
 //    }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public GetAdminsResponse getAdmins(AdminDetails adminUser) {
         final Admin superAdmin = adminUser.getAdmin();
         return adminMapper.toGetAdmins(adminHelper.findAdmins(superAdmin));
