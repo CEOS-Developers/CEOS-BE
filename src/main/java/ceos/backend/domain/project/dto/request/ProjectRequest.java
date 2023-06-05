@@ -11,7 +11,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class CreateProjectRequest {
+public class ProjectRequest {
 
     @JsonUnwrapped
     private ProjectInfoVo projectInfoVo;
