@@ -3,6 +3,7 @@ package ceos.backend.domain.admin;
 import ceos.backend.domain.admin.dto.request.*;
 import ceos.backend.domain.admin.dto.response.CheckUsernameResponse;
 import ceos.backend.domain.admin.dto.response.FindIdResponse;
+import ceos.backend.domain.admin.dto.response.GetAdminsResponse;
 import ceos.backend.domain.admin.dto.response.SignInResponse;
 import ceos.backend.domain.admin.service.AdminService;
 import ceos.backend.global.config.user.AdminDetails;
@@ -12,10 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -26,7 +24,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @Operation
+    @Operation(summary = "닉네임 확인")
     @PostMapping("/username")
     public CheckUsernameResponse checkUsername(@RequestBody @Valid CheckUsernameRequest checkUsernameRequest) {
         return adminService.checkUsername(checkUsernameRequest);
@@ -47,21 +45,21 @@ public class AdminController {
     }
 
     @Operation(summary = "아이디 찾기")
-    @PostMapping("/findid")
+    @PostMapping("/id")
     public FindIdResponse findId(@RequestBody @Valid FindIdRequest findIdRequest) {
         log.info("아이디 찾기");
         return adminService.findId(findIdRequest);
     }
 
     @Operation(summary = "비밀번호 찾기")
-    @PostMapping("/findpwd")
+    @PostMapping("/password")
     public void findPwd(@RequestBody @Valid SendRandomPwdRequest sendRandomPwdRequest) {
         log.info("임시 비밀번호 메일 전송");
         adminService.findPwd(sendRandomPwdRequest);
     }
 
     @Operation(summary = "비밀번호 재설정")
-    @PostMapping("/resetpwd")
+    @PostMapping("/newpassword")
     public void resetPwd(
             @RequestBody @Valid ResetPwdRequest resetPwdRequest,
             @AuthenticationPrincipal AdminDetails adminUser
@@ -85,4 +83,30 @@ public class AdminController {
 //        log.info("토큰 재발급");
 //        return adminService.refreshToken(refreshToken, adminUser);
 //    }
+
+    @Operation(summary = "슈퍼유저 - 유저 목록 보기")
+    @GetMapping("/super")
+    public GetAdminsResponse getAdmins(
+            @AuthenticationPrincipal AdminDetails adminUser) {
+        log.info("슈퍼유저 - 유저 목록 보기");
+        return adminService.getAdmins(adminUser);
+    }
+
+    @Operation(summary = "슈퍼유저 - 유저 권한 변경")
+    @PostMapping("/super")
+    public void grantAuthority(
+            @AuthenticationPrincipal AdminDetails adminUser,
+            GrantAuthorityRequest grantAuthorityRequest ) {
+        log.info("슈퍼유저 - 유저 권한 변경");
+        adminService.grantAuthority(adminUser, grantAuthorityRequest);
+    }
+
+    @Operation(summary = "슈퍼유저 - 유저 삭제")
+    @DeleteMapping("/super")
+    public void deleteAdmin(
+            @AuthenticationPrincipal AdminDetails adminUser,
+            Long adminId ) {
+        log.info("슈퍼유저 - 유저 삭제");
+        adminService.deleteAdmin(adminUser, adminId);
+    }
 }

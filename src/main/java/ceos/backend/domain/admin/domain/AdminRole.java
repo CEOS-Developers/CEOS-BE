@@ -1,5 +1,5 @@
 package ceos.backend.domain.admin.domain;
 
 public enum AdminRole {
-    ROOT, ADMIN, ANONYMOUS
+    ROLE_ROOT, ROLE_ADMIN, ROLE_ANONYMOUS
 }
