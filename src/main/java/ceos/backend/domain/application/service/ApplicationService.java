@@ -3,9 +3,13 @@ package ceos.backend.domain.application.service;
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.*;
+import ceos.backend.domain.application.exception.FileCreationFailed;
+import ceos.backend.domain.application.helper.ApplicationExcelHelper;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
+import ceos.backend.domain.recruitment.domain.Recruitment;
+import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.entity.Part;
@@ -21,6 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Slf4j
@@ -33,8 +41,13 @@ public class ApplicationService {
     private final InterviewRepository interviewRepository;
     private final ApplicationInterviewRepository applicationInterviewRepository;
 
+    private final RecruitmentRepository recruitmentRepository;
+
     private final ApplicationMapper applicationMapper;
     private final ApplicationHelper applicationHelper;
+
+    private final ApplicationExcelHelper applicationExcelHelper;
+
 
     @Transactional(readOnly = true)
     public GetApplications getApplications(int pageNum, int limit) {
@@ -59,18 +72,32 @@ public class ApplicationService {
 
         // 엔티티 생성 및 저장
         final String UUID = applicationHelper.generateUUID();
-        final Application application = applicationMapper.toEntity(createApplicationRequest, UUID);
+        Application application = applicationMapper.toEntity(createApplicationRequest, UUID);
+
         applicationRepository.save(application);
 
-        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
-        final List<ApplicationAnswer> applicationAnswers
+        List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
+        List<ApplicationAnswer> applicationAnswers
                 = applicationMapper.toAnswerList(createApplicationRequest, application, applicationQuestions);
+
+        for (ApplicationAnswer applicationAnswer : applicationAnswers) {
+            application.addApplicationAnswers(applicationAnswer);
+        }
+
         applicationAnswerRepository.saveAll(applicationAnswers);
 
-        final List<Interview> interviews = interviewRepository.findAll();
-        final List<ApplicationInterview> applicationInterviews
+        List<Interview> interviews = interviewRepository.findAll();
+        List<ApplicationInterview> applicationInterviews
                 = applicationMapper.toApplicationInterviewList(createApplicationRequest.getUnableTimes(),
                 application, interviews);
+
+        for (ApplicationInterview applicationInterview : applicationInterviews) {
+            application.addApplicationInterviews(applicationInterview);
+        }
+        applicationInterviewRepository.saveAll(applicationInterviews);
+
+        applicationRepository.save(application);
+        applicationAnswerRepository.saveAll(applicationAnswers);
         applicationInterviewRepository.saveAll(applicationInterviews);
 
         // 이메일 전송
@@ -256,7 +283,29 @@ public class ApplicationService {
     }
 
     @Transactional
-    public void createExcelFile() throws IOException {
+    public Path getApplicationExcel() {
+        return Paths.get("ApplicationList.xlsx");
+    }
+
+    @Transactional
+    public GetCreationTime createApplicationExcel() {
+        try {
+            // 지원서 엑셀 생성
+            createApplicationExcelFile();
+        } catch (IOException e) {
+            throw FileCreationFailed.EXCEPTION;
+        }
+
+        LocalDateTime dateTime = LocalDateTime.now();
+
+        Recruitment recruitment = recruitmentRepository.findAll().get(0);
+        recruitment.updateApplicationExcelCreatedAt(dateTime);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return GetCreationTime.from(dateTime.format(formatter));
+    }
+    @Transactional
+    public void createApplicationExcelFile() throws IOException {
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Sheet1");
@@ -265,47 +314,40 @@ public class ApplicationService {
         List<String> headers = new ArrayList<>(List.of("", "파트", "이름", "성별", "생년월일", "email", "전화번호",
                 "대학교", "전공", "남은 학기 수", "OT", "데모데이", "다른 활동"));
 
-        // Header : 지원서 질문
+        // 지원서 질문
         List<ApplicationQuestion> questionList = applicationQuestionRepository.findAll();
-
-        // 공통질문, 기획, 디자인, 프론트, 백엔드로 정렬
-
-        // Map : Key (question_id), Value (colIndex)
-        Map<Long, Integer> questionIndex = new HashMap<>();
-
         questionList.sort(Comparator.comparing(ApplicationQuestion::getCategory)
                 .thenComparing(ApplicationQuestion::getNumber));
 
-        int colIndex = headers.size();
-        for (ApplicationQuestion applicationQuestion : questionList) {
-            headers.add(applicationQuestion.getQuestion());
-            questionIndex.put(applicationQuestion.getId(), colIndex++);
-        }
+        List<Application> applicationList = applicationRepository.findAll();
 
-        System.out.println("questionIndex = " + questionIndex);
+        Map<Long, String> interviewTimeMap = applicationExcelHelper.getInterviewTimeMap();
+        Map<Long, Integer> questionIndexMap = applicationExcelHelper.getQuestionIndexMap(headers, questionList);
 
         // Header
         headers.addAll(List.of("면접 가능한 시간", "서류 합격 여부", "면접 시간"));
 
-        // Header 입력
-        colIndex = 0;
+        int colIndex = 0;
         int rowIndex = 0;
+
         Row row = sheet.createRow(rowIndex++);
 
         for (String header : headers) {
             row.createCell(colIndex++).setCellValue(header);
         }
 
-        // Date Style
+        // 날짜 형식 설정
         CellStyle cellStyle = workbook.createCellStyle();
         CreationHelper creationHelper = workbook.getCreationHelper();
-        cellStyle.setDataFormat(creationHelper.createDataFormat().getFormat("yyyy-mm-dd")); // 날짜 형식 설정
+        cellStyle.setDataFormat(creationHelper.createDataFormat().getFormat("yyyy-mm-dd"));
 
-        // Application
-        List<Application> applicationList = applicationRepository.findAll();
         Cell cell;
 
+        // 지원서
         for (Application application : applicationList) {
+
+            List<ApplicationAnswer> applicationAnswers = application.getApplicationAnswers();
+            List<ApplicationInterview> applicationInterviews = application.getApplicationInterviews();
 
             Part part = application.getApplicationDetail().getPart();
 
@@ -337,37 +379,21 @@ public class ApplicationService {
             row.createCell(colIndex++).setCellValue((application.getApplicationDetail().getOtherActivities()));
 
             // 질문 답변 입력
-            List<ApplicationAnswer> applicationAnswers = application.getApplicationAnswers();
-
             for (ApplicationAnswer answer : applicationAnswers) {
-                Long id = answer.getApplicationQuestion().getId();
-                int index = (int) questionIndex.get(id);
+                int index = (int) questionIndexMap.get(answer.getApplicationQuestion().getId());
                 row.createCell(index).setCellValue(answer.getAnswer());
             }
-
             colIndex += questionList.size();
 
-            // 면접 가능한 시간
-            List<ApplicationInterview> applicationInterviews = application.getApplicationInterviews();
-
-            String possibleInterview = "";
-            for (ApplicationInterview interview : applicationInterviews) {
-                possibleInterview += interview.getInterview().getId() + " ";
-            }
-
-            row.createCell(colIndex++).setCellValue(possibleInterview);
-
-            // 서류 합격 여부
+            row.createCell(colIndex++).setCellValue(applicationExcelHelper.getPossibleInterview(interviewTimeMap, applicationInterviews)); // 면접 가능한 시간
             row.createCell(colIndex++).setCellValue(application.getDocumentPass().getResult());
-
-            // 면접 시간
             row.createCell(colIndex++).setCellValue(application.getInterviewDatetime());
 
             rowIndex++;
         }
 
         // 파일로 저장
-        FileOutputStream fileOutputStream = new FileOutputStream("example.xlsx");
+        FileOutputStream fileOutputStream = new FileOutputStream("ApplicationList.xlsx");
         workbook.write(fileOutputStream);
         fileOutputStream.close();
 
