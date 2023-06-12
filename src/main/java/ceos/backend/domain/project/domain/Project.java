@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -37,17 +38,17 @@ public class Project extends BaseEntity {
     // Project : ProjectUrl = 1:N
     @OneToMany(mappedBy = "project")
     @JsonManagedReference
-    private List<ProjectUrl> projectUrls;
+    private List<ProjectUrl> projectUrls = new ArrayList<>();
 
     // Project : ProjectImage = 1:N
     @OneToMany(mappedBy = "project")
     @JsonManagedReference
-    private List<ProjectImage> projectImages;
+    private List<ProjectImage> projectImages = new ArrayList<>();
 
     // Project : Participant = 1:N
     @OneToMany(mappedBy = "project")
     @JsonManagedReference
-    private List<Participant> participants;
+    private List<Participant> participants = new ArrayList<>();
 
     // 생성자
     @Builder
