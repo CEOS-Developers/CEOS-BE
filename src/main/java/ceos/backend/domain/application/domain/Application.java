@@ -1,8 +1,7 @@
 package ceos.backend.domain.application.domain;
 
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.exception.NotPassDocument;
-import ceos.backend.domain.application.exception.SamePassStatus;
+import ceos.backend.domain.application.exception.*;
 import ceos.backend.global.common.annotation.DateTimeFormat;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -98,5 +97,23 @@ public class Application extends BaseEntity{
 
     public void updateInterviewTime(String interviewTime) {
         this.interviewDatetime = interviewTime;
+    }
+
+    public void validateFinalPass() {
+        if (this.finalPass == Pass.FAIL) {
+            throw NotPassFinal.EXCEPTION;
+        }
+    }
+
+    public void validateNotFinalCheck() {
+        if (this.isFinalCheck()) {
+            throw AlreadyCheckFinal.EXCEPTION;
+        }
+    }
+
+    public void validateNotInterviewCheck() {
+        if (this.isInterviewCheck()) {
+            throw AlreadyCheckInterview.EXCEPTION;
+        }
     }
 }

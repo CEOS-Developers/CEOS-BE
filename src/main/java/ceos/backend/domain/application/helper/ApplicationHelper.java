@@ -30,8 +30,7 @@ public class ApplicationHelper {
 
     public void validateFirstApplication(ApplicantInfoVo applicantInfoVo) {
         if (applicationRepository
-                .findByEmail(applicantInfoVo.getEmail())
-                .isPresent()) {
+                .existsByEmail(applicantInfoVo.getEmail())) {
             throw DuplicateApplicant.EXCEPTION;
         }
     }
@@ -53,9 +52,9 @@ public class ApplicationHelper {
     }
 
     public void validateRecruitOption(int generation) {
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
+        final LocalDate now = LocalDate.now();
+        final Recruitment recruitment = recruitmentHelper.takeRecruitment();
         recruitment.validateGeneration(generation);
-        LocalDate now = LocalDate.now();
         recruitment.validateApplyDuration(now);
     }
 
@@ -68,49 +67,37 @@ public class ApplicationHelper {
     }
 
     public void validateDocumentResultOption() {
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        LocalDate now = LocalDate.now();
-        recruitment.validateDocumentResultDuration(now);
+        final LocalDate now = LocalDate.now();
+        recruitmentHelper.takeRecruitment()
+                .validateDocumentResultDuration(now);
     }
 
     public void validateFinalResultOption() {
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
-        recruitment.validateFinalResultDuration(now);
+        recruitmentHelper.takeRecruitment()
+                .validateFinalResultDuration(now);
     }
 
 
     public void validateApplicantDocumentPass(Application application) {
-        if (application.getDocumentPass() == Pass.FAIL) {
-            throw NotPassDocument.EXCEPTION;
-        }
+        application.validateDocumentPass();
     }
 
     public void validateApplicantInterviewCheckStatus(Application application) {
-        if (application.getDocumentPass() == Pass.FAIL) {
-            throw NotPassDocument.EXCEPTION;
-        }
-        if (application.isInterviewCheck()) {
-            throw AlreadyCheckInterview.EXCEPTION;
-        }
+        application.validateDocumentPass();
+        application.validateNotInterviewCheck();
     }
 
     public void validateApplicantActivityCheckStatus(Application application) {
-        if (application.getDocumentPass() != Pass.PASS) {
-            throw NotPassDocument.EXCEPTION;
-        }
-        if (application.getFinalPass() != Pass.PASS) {
-            throw NotPassFinal.EXCEPTION;
-        }
-        if (application.isFinalCheck()) {
-            throw AlreadyCheckFinal.EXCEPTION;
-        }
+        application.validateDocumentPass();
+        application.validateFinalPass();
+        application.validateNotFinalCheck();
     }
 
     public void validateDocumentPassDuration() {
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
-        recruitment.validateDocumentPassDuration(now);
+        recruitmentHelper.takeRecruitment()
+                .validateDocumentPassDuration(now);
     }
 
     public Application validateExistingApplicant(Long applicationId) {
@@ -122,9 +109,9 @@ public class ApplicationHelper {
     }
 
     public void validateFinalPassDuration() {
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
-        recruitment.validateFinalPassDuration(now);
+        recruitmentHelper.takeRecruitment()
+                .validateFinalPassDuration(now);
     }
 
     public void validateDocumentPassStatus(Application application) {
@@ -140,9 +127,9 @@ public class ApplicationHelper {
     }
 
     public void validateBeforeStartDateDoc() {
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         LocalDate now = LocalDate.now();
-        recruitment.validateBeforeStartDateDoc(now);
+        recruitmentHelper.takeRecruitment()
+                .validateBeforeStartDateDoc(now);
     }
 
     public void validateRemainApplications() {
