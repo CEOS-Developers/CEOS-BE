@@ -72,6 +72,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
+                .requestMatchers("/applications/**").permitAll()
                 .requestMatchers(SwaggerPatterns).permitAll()
                 .requestMatchers(AdminPatterns).hasAnyRole("ROOT", "ADMIN")
                 .requestMatchers(RootPatterns).hasRole("ROOT")
