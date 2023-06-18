@@ -16,6 +16,9 @@ import java.util.Arrays;
 @Configuration
 public class OpenApiConfig {
 
+    @Value("${server.url}")
+    private String SERVER_URL;
+
     @Bean
     public OpenAPI openAPI(@Value("${springdoc.version}") String springdocVersion) {
         Info info = new Info()
@@ -34,6 +37,8 @@ public class OpenApiConfig {
                         .bearerFormat("JWT"));
 
         return new OpenAPI()
+                .servers(Arrays.asList(
+                        new Server().url(SERVER_URL)))
                 .info(info)
                 .addSecurityItem(securityRequirement)
                 .components(components);
