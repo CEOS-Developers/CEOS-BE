@@ -36,7 +36,7 @@ public class WebSecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private final String[] SwaggerPatterns = {
-            "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs"
+            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
     };
 
     private final String[] AdminPatterns = {
