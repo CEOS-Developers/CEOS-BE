@@ -8,6 +8,7 @@ import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESMail;
+import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.common.event.Event;
 import ceos.backend.global.util.InterviewDateFormatter;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -138,6 +140,20 @@ public class ApplicationHelper {
         }
         if (applicationInterviewRepository.count() != 0) {
             throw ApplicationInterviewStillExist.EXCEPTION;
+        }
+    }
+
+    public void validateQAMatching(List<ApplicationQuestion> applicationQuestions, CreateApplicationRequest createApplicationRequest) {
+        if (applicationQuestions.stream()
+                .filter(question -> question.getCategory() == QuestionCategory.COMMON)
+                .count() != createApplicationRequest.getCommonAnswers().size()) {
+            throw NotMatchingQnA.EXCEPTION;
+        }
+        final Part part = createApplicationRequest.getApplicationDetailVo().getPart();
+        if (applicationQuestions.stream()
+                .filter(question -> question.getCategory().toString().equals(part.toString()))
+                .count() != createApplicationRequest.getPartAnswers().size()) {
+            throw NotMatchingQnA.EXCEPTION;
         }
     }
 }

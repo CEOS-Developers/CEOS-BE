@@ -27,6 +27,7 @@ public enum ApplicationErrorCode implements BaseErrorCode {
 
     /* Answer */
     ANSWERS_STILL_EXIST(BAD_REQUEST, "ANSWER_400_1", "기존 질문에 대한 답변이 존재합니다."),
+    NOT_MATCHING_QNA(BAD_REQUEST, "ANSWER_400_2", "질문에 대한 답변이 없습니다."),
 
     /* Application Interview */
     APPLICATION_INTERVIEW_STILL_EXIST(BAD_REQUEST, "ANSWER_400_1", "기존 면접 시간에 대한 답변이 존재합니다."),

@@ -53,12 +53,15 @@ public class ApplicationService {
         // 중복 검사
         applicationHelper.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
 
+        // 질문 다 채웠나 검사
+        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
+        applicationHelper.validateQAMatching(applicationQuestions, createApplicationRequest);
+
         // 엔티티 생성 및 저장
         final String UUID = applicationHelper.generateUUID();
         final Application application = applicationMapper.toEntity(createApplicationRequest, UUID);
         applicationRepository.save(application);
 
-        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
         final List<ApplicationAnswer> applicationAnswers
                 = applicationMapper.toAnswerList(createApplicationRequest, application, applicationQuestions);
         applicationAnswerRepository.saveAll(applicationAnswers);
