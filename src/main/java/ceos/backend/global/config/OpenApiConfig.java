@@ -34,8 +34,6 @@ public class OpenApiConfig {
                         .bearerFormat("JWT"));
 
         return new OpenAPI()
-                .servers(Arrays.asList(
-                        new Server().url("https://www.ceos-sinchon.com")))
                 .info(info)
                 .addSecurityItem(securityRequirement)
                 .components(components);
