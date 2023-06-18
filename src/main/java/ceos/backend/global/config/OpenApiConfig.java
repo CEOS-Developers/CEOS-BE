@@ -5,10 +5,13 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Arrays;
 
 @Configuration
 public class OpenApiConfig {
@@ -31,6 +34,8 @@ public class OpenApiConfig {
                         .bearerFormat("JWT"));
 
         return new OpenAPI()
+                .servers(Arrays.asList(
+                        new Server().url("https://www.ceos-sinchon.com")))
                 .info(info)
                 .addSecurityItem(securityRequirement)
                 .components(components);

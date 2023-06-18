@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - fix/swagger
 
 permissions:
   contents: read
