@@ -1,9 +1,6 @@
 package ceos.backend.domain.sponsor.mapper;
 
-import ceos.backend.domain.management.domain.Management;
-import ceos.backend.domain.management.dto.ManagementDto;
-import ceos.backend.domain.management.dto.SponsorDto;
-import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
+import ceos.backend.domain.sponsor.dto.SponsorDto;
 import ceos.backend.domain.sponsor.domain.Sponsor;
 import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
 import ceos.backend.global.common.dto.PageInfo;

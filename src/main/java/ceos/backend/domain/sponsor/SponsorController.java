@@ -1,6 +1,6 @@
 package ceos.backend.domain.sponsor;
 
-import ceos.backend.domain.management.dto.SponsorDto;
+import ceos.backend.domain.sponsor.dto.SponsorDto;
 import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
 import ceos.backend.domain.sponsor.service.SponsorService;
 import ceos.backend.domain.sponsor.vo.SponsorVo;
