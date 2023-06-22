@@ -47,10 +47,10 @@ public class ProjectHelper {
         if (projectImageVos.size() < 3) {
             throw InvalidData.EXCEPTION;
         }
-        for (ProjectImageCategory category : ProjectImageCategory.values()) {
-            if (projectImageRepository.findByCategory(category).size() > 1) {
-                throw InvalidData.EXCEPTION;
-            }
+       // for (ProjectImageCategory category : ProjectImageCategory.values()) {
+      //      if (projectImageRepository.findByCategory(category).size() > 1) {
+        //        throw InvalidData.EXCEPTION;
+        //    }
         }
     }
 
