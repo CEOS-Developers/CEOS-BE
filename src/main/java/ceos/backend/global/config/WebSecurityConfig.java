@@ -45,7 +45,7 @@ public class WebSecurityConfig {
 
     private final String[] AdminPatterns = {
             "/admin/password", "/admin/newpassword", "/admin/logout", "admin/refresh",
-            "/applications/**", "recruitments/**", "projects/**"
+            "/applications/**", "recruitments/**", "projects/**", "activities/**", "awards/**"
     };
 
     private final String[] RootPatterns = {
@@ -103,6 +103,7 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(
                 Arrays.asList(
                         "http://localhost:8080",
+                        "http://localhost:3000",
                         SERVER_URL
                 )
         );
