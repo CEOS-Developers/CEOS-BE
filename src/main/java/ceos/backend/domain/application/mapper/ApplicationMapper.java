@@ -7,24 +7,17 @@ import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.exception.InterviewNotFound;
 import ceos.backend.domain.application.exception.QuestionNotFound;
 import ceos.backend.domain.application.vo.*;
-import ceos.backend.global.common.annotation.ValidDateList;
-import ceos.backend.global.common.annotation.ValidTimeDuration;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.DateTimeConvertor;
 import ceos.backend.global.util.InterviewDateFormatter;
 import ceos.backend.global.util.ParsingDuration;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class ApplicationMapper {
@@ -92,7 +85,7 @@ public class ApplicationMapper {
                     questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.COMMON));
                 });
         productQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.PRODUCT));
+            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.STRATEGY));
         });
         designQuestions.forEach(questionVo -> {
             questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.DESIGN));
@@ -139,7 +132,7 @@ public class ApplicationMapper {
         applicationQuestions.forEach(applicationQuestion -> {
             if (applicationQuestion.getCategory() == QuestionCategory.COMMON) {
                 commonQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else if (applicationQuestion.getCategory() == QuestionCategory.PRODUCT) {
+            } else if (applicationQuestion.getCategory() == QuestionCategory.STRATEGY) {
                 productQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
             } else if (applicationQuestion.getCategory() == QuestionCategory.FRONTEND) {
                 frontendQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
