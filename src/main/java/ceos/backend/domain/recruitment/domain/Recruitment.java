@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -72,7 +73,7 @@ public class Recruitment extends BaseEntity {
     @NotNull
     private LocalDate demodayDate;
 
-    // private LocalDate hackatonDate;
+    private LocalDateTime applicationExcelCreatedAt;
 
     // 생성자
     @Builder
@@ -91,7 +92,8 @@ public class Recruitment extends BaseEntity {
                         LocalDate resultDateFinal,
                         String openChatUrl,
                         LocalDate otDate,
-                        LocalDate demodayDate) {
+                        LocalDate demodayDate,
+                        LocalDateTime applicationExcelCreatedAt) {
         this.generation = generation;
         this.prodImg = prodImg;
         this.designImg = designImg;
@@ -108,6 +110,7 @@ public class Recruitment extends BaseEntity {
         this.openChatUrl = openChatUrl;
         this.otDate = otDate;
         this.demodayDate = demodayDate;
+        this.applicationExcelCreatedAt = applicationExcelCreatedAt;
     }
 
 
@@ -128,6 +131,10 @@ public class Recruitment extends BaseEntity {
         this.openChatUrl = updateRecruitmentRequest.getOpenChatUrl();
         this.otDate = updateRecruitmentRequest.getOtDate();
         this.demodayDate = updateRecruitmentRequest.getDemodayDate();
+    }
+
+    public void updateApplicationExcelCreatedAt(LocalDateTime createdAt) {
+        this.applicationExcelCreatedAt = createdAt;
     }
 
 

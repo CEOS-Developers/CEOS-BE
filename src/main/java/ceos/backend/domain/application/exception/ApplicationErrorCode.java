@@ -7,6 +7,8 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 
 @Getter
 @AllArgsConstructor
@@ -33,7 +35,10 @@ public enum ApplicationErrorCode implements BaseErrorCode {
     APPLICATION_INTERVIEW_STILL_EXIST(BAD_REQUEST, "ANSWER_400_1", "기존 면접 시간에 대한 답변이 존재합니다."),
 
     /* Interview */
-    INTERVIEW_NOT_FOUND(BAD_REQUEST, "INTERVIEW_404_1", "존재하지 않는 면접 시간입니다.");
+    INTERVIEW_NOT_FOUND(BAD_REQUEST, "INTERVIEW_404_1", "존재하지 않는 면접 시간입니다."),
+
+    /* Excel File */
+    FILE_CREATION_FAILED(INTERNAL_SERVER_ERROR, "APPLICATION_EXCEL_500_1", "파일 생성에 실패하였습니다.");
 
     private HttpStatus status;
     private String code;

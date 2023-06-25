@@ -23,8 +23,9 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 @Slf4j
 @RestControllerAdvice
 public class ResponseAdvicer implements ResponseBodyAdvice<Object> {
-    private final String[] SwaggerPatterns = {
-            "/v3/api-docs"
+    private final String[] EscapePatterns = {
+            "/v3/api-docs",
+            "/applications/file/download"
     };
 
     @Override
@@ -42,8 +43,8 @@ public class ResponseAdvicer implements ResponseBodyAdvice<Object> {
         ContentCachingRequestWrapper servletRequest
                 = new ContentCachingRequestWrapper(((ServletServerHttpRequest) request).getServletRequest());
 
-        for (String swaggerPattern : SwaggerPatterns) {
-            if (servletRequest.getRequestURL().toString().contains(swaggerPattern))
+        for (String escapePattern : EscapePatterns) {
+            if (servletRequest.getRequestURL().toString().contains(escapePattern))
                 return body;
         }
 

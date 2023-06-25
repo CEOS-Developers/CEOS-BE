@@ -8,7 +8,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.file.Path;
 
 @Slf4j
 @RestController
@@ -117,5 +123,29 @@ public class ApplicationController {
                                       @RequestBody @Valid UpdatePassStatus updatePassStatus) {
         log.info("최종 합격 여부 변경");
         applicationService.updateFinalPassStatus(applicationId, updatePassStatus);
+    }
+
+    @Operation(summary = "지원서 엑셀 파일 생성")
+    @GetMapping(value = "/file/create")
+    public GetCreationTime createApplicationExcel() {
+        log.info("지원서 엑셀 파일 생성");
+        return applicationService.createApplicationExcel();
+    }
+
+    @Operation(summary = "지원서 엑셀 다운로드")
+    @GetMapping(value = "/file/download")
+    public ResponseEntity<FileSystemResource> getApplicationExcel() {
+        log.info("지원서 엑셀 다운로드");
+        Path path = applicationService.getApplicationExcel();
+
+        FileSystemResource resource = new FileSystemResource(path.toFile());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=" + path.getFileName().toString());
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(path.toFile().length())
+                .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+                .body(resource);
     }
 }
