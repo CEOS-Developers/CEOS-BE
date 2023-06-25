@@ -22,7 +22,7 @@ public class QuestionVo {
     private String question;
 
     @Schema(defaultValue = "false", description = "입력창 크기")
-    @NotEmpty(message = "입력창 크기를 입력해주세요")
+    @NotNull(message = "입력창 크기를 입력해주세요")
     private boolean multiline;
 
     @Valid

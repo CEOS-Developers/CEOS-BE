@@ -80,7 +80,7 @@ public class ApplicationMapper {
         return GetResultResponse.toFinalResult(application);
     }
     
-    public List<ApplicationQuestion> toQuestionList(UpdateApplicationQuestion updateApplicationQuestion) {
+    public QuestionListVo toQuestionList(UpdateApplicationQuestion updateApplicationQuestion) {
         final List<QuestionVo> commonQuestions = updateApplicationQuestion.getCommonQuestions();
         final List<QuestionVo> productQuestions = updateApplicationQuestion.getProductQuestions();
         final List<QuestionVo> designQuestions = updateApplicationQuestion.getDesignQuestions();
@@ -88,36 +88,37 @@ public class ApplicationMapper {
         final List<QuestionVo> backendQuestions = updateApplicationQuestion.getBackendQuestions();
 
         List<ApplicationQuestion> questions = new ArrayList<>();
-        commonQuestions.forEach(questionVo -> {
-                    questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.COMMON));
-                });
-        productQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.STRATEGY));
-        });
-        designQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.DESIGN));
-        });
-        frontendQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.FRONTEND));
-        });
-        backendQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.BACKEND));
-        });
-        return questions;
+        List<ApplicationQuestionDetail> questionDetails = new ArrayList<>();
+        parsingQuestion(questions, questionDetails, commonQuestions, QuestionCategory.COMMON);
+        parsingQuestion(questions, questionDetails, productQuestions, QuestionCategory.STRATEGY);
+        parsingQuestion(questions, questionDetails, designQuestions, QuestionCategory.DESIGN);
+        parsingQuestion(questions, questionDetails, frontendQuestions, QuestionCategory.FRONTEND);
+        parsingQuestion(questions, questionDetails, backendQuestions, QuestionCategory.BACKEND);
+        return QuestionListVo.of(questions, questionDetails);
     }
 
-    public List<Interview> toInterviewList(UpdateApplicationQuestion updateApplicationQuestion) {
-        final List<String> dates = updateApplicationQuestion.getDates();
-        final List<String> times = updateApplicationQuestion.getTimes();
-
-        List<Interview> interviews = new ArrayList<>();
-        dates.forEach(date -> {
-            times.forEach(time -> {
-                final String[] strTimes = time.split(" - ");
-                final LocalDateTime fromTime = DateTimeConvertor.dateTimeConvertor(date, strTimes[0]);
-                final LocalDateTime toTime = DateTimeConvertor.dateTimeConvertor(date, strTimes[1]);
-                interviews.add(Interview.of(fromTime, toTime));
+    private void parsingQuestion(List<ApplicationQuestion> questions,
+                                 List<ApplicationQuestionDetail> questionDetails,
+                                 List<QuestionVo> ansQuestions,
+                                 QuestionCategory category) {
+        ansQuestions.forEach(questionVo -> {
+            final ApplicationQuestion applicationQuestion
+                    = ApplicationQuestion.of(questionVo, category);
+            questions.add(applicationQuestion);
+            questionVo.getQuestionDetail().forEach(questionDetailVo -> {
+                questionDetails.add(ApplicationQuestionDetail.of(applicationQuestion, questionDetailVo));
             });
+        });
+    }
+
+    public List<Interview> toInterviewList(List<String> times) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        List<Interview> interviews = new ArrayList<>();
+        times.forEach(time -> {
+            final String[] strTimes = time.split(" - ");
+            final LocalDateTime fromTime = LocalDateTime.parse(strTimes[0], formatter);
+            final LocalDateTime toTime = LocalDateTime.parse(strTimes[1], formatter);
+            interviews.add(Interview.of(fromTime, toTime));
         });
         return interviews;
     }

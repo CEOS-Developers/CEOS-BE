@@ -6,6 +6,7 @@ import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
+import ceos.backend.domain.application.vo.QuestionListVo;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.event.Event;
@@ -27,6 +28,7 @@ public class ApplicationService {
     private final ApplicationQuestionRepository applicationQuestionRepository;
     private final InterviewRepository interviewRepository;
     private final ApplicationInterviewRepository applicationInterviewRepository;
+    private final ApplicationQuestionDetailRepository applicationQuestionDetailRepository;
 
     private final ApplicationMapper applicationMapper;
     private final ApplicationHelper applicationHelper;
@@ -87,21 +89,22 @@ public class ApplicationService {
     @Transactional
     public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
         // 기간 확인
-        applicationHelper.validateBeforeStartDateDoc();
+//        applicationHelper.validateBeforeStartDateDoc();
 
         // 남은 응답 확인
         applicationHelper.validateRemainApplications();
 
         // 변경
         applicationQuestionRepository.deleteAll();
+        applicationQuestionDetailRepository.deleteAll();
         interviewRepository.deleteAll();
 
-        final List<ApplicationQuestion> questions = applicationMapper.toQuestionList(updateApplicationQuestion);
-        applicationQuestionRepository.saveAll(questions);
+        final QuestionListVo questionListVo = applicationMapper.toQuestionList(updateApplicationQuestion);
+        applicationQuestionRepository.saveAll(questionListVo.getApplicationQuestions());
+        applicationQuestionDetailRepository.saveAll(questionListVo.getApplicationQuestionDetails());
 
-        final List<Interview> interviews = applicationMapper.toInterviewList(updateApplicationQuestion);
+        final List<Interview> interviews = applicationMapper.toInterviewList(updateApplicationQuestion.getTimes());
         interviewRepository.saveAll(interviews);
-
     }
 
     @Transactional(readOnly = true)
