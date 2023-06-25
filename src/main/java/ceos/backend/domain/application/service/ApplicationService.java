@@ -204,7 +204,6 @@ public class ApplicationService {
         }
     }
 
-    @Transactional(readOnly = true)
     public GetApplication getApplication(Long applicationId) {
         // 유저 검증
         final Application application = applicationHelper.validateExistingApplicant(applicationId);
@@ -304,7 +303,8 @@ public class ApplicationService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return GetCreationTime.from(dateTime.format(formatter));
     }
-    @Transactional
+
+    @Transactional(readOnly = true)
     public void createApplicationExcelFile() throws IOException {
 
         Workbook workbook = new XSSFWorkbook();
