@@ -33,7 +33,7 @@ public class UpdateApplicationQuestion {
     private List<QuestionVo> backendQuestions;
 
     @ArraySchema(schema = @Schema(description = "면접 시간",
-            type = "string",
+            type = "2023.03.20 00:00:00 - 2023.03.20 00:30:00",
             defaultValue = "2023.03.20 00:00:00 - 2023.03.20 00:30:00"))
     @Valid
     private List<@ValidDuration String> times;

@@ -49,7 +49,7 @@ public class ApplicationService {
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
         // 제출 기간, 기수 검사
-        applicationHelper.validateRecruitOption(createApplicationRequest.getApplicationDetailVo().getGeneration());
+//        applicationHelper.validateRecruitOption(createApplicationRequest.getApplicationDetailVo().getGeneration());
 
         // 중복 검사
         applicationHelper.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
@@ -92,7 +92,7 @@ public class ApplicationService {
     @Transactional
     public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
         // 기간 확인
-//        applicationHelper.validateBeforeStartDateDoc();
+        applicationHelper.validateBeforeStartDateDoc();
 
         // 남은 응답 확인
         applicationHelper.validateRemainApplications();
@@ -192,10 +192,12 @@ public class ApplicationService {
                 = applicationInterviewRepository.findAllByApplication(application);
         final List<ApplicationQuestion> applicationQuestions
                 = applicationQuestionRepository.findAll();
+        final List<ApplicationQuestionDetail> applicationQuestionDetails
+                = applicationQuestionDetailRepository.findAll();
         final List<ApplicationAnswer> applicationAnswers
                 = applicationAnswerRepository.findAllByApplication(application);
         return applicationMapper.toGetApplication(application, interviews, applicationInterviews,
-                applicationQuestions, applicationAnswers);
+                applicationQuestions, applicationQuestionDetails, applicationAnswers);
     }
 
     @Transactional(readOnly = true)

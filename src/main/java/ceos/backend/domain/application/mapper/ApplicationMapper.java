@@ -133,17 +133,17 @@ public class ApplicationMapper {
     public GetApplicationQuestion toGetApplicationQuestion(List<ApplicationQuestion> applicationQuestions,
                                                            List<ApplicationQuestionDetail> applicationQuestionDetails,
                                                            List<Interview> interviews) {
-        List<QuestionVo> commonQuestions = new ArrayList<>();
-        List<QuestionVo> productQuestions = new ArrayList<>();
-        List<QuestionVo> frontendQuestions = new ArrayList<>();
-        List<QuestionVo> backendQuestions = new ArrayList<>();
-        List<QuestionVo> designQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> commonQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> productQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> frontendQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> backendQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> designQuestions = new ArrayList<>();
         applicationQuestions.forEach(applicationQuestion -> {
             final List<QuestionDetailVo> questionDetailVos = applicationQuestionDetails.stream()
                     .filter(details -> details.getApplicationQuestion().equals(applicationQuestion))
                     .map(QuestionDetailVo::from)
                     .toList();
-            final QuestionVo questionVo = QuestionVo.of(applicationQuestion, questionDetailVos);
+            final QuestionWithIdVo questionVo = QuestionWithIdVo.of(applicationQuestion, questionDetailVos);
             switch (applicationQuestion.getCategory()) {
                 case COMMON -> commonQuestions.add(questionVo);
                 case STRATEGY -> productQuestions.add(questionVo);
@@ -163,34 +163,40 @@ public class ApplicationMapper {
     public GetApplication toGetApplication(Application application, List<Interview> interviews,
                                            List<ApplicationInterview> applicationInterviews,
                                            List<ApplicationQuestion> applicationQuestions,
+                                           List<ApplicationQuestionDetail> applicationQuestionDetails,
                                            List<ApplicationAnswer> applicationAnswers) {
         // qna common
         final List<QnAVo> commonQuestions = applicationQuestions.stream()
                 .filter(question -> question.getCategory() == QuestionCategory.COMMON)
-                .map(question ->
-                    applicationAnswers.stream()
-                            .filter(applicationAnswer -> applicationAnswer.getApplicationQuestion()
-                                    .equals(question))
-                            .map(answer -> QnAVo.of(question, answer))
-                            .findFirst()
-                            .orElseThrow()
-                ).toList();
+                .map(question -> toQnAVo(applicationAnswers, applicationQuestionDetails, question))
+                .toList();
         // qna part
         final Part part = application.getApplicationDetail().getPart();
         final List<QnAVo> partQuestions = applicationQuestions.stream()
                 .filter(question -> question.getCategory().toString().equals(part.toString()))
-                .map(question ->
-                        applicationAnswers.stream()
-                                .filter(applicationAnswer -> applicationAnswer.getApplicationQuestion()
-                                        .equals(question))
-                                .map(answer -> QnAVo.of(question, answer))
-                                .findFirst()
-                                .orElseThrow()
-                ).toList();
+                .map(question -> toQnAVo(applicationAnswers, applicationQuestionDetails, question))
+                .toList();
 
         // interview
         List<InterviewTimeVo> times = toInterviewTimeVoList(interviews, applicationInterviews);
         return GetApplication.of(application, commonQuestions, partQuestions, times);
+    }
+
+    private QnAVo toQnAVo(List<ApplicationAnswer> applicationAnswers,
+                          List<ApplicationQuestionDetail> applicationQuestionDetails,
+                          ApplicationQuestion question) {
+        return applicationAnswers.stream()
+                .filter(applicationAnswer -> applicationAnswer.getApplicationQuestion()
+                        .equals(question))
+                .map(answer -> {
+                    final List<QuestionDetailVo> detailVos = applicationQuestionDetails.stream()
+                            .filter(details -> details.getApplicationQuestion().equals(question))
+                            .map(QuestionDetailVo::from)
+                            .toList();
+                    return QnAVo.of(question, detailVos, answer);
+                })
+                .findFirst()
+                .orElseThrow();
     }
 
     private List<InterviewTimeVo> toInterviewTimeVoList(List<Interview> interviews, List<ApplicationInterview> applicationInterviews) {

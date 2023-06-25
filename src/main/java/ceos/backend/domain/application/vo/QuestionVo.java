@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 public class QuestionVo {
-    @Schema(defaultValue = "1", description = "질문 번호")
+    @Schema(defaultValue = "1", description = "질문 번호 (순서)")
     @NotNull(message = "질문 번호를 입력해주세요.")
     private int questionIndex;
 

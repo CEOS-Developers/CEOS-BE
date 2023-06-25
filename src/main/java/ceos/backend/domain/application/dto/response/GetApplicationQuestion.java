@@ -1,6 +1,7 @@
 package ceos.backend.domain.application.dto.response;
 
 import ceos.backend.domain.application.vo.QuestionVo;
+import ceos.backend.domain.application.vo.QuestionWithIdVo;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,17 +9,17 @@ import java.util.List;
 
 @Getter
 public class GetApplicationQuestion {
-    private List<QuestionVo> commonQuestions;
-    private List<QuestionVo> productQuestions;
-    private List<QuestionVo> designQuestions;
-    private List<QuestionVo> frontendQuestions;
-    private List<QuestionVo> backendQuestions;
+    private List<QuestionWithIdVo> commonQuestions;
+    private List<QuestionWithIdVo> productQuestions;
+    private List<QuestionWithIdVo> designQuestions;
+    private List<QuestionWithIdVo> frontendQuestions;
+    private List<QuestionWithIdVo> backendQuestions;
     private List<String> times;
 
     @Builder
-    private GetApplicationQuestion(List<QuestionVo> commonQuestions, List<QuestionVo> productQuestions,
-                                  List<QuestionVo> designQuestions, List<QuestionVo> frontendQuestions,
-                                  List<QuestionVo> backendQuestions, List<String> times) {
+    private GetApplicationQuestion(List<QuestionWithIdVo> commonQuestions, List<QuestionWithIdVo> productQuestions,
+                                  List<QuestionWithIdVo> designQuestions, List<QuestionWithIdVo> frontendQuestions,
+                                  List<QuestionWithIdVo> backendQuestions, List<String> times) {
         this.commonQuestions = commonQuestions;
         this.productQuestions = productQuestions;
         this.designQuestions = designQuestions;
@@ -27,9 +28,9 @@ public class GetApplicationQuestion {
         this.times = times;
     }
 
-    public static GetApplicationQuestion of(List<QuestionVo> commonQuestions, List<QuestionVo> productQuestions,
-                                            List<QuestionVo> designQuestions, List<QuestionVo> frontendQuestions,
-                                            List<QuestionVo> backendQuestions, List<String> times) {
+    public static GetApplicationQuestion of(List<QuestionWithIdVo> commonQuestions, List<QuestionWithIdVo> productQuestions,
+                                            List<QuestionWithIdVo> designQuestions, List<QuestionWithIdVo> frontendQuestions,
+                                            List<QuestionWithIdVo> backendQuestions, List<String> times) {
         return GetApplicationQuestion.builder()
                 .commonQuestions(commonQuestions)
                 .productQuestions(productQuestions)
