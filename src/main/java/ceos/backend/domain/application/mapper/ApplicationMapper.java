@@ -7,24 +7,19 @@ import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.exception.InterviewNotFound;
 import ceos.backend.domain.application.exception.QuestionNotFound;
 import ceos.backend.domain.application.vo.*;
-import ceos.backend.global.common.annotation.ValidDateList;
-import ceos.backend.global.common.annotation.ValidTimeDuration;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.entity.Part;
-import ceos.backend.global.util.DateTimeConvertor;
 import ceos.backend.global.util.InterviewDateFormatter;
 import ceos.backend.global.util.ParsingDuration;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 public class ApplicationMapper {
@@ -38,25 +33,26 @@ public class ApplicationMapper {
         final Part part = request.getApplicationDetailVo().getPart();
         // common
         List<ApplicationAnswer> answers = new java.util.ArrayList<>(request.getCommonAnswers().stream()
-                .map(answerVo -> {
-                    ApplicationQuestion question = questions.stream()
-                            .filter(q -> q.getCategory() == QuestionCategory.COMMON)
-                            .filter(q -> Objects.equals(q.getId(), answerVo.getQuestionId()))
-                            .findFirst()
-                            .orElseThrow(() -> QuestionNotFound.EXCEPTION);
-                    return ApplicationAnswer.of(question, application, answerVo.getAnswer());
-                }).toList());
+                .map(answerVo -> toApplicationAnswer(questions, application, answerVo, part))
+                .toList());
         // part
         request.getPartAnswers()
                 .forEach(answerVo -> {
-                    ApplicationQuestion question = questions.stream()
-                            .filter(q -> q.getCategory().toString().equals(part.toString()))
-                            .filter(q -> Objects.equals(q.getId(), answerVo.getQuestionId()))
-                            .findFirst()
-                            .orElseThrow(() -> QuestionNotFound.EXCEPTION);
-                    answers.add(ApplicationAnswer.of(question, application, answerVo.getAnswer()));
+                    answers.add(toApplicationAnswer(questions, application, answerVo, part));
                 });
         return answers;
+    }
+
+    private ApplicationAnswer toApplicationAnswer(List<ApplicationQuestion> questions,
+                                                  Application application,
+                                                  AnswerVo answerVo,
+                                                  Part part) {
+        ApplicationQuestion question = questions.stream()
+                .filter(q -> q.getCategory().toString().equals(part.toString()))
+                .filter(q -> Objects.equals(q.getId(), answerVo.getQuestionId()))
+                .findFirst()
+                .orElseThrow(() -> QuestionNotFound.EXCEPTION);
+        return ApplicationAnswer.of(question, application, answerVo.getAnswer());
     }
 
     public List<ApplicationInterview> toApplicationInterviewList(List<String> unableTimes,
@@ -200,7 +196,7 @@ public class ApplicationMapper {
     }
 
     private List<InterviewTimeVo> toInterviewTimeVoList(List<Interview> interviews, List<ApplicationInterview> applicationInterviews) {
-        List<InterviewTimeVo> times = interviews.stream()
+        return interviews.stream()
                 .map(interview -> {
                     final String duration = InterviewDateFormatter.interviewDateFormatter(interview);
                     final ParsedDuration parsedDuration = ParsingDuration.parsingDuration(duration);
@@ -211,7 +207,6 @@ public class ApplicationMapper {
                     return InterviewTimeVo.of(false, parsedDuration);
                 })
                 .toList();
-        return times;
     }
 
     public GetApplications toGetApplications(Page<Application> pageManagements, PageInfo pageInfo) {

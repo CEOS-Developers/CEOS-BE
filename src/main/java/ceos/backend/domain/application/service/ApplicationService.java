@@ -49,7 +49,7 @@ public class ApplicationService {
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
         // 제출 기간, 기수 검사
-//        applicationHelper.validateRecruitOption(createApplicationRequest.getApplicationDetailVo().getGeneration());
+        applicationHelper.validateRecruitOption(createApplicationRequest.getApplicationDetailVo().getGeneration());
 
         // 중복 검사
         applicationHelper.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
