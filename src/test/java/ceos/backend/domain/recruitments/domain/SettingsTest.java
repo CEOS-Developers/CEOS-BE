@@ -1,4 +1,4 @@
-package ceos.backend.domain.settings.domain;
+package ceos.backend.domain.recruitments.domain;
 
 import ceos.backend.domain.admin.exception.NotAllowedToModify;
 import ceos.backend.domain.recruitment.domain.Recruitment;

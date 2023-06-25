@@ -8,12 +8,14 @@ import lombok.Getter;
 @Getter
 public class FaqDto {
 
+    private Long id;
     private FaqCategory category;
     private String question;
     private String answer;
 
     @Builder
-    private FaqDto(FaqCategory category, String question, String answer) {
+    private FaqDto(Long id, FaqCategory category, String question, String answer) {
+        this.id = id;
         this.category = category;
         this.question = question;
         this.answer = answer;
@@ -21,6 +23,7 @@ public class FaqDto {
 
     public static FaqDto entityToDto(Faq faq) {
         return FaqDto.builder()
+                .id(faq.getId())
                 .category(faq.getCategory())
                 .question(faq.getQuestion())
                 .answer(faq.getAnswer())

@@ -1,4 +1,4 @@
-package ceos.backend.domain.management.dto;
+package ceos.backend.domain.sponsor.dto;
 
 import ceos.backend.domain.sponsor.domain.Sponsor;
 import ceos.backend.domain.sponsor.vo.SponsorVo;
@@ -8,11 +8,13 @@ import lombok.Getter;
 @Getter
 public class SponsorDto {
 
+    private Long id;
     private String name;
     private String imageUrl;
 
     @Builder
-    private SponsorDto(String name, String imageUrl) {
+    private SponsorDto(Long id, String name, String imageUrl) {
+        this.id = id;
         this.name = name;
         this.imageUrl = imageUrl;
     }
@@ -26,6 +28,7 @@ public class SponsorDto {
 
     public static SponsorDto entityToDto(Sponsor sponsor) {
         return SponsorDto.builder()
+                .id(sponsor.getId())
                 .name(sponsor.getName())
                 .imageUrl(sponsor.getImageUrl())
                 .build();

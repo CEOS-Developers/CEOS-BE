@@ -1,8 +1,6 @@
 package ceos.backend.domain.sponsor.service;
 
-import ceos.backend.domain.management.domain.Management;
-import ceos.backend.domain.management.dto.SponsorDto;
-import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
+import ceos.backend.domain.sponsor.dto.SponsorDto;
 import ceos.backend.domain.sponsor.domain.Sponsor;
 import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
 import ceos.backend.domain.sponsor.exception.SponsorNotFound;
@@ -11,7 +9,6 @@ import ceos.backend.domain.sponsor.repository.SponsorRepository;
 import ceos.backend.domain.sponsor.vo.SponsorVo;
 import ceos.backend.global.common.dto.AwsS3Url;
 import ceos.backend.global.common.dto.PageInfo;
-import ceos.backend.global.common.event.Event;
 import ceos.backend.infra.s3.AwsS3UrlHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

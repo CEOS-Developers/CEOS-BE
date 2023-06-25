@@ -53,7 +53,7 @@ public class ProjectService {
         projectHelper.validateProjectImages(projectRequest.getProjectImages());
 
         //프로젝트 링크 검사
-        projectHelper.validateProjectUrls(projectRequest.getProjectUrls());
+        //projectHelper.validateProjectUrls(projectRequest.getProjectUrls());
 
         //프로젝트 생성
         final Project project = projectMapper.toEntity(projectRequest);
@@ -80,7 +80,7 @@ public class ProjectService {
         projectHelper.validateProjectImages(projectRequest.getProjectImages());
 
         //프로젝트 링크 검사
-        projectHelper.validateProjectUrls(projectRequest.getProjectUrls());
+        //projectHelper.validateProjectUrls(projectRequest.getProjectUrls());
 
         //프로젝트 업데이트
         project.update(projectRequest.getProjectInfoVo());

@@ -1,6 +1,6 @@
 package ceos.backend.domain.sponsor.dto.response;
 
-import ceos.backend.domain.management.dto.SponsorDto;
+import ceos.backend.domain.sponsor.dto.SponsorDto;
 import ceos.backend.global.common.dto.PageInfo;
 import lombok.Builder;
 import lombok.Getter;
