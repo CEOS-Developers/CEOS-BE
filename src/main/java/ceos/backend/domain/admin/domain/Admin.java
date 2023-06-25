@@ -79,7 +79,7 @@ public class Admin extends BaseEntity {
                 .generation(generation)
                 .name(signUpRequest.getAdminVo().getName())
                 .part(signUpRequest.getAdminVo().getPart())
-                .role(AdminRole.ANONYMOUS)
+                .role(AdminRole.ROLE_ANONYMOUS)
                 .email(signUpRequest.getAdminVo().getEmail())
                 .build();
     }
@@ -98,5 +98,9 @@ public class Admin extends BaseEntity {
 
     public void deleteRefreshToken() {
         this.refreshToken = null;
+    }
+
+    public void updateRole(AdminRole adminRole) {
+        this.role = adminRole;
     }
 }

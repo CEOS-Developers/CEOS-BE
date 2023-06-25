@@ -22,7 +22,7 @@ public enum GlobalErrorCode implements BaseErrorCode{
     INVALID_REFRESH_TOKEN(UNAUTHORIZED, "AUTH_401_4", "리프레시 토큰이 유효하지 않습니다"),
     EXPIRED_REFRESH_TOKEN(UNAUTHORIZED, "AUTH_401_5", "만료된 리프레시 토큰입니다"),
     MISMATCH_REFRESH_TOKEN(UNAUTHORIZED, "AUTH_401_6", "리프레시 토큰의 유저 정보가 일치하지 않습니다"),
-    FORBIDDEN_USER(FORBIDDEN, "AUTH_403_1", "권한이 없는 유저입니다"),
+    FORBIDDEN_ADMIN(FORBIDDEN, "AUTH_403_1", "권한이 부여되지 않은 사용자입니다"),
     UNSUPPORTED_TOKEN(UNAUTHORIZED, "AUTH_401_7", "지원하지 않는 토큰입니다"),
     INVALID_SIGNATURE(UNAUTHORIZED, "AUTH_401_8", "잘못된 JWT 서명입니다"),
     ;

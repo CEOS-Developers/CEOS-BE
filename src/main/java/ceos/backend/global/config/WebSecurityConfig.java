@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplicat
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -38,6 +39,15 @@ public class WebSecurityConfig {
             "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs"
     };
 
+    private final String[] AdminPatterns = {
+            "/admin/password", "/admin/newpassword", "/admin/logout", "admin/refresh",
+            "/applications/**", "recruitments/**", "projects/**"
+    };
+
+    private final String[] RootPatterns = {
+            "/admin/super"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().configurationSource(corsConfigurationSource())
@@ -45,8 +55,9 @@ public class WebSecurityConfig {
                 .csrf().disable()
 
                 .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDeniedHandler)
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+
 
                 .and()
                 .headers()
@@ -60,9 +71,11 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
                 .requestMatchers(SwaggerPatterns).permitAll()
-                .requestMatchers("**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(AdminPatterns).hasAnyRole("ROOT", "ADMIN")
+                .requestMatchers(RootPatterns).hasRole("ROOT")
+                .anyRequest().permitAll()
                 .and()
                 .headers().frameOptions().disable();
 

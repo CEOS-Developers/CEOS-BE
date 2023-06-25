@@ -12,7 +12,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @AllArgsConstructor
 public enum ManagementErrorCode implements BaseErrorCode {
     /* Management */
-    MANAGER_NOT_FOUND(BAD_REQUEST, "MANAGEMENT_402_1", "해당 임원진이 존재하지 않습니다");
+    MANAGER_NOT_FOUND(BAD_REQUEST, "MANAGEMENT_404_1", "해당 임원진이 존재하지 않습니다");
 
     private HttpStatus status;
     private String code;
