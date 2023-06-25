@@ -81,9 +81,12 @@ public class ApplicationService {
     public GetApplicationQuestion getApplicationQuestion() {
         // dto
         final List<ApplicationQuestion> applicationQuestions
-                = applicationQuestionRepository.findAllWithQuestionDetail();
+                = applicationQuestionRepository.findAll();
+        final List<ApplicationQuestionDetail> applicationQuestionDetails
+                = applicationQuestionDetailRepository.findAll();
         final List<Interview> interviews = interviewRepository.findAll();
-        return applicationMapper.toGetApplicationQuestion(applicationQuestions, interviews);
+        return applicationMapper.toGetApplicationQuestion(applicationQuestions,
+                applicationQuestionDetails, interviews);
     }
 
     @Transactional

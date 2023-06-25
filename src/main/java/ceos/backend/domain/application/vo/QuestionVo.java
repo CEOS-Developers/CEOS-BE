@@ -1,5 +1,7 @@
 package ceos.backend.domain.application.vo;
 
+import ceos.backend.domain.application.domain.ApplicationQuestion;
+import ceos.backend.domain.application.domain.ApplicationQuestionDetail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -30,17 +32,20 @@ public class QuestionVo {
 
     @Builder
     private QuestionVo(int questionIndex, String question, boolean multiline,
-                       List<QuestionDetailVo> questionDetailVos) {
+                       List<QuestionDetailVo> questionDetail) {
         this.questionIndex = questionIndex;
         this.question = question;
         this.multiline = multiline;
-        this.questionDetail = questionDetailVos;
+        this.questionDetail = questionDetail;
     }
 
-    public static QuestionVo of(int questionIndex, String question) {
+    public static QuestionVo of(ApplicationQuestion applicationQuestion,
+                                List<QuestionDetailVo> questionDetailVos) {
         return QuestionVo.builder()
-                .question(question)
-                .questionIndex(questionIndex)
+                .question(applicationQuestion.getQuestion())
+                .questionIndex(applicationQuestion.getNumber())
+                .multiline(applicationQuestion.isMultiline())
+                .questionDetail(questionDetailVos)
                 .build();
     }
 }

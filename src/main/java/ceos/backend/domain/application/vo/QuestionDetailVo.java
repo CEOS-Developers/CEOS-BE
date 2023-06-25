@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.vo;
 
+import ceos.backend.domain.application.domain.ApplicationQuestionDetail;
 import ceos.backend.domain.application.domain.ExplainationColor;
 import ceos.backend.global.common.annotation.ValidEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,5 +25,12 @@ public class QuestionDetailVo {
     private QuestionDetailVo(String explaination, ExplainationColor color) {
         this.explaination = explaination;
         this.color = color;
+    }
+
+    public static QuestionDetailVo from(ApplicationQuestionDetail detail) {
+        return QuestionDetailVo.builder()
+                .explaination(detail.getExplaination())
+                .color(detail.getColor())
+                .build();
     }
 }

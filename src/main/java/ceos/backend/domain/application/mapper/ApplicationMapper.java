@@ -131,6 +131,7 @@ public class ApplicationMapper {
     }
 
     public GetApplicationQuestion toGetApplicationQuestion(List<ApplicationQuestion> applicationQuestions,
+                                                           List<ApplicationQuestionDetail> applicationQuestionDetails,
                                                            List<Interview> interviews) {
         List<QuestionVo> commonQuestions = new ArrayList<>();
         List<QuestionVo> productQuestions = new ArrayList<>();
@@ -138,37 +139,25 @@ public class ApplicationMapper {
         List<QuestionVo> backendQuestions = new ArrayList<>();
         List<QuestionVo> designQuestions = new ArrayList<>();
         applicationQuestions.forEach(applicationQuestion -> {
-            if (applicationQuestion.getCategory() == QuestionCategory.COMMON) {
-                commonQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else if (applicationQuestion.getCategory() == QuestionCategory.STRATEGY) {
-                productQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else if (applicationQuestion.getCategory() == QuestionCategory.FRONTEND) {
-                frontendQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else if (applicationQuestion.getCategory() == QuestionCategory.BACKEND) {
-                backendQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else {
-                designQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
+            final List<QuestionDetailVo> questionDetailVos = applicationQuestionDetails.stream()
+                    .filter(details -> details.getApplicationQuestion().equals(applicationQuestion))
+                    .map(QuestionDetailVo::from)
+                    .toList();
+            final QuestionVo questionVo = QuestionVo.of(applicationQuestion, questionDetailVos);
+            switch (applicationQuestion.getCategory()) {
+                case COMMON -> commonQuestions.add(questionVo);
+                case STRATEGY -> productQuestions.add(questionVo);
+                case DESIGN -> designQuestions.add(questionVo);
+                case FRONTEND -> frontendQuestions.add(questionVo);
+                case BACKEND -> backendQuestions.add(questionVo);
             }
         });
 
-        Set<String> dates = new HashSet<>();
-        Set<String> times = new HashSet<>();
-        final List<ParsedDuration> parsedDurations = interviews.stream()
-                .map(interview -> {
-                    final String duration = InterviewDateFormatter.interviewDateFormatter(interview);
-                    return ParsingDuration.parsingDuration(duration);
-                })
+        final List<String> times = interviews.stream()
+                .map(InterviewDateFormatter::interviewDateFormatter)
                 .toList();
-        parsedDurations.forEach(parsedDuration -> {
-            dates.add(parsedDuration.getDate());
-            times.add(parsedDuration.getDuration());
-        });
-        List<String> listDates = new ArrayList<>(dates);
-        List<String> listTimes = new ArrayList<>(times);
-        Collections.sort(listDates);
-        Collections.sort(listTimes);
         return GetApplicationQuestion.of(commonQuestions, productQuestions, designQuestions,
-                frontendQuestions, backendQuestions, listDates, listTimes);
+                frontendQuestions, backendQuestions, times);
     }
 
     public GetApplication toGetApplication(Application application, List<Interview> interviews,

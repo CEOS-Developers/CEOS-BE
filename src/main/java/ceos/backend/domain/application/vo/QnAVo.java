@@ -22,7 +22,7 @@ public class QnAVo {
 
     public static QnAVo of(ApplicationQuestion question, ApplicationAnswer answer) {
         return QnAVo.builder()
-                .questionVo(QuestionVo.of(question.getNumber(), question.getQuestion()))
+//                .questionVo(QuestionVo.of(question))
                 .answerVo(AnswerVo.of(question, answer))
                 .build();
     }
