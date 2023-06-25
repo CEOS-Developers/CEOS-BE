@@ -28,15 +28,6 @@ public class Recruitment extends BaseEntity {
     private int generation;
 
     @NotNull
-    private String prodImg;
-
-    @NotNull
-    private String designImg;
-
-    @NotNull
-    private String devImg;
-
-    @NotNull
     private String prodStudyUrl;
 
     @NotNull
@@ -77,9 +68,6 @@ public class Recruitment extends BaseEntity {
     // 생성자
     @Builder
     private Recruitment(int generation,
-                        String prodImg,
-                        String designImg,
-                        String devImg,
                         String prodStudyUrl,
                         String designStudyUrl,
                         String devStudyUrl,
@@ -93,9 +81,6 @@ public class Recruitment extends BaseEntity {
                         LocalDate otDate,
                         LocalDate demodayDate) {
         this.generation = generation;
-        this.prodImg = prodImg;
-        this.designImg = designImg;
-        this.devImg = devImg;
         this.prodStudyUrl = prodStudyUrl;
         this.designStudyUrl = designStudyUrl;
         this.devStudyUrl = devStudyUrl;
@@ -113,9 +98,6 @@ public class Recruitment extends BaseEntity {
 
     public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest) {
         this.generation = updateRecruitmentRequest.getGeneration();
-        this.prodImg = updateRecruitmentRequest.getProdImg();
-        this.designImg = updateRecruitmentRequest.getDesignImg();
-        this.devImg = updateRecruitmentRequest.getDevImg();
         this.prodStudyUrl = updateRecruitmentRequest.getProdStudyUrl();
         this.designStudyUrl = updateRecruitmentRequest.getDesignStudyUrl();
         this.devStudyUrl = updateRecruitmentRequest.getDevStudyUrl();
