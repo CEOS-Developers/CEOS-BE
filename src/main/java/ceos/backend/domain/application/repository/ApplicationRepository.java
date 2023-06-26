@@ -21,4 +21,8 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
             " and a.applicantInfo.email = :email")
     Optional<Application> findByUuidAndEmail(@Param("uuid") String uuid,
                                              @Param("email") String email);
+
+    @Query("select count(a) > 0 from Application a" +
+            " where a.applicantInfo.email = :email")
+    boolean existsByEmail(@Param("email") String email);
 }

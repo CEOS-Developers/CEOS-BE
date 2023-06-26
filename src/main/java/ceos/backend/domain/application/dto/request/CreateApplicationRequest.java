@@ -28,7 +28,8 @@ public class CreateApplicationRequest {
     @Valid
     private List<AnswerVo> partAnswers;
 
-    @ArraySchema(schema = @Schema(description = "불가능 시간 선택 ", type = "string",
+    @ArraySchema(schema = @Schema(description = "불가능 시간 선택 ",
+            type = "2023.03.20 00:00:00 - 2023.03.20 00:30:00",
             defaultValue = "2023.03.20 00:00:00 - 2023.03.20 00:00:00"))
     @Valid
     private List<@ValidDuration String> unableTimes;

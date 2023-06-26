@@ -8,6 +8,7 @@ import ceos.backend.domain.application.helper.ApplicationExcelHelper;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
+import ceos.backend.domain.application.vo.QuestionListVo;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import ceos.backend.global.common.dto.PageInfo;
@@ -40,6 +41,7 @@ public class ApplicationService {
     private final ApplicationQuestionRepository applicationQuestionRepository;
     private final InterviewRepository interviewRepository;
     private final ApplicationInterviewRepository applicationInterviewRepository;
+    private final ApplicationQuestionDetailRepository applicationQuestionDetailRepository;
 
     private final RecruitmentRepository recruitmentRepository;
 
@@ -70,35 +72,27 @@ public class ApplicationService {
         // 중복 검사
         applicationHelper.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
 
+        // 질문 다 채웠나 검사
+        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
+        applicationHelper.validateQAMatching(applicationQuestions, createApplicationRequest);
+
         // 엔티티 생성 및 저장
         final String UUID = applicationHelper.generateUUID();
-        Application application = applicationMapper.toEntity(createApplicationRequest, UUID);
+        final Application application = applicationMapper.toEntity(createApplicationRequest, UUID);
+        final List<Interview> interviews = interviewRepository.findAll();
 
-        applicationRepository.save(application);
-
-        List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
-        List<ApplicationAnswer> applicationAnswers
+        final List<ApplicationAnswer> applicationAnswers
                 = applicationMapper.toAnswerList(createApplicationRequest, application, applicationQuestions);
-
-        for (ApplicationAnswer applicationAnswer : applicationAnswers) {
-            application.addApplicationAnswers(applicationAnswer);
-        }
-
         applicationAnswerRepository.saveAll(applicationAnswers);
 
-        List<Interview> interviews = interviewRepository.findAll();
-        List<ApplicationInterview> applicationInterviews
+        final List<ApplicationInterview> applicationInterviews
                 = applicationMapper.toApplicationInterviewList(createApplicationRequest.getUnableTimes(),
                 application, interviews);
-
-        for (ApplicationInterview applicationInterview : applicationInterviews) {
-            application.addApplicationInterviews(applicationInterview);
-        }
         applicationInterviewRepository.saveAll(applicationInterviews);
 
+        application.addApplicationAnswerList(applicationAnswers);
+        application.addApplicationInterviewList(applicationInterviews);
         applicationRepository.save(application);
-        applicationAnswerRepository.saveAll(applicationAnswers);
-        applicationInterviewRepository.saveAll(applicationInterviews);
 
         // 이메일 전송
         applicationHelper.sendEmail(createApplicationRequest, UUID);
@@ -109,8 +103,11 @@ public class ApplicationService {
         // dto
         final List<ApplicationQuestion> applicationQuestions
                 = applicationQuestionRepository.findAll();
+        final List<ApplicationQuestionDetail> applicationQuestionDetails
+                = applicationQuestionDetailRepository.findAll();
         final List<Interview> interviews = interviewRepository.findAll();
-        return applicationMapper.toGetApplicationQuestion(applicationQuestions, interviews);
+        return applicationMapper.toGetApplicationQuestion(applicationQuestions,
+                applicationQuestionDetails, interviews);
     }
 
     @Transactional
@@ -123,14 +120,15 @@ public class ApplicationService {
 
         // 변경
         applicationQuestionRepository.deleteAll();
+        applicationQuestionDetailRepository.deleteAll();
         interviewRepository.deleteAll();
 
-        final List<ApplicationQuestion> questions = applicationMapper.toQuestionList(updateApplicationQuestion);
-        applicationQuestionRepository.saveAll(questions);
+        final QuestionListVo questionListVo = applicationMapper.toQuestionList(updateApplicationQuestion);
+        applicationQuestionRepository.saveAll(questionListVo.getApplicationQuestions());
+        applicationQuestionDetailRepository.saveAll(questionListVo.getApplicationQuestionDetails());
 
-        final List<Interview> interviews = applicationMapper.toInterviewList(updateApplicationQuestion);
+        final List<Interview> interviews = applicationMapper.toInterviewList(updateApplicationQuestion.getTimes());
         interviewRepository.saveAll(interviews);
-
     }
 
     @Transactional(readOnly = true)
@@ -204,6 +202,7 @@ public class ApplicationService {
         }
     }
 
+    @Transactional(readOnly = true)
     public GetApplication getApplication(Long applicationId) {
         // 유저 검증
         final Application application = applicationHelper.validateExistingApplicant(applicationId);
@@ -214,10 +213,12 @@ public class ApplicationService {
                 = applicationInterviewRepository.findAllByApplication(application);
         final List<ApplicationQuestion> applicationQuestions
                 = applicationQuestionRepository.findAll();
+        final List<ApplicationQuestionDetail> applicationQuestionDetails
+                = applicationQuestionDetailRepository.findAll();
         final List<ApplicationAnswer> applicationAnswers
                 = applicationAnswerRepository.findAllByApplication(application);
         return applicationMapper.toGetApplication(application, interviews, applicationInterviews,
-                applicationQuestions, applicationAnswers);
+                applicationQuestions, applicationQuestionDetails, applicationAnswers);
     }
 
     @Transactional(readOnly = true)
