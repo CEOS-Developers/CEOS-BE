@@ -74,14 +74,12 @@ public class Application extends BaseEntity{
                 .build();
     }
 
-    public void addApplicationAnswers(ApplicationAnswer answer) {
-        applicationAnswers.add(answer);
-        answer.setApplication(this);
+    public void addApplicationAnswerList(List<ApplicationAnswer> applicationAnswers) {
+        this.applicationAnswers = applicationAnswers;
     }
 
-    public void addApplicationInterviews(ApplicationInterview interview) {
-        applicationInterviews.add(interview);
-        interview.setApplication(this);
+    public void addApplicationInterviewList(List<ApplicationInterview> applicationInterviews) {
+        this.applicationInterviews = applicationInterviews;
     }
 
     public void updateInterviewCheck(boolean check) {

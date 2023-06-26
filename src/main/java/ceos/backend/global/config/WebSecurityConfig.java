@@ -45,7 +45,8 @@ public class WebSecurityConfig {
 
     private final String[] AdminPatterns = {
             "/admin/password", "/admin/newpassword", "/admin/logout", "admin/refresh",
-            "/applications/**", "recruitments/**", "projects/**", "activities/**", "awards/**"
+            "/applications", "/applications/question", "/applications/document", "/applications/final",
+            "recruitments/**", "projects/**", "activities/**", "awards/**"
     };
 
     private final String[] RootPatterns = {
@@ -76,7 +77,6 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
-                .requestMatchers("/applications/**").permitAll()
                 .requestMatchers(SwaggerPatterns).permitAll()
                 .requestMatchers(AdminPatterns).hasAnyRole("ROOT", "ADMIN")
                 .requestMatchers(RootPatterns).hasRole("ROOT")

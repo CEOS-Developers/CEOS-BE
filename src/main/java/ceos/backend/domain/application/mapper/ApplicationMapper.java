@@ -33,12 +33,12 @@ public class ApplicationMapper {
         final Part part = request.getApplicationDetailVo().getPart();
         // common
         List<ApplicationAnswer> answers = new java.util.ArrayList<>(request.getCommonAnswers().stream()
-                .map(answerVo -> toApplicationAnswer(questions, application, answerVo, part))
+                .map(answerVo -> toApplicationAnswer(questions, application, answerVo, part, true))
                 .toList());
         // part
         request.getPartAnswers()
                 .forEach(answerVo -> {
-                    answers.add(toApplicationAnswer(questions, application, answerVo, part));
+                    answers.add(toApplicationAnswer(questions, application, answerVo, part, false));
                 });
         return answers;
     }
@@ -46,9 +46,12 @@ public class ApplicationMapper {
     private ApplicationAnswer toApplicationAnswer(List<ApplicationQuestion> questions,
                                                   Application application,
                                                   AnswerVo answerVo,
-                                                  Part part) {
+                                                  Part part,
+                                                  boolean isCommon) {
+        final String category = isCommon ? "COMMON" : part.toString();
+
         ApplicationQuestion question = questions.stream()
-                .filter(q -> q.getCategory().toString().equals(part.toString()))
+                .filter(q -> q.getCategory().toString().equals(category))
                 .filter(q -> Objects.equals(q.getId(), answerVo.getQuestionId()))
                 .findFirst()
                 .orElseThrow(() -> QuestionNotFound.EXCEPTION);

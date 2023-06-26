@@ -73,37 +73,26 @@ public class ApplicationService {
         applicationHelper.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
 
         // 질문 다 채웠나 검사
-        List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
+        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
         applicationHelper.validateQAMatching(applicationQuestions, createApplicationRequest);
 
         // 엔티티 생성 및 저장
         final String UUID = applicationHelper.generateUUID();
-        Application application = applicationMapper.toEntity(createApplicationRequest, UUID);
+        final Application application = applicationMapper.toEntity(createApplicationRequest, UUID);
+        final List<Interview> interviews = interviewRepository.findAll();
 
-        applicationRepository.save(application);
-
-        List<ApplicationAnswer> applicationAnswers
+        final List<ApplicationAnswer> applicationAnswers
                 = applicationMapper.toAnswerList(createApplicationRequest, application, applicationQuestions);
-
-        for (ApplicationAnswer applicationAnswer : applicationAnswers) {
-            application.addApplicationAnswers(applicationAnswer);
-        }
-
         applicationAnswerRepository.saveAll(applicationAnswers);
 
-        List<Interview> interviews = interviewRepository.findAll();
-        List<ApplicationInterview> applicationInterviews
+        final List<ApplicationInterview> applicationInterviews
                 = applicationMapper.toApplicationInterviewList(createApplicationRequest.getUnableTimes(),
                 application, interviews);
-
-        for (ApplicationInterview applicationInterview : applicationInterviews) {
-            application.addApplicationInterviews(applicationInterview);
-        }
         applicationInterviewRepository.saveAll(applicationInterviews);
 
+        application.addApplicationAnswerList(applicationAnswers);
+        application.addApplicationInterviewList(applicationInterviews);
         applicationRepository.save(application);
-        applicationAnswerRepository.saveAll(applicationAnswers);
-        applicationInterviewRepository.saveAll(applicationInterviews);
 
         // 이메일 전송
         applicationHelper.sendEmail(createApplicationRequest, UUID);
