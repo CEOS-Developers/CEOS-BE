@@ -37,8 +37,8 @@ public class OpenApiConfig {
                         .bearerFormat("JWT"));
 
         return new OpenAPI()
-//                .servers(Arrays.asList(
-//                        new Server().url(SERVER_URL)))
+                .servers(Arrays.asList(
+                        new Server().url(SERVER_URL)))
                 .info(info)
                 .addSecurityItem(securityRequirement)
                 .components(components);
