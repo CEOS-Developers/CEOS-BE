@@ -7,16 +7,11 @@ import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
 import ceos.backend.domain.awards.dto.response.GenerationAwardsResponse;
 import ceos.backend.domain.awards.exception.AwardNotFound;
 import ceos.backend.domain.awards.helper.AwardsHelper;
-import ceos.backend.domain.awards.mapper.AwardsMapper;
 import ceos.backend.domain.awards.repository.AwardsRepository;
-import ceos.backend.domain.project.domain.Project;
 import ceos.backend.domain.project.repository.ProjectRepository;
 import ceos.backend.global.common.dto.PageInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +25,6 @@ public class AwardsService {
 
     private final AwardsRepository awardsRepository;
     private final ProjectRepository projectRepository;
-    private final AwardsMapper awardsMapper;
     private final AwardsHelper awardsHelper;
 
     @Transactional
@@ -40,23 +34,27 @@ public class AwardsService {
     }
 
     @Transactional(readOnly = true)
-    public List<GenerationAwardsResponse> getAllAwards(int pageNum, int limit) {
+    public AllAwardsResponse getAllAwards(int pageNum, int limit) {
         List<GenerationAwardsResponse> generationAwardsResponses = new ArrayList<>();
+
         int maxGeneration = projectRepository.findMaxGeneration();
         for(int i = maxGeneration; i > 0; i--){
             GenerationAwardsResponse generationAwardsResponse = GenerationAwardsResponse.of(i, awardsHelper.getAwardsDto(i), awardsHelper.getProjectVo(i));
             generationAwardsResponses.add(generationAwardsResponse);
         }
-        return generationAwardsResponses;
-//        //페이징 요청 정보
-//        PageRequest pageRequest = PageRequest.of(pageNum, limit, Sort.by("generation").descending());
-//
-//        Page<Awards> pageAwards = awardsRepository.findAll(pageRequest);
-//
-//        //페이징 정보
-//        PageInfo pageInfo = PageInfo.of(pageNum, limit, pageAwards.getTotalPages(), pageAwards.getTotalElements());
-//
-//        return awardsMapper.toAwardsPage(pageAwards.getContent(), pageInfo);
+
+        int startIndex = (pageNum - 1) * limit;
+        int endIndex = Math.min(startIndex + limit, generationAwardsResponses.size());
+        int totalElements = generationAwardsResponses.size();
+        int totalPages = (int) Math.ceil((double) totalElements / limit);
+
+        List<GenerationAwardsResponse> pageAwards = generationAwardsResponses.subList(startIndex, endIndex);
+
+        //페이징 정보
+        PageInfo pageInfo = PageInfo.of(pageNum, limit, totalPages, totalElements);
+
+        return AllAwardsResponse.of(pageAwards, pageInfo);
+
     }
 
     @Transactional(readOnly = true)

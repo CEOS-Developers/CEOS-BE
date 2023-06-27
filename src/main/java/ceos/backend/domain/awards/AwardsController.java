@@ -32,7 +32,7 @@ public class AwardsController {
 
     @Operation(summary = "수상이력 전체보기")
     @GetMapping
-    public List<GenerationAwardsResponse> getAllAwards(@RequestParam("pageNum") int pageNum, @RequestParam("limit") int limit){
+    public AllAwardsResponse getAllAwards(@RequestParam("pageNum") int pageNum, @RequestParam("limit") int limit){
         log.info("수상이력 전체보기");
         return awardsService.getAllAwards(pageNum, limit);
     }

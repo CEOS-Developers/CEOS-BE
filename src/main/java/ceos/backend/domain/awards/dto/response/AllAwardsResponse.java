@@ -9,21 +9,18 @@ import java.util.List;
 
 @Getter
 public class AllAwardsResponse {
-    private List<AwardsResponse> awards;
-    private List<ProjectInfoVo> projects;
+    private List<GenerationAwardsResponse> generationAwards;
     PageInfo pageInfo;
 
     @Builder
-    private AllAwardsResponse(List<AwardsResponse> awards, List<ProjectInfoVo> projects, PageInfo pageInfo) {
-        this.awards = awards;
-        this.projects = projects;
+    private AllAwardsResponse(List<GenerationAwardsResponse> generationAwards, PageInfo pageInfo) {
+        this.generationAwards = generationAwards;
         this.pageInfo = pageInfo;
     }
 
-    public static AllAwardsResponse of(List<AwardsResponse> awards, List<ProjectInfoVo> projects, PageInfo pageInfo) {
+    public static AllAwardsResponse of(List<GenerationAwardsResponse> generationAwards, PageInfo pageInfo) {
         return AllAwardsResponse.builder()
-                .awards(awards)
-                .projects(projects)
+                .generationAwards(generationAwards)
                 .pageInfo(pageInfo)
                 .build();
     }
