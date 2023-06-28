@@ -52,7 +52,7 @@ public class ActivityService {
     @Transactional(readOnly = true)
     public GetAllActivitiesResponse getAllActivities(int pageNum, int limit) {
         //페이징 요청 정보
-        PageRequest pageRequest = PageRequest.of(pageNum, limit, Sort.by("id").descending());
+        PageRequest pageRequest = PageRequest.of(pageNum, limit, Sort.by("id").ascending());
 
         Page<Activity> pageActivities = activityRepository.findAll(pageRequest);
 
