@@ -3,21 +3,21 @@ package ceos.backend.domain.activity.service;
 import ceos.backend.domain.activity.domain.Activity;
 import ceos.backend.domain.activity.dto.ActivityRequest;
 import ceos.backend.domain.activity.dto.ActivityResponse;
+import ceos.backend.domain.activity.dto.GetAllActivitiesResponse;
 import ceos.backend.domain.activity.exception.ActivityNotFound;
 import ceos.backend.domain.activity.converter.ActivityConverter;
 import ceos.backend.domain.activity.repository.ActivityRepository;
-import ceos.backend.domain.recruitment.domain.Recruitment;
-import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsS3Url;
+import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.infra.s3.AwsS3UrlHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -50,14 +50,19 @@ public class ActivityService {
      * 활동 전체 조회
      */
     @Transactional(readOnly = true)
-    public List<ActivityResponse> getAllActivities() {
-        List<Activity> activities = activityRepository.findAll();
-        List<ActivityResponse> activitiesAsDto = new ArrayList<>();
+    public GetAllActivitiesResponse getAllActivities(int pageNum, int limit) {
+        //페이징 요청 정보
+        PageRequest pageRequest = PageRequest.of(pageNum, limit, Sort.by("id").descending());
 
-        for (Activity activity : activities) {
-            activitiesAsDto.add(activityConverter.toDTO(activity));
-        }
-        return activitiesAsDto;
+        Page<Activity> pageActivities = activityRepository.findAll(pageRequest);
+
+        //페이징 정보
+        PageInfo pageInfo = PageInfo.of(pageNum, limit, pageActivities.getTotalPages(), pageActivities.getTotalElements());
+
+       // dto
+        GetAllActivitiesResponse response = activityConverter.toActivitiesPage(pageActivities.getContent(), pageInfo);
+
+        return response;
     }
 
     /**
