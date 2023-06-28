@@ -3,6 +3,7 @@ package ceos.backend.domain.awards;
 import ceos.backend.domain.awards.dto.response.AwardsResponse;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
+import ceos.backend.domain.awards.dto.response.GenerationAwardsResponse;
 import ceos.backend.domain.awards.service.AwardsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
