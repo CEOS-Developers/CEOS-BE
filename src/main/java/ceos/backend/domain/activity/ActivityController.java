@@ -25,9 +25,9 @@ public class ActivityController {
 
     @Operation(summary = "활동 생성하기")
     @PostMapping
-    public ActivityResponse createActivity(@RequestBody @Valid ActivityRequest activityRequest) {
+    public void createActivity(@RequestBody @Valid ActivityRequest activityRequest) {
         log.info("활동 생성하기");
-        return activityService.createActivity(activityRequest);
+        activityService.createActivity(activityRequest);
     }
 
 

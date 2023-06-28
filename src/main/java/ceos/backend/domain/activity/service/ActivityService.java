@@ -27,25 +27,15 @@ public class ActivityService {
     private final ActivityRepository activityRepository;
     private final ActivityConverter activityConverter;
     private final AwsS3UrlHandler awsS3UrlHandler;
-    private final RecruitmentHelper recruitmentHelper;
 
 
     /**
      * 활동 추가
-     *
-     * TODO : 인증
      */
     @Transactional
-    public ActivityResponse createActivity(ActivityRequest activityRequest) {
-
-        // 지원 기간 동안 수정할 수 없음
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        recruitment.validAmenablePeriod(LocalDate.now());
-
+    public void createActivity(ActivityRequest activityRequest) {
         Activity activity = Activity.from(activityRequest);
         activityRepository.save(activity);
-
-        return activityConverter.toDTO(activity);
     }
 
     /**
@@ -72,17 +62,9 @@ public class ActivityService {
 
     /**
      * 활동 수정
-     *
-     * TODO : 인증
      */
     @Transactional
     public ActivityResponse updateActivity(Long id, ActivityRequest activityRequest) {
-
-        // 지원 기간 동안 수정할 수 없음
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        recruitment.validAmenablePeriod(LocalDate.now());
-
-
         Activity activity = activityRepository.findById(id).orElseThrow(() -> new ActivityNotFound());
 
         activity.updateActivity(activityRequest);
@@ -93,16 +75,9 @@ public class ActivityService {
 
     /**
      * 활동 삭제
-     *
-     * TODO : 인증
      */
     @Transactional
     public void deleteActivity(Long id) {
-
-        // 지원 기간 동안 수정할 수 없음
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        recruitment.validAmenablePeriod(LocalDate.now());
-
         Activity activity = activityRepository.findById(id).orElseThrow(() -> new ActivityNotFound());
 
         activityRepository.delete(activity);
