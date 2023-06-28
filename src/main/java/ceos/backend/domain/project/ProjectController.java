@@ -21,7 +21,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @Operation(summary = "프로젝트 목록 보기")
-    @GetMapping("/")
+    @GetMapping
     public GetProjectsResponse getProjects(@RequestParam("pageNum") int pageNum,
                                            @RequestParam("limit") int limit) {
         log.info("프로젝트 목록 보기");
@@ -38,14 +38,14 @@ public class ProjectController {
     }
 
     @Operation(summary = "프로젝트 생성하기")
-    @PostMapping("/")
+    @PostMapping
     public void createProject(@RequestBody @Valid ProjectRequest projectRequest) {
         log.info("프로젝트 생성하기");
         projectService.createProject(projectRequest);
     }
 
     @Operation(summary = "프로젝트 수정하기")
-    @PatchMapping("/")
+    @PatchMapping
     public void updateProject(@RequestParam("id") Long projectId,
                               @RequestBody @Valid ProjectRequest projectRequest) {
         log.info("프로젝트 수정하기");
