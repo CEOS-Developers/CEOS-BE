@@ -48,6 +48,10 @@ public class WebSecurityConfig {
             "/applications/**", "recruitments/**", "projects/**", "activities/**", "awards/**"
     };
 
+    private final String[] GetPermittedPatterns = {
+            "/awards/**", "recruitments/**", "projects/**", "activities/**"
+    };
+
     private final String[] AllPermittedPattern = {
             "/applications", "/applications/question", "/applications/document", "/applications/final"
     };
@@ -79,8 +83,7 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/activities/**").permitAll()
+                .requestMatchers(HttpMethod.GET, GetPermittedPatterns).permitAll()
                 .requestMatchers(AllPermittedPattern).permitAll()
                 .requestMatchers(SwaggerPatterns).permitAll()
                 .requestMatchers(AdminPatterns).hasAnyRole("ROOT", "ADMIN")
