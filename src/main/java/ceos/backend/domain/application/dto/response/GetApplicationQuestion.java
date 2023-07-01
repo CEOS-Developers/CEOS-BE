@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.dto.response;
 
+import ceos.backend.domain.application.vo.InterviewDateTimesVo;
 import ceos.backend.domain.application.vo.QuestionVo;
 import ceos.backend.domain.application.vo.QuestionWithIdVo;
 import lombok.Builder;
@@ -14,12 +15,12 @@ public class GetApplicationQuestion {
     private List<QuestionWithIdVo> designQuestions;
     private List<QuestionWithIdVo> frontendQuestions;
     private List<QuestionWithIdVo> backendQuestions;
-    private List<String> times;
+    private List<InterviewDateTimesVo> times;
 
     @Builder
     private GetApplicationQuestion(List<QuestionWithIdVo> commonQuestions, List<QuestionWithIdVo> productQuestions,
                                   List<QuestionWithIdVo> designQuestions, List<QuestionWithIdVo> frontendQuestions,
-                                  List<QuestionWithIdVo> backendQuestions, List<String> times) {
+                                  List<QuestionWithIdVo> backendQuestions, List<InterviewDateTimesVo> times) {
         this.commonQuestions = commonQuestions;
         this.productQuestions = productQuestions;
         this.designQuestions = designQuestions;
@@ -30,7 +31,7 @@ public class GetApplicationQuestion {
 
     public static GetApplicationQuestion of(List<QuestionWithIdVo> commonQuestions, List<QuestionWithIdVo> productQuestions,
                                             List<QuestionWithIdVo> designQuestions, List<QuestionWithIdVo> frontendQuestions,
-                                            List<QuestionWithIdVo> backendQuestions, List<String> times) {
+                                            List<QuestionWithIdVo> backendQuestions, List<InterviewDateTimesVo> times) {
         return GetApplicationQuestion.builder()
                 .commonQuestions(commonQuestions)
                 .productQuestions(productQuestions)

@@ -20,6 +20,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class ApplicationMapper {
@@ -152,11 +154,23 @@ public class ApplicationMapper {
             }
         });
 
-        final List<String> times = interviews.stream()
+        final List<ParsedDuration> parsedDurations = interviews.stream()
                 .map(InterviewDateFormatter::interviewDateFormatter)
+                .map(ParsingDuration::parsingDuration)
                 .toList();
+        final Set<String> dateSets = parsedDurations.stream()
+                .map(ParsedDuration::getDate)
+                .collect(Collectors.toSet());
+        final List<InterviewDateTimesVo> interviewDateTimesVos = dateSets.stream()
+                .map(dateSet -> InterviewDateTimesVo.of(dateSet,
+                    parsedDurations.stream()
+                            .filter(parsedDuration -> parsedDuration.getDate().equals(dateSet))
+                            .map(ParsedDuration::getDuration)
+                            .toList())
+                ).toList();
+
         return GetApplicationQuestion.of(commonQuestions, productQuestions, designQuestions,
-                frontendQuestions, backendQuestions, times);
+                frontendQuestions, backendQuestions, interviewDateTimesVos);
     }
 
     public GetApplication toGetApplication(Application application, List<Interview> interviews,
