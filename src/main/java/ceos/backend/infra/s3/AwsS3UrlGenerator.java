@@ -8,6 +8,8 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequ
 import software.amazon.awssdk.services.s3.presigner.model.PutObjectPresignRequest;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Component
@@ -19,10 +21,13 @@ public class AwsS3UrlGenerator {
 
     public String generateUrl(String prefix){
         String filename = UUID.randomUUID().toString();
+        Map<String, String> metadata = new HashMap<>();
+        metadata.put("Cache-Control", "no-cache");
 
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(BUCKET)
                 .key(prefix + "/" + filename)
+                .metadata(metadata)
                 .build();
 
         PutObjectPresignRequest presignRequest = PutObjectPresignRequest.builder()
