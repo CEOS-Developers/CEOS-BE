@@ -12,6 +12,8 @@ spring:
 #        show_sql: true
 #        format_sql: true
         default_batch_fetch_size: 1000
+  data:
+    - secret
 
 springdoc:
   version: 0.0.1
