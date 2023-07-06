@@ -18,16 +18,12 @@ public class AdminMapper {
         return CheckUsernameResponse.from(isAvailable);
     }
 
-    public SignInResponse toSignInResponse(String accessToken, String refreshToken) {
-        return SignInResponse.of(accessToken, refreshToken);
+    public TokenResponse toTokenResponse(String accessToken, String refreshToken) {
+        return TokenResponse.of(accessToken, refreshToken);
     }
 
     public FindIdResponse toFindIdResponse(String username) {
         return FindIdResponse.from(username);
-    }
-
-    public RefreshTokenResponse toRefreshTokenResponse(String accessToken) {
-        return RefreshTokenResponse.from(accessToken);
     }
 
     public GetAdminsResponse toGetAdmins(List<Admin> adminList) {
