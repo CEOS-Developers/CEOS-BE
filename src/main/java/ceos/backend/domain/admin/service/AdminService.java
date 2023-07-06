@@ -3,13 +3,11 @@ package ceos.backend.domain.admin.service;
 import ceos.backend.domain.admin.domain.Admin;
 import ceos.backend.domain.admin.domain.AdminRole;
 import ceos.backend.domain.admin.dto.request.*;
-import ceos.backend.domain.admin.dto.response.CheckUsernameResponse;
-import ceos.backend.domain.admin.dto.response.FindIdResponse;
-import ceos.backend.domain.admin.dto.response.GetAdminsResponse;
-import ceos.backend.domain.admin.dto.response.SignInResponse;
+import ceos.backend.domain.admin.dto.response.*;
 import ceos.backend.domain.admin.helper.AdminHelper;
 import ceos.backend.domain.admin.repository.AdminMapper;
 import ceos.backend.domain.admin.repository.AdminRepository;
+import ceos.backend.global.config.jwt.TokenProvider;
 import ceos.backend.global.config.user.AdminDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminService {
 
+    private final TokenProvider tokenProvider;
     private final AdminHelper adminHelper;
     private final AdminMapper adminMapper;
     private final AdminRepository adminRepository;
@@ -47,16 +46,16 @@ public class AdminService {
     }
 
     @Transactional
-    public SignInResponse signIn(SignInRequest signInRequest) {
+    public TokenResponse signIn(SignInRequest signInRequest) {
 
         final Admin admin = adminHelper.findForSignIn(signInRequest);
         final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
 
         //토큰 발급
-        final String accessToken = adminHelper.getAccessToken(admin, authentication);
-        final String refreshToken = adminHelper.getRefreshToken(admin, authentication);
+        final String accessToken = tokenProvider.createAccessToken(admin.getId(), authentication);
+        final String refreshToken = tokenProvider.createRefreshToken(admin.getId(), authentication);
 
-        return adminMapper.toSignInResponse(accessToken, refreshToken);
+        return adminMapper.toTokenResponse(accessToken, refreshToken);
     }
 
     @Transactional
@@ -94,22 +93,25 @@ public class AdminService {
     public void logout(AdminDetails adminUser) {
         final Admin admin = adminUser.getAdmin();
 
-        adminHelper.deleteRefreshToken(admin);
+        //레디스 삭제
+        tokenProvider.deleteRefreshToken(admin.getId());
     }
 
-//    @Transactional
-//    public RefreshTokenResponse refreshToken(String refreshToken, AdminDetails adminUser) {
-//        final Admin admin = adminUser.getAdmin();
-//        final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
-//        //리프레시 토큰 검증
-//        tokenProvider.validateToken(refreshToken);
-//        adminHelper.matchesRefreshToken()
-//
-//        //토큰 재발급
-//        final String accessToken = adminHelper.getAccessToken(admin, authentication);
-//
-//        return adminMapper.toRefreshTokenResponse(accessToken);
-//    }
+    @Transactional
+    public TokenResponse reissueToken(RefreshTokenRequest refreshTokenRequest, AdminDetails adminUser) {
+        final Admin admin = adminUser.getAdmin();
+        final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
+        final String refreshToken = refreshTokenRequest.getRefreshToken();
+        //리프레시 토큰 검증
+        tokenProvider.validateRefreshToken(refreshToken);
+        adminHelper.matchesRefreshToken(refreshToken, admin);
+
+        //토큰 재발급
+        final String newAccessToken = tokenProvider.createAccessToken(admin.getId(), authentication);
+        final String newRefreshToken = tokenProvider.createRefreshToken(admin.getId(), authentication);
+
+        return adminMapper.toTokenResponse(newAccessToken, newRefreshToken);
+    }
 
     @Transactional(readOnly = true)
     public GetAdminsResponse getAdmins(AdminDetails adminUser) {
