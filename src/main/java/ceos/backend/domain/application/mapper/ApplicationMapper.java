@@ -156,7 +156,7 @@ public class ApplicationMapper {
 
         final List<ParsedDuration> parsedDurations = interviews.stream()
                 .map(InterviewDateFormatter::interviewDateFormatter)
-                .map(ParsingDuration::parsingDuration)
+                .map(ParsingDuration::parsingYearDuration)
                 .toList();
         final Set<String> dateSets = parsedDurations.stream()
                 .map(ParsedDuration::getDate)
