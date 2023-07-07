@@ -1,10 +1,7 @@
 package ceos.backend.domain.admin;
 
 import ceos.backend.domain.admin.dto.request.*;
-import ceos.backend.domain.admin.dto.response.CheckUsernameResponse;
-import ceos.backend.domain.admin.dto.response.FindIdResponse;
-import ceos.backend.domain.admin.dto.response.GetAdminsResponse;
-import ceos.backend.domain.admin.dto.response.SignInResponse;
+import ceos.backend.domain.admin.dto.response.*;
 import ceos.backend.domain.admin.service.AdminService;
 import ceos.backend.global.config.user.AdminDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +36,7 @@ public class AdminController {
 
     @Operation(summary = "로그인")
     @PostMapping("/signin")
-    public SignInResponse signIn(@RequestBody @Valid SignInRequest signInRequest) {
+    public TokenResponse signIn(@RequestBody @Valid SignInRequest signInRequest) {
         log.info("로그인");
         return adminService.signIn(signInRequest);
     }
@@ -69,20 +66,20 @@ public class AdminController {
     }
 
     @Operation(summary = "로그아웃")
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public void logout(@AuthenticationPrincipal AdminDetails adminUser) {
         log.info("로그아웃");
         adminService.logout(adminUser);
     }
 
-//    @Operation(summary = "토큰 재발급")
-//    @PostMapping("/refresh")
-//    public RefreshTokenResponse refreshToken(
-//            @RequestBody @Valid String refreshToken,
-//            @AuthenticationPrincipal AdminDetails adminUser) {
-//        log.info("토큰 재발급");
-//        return adminService.refreshToken(refreshToken, adminUser);
-//    }
+    @Operation(summary = "토큰 재발급")
+    @PostMapping("/reissue")
+    public TokenResponse refreshToken(
+            @RequestBody @Valid RefreshTokenRequest refreshTokenRequest,
+            @AuthenticationPrincipal AdminDetails adminUser) {
+        log.info("토큰 재발급");
+        return adminService.reissueToken(refreshTokenRequest, adminUser);
+    }
 
     @Operation(summary = "슈퍼유저 - 유저 목록 보기")
     @GetMapping("/super")
