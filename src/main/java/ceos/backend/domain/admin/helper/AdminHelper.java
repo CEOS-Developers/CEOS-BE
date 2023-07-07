@@ -143,7 +143,8 @@ public class AdminHelper {
     }
 
     public void resetPwd(ResetPwdRequest resetPwdRequest, Admin admin) {
-        final String encodedPassword = encodePassword(resetPwdRequest.getNewPassword1());
+
+        final String encodedPassword = passwordEncoder.encode(resetPwdRequest.getNewPassword1());
         admin.updatePwd(encodedPassword);
         adminRepository.save(admin);
     }
