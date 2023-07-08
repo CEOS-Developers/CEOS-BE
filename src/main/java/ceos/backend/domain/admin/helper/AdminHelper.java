@@ -134,7 +134,9 @@ public class AdminHelper {
     }
 
     public void setRandomPwd(Admin admin, String randomPwd) {
-        admin.updateRandomPwd(randomPwd);
+
+        final String tempPassword = passwordEncoder.encode(randomPwd);
+        admin.updateRandomPwd(tempPassword);
         adminRepository.save(admin);
     }
 
