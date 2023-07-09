@@ -25,14 +25,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class ApplicationMapper {
-    public Application toEntity(CreateApplicationRequest request, String UUID) {
-        return Application.of(request, UUID);
+    public Application toEntity(CreateApplicationRequest request, int generation, String UUID) {
+        return Application.of(request, generation, UUID);
     }
 
     public List<ApplicationAnswer> toAnswerList(CreateApplicationRequest request,
                                                 Application application,
                                                 List<ApplicationQuestion> questions) {
-        final Part part = request.getApplicationDetailVo().getPart();
+        final Part part = request.getPart();
         // common
         List<ApplicationAnswer> answers = new java.util.ArrayList<>(request.getCommonAnswers().stream()
                 .map(answerVo -> toApplicationAnswer(questions, application, answerVo, part, true))

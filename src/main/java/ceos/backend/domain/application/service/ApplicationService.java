@@ -10,11 +10,13 @@ import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.domain.application.vo.QuestionListVo;
 import ceos.backend.domain.recruitment.domain.Recruitment;
+import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.common.event.Event;
+import ceos.backend.global.util.DurationFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
@@ -43,6 +45,7 @@ public class ApplicationService {
     private final ApplicationInterviewRepository applicationInterviewRepository;
     private final ApplicationQuestionDetailRepository applicationQuestionDetailRepository;
 
+    private final RecruitmentHelper recruitmentHelper;
     private final RecruitmentRepository recruitmentRepository;
 
     private final ApplicationMapper applicationMapper;
@@ -67,7 +70,7 @@ public class ApplicationService {
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
         // 제출 기간, 기수 검사
-        applicationHelper.validateRecruitOption(createApplicationRequest.getApplicationDetailVo().getGeneration());
+        applicationHelper.validateRecruitOption();
 
         // 중복 검사
         applicationHelper.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
@@ -78,16 +81,18 @@ public class ApplicationService {
 
         // 엔티티 생성 및 저장
         final String UUID = applicationHelper.generateUUID();
-        final Application application = applicationMapper.toEntity(createApplicationRequest, UUID);
+        final int generation = recruitmentHelper.takeRecruitment().getGeneration();
+        final Application application = applicationMapper.toEntity(createApplicationRequest, generation, UUID);
         final List<Interview> interviews = interviewRepository.findAll();
 
         final List<ApplicationAnswer> applicationAnswers
                 = applicationMapper.toAnswerList(createApplicationRequest, application, applicationQuestions);
         applicationAnswerRepository.saveAll(applicationAnswers);
 
+        final List<String> unableTimes = DurationFormatter
+                .toStringDuration(createApplicationRequest.getUnableTimes());
         final List<ApplicationInterview> applicationInterviews
-                = applicationMapper.toApplicationInterviewList(createApplicationRequest.getUnableTimes(),
-                application, interviews);
+                = applicationMapper.toApplicationInterviewList(unableTimes, application, interviews);
         applicationInterviewRepository.saveAll(applicationInterviews);
 
         application.addApplicationAnswerList(applicationAnswers);
@@ -95,7 +100,7 @@ public class ApplicationService {
         applicationRepository.save(application);
 
         // 이메일 전송
-        applicationHelper.sendEmail(createApplicationRequest, UUID);
+        applicationHelper.sendEmail(createApplicationRequest, generation, UUID);
     }
 
     @Transactional(readOnly = true)
