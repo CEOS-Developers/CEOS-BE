@@ -25,14 +25,14 @@ import java.util.stream.Collectors;
 
 @Component
 public class ApplicationMapper {
-    public Application toEntity(CreateApplicationRequest request, String UUID) {
-        return Application.of(request, UUID);
+    public Application toEntity(CreateApplicationRequest request, int generation, String UUID) {
+        return Application.of(request, generation, UUID);
     }
 
     public List<ApplicationAnswer> toAnswerList(CreateApplicationRequest request,
                                                 Application application,
                                                 List<ApplicationQuestion> questions) {
-        final Part part = request.getApplicationDetailVo().getPart();
+        final Part part = request.getPart();
         // common
         List<ApplicationAnswer> answers = new java.util.ArrayList<>(request.getCommonAnswers().stream()
                 .map(answerVo -> toApplicationAnswer(questions, application, answerVo, part, true))
@@ -156,7 +156,7 @@ public class ApplicationMapper {
 
         final List<ParsedDuration> parsedDurations = interviews.stream()
                 .map(InterviewDateFormatter::interviewDateFormatter)
-                .map(ParsingDuration::parsingDuration)
+                .map(ParsingDuration::parsingYearDuration)
                 .toList();
         final Set<String> dateSets = parsedDurations.stream()
                 .map(ParsedDuration::getDate)

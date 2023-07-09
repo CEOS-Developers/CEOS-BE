@@ -67,10 +67,10 @@ public class Application extends BaseEntity{
     }
 
     // 정적 팩토리 메서드
-    public static Application of(CreateApplicationRequest createApplicationRequest, String UUID) {
+    public static Application of(CreateApplicationRequest createApplicationRequest, int generation, String UUID) {
         return Application.builder()
                 .applicantInfo(ApplicantInfo.of(createApplicationRequest.getApplicantInfoVo(), UUID))
-                .applicationDetail(ApplicationDetail.from(createApplicationRequest.getApplicationDetailVo()))
+                .applicationDetail(ApplicationDetail.of(createApplicationRequest, generation))
                 .build();
     }
 

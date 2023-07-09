@@ -48,15 +48,14 @@ public class ApplicationHelper {
         return newUUID;
     }
 
-    public void sendEmail(CreateApplicationRequest request, String UUID) {
+    public void sendEmail(CreateApplicationRequest request, int generation, String UUID) {
         final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
-        Event.raise(AwsSESMail.of(request, applicationQuestions, UUID));
+        Event.raise(AwsSESMail.of(request, applicationQuestions, generation, UUID));
     }
 
-    public void validateRecruitOption(int generation) {
+    public void validateRecruitOption() {
         final LocalDate now = LocalDate.now();
         final Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        recruitment.validateGeneration(generation);
         recruitment.validateApplyDuration(now);
     }
 
@@ -149,7 +148,7 @@ public class ApplicationHelper {
                 .count() != createApplicationRequest.getCommonAnswers().size()) {
             throw NotMatchingQnA.EXCEPTION;
         }
-        final Part part = createApplicationRequest.getApplicationDetailVo().getPart();
+        final Part part = createApplicationRequest.getPart();
         if (applicationQuestions.stream()
                 .filter(question -> question.getCategory().toString().equals(part.toString()))
                 .count() != createApplicationRequest.getPartAnswers().size()) {
