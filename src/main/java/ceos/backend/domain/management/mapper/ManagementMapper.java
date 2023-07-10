@@ -4,6 +4,7 @@ import ceos.backend.domain.management.domain.Management;
 import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
 import ceos.backend.domain.management.Vo.ManagementVo;
+import ceos.backend.domain.management.dto.response.GetPartManagementsResponse;
 import ceos.backend.global.common.dto.PageInfo;
 import org.springframework.stereotype.Component;
 
@@ -23,5 +24,14 @@ public class ManagementMapper {
             managementDtoList.add(managementDto);
         }
         return GetAllManagementsResponse.of(managementDtoList, pageInfo);
+    }
+
+    public GetPartManagementsResponse toManagementList(List<Management> managements) {
+        List<ManagementDto> managementDtoList = new ArrayList<>();
+        for (Management m : managements) {
+            ManagementDto managementDto = ManagementDto.entityToDto(m);
+            managementDtoList.add(managementDto);
+        }
+        return GetPartManagementsResponse.from(managementDtoList);
     }
 }

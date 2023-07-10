@@ -4,6 +4,7 @@ import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.CreateManagementRequest;
 import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
+import ceos.backend.domain.management.dto.response.GetPartManagementsResponse;
 import ceos.backend.domain.management.service.ManagementService;
 import ceos.backend.global.common.dto.AwsS3Url;
 
@@ -39,6 +40,15 @@ public class ManagementController {
     ) {
         log.info("임원진 전체 보기");
         return managementService.getAllManagements(pageNum, limit);
+    }
+
+    @Operation(summary = "파트별 운영진 보기")
+    @GetMapping
+    public GetPartManagementsResponse getPartManagements(
+            @RequestParam(value = "part", defaultValue = "팀장") String part
+    ) {
+        log.info("파트별 운영진 보기");
+        return managementService.getPartManagements(part);
     }
 
     @Operation(summary = "임원진 하나 보기")

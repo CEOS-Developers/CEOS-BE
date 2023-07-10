@@ -5,6 +5,7 @@ import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.CreateManagementRequest;
 import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
+import ceos.backend.domain.management.dto.response.GetPartManagementsResponse;
 import ceos.backend.domain.management.exception.ManagerNotFound;
 import ceos.backend.domain.management.helper.ManagementHelper;
 import ceos.backend.domain.management.mapper.ManagementMapper;
@@ -19,6 +20,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -46,6 +50,14 @@ public class ManagementService {
         PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(), pageManagements.getTotalElements());
         // dto
         GetAllManagementsResponse response = managementMapper.toManagementsPage(pageManagements.getContent(), pageInfo);
+
+        return response;
+    }
+
+    @Transactional(readOnly = true)
+    public GetPartManagementsResponse getPartManagements(String part) {
+        List<Management> findManagements = managementRepository.findManagementAllByPartOrderByNameAsc(part);
+        GetPartManagementsResponse response = managementMapper.toManagementList(findManagements);
 
         return response;
     }
