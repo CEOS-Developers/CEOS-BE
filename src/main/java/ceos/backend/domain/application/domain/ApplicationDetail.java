@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.domain;
 
+import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.vo.ApplicationDetailVo;
 import ceos.backend.global.common.entity.Part;
 import jakarta.persistence.Column;
@@ -49,13 +50,13 @@ public class ApplicationDetail {
         this.demodayDate = demodayDate;
     }
 
-    public static ApplicationDetail from(ApplicationDetailVo applicationDetailVo) {
+    public static ApplicationDetail of(CreateApplicationRequest request, int generation) {
         return ApplicationDetail.builder()
-                .generation(applicationDetailVo.getGeneration())
-                .part(applicationDetailVo.getPart())
-                .otherActivities(applicationDetailVo.getOtherActivities())
-                .otDate(applicationDetailVo.getOtDate())
-                .demodayDate(applicationDetailVo.getDemodayDate())
+                .generation(generation)
+                .part(request.getPart())
+                .otherActivities(request.getOtherActivities())
+                .otDate(request.getOtDate())
+                .demodayDate(request.getDemodayDate())
                 .build();
     }
 }

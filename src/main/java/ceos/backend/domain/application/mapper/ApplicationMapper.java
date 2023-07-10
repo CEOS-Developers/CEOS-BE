@@ -7,56 +7,57 @@ import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.exception.InterviewNotFound;
 import ceos.backend.domain.application.exception.QuestionNotFound;
 import ceos.backend.domain.application.vo.*;
-import ceos.backend.global.common.annotation.ValidDateList;
-import ceos.backend.global.common.annotation.ValidTimeDuration;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.entity.Part;
-import ceos.backend.global.util.DateTimeConvertor;
 import ceos.backend.global.util.InterviewDateFormatter;
 import ceos.backend.global.util.ParsingDuration;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
 public class ApplicationMapper {
-    public Application toEntity(CreateApplicationRequest request, String UUID) {
-        return Application.of(request, UUID);
+    public Application toEntity(CreateApplicationRequest request, int generation, String UUID) {
+        return Application.of(request, generation, UUID);
     }
 
     public List<ApplicationAnswer> toAnswerList(CreateApplicationRequest request,
                                                 Application application,
                                                 List<ApplicationQuestion> questions) {
-        final Part part = request.getApplicationDetailVo().getPart();
+        final Part part = request.getPart();
         // common
         List<ApplicationAnswer> answers = new java.util.ArrayList<>(request.getCommonAnswers().stream()
-                .map(answerVo -> {
-                    ApplicationQuestion question = questions.stream()
-                            .filter(q -> q.getCategory() == QuestionCategory.COMMON)
-                            .filter(q -> Objects.equals(q.getId(), answerVo.getQuestionId()))
-                            .findFirst()
-                            .orElseThrow(() -> QuestionNotFound.EXCEPTION);
-                    return ApplicationAnswer.of(question, application, answerVo.getAnswer());
-                }).toList());
+                .map(answerVo -> toApplicationAnswer(questions, application, answerVo, part, true))
+                .toList());
         // part
         request.getPartAnswers()
                 .forEach(answerVo -> {
-                    ApplicationQuestion question = questions.stream()
-                            .filter(q -> q.getCategory().toString().equals(part.toString()))
-                            .filter(q -> Objects.equals(q.getId(), answerVo.getQuestionId()))
-                            .findFirst()
-                            .orElseThrow(() -> QuestionNotFound.EXCEPTION);
-                    answers.add(ApplicationAnswer.of(question, application, answerVo.getAnswer()));
+                    answers.add(toApplicationAnswer(questions, application, answerVo, part, false));
                 });
         return answers;
+    }
+
+    private ApplicationAnswer toApplicationAnswer(List<ApplicationQuestion> questions,
+                                                  Application application,
+                                                  AnswerVo answerVo,
+                                                  Part part,
+                                                  boolean isCommon) {
+        final String category = isCommon ? "COMMON" : part.toString();
+
+        ApplicationQuestion question = questions.stream()
+                .filter(q -> q.getCategory().toString().equals(category))
+                .filter(q -> Objects.equals(q.getId(), answerVo.getQuestionId()))
+                .findFirst()
+                .orElseThrow(() -> QuestionNotFound.EXCEPTION);
+        return ApplicationAnswer.of(question, application, answerVo.getAnswer());
     }
 
     public List<ApplicationInterview> toApplicationInterviewList(List<String> unableTimes,
@@ -80,7 +81,7 @@ public class ApplicationMapper {
         return GetResultResponse.toFinalResult(application);
     }
     
-    public List<ApplicationQuestion> toQuestionList(UpdateApplicationQuestion updateApplicationQuestion) {
+    public QuestionListVo toQuestionList(UpdateApplicationQuestion updateApplicationQuestion) {
         final List<QuestionVo> commonQuestions = updateApplicationQuestion.getCommonQuestions();
         final List<QuestionVo> productQuestions = updateApplicationQuestion.getProductQuestions();
         final List<QuestionVo> designQuestions = updateApplicationQuestion.getDesignQuestions();
@@ -88,36 +89,37 @@ public class ApplicationMapper {
         final List<QuestionVo> backendQuestions = updateApplicationQuestion.getBackendQuestions();
 
         List<ApplicationQuestion> questions = new ArrayList<>();
-        commonQuestions.forEach(questionVo -> {
-                    questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.COMMON));
-                });
-        productQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.PRODUCT));
-        });
-        designQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.DESIGN));
-        });
-        frontendQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.FRONTEND));
-        });
-        backendQuestions.forEach(questionVo -> {
-            questions.add(ApplicationQuestion.of(questionVo, QuestionCategory.BACKEND));
-        });
-        return questions;
+        List<ApplicationQuestionDetail> questionDetails = new ArrayList<>();
+        parsingQuestion(questions, questionDetails, commonQuestions, QuestionCategory.COMMON);
+        parsingQuestion(questions, questionDetails, productQuestions, QuestionCategory.STRATEGY);
+        parsingQuestion(questions, questionDetails, designQuestions, QuestionCategory.DESIGN);
+        parsingQuestion(questions, questionDetails, frontendQuestions, QuestionCategory.FRONTEND);
+        parsingQuestion(questions, questionDetails, backendQuestions, QuestionCategory.BACKEND);
+        return QuestionListVo.of(questions, questionDetails);
     }
 
-    public List<Interview> toInterviewList(UpdateApplicationQuestion updateApplicationQuestion) {
-        final List<String> dates = updateApplicationQuestion.getDates();
-        final List<String> times = updateApplicationQuestion.getTimes();
-
-        List<Interview> interviews = new ArrayList<>();
-        dates.forEach(date -> {
-            times.forEach(time -> {
-                final String[] strTimes = time.split(" - ");
-                final LocalDateTime fromTime = DateTimeConvertor.dateTimeConvertor(date, strTimes[0]);
-                final LocalDateTime toTime = DateTimeConvertor.dateTimeConvertor(date, strTimes[1]);
-                interviews.add(Interview.of(fromTime, toTime));
+    private void parsingQuestion(List<ApplicationQuestion> questions,
+                                 List<ApplicationQuestionDetail> questionDetails,
+                                 List<QuestionVo> ansQuestions,
+                                 QuestionCategory category) {
+        ansQuestions.forEach(questionVo -> {
+            final ApplicationQuestion applicationQuestion
+                    = ApplicationQuestion.of(questionVo, category);
+            questions.add(applicationQuestion);
+            questionVo.getQuestionDetail().forEach(questionDetailVo -> {
+                questionDetails.add(ApplicationQuestionDetail.of(applicationQuestion, questionDetailVo));
             });
+        });
+    }
+
+    public List<Interview> toInterviewList(List<String> times) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        List<Interview> interviews = new ArrayList<>();
+        times.forEach(time -> {
+            final String[] strTimes = time.split(" - ");
+            final LocalDateTime fromTime = LocalDateTime.parse(strTimes[0], formatter);
+            final LocalDateTime toTime = LocalDateTime.parse(strTimes[1], formatter);
+            interviews.add(Interview.of(fromTime, toTime));
         });
         return interviews;
     }
@@ -130,81 +132,88 @@ public class ApplicationMapper {
     }
 
     public GetApplicationQuestion toGetApplicationQuestion(List<ApplicationQuestion> applicationQuestions,
+                                                           List<ApplicationQuestionDetail> applicationQuestionDetails,
                                                            List<Interview> interviews) {
-        List<QuestionVo> commonQuestions = new ArrayList<>();
-        List<QuestionVo> productQuestions = new ArrayList<>();
-        List<QuestionVo> frontendQuestions = new ArrayList<>();
-        List<QuestionVo> backendQuestions = new ArrayList<>();
-        List<QuestionVo> designQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> commonQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> productQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> frontendQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> backendQuestions = new ArrayList<>();
+        List<QuestionWithIdVo> designQuestions = new ArrayList<>();
         applicationQuestions.forEach(applicationQuestion -> {
-            if (applicationQuestion.getCategory() == QuestionCategory.COMMON) {
-                commonQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else if (applicationQuestion.getCategory() == QuestionCategory.PRODUCT) {
-                productQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else if (applicationQuestion.getCategory() == QuestionCategory.FRONTEND) {
-                frontendQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else if (applicationQuestion.getCategory() == QuestionCategory.BACKEND) {
-                backendQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
-            } else {
-                designQuestions.add(QuestionVo.of(applicationQuestion.getNumber(), applicationQuestion.getQuestion()));
+            final List<QuestionDetailVo> questionDetailVos = applicationQuestionDetails.stream()
+                    .filter(details -> details.getApplicationQuestion().equals(applicationQuestion))
+                    .map(QuestionDetailVo::from)
+                    .toList();
+            final QuestionWithIdVo questionVo = QuestionWithIdVo.of(applicationQuestion, questionDetailVos);
+            switch (applicationQuestion.getCategory()) {
+                case COMMON -> commonQuestions.add(questionVo);
+                case STRATEGY -> productQuestions.add(questionVo);
+                case DESIGN -> designQuestions.add(questionVo);
+                case FRONTEND -> frontendQuestions.add(questionVo);
+                case BACKEND -> backendQuestions.add(questionVo);
             }
         });
 
-        Set<String> dates = new HashSet<>();
-        Set<String> times = new HashSet<>();
         final List<ParsedDuration> parsedDurations = interviews.stream()
-                .map(interview -> {
-                    final String duration = InterviewDateFormatter.interviewDateFormatter(interview);
-                    return ParsingDuration.parsingDuration(duration);
-                })
+                .map(InterviewDateFormatter::interviewDateFormatter)
+                .map(ParsingDuration::parsingYearDuration)
                 .toList();
-        parsedDurations.forEach(parsedDuration -> {
-            dates.add(parsedDuration.getDate());
-            times.add(parsedDuration.getDuration());
-        });
-        List<String> listDates = new ArrayList<>(dates);
-        List<String> listTimes = new ArrayList<>(times);
-        Collections.sort(listDates);
-        Collections.sort(listTimes);
+        final Set<String> dateSets = parsedDurations.stream()
+                .map(ParsedDuration::getDate)
+                .collect(Collectors.toSet());
+        final List<InterviewDateTimesVo> interviewDateTimesVos = dateSets.stream()
+                .map(dateSet -> InterviewDateTimesVo.of(dateSet,
+                    parsedDurations.stream()
+                            .filter(parsedDuration -> parsedDuration.getDate().equals(dateSet))
+                            .map(ParsedDuration::getDuration)
+                            .toList())
+                ).toList();
+
         return GetApplicationQuestion.of(commonQuestions, productQuestions, designQuestions,
-                frontendQuestions, backendQuestions, listDates, listTimes);
+                frontendQuestions, backendQuestions, interviewDateTimesVos);
     }
 
     public GetApplication toGetApplication(Application application, List<Interview> interviews,
                                            List<ApplicationInterview> applicationInterviews,
                                            List<ApplicationQuestion> applicationQuestions,
+                                           List<ApplicationQuestionDetail> applicationQuestionDetails,
                                            List<ApplicationAnswer> applicationAnswers) {
         // qna common
         final List<QnAVo> commonQuestions = applicationQuestions.stream()
                 .filter(question -> question.getCategory() == QuestionCategory.COMMON)
-                .map(question ->
-                    applicationAnswers.stream()
-                            .filter(applicationAnswer -> applicationAnswer.getApplicationQuestion()
-                                    .equals(question))
-                            .map(answer -> QnAVo.of(question, answer))
-                            .findFirst()
-                            .orElseThrow()
-                ).toList();
+                .map(question -> toQnAVo(applicationAnswers, applicationQuestionDetails, question))
+                .toList();
         // qna part
         final Part part = application.getApplicationDetail().getPart();
         final List<QnAVo> partQuestions = applicationQuestions.stream()
                 .filter(question -> question.getCategory().toString().equals(part.toString()))
-                .map(question ->
-                        applicationAnswers.stream()
-                                .filter(applicationAnswer -> applicationAnswer.getApplicationQuestion()
-                                        .equals(question))
-                                .map(answer -> QnAVo.of(question, answer))
-                                .findFirst()
-                                .orElseThrow()
-                ).toList();
+                .map(question -> toQnAVo(applicationAnswers, applicationQuestionDetails, question))
+                .toList();
 
         // interview
         List<InterviewTimeVo> times = toInterviewTimeVoList(interviews, applicationInterviews);
         return GetApplication.of(application, commonQuestions, partQuestions, times);
     }
 
+    private QnAVo toQnAVo(List<ApplicationAnswer> applicationAnswers,
+                          List<ApplicationQuestionDetail> applicationQuestionDetails,
+                          ApplicationQuestion question) {
+        return applicationAnswers.stream()
+                .filter(applicationAnswer -> applicationAnswer.getApplicationQuestion()
+                        .equals(question))
+                .map(answer -> {
+                    final List<QuestionDetailVo> detailVos = applicationQuestionDetails.stream()
+                            .filter(details -> details.getApplicationQuestion().equals(question))
+                            .map(QuestionDetailVo::from)
+                            .toList();
+                    return QnAVo.of(question, detailVos, answer);
+                })
+                .findFirst()
+                .orElseThrow();
+    }
+
     private List<InterviewTimeVo> toInterviewTimeVoList(List<Interview> interviews, List<ApplicationInterview> applicationInterviews) {
-        List<InterviewTimeVo> times = interviews.stream()
+        return interviews.stream()
                 .map(interview -> {
                     final String duration = InterviewDateFormatter.interviewDateFormatter(interview);
                     final ParsedDuration parsedDuration = ParsingDuration.parsingDuration(duration);
@@ -215,7 +224,6 @@ public class ApplicationMapper {
                     return InterviewTimeVo.of(false, parsedDuration);
                 })
                 .toList();
-        return times;
     }
 
     public GetApplications toGetApplications(Page<Application> pageManagements, PageInfo pageInfo) {

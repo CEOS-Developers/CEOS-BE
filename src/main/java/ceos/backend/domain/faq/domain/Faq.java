@@ -1,5 +1,7 @@
 package ceos.backend.domain.faq.domain;
 
+import ceos.backend.domain.faq.vo.FaqVo;
+import ceos.backend.domain.faq.vo.UpdateFaqRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +20,6 @@ public class Faq extends BaseEntity {
     private Long id;
 
     @NotNull
-    @Size(max = 20)
     @Enumerated(EnumType.STRING)
     private FaqCategory category;
 
@@ -42,4 +43,20 @@ public class Faq extends BaseEntity {
     }
 
     // 정적 팩토리 메서드
+    public static Faq from(FaqVo faqVo) {
+        return Faq.builder()
+                .category(faqVo.getCategory())
+                .question(faqVo.getQuestion())
+                .answer(faqVo.getAnswer())
+                .build();
+    }
+
+    public void update(UpdateFaqRequest updateFaqRequest) {
+        if (updateFaqRequest.getQuestion() != null) {
+            this.question = updateFaqRequest.getQuestion();
+        }
+        if (updateFaqRequest.getAnswer() != null) {
+            this.answer = updateFaqRequest.getAnswer();
+        }
+    }
 }

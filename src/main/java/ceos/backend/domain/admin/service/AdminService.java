@@ -1,10 +1,9 @@
 package ceos.backend.domain.admin.service;
 
 import ceos.backend.domain.admin.domain.Admin;
+import ceos.backend.domain.admin.domain.AdminRole;
 import ceos.backend.domain.admin.dto.request.*;
-import ceos.backend.domain.admin.dto.response.CheckUsernameResponse;
-import ceos.backend.domain.admin.dto.response.FindIdResponse;
-import ceos.backend.domain.admin.dto.response.SignInResponse;
+import ceos.backend.domain.admin.dto.response.*;
 import ceos.backend.domain.admin.helper.AdminHelper;
 import ceos.backend.domain.admin.repository.AdminMapper;
 import ceos.backend.domain.admin.repository.AdminRepository;
@@ -21,12 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AdminService {
 
+    private final TokenProvider tokenProvider;
     private final AdminHelper adminHelper;
     private final AdminMapper adminMapper;
     private final AdminRepository adminRepository;
 
     @Transactional
-    public CheckUsernameResponse checkUsername(CheckUsernameRequest checkUsernameRequest){
+    public CheckUsernameResponse checkUsername(CheckUsernameRequest checkUsernameRequest) {
         //중복 아이디 검사
         adminHelper.findDuplicateUsername(checkUsernameRequest.getUsername());
 
@@ -46,16 +46,16 @@ public class AdminService {
     }
 
     @Transactional
-    public SignInResponse signIn(SignInRequest signInRequest) {
+    public TokenResponse signIn(SignInRequest signInRequest) {
 
         final Admin admin = adminHelper.findForSignIn(signInRequest);
         final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
 
         //토큰 발급
-        final String accessToken = adminHelper.getAccessToken(admin, authentication);
-        final String refreshToken = adminHelper.getRefreshToken(admin, authentication);
+        final String accessToken = tokenProvider.createAccessToken(admin.getId(), authentication);
+        final String refreshToken = tokenProvider.createRefreshToken(admin.getId(), authentication);
 
-        return adminMapper.toSignInResponse(accessToken, refreshToken);
+        return adminMapper.toTokenResponse(accessToken, refreshToken);
     }
 
     @Transactional
@@ -93,20 +93,54 @@ public class AdminService {
     public void logout(AdminDetails adminUser) {
         final Admin admin = adminUser.getAdmin();
 
-        adminHelper.deleteRefreshToken(admin);
+        //레디스 삭제
+        tokenProvider.deleteRefreshToken(admin.getId());
     }
 
-//    @Transactional
-//    public RefreshTokenResponse refreshToken(String refreshToken, AdminDetails adminUser) {
-//        final Admin admin = adminUser.getAdmin();
-//        final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
-//        //리프레시 토큰 검증
-//        tokenProvider.validateToken(refreshToken);
-//        adminHelper.matchesRefreshToken()
-//
-//        //토큰 재발급
-//        final String accessToken = adminHelper.getAccessToken(admin, authentication);
-//
-//        return adminMapper.toRefreshTokenResponse(accessToken);
-//    }
+    @Transactional
+    public TokenResponse reissueToken(RefreshTokenRequest refreshTokenRequest, AdminDetails adminUser) {
+        final Admin admin = adminUser.getAdmin();
+        final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
+        final String refreshToken = refreshTokenRequest.getRefreshToken();
+        //리프레시 토큰 검증
+        tokenProvider.validateRefreshToken(refreshToken);
+        adminHelper.matchesRefreshToken(refreshToken, admin);
+
+        //토큰 재발급
+        final String newAccessToken = tokenProvider.createAccessToken(admin.getId(), authentication);
+        final String newRefreshToken = tokenProvider.createRefreshToken(admin.getId(), authentication);
+
+        return adminMapper.toTokenResponse(newAccessToken, newRefreshToken);
+    }
+
+    @Transactional(readOnly = true)
+    public GetAdminsResponse getAdmins(AdminDetails adminUser) {
+        final Admin superAdmin = adminUser.getAdmin();
+        return adminMapper.toGetAdmins(adminHelper.findAdmins(superAdmin));
+    }
+
+    @Transactional
+    public void grantAuthority(AdminDetails adminUser, GrantAuthorityRequest grantAuthorityRequest) {
+        final Admin superAdmin = adminUser.getAdmin();
+        final Admin admin = adminHelper.findAdmin(grantAuthorityRequest.getId());
+        final AdminRole adminRole = grantAuthorityRequest.getAdminRole();
+
+        //어드민 작업 검증
+        adminHelper.validateAdmin(superAdmin, admin);
+
+        //권한 변경
+        adminHelper.changeRole(admin, adminRole);
+    }
+
+    @Transactional
+    public void deleteAdmin(AdminDetails adminUser, Long adminId) {
+        final Admin superAdmin = adminUser.getAdmin();
+        final Admin admin = adminHelper.findAdmin(adminId);
+
+        //어드민 작업 검증
+        adminHelper.validateAdmin(superAdmin, admin);
+
+        //어드민 삭제
+        adminRepository.delete(admin);
+    }
 }

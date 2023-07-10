@@ -32,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        if (StringUtils.isNotBlank(token) && tokenProvider.validateToken(token)) {
+        if (StringUtils.isNotBlank(token) && tokenProvider.validateAccessToken(token)) {
             Authentication authentication = tokenProvider.getAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {

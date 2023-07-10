@@ -1,8 +1,8 @@
 package ceos.backend.domain.activity;
 
-import ceos.backend.domain.activity.domain.Activity;
 import ceos.backend.domain.activity.dto.ActivityRequest;
 import ceos.backend.domain.activity.dto.ActivityResponse;
+import ceos.backend.domain.activity.dto.GetAllActivitiesResponse;
 import ceos.backend.domain.activity.service.ActivityService;
 import ceos.backend.global.common.dto.AwsS3Url;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,8 +11,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -25,9 +23,9 @@ public class ActivityController {
 
     @Operation(summary = "활동 생성하기")
     @PostMapping
-    public ActivityResponse createActivity(@RequestBody @Valid ActivityRequest activityRequest) {
+    public void createActivity(@RequestBody @Valid ActivityRequest activityRequest) {
         log.info("활동 생성하기");
-        return activityService.createActivity(activityRequest);
+        activityService.createActivity(activityRequest);
     }
 
 
@@ -41,11 +39,13 @@ public class ActivityController {
 
     @Operation(summary = "활동 전체 조회하기")
     @GetMapping
-    public List<ActivityResponse> getAllActivities() {
+    public GetAllActivitiesResponse getAllActivities(
+            @RequestParam("pageNum") int pageNum,
+            @RequestParam("limit") int limit
+    ) {
         log.info("활동 전체 조회하기");
-        return activityService.getAllActivities();
+        return activityService.getAllActivities(pageNum, limit);
     }
-
 
     @Operation(summary = "활동 수정하기")
     @PutMapping("/{id}")

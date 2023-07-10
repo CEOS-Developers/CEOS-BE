@@ -22,8 +22,7 @@ public class AwsSESSendMailHandler {
 
         final String TO = request.getApplicantInfoVo().getEmail();
         final String SUBJECT = awsSESMailGenerator
-                .generateApplicationMailSubject(request.getApplicationDetailVo()
-                                                        .getGeneration());
+                .generateApplicationMailSubject(awsSESMail.getGeneration());
         final Context CONTEXT = awsSESMailGenerator.generateApplicationMailContext(awsSESMail);
         awsSesUtils.singleEmailRequest(TO, SUBJECT, "sendApplicationMail", CONTEXT);
     }

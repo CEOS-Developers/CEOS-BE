@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -25,16 +28,18 @@ public class ApplicationQuestion extends BaseEntity {
     private String question;
 
     @NotNull
+    private boolean multiline;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     private QuestionCategory category;
 
     @Builder
-    private ApplicationQuestion(int number,
-                                String question,
-                                QuestionCategory category)
-    {
+    private ApplicationQuestion(int number, String question, boolean multiline,
+                                QuestionCategory category) {
         this.number = number;
         this.question = question;
+        this.multiline = multiline;
         this.category = category;
     }
 

@@ -1,6 +1,7 @@
 package ceos.backend.domain.admin.helper;
 
 import ceos.backend.domain.admin.domain.Admin;
+import ceos.backend.domain.admin.domain.AdminRole;
 import ceos.backend.domain.admin.dto.request.FindIdRequest;
 import ceos.backend.domain.admin.dto.request.ResetPwdRequest;
 import ceos.backend.domain.admin.dto.request.SendRandomPwdRequest;
@@ -9,9 +10,9 @@ import ceos.backend.domain.admin.exception.*;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.event.Event;
-import ceos.backend.global.config.jwt.TokenProvider;
 import ceos.backend.global.config.user.AdminDetailsService;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,14 +24,16 @@ import ceos.backend.domain.admin.vo.AdminVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class AdminHelper {
+    private final RedisTemplate<String, String> redisTemplate;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final RecruitmentHelper recruitmentHelper;
     private final AdminRepository adminRepository;
     private final AdminDetailsService adminDetailsService;
-    private final TokenProvider tokenProvider;
 
     public String encodePassword(String password) {
         return passwordEncoder.encode(password);
@@ -58,19 +61,6 @@ public class AdminHelper {
         return authentication;
     }
 
-    public String getAccessToken(Admin admin, Authentication authentication) {
-        return tokenProvider.createAccessToken(admin.getId(), authentication);
-    }
-
-    public String getRefreshToken(Admin admin, Authentication authentication) {
-        final String refreshToken = tokenProvider.createRefreshToken(authentication);
-
-        admin.setRefreshToken(refreshToken);
-        adminRepository.save(admin);
-
-        return refreshToken;
-    }
-
     public void findDuplicateUsername(String username) {
         if (adminRepository
                 .findByUsername(username)
@@ -93,7 +83,7 @@ public class AdminHelper {
                     throw AdminNotFound.EXCEPTION;
                 });
 
-        if (matchesPassword(
+        if (!matchesPassword(
                 signInRequest.getPassword(),
                 findAdmin.getPassword())) {
             throw MismatchPassword.EXCEPTION;
@@ -130,7 +120,7 @@ public class AdminHelper {
         final String newPassword1 = resetPwdRequest.getNewPassword1();
         final String newPassword2 = resetPwdRequest.getNewPassword2();
 
-        if (matchesPassword(password, admin.getPassword())) {
+        if (!matchesPassword(password, admin.getPassword())) {
             throw MismatchPassword.EXCEPTION;
         }
 
@@ -144,7 +134,9 @@ public class AdminHelper {
     }
 
     public void setRandomPwd(Admin admin, String randomPwd) {
-        admin.updateRandomPwd(randomPwd);
+
+        final String tempPassword = passwordEncoder.encode(randomPwd);
+        admin.updateRandomPwd(tempPassword);
         adminRepository.save(admin);
     }
 
@@ -153,19 +145,39 @@ public class AdminHelper {
     }
 
     public void resetPwd(ResetPwdRequest resetPwdRequest, Admin admin) {
-        final String encodedPassword = encodePassword(resetPwdRequest.getNewPassword1());
+
+        final String encodedPassword = passwordEncoder.encode(resetPwdRequest.getNewPassword1());
         admin.updatePwd(encodedPassword);
         adminRepository.save(admin);
     }
 
-    public void deleteRefreshToken(Admin admin) {
-        admin.deleteRefreshToken();
-        adminRepository.save(admin);
+    public void matchesRefreshToken(String refreshToken, Admin admin) {
+        String savedToken = redisTemplate.opsForValue().get(admin.getId().toString());
+        if (savedToken == null || !savedToken.equals(refreshToken)) {
+            throw RefreshTokenNotFound.EXCEPTION;
+        }
     }
 
-//    public void matchesRefreshToken(String refreshToken, Admin admin) {
-//        if(!admin.getRefreshToken().equals(refreshToken)) {
-//            throw .Exception;
-//        }
-//    }
+
+    public Admin findAdmin(Long adminId) {
+        return adminRepository
+                .findById(adminId)
+                .orElseThrow(() -> {
+                    throw AdminNotFound.EXCEPTION;
+                });
+    }
+
+    public List<Admin> findAdmins(Admin superAdmin) {
+        return adminRepository.findAllByIdNot(superAdmin.getId());
+    }
+
+    public void changeRole(Admin admin, AdminRole adminRole) {
+        admin.updateRole(adminRole);
+    }
+
+    public void validateAdmin(Admin superAdmin, Admin admin) {
+        if (superAdmin.getId().equals(admin.getId())) {
+            throw InvalidAction.EXCEPTION;
+        }
+    }
 }
