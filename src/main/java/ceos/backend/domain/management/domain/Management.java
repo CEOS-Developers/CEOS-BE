@@ -33,8 +33,8 @@ public class Management extends BaseEntity {
     private ManagementRole role;
 
     @NotNull
-    @Size(max = 20)
-    private String part;
+    @Enumerated(EnumType.STRING)
+    private ManagementPart part;
 
     private int generation;
 
@@ -59,7 +59,7 @@ public class Management extends BaseEntity {
     @Builder
     private Management(String name,
                        ManagementRole role,
-                       String part,
+                       ManagementPart part,
                        int generation,
                        int managementGeneration,
                        University university,
