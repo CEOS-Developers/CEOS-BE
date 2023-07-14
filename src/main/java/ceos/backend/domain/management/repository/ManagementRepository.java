@@ -11,6 +11,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ManagementRepository extends JpaRepository<Management, Long> {
-    @Query("SELECT m FROM Management m WHERE m.role = MANAGEMENT AND m.part = :part ORDER BY m.name")
-    List<Management> findManagementAllByPartOrderByNameAsc(@Param("part") String part);
+    @Query("SELECT m FROM Management m WHERE m.role = :role ORDER BY m.name ASC")
+    List<Management> findManagementAllByRoleOrderByNameAsc(@Param("role") ManagementRole role);
 }
