@@ -1,10 +1,12 @@
 package ceos.backend.domain.management.service;
 
 import ceos.backend.domain.management.domain.Management;
+import ceos.backend.domain.management.domain.ManagementRole;
 import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.CreateManagementRequest;
 import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
+import ceos.backend.domain.management.dto.response.GetAllPartManagementsResponse;
 import ceos.backend.domain.management.exception.ManagerNotFound;
 import ceos.backend.domain.management.helper.ManagementHelper;
 import ceos.backend.domain.management.mapper.ManagementMapper;
@@ -19,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -46,6 +50,18 @@ public class ManagementService {
         PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(), pageManagements.getTotalElements());
         // dto
         GetAllManagementsResponse response = managementMapper.toManagementsPage(pageManagements.getContent(), pageInfo);
+
+        return response;
+    }
+
+    @Transactional(readOnly = true)
+    public GetAllPartManagementsResponse getAllPartManagements() {
+        List<Management> findPresidency = managementRepository.findManagementAllByRoleOrderByNameAsc(ManagementRole.PRESIDENCY);
+        List<Management> findGeneralAffairs = managementRepository.findManagementAllByRoleOrderByNameAsc(ManagementRole.GENERAL_AFFAIRS);
+        List<Management> findPartLeaders = managementRepository.findManagementAllByRoleOrderByNameAsc(ManagementRole.PART_LEADER);
+        List<Management> findManagements = managementRepository.findManagementAllByRoleOrderByNameAsc(ManagementRole.MANAGEMENT);
+
+        GetAllPartManagementsResponse response = managementMapper.toPartManagementList(findPresidency, findGeneralAffairs, findPartLeaders, findManagements);
 
         return response;
     }
