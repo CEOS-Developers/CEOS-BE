@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto.mail;
 
+import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.vo.ApplicationDetailVo;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,11 +20,11 @@ public class CeosQuestionInfo {
         this.otherActivities = otherActivities;
     }
 
-    public static CeosQuestionInfo from(ApplicationDetailVo applicationDetailVo) {
+    public static CeosQuestionInfo from(CreateApplicationRequest request) {
         return CeosQuestionInfo.builder()
-                .otDate(applicationDetailVo.getOtDate().format(DateTimeFormatter.ISO_DATE))
-                .demodayDate(applicationDetailVo.getDemodayDate().format(DateTimeFormatter.ISO_DATE))
-                .otherActivities(applicationDetailVo.getOtherActivities())
+                .otDate(request.getOtDate().format(DateTimeFormatter.ISO_DATE))
+                .demodayDate(request.getDemodayDate().format(DateTimeFormatter.ISO_DATE))
+                .otherActivities(request.getOtherActivities())
                 .build();
     }
 }

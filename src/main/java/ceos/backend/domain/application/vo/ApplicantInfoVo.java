@@ -1,6 +1,7 @@
 package ceos.backend.domain.application.vo;
 
 import ceos.backend.domain.application.domain.ApplicantInfo;
+import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.Gender;
 import ceos.backend.global.common.annotation.DateFormat;
 import ceos.backend.global.common.annotation.ValidEmail;
@@ -81,6 +82,19 @@ public class ApplicantInfoVo {
                 .university(applicantInfo.getUniversity())
                 .major(applicantInfo.getMajor())
                 .semestersLeftNumber(applicantInfo.getSemestersLeftNumber())
+                .build();
+    }
+
+    public static ApplicantInfoVo from(Application application) {
+        return ApplicantInfoVo.builder()
+                .name(application.getApplicantInfo().getName())
+                .gender(application.getApplicantInfo().getGender())
+                .birth(application.getApplicantInfo().getBirth())
+                .email(application.getApplicantInfo().getEmail())
+                .phoneNumber(application.getApplicantInfo().getPhoneNumber())
+                .university(application.getApplicantInfo().getUniversity())
+                .major(application.getApplicantInfo().getMajor())
+                .semestersLeftNumber(application.getApplicantInfo().getSemestersLeftNumber())
                 .build();
     }
 }

@@ -15,9 +15,9 @@ public class GreetInfo {
         this.generation = generation;
     }
 
-    public static GreetInfo from(CreateApplicationRequest request) {
+    public static GreetInfo of(CreateApplicationRequest request, int generation) {
         return GreetInfo.builder()
-                .generation(Integer.toString(request.getApplicationDetailVo().getGeneration()))
+                .generation(Integer.toString(generation))
                 .name(request.getApplicantInfoVo().getName())
                 .build();
     }

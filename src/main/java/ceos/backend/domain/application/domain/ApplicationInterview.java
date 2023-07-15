@@ -15,7 +15,7 @@ public class ApplicationInterview extends BaseEntity {
     @Column(name = "application_interview_id")
     private Long id;
 
-    // Application : ApplicationInterview = N:1 (단방향)
+    // Application : ApplicationInterview = N:1 (양방향)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private Application application;
@@ -38,4 +38,6 @@ public class ApplicationInterview extends BaseEntity {
                 .interview(interview)
                 .build();
     }
+
+    public void setApplication(Application application) { this.application = application; }
 }

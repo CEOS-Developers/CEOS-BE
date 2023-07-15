@@ -1,5 +1,6 @@
 package ceos.backend.domain.management.Vo;
 
+import ceos.backend.domain.management.domain.ManagementPart;
 import ceos.backend.domain.management.domain.ManagementRole;
 import ceos.backend.global.common.annotation.ValidEnum;
 import ceos.backend.global.common.entity.University;
@@ -16,13 +17,13 @@ public class ManagementVo {
     @NotEmpty(message = "임원진 이름을 입력해주세요")
     private String name;
 
-    @Schema(defaultValue = "운영진", description = "임원진 역할(운영진/멘토)")
+    @Schema(defaultValue = "회장단", description = "임원진 역할(회장단/총무/파트장/운영진/멘토)")
     @ValidEnum(target = ManagementRole.class)
     private ManagementRole role;
 
-    @Schema(defaultValue = "백엔드 팀", description = "임원진 파트")
-    @NotEmpty(message = "임원진 파트를 입력해주세요")
-    private String part;
+    @Schema(defaultValue = "기획", description = "임원진 파트(회장/부회장/공동회장/기획/디자인/프론트엔드/백엔드)")
+    @ValidEnum(target = ManagementPart.class)
+    private ManagementPart part;
 
     @Schema(defaultValue = "16", description = "기수")
     @Positive
@@ -37,7 +38,7 @@ public class ManagementVo {
     @ValidEnum(target = University.class)
     private University university;
 
-    @Schema(defaultValue = "컴퓨터 공학과", description = "임원진 전공")
+    @Schema(defaultValue = "컴퓨터공학과", description = "임원진 전공")
     @NotEmpty(message = "임원진 전공을 입력해주세요")
     private String major;
 

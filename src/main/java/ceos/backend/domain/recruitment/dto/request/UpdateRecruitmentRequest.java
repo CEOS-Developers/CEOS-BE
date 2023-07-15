@@ -8,9 +8,6 @@ import java.time.LocalDate;
 @Getter
 public class UpdateRecruitmentRequest {
     private int generation;
-    private String prodImg;
-    private String designImg;
-    private String devImg;
     private String prodStudyUrl;
     private String designStudyUrl;
     private String devStudyUrl;

@@ -10,6 +10,7 @@ import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.dto.mail.*;
 import ceos.backend.global.common.entity.Part;
+import ceos.backend.global.util.DurationFormatter;
 import ceos.backend.global.util.ParsingDuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -40,7 +41,7 @@ public class AwsSESMailGenerator {
                 });
 
         List<String> partQ = new ArrayList<>(), partA = new ArrayList<>();
-        final Part part = request.getApplicationDetailVo().getPart();
+        final Part part = request.getPart();
         questions.stream()
                 .filter(question -> question.getCategory().toString().equals(part.toString()))
                 .sorted(Comparator.comparing(ApplicationQuestion::getNumber))
@@ -49,7 +50,10 @@ public class AwsSESMailGenerator {
                     partA.add(generateAnswer(request.getPartAnswers(), question));
                 });
 
-        List<ParsedDuration> parsedDurations = request.getUnableTimes().stream()
+
+        final List<String> unableTimes = DurationFormatter
+                .toStringDuration(request.getUnableTimes());
+        List<ParsedDuration> parsedDurations = unableTimes.stream()
                 .map(ParsingDuration::parsingDuration)
                 .sorted(Comparator.comparing(ParsedDuration::getDuration))
                 .sorted(Comparator.comparing(ParsedDuration::getDate))
@@ -67,14 +71,14 @@ public class AwsSESMailGenerator {
                         .collect(Collectors.toList())));
 
         Context context = new Context();
-        context.setVariable("greetInfo", GreetInfo.from(request));
+        context.setVariable("greetInfo", GreetInfo.of(request, awsSESMail.getGeneration()));
         context.setVariable("uuidInfo", UuidInfo.of(request.getApplicantInfoVo(),UUID));
         context.setVariable("personalInfo", PersonalInfo.from(request.getApplicantInfoVo()));
         context.setVariable("schoolInfo", SchoolInfo.from(request.getApplicantInfoVo()));
-        context.setVariable("ceosQuestionInfo", CeosQuestionInfo.from(request.getApplicationDetailVo()));
+        context.setVariable("ceosQuestionInfo", CeosQuestionInfo.from(request));
         context.setVariable("commonQuestionInfo", CommonQuestionInfo.of(commonQ, commonA));
         context.setVariable("partQuestionInfo",
-                PartQuestionInfo.of(request.getApplicationDetailVo().getPart().getPart(), partQ, partA));
+                PartQuestionInfo.of(request.getPart().getPart(), partQ, partA));
         context.setVariable("interviewDateInfo", InterviewDateInfo.of(times, dates));
 
         return context;

@@ -1,8 +1,7 @@
 package ceos.backend.domain.application.domain;
 
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.exception.NotPassDocument;
-import ceos.backend.domain.application.exception.SamePassStatus;
+import ceos.backend.domain.application.exception.*;
 import ceos.backend.global.common.annotation.DateTimeFormat;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -14,7 +13,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @DynamicInsert
 @Getter
@@ -51,6 +51,12 @@ public class Application extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Pass finalPass;
 
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+    private List<ApplicationAnswer> applicationAnswers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
+    private List<ApplicationInterview> applicationInterviews = new ArrayList<>();
+
     @Builder
     private Application(ApplicantInfo applicantInfo, ApplicationDetail applicationDetail) {
         this.applicantInfo = applicantInfo;
@@ -61,11 +67,19 @@ public class Application extends BaseEntity{
     }
 
     // 정적 팩토리 메서드
-    public static Application of(CreateApplicationRequest createApplicationRequest, String UUID) {
+    public static Application of(CreateApplicationRequest createApplicationRequest, int generation, String UUID) {
         return Application.builder()
                 .applicantInfo(ApplicantInfo.of(createApplicationRequest.getApplicantInfoVo(), UUID))
-                .applicationDetail(ApplicationDetail.from(createApplicationRequest.getApplicationDetailVo()))
+                .applicationDetail(ApplicationDetail.of(createApplicationRequest, generation))
                 .build();
+    }
+
+    public void addApplicationAnswerList(List<ApplicationAnswer> applicationAnswers) {
+        this.applicationAnswers = applicationAnswers;
+    }
+
+    public void addApplicationInterviewList(List<ApplicationInterview> applicationInterviews) {
+        this.applicationInterviews = applicationInterviews;
     }
 
     public void updateInterviewCheck(boolean check) {
@@ -98,5 +112,23 @@ public class Application extends BaseEntity{
 
     public void updateInterviewTime(String interviewTime) {
         this.interviewDatetime = interviewTime;
+    }
+
+    public void validateFinalPass() {
+        if (this.finalPass == Pass.FAIL) {
+            throw NotPassFinal.EXCEPTION;
+        }
+    }
+
+    public void validateNotFinalCheck() {
+        if (this.isFinalCheck()) {
+            throw AlreadyCheckFinal.EXCEPTION;
+        }
+    }
+
+    public void validateNotInterviewCheck() {
+        if (this.isInterviewCheck()) {
+            throw AlreadyCheckInterview.EXCEPTION;
+        }
     }
 }

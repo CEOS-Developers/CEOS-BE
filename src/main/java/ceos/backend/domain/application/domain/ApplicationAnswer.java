@@ -21,7 +21,7 @@ public class ApplicationAnswer extends BaseEntity {
     @JoinColumn(name = "application_question_id")
     private ApplicationQuestion applicationQuestion;
 
-    // Application : Answer : N:1 (단방향)
+    // Application : Answer : N:1 (양방향)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private Application application;
@@ -48,5 +48,9 @@ public class ApplicationAnswer extends BaseEntity {
                 .application(application)
                 .answer(answer)
                 .build();
+    }
+
+    public void setApplication(Application application) {
+        this.application = application;
     }
 }

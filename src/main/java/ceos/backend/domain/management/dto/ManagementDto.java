@@ -2,6 +2,7 @@ package ceos.backend.domain.management.dto;
 
 import ceos.backend.domain.management.Vo.ManagementVo;
 import ceos.backend.domain.management.domain.Management;
+import ceos.backend.domain.management.domain.ManagementPart;
 import ceos.backend.domain.management.domain.ManagementRole;
 import ceos.backend.global.common.annotation.ValidEnum;
 import ceos.backend.global.common.entity.University;
@@ -15,9 +16,10 @@ import lombok.Getter;
 @Getter
 public class ManagementDto {
 
+    private Long id;
     private String name;
     private ManagementRole role;
-    private String part;
+    private ManagementPart part;
     private int generation;
     private int managementGeneration;
     private University university;
@@ -26,7 +28,8 @@ public class ManagementDto {
     private String imageUrl;
 
     @Builder
-    private ManagementDto(String name, ManagementRole role, String part, int generation, int managementGeneration, University university, String major, String company, String imageUrl) {
+    private ManagementDto(Long id, String name, ManagementRole role, ManagementPart part, int generation, int managementGeneration, University university, String major, String company, String imageUrl) {
+        this.id = id;
         this.name = name;
         this.role = role;
         this.part = part;
@@ -54,6 +57,7 @@ public class ManagementDto {
 
     public static ManagementDto entityToDto(Management management) {
         return ManagementDto.builder()
+                .id(management.getId())
                 .name(management.getName())
                 .role(management.getRole())
                 .part(management.getPart())

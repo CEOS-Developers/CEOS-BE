@@ -5,6 +5,7 @@ import ceos.backend.global.config.jwt.JwtAuthenticationEntryPoint;
 import ceos.backend.global.config.jwt.JwtAuthenticationFilter;
 import ceos.backend.global.config.jwt.JwtExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
 import org.springframework.context.annotation.Bean;
@@ -30,18 +31,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
+    @Value("${server.url}")
+    private String SERVER_URL;
+
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private final String[] SwaggerPatterns = {
-            "/swagger-resources/**", "/swagger-ui/**", "/v3/api-docs/**", "/v3/api-docs"
+            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
     };
 
     private final String[] AdminPatterns = {
-            "/admin/password", "/admin/newpassword", "/admin/logout", "admin/refresh",
-            "/applications/**", "recruitments/**", "projects/**"
+            "/admin/newpassword", "/admin/logout", "admin/reissue",
+            "/applications/**", "recruitments/**", "projects/**", "activities/**", "awards/**"
+    };
+
+    private final String[] GetPermittedPatterns = {
+            "/awards/**", "recruitments/**", "projects/**", "activities/**"
+    };
+
+    private final String[] AllPermittedPattern = {
+            "/applications", "/applications/question", "/applications/document", "/applications/final"
     };
 
     private final String[] RootPatterns = {
@@ -71,7 +83,8 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .requestMatchers(HttpMethod.GET, "/projects/**").permitAll()
+                .requestMatchers(HttpMethod.GET, GetPermittedPatterns).permitAll()
+                .requestMatchers(AllPermittedPattern).permitAll()
                 .requestMatchers(SwaggerPatterns).permitAll()
                 .requestMatchers(AdminPatterns).hasAnyRole("ROOT", "ADMIN")
                 .requestMatchers(RootPatterns).hasRole("ROOT")
@@ -99,7 +112,8 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(
                 Arrays.asList(
                         "http://localhost:8080",
-                        "http://www.ceos-sinchon.com"
+                        "http://localhost:3000",
+                        SERVER_URL
                 )
         );
         configuration.setAllowedHeaders(List.of("*"));

@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 @Getter
 @RequiredArgsConstructor
 public enum ManagementRole {
-    MANAGEMENT("운영진"), MENTOR("멘토");
+    PRESIDENCY("회장단"), GENERAL_AFFAIRS("총무"), PART_LEADER("파트장"), MANAGEMENT("운영진"), MENTOR("멘토");
 
     @JsonValue
     private final String managementRole;
