@@ -4,6 +4,7 @@ import ceos.backend.domain.project.dto.request.ProjectRequest;
 import ceos.backend.domain.project.dto.response.GetProjectResponse;
 import ceos.backend.domain.project.dto.response.GetProjectsResponse;
 import ceos.backend.domain.project.service.ProjectService;
+import ceos.backend.global.common.dto.AwsS3Url;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -59,5 +60,12 @@ public class ProjectController {
     ) {
         log.info("프로젝트 삭제하기");
         projectService.deleteProject(projectId);
+    }
+
+    @Operation(summary = "프로젝트 이미지 url 생성하기")
+    @GetMapping("/image")
+    public AwsS3Url getImageUrl() {
+        log.info("프로젝트 이미지 url 생성하기");
+        return projectService.getImageUrl();
     }
 }
