@@ -9,7 +9,9 @@ import ceos.backend.domain.project.repository.*;
 import ceos.backend.domain.project.vo.ParticipantVo;
 import ceos.backend.domain.project.vo.ProjectImageVo;
 import ceos.backend.domain.project.vo.ProjectUrlVo;
+import ceos.backend.global.common.dto.AwsS3Url;
 import ceos.backend.global.common.dto.PageInfo;
+import ceos.backend.infra.s3.AwsS3UrlHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +32,8 @@ public class ProjectService {
     private final ProjectImageRepository projectImageRepository;
     private final ProjectUrlRepository projectUrlRepository;
     private final ParticipantRepository participantRepository;
+    private final AwsS3UrlHandler awsS3UrlHandler;
+
 
     @Transactional(readOnly = true)
     public GetProjectsResponse getProjects(int pageNum, int limit) {
@@ -90,5 +94,10 @@ public class ProjectService {
 
         //프로젝트 삭제
         projectRepository.delete(project);
+    }
+
+    @Transactional(readOnly = true)
+    public AwsS3Url getImageUrl(){
+        return awsS3UrlHandler.handle("projects");
     }
 }
