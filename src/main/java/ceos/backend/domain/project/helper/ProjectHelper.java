@@ -44,23 +44,15 @@ public class ProjectHelper {
     }
 
     public void validateProjectImages(List<ProjectImageVo> projectImageVos) {
-        if (projectImageVos.size() < 3) {
+        if (projectImageVos.size() < 2) {
             throw InvalidData.EXCEPTION;
         }
-        //for (ProjectImageCategory category : ProjectImageCategory.values()) {
-        //    if (projectImageRepository.findByCategory(category).size() > 1) {
-        //        throw InvalidData.EXCEPTION;
-        //    }
-        //}
+
+//        if (projectImageVos.get(0).getCategory()==projectImageVos.get(1).getCategory()) {
+//            throw InvalidData.EXCEPTION;
+//        }
     }
 
-    public void validateProjectUrls(List<ProjectUrlVo> projectUrlVos) {
-        for (ProjectUrlCategory category : ProjectUrlCategory.values()) {
-            if (projectUrlRepository.findByCategory(category).size() > 1) {
-                throw InvalidData.EXCEPTION;
-            }
-        }
-    }
 
     public void updateImages(Project project, List<ProjectImageVo> projectImageVos) {
 

@@ -2,10 +2,11 @@ package ceos.backend.domain.project.vo;
 
 import ceos.backend.domain.project.domain.Project;
 import ceos.backend.domain.project.domain.ProjectImage;
+import ceos.backend.domain.project.exception.DataNotFound;
 import lombok.Builder;
 import lombok.Getter;
 
-import static ceos.backend.domain.project.domain.ProjectImageCategory.PREVIEW;
+import static ceos.backend.domain.project.domain.ProjectImageCategory.THUMBNAIL;
 
 @Getter
 public class ProjectBriefInfoVo {
@@ -14,7 +15,7 @@ public class ProjectBriefInfoVo {
     private String name;
     private String description;
     private int generation;
-    private ProjectImage previewImage;
+    private ProjectImage thumbnailImage;
 
     @Builder
     public ProjectBriefInfoVo(
@@ -22,13 +23,13 @@ public class ProjectBriefInfoVo {
             String name,
             String description,
             int generation,
-            ProjectImage previewImage
+            ProjectImage thumbnailImage
     ) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.generation = generation;
-        this.previewImage = previewImage;
+        this.thumbnailImage = thumbnailImage;
     }
 
     public static ProjectBriefInfoVo from(Project project) {
@@ -37,10 +38,10 @@ public class ProjectBriefInfoVo {
                 .name(project.getName())
                 .description(project.getDescription())
                 .generation(project.getGeneration())
-                .previewImage(project.getProjectImages().stream()
-                        .filter(image -> image.getCategory().equals(PREVIEW))
+                .thumbnailImage(project.getProjectImages().stream()
+                        .filter(image -> image.getCategory().equals(THUMBNAIL))
                         .findFirst()
-                        .orElseThrow(null))
+                        .orElseThrow(() -> DataNotFound.EXCEPTION))
                 .build();
     }
 }
