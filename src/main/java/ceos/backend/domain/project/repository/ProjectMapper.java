@@ -20,10 +20,6 @@ import java.util.List;
 @Component
 public class ProjectMapper {
 
-//    public Project toEntity(AddProjectRequest addProjectRequest){
-//
-//    }
-
     public GetProjectsResponse toGetProjects(Page<Project> projectList, PageInfo pageInfo) {
         List<ProjectBriefInfoVo> projectBriefInfoVos = projectList.stream()
                 .map(ProjectBriefInfoVo::from)
