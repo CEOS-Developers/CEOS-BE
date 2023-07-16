@@ -118,7 +118,7 @@ public class ApplicationService {
     @Transactional
     public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
         // 기간 확인
-        applicationHelper.validateBeforeStartDateDoc();
+//        applicationHelper.validateBeforeStartDateDoc();
 
         // 남은 응답 확인
         applicationHelper.validateRemainApplications();
@@ -132,7 +132,8 @@ public class ApplicationService {
         applicationQuestionRepository.saveAll(questionListVo.getApplicationQuestions());
         applicationQuestionDetailRepository.saveAll(questionListVo.getApplicationQuestionDetails());
 
-        final List<Interview> interviews = applicationMapper.toInterviewList(updateApplicationQuestion.getTimes());
+        List<String> times = DurationFormatter.toStringDuration(updateApplicationQuestion.getTimes());
+        final List<Interview> interviews = applicationMapper.toInterviewList(times);
         interviewRepository.saveAll(interviews);
     }
 
