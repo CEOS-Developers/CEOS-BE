@@ -132,7 +132,8 @@ public class ApplicationService {
         applicationQuestionRepository.saveAll(questionListVo.getApplicationQuestions());
         applicationQuestionDetailRepository.saveAll(questionListVo.getApplicationQuestionDetails());
 
-        final List<Interview> interviews = applicationMapper.toInterviewList(updateApplicationQuestion.getTimes());
+        List<String> times = DurationFormatter.toStringDuration(updateApplicationQuestion.getTimes());
+        final List<Interview> interviews = applicationMapper.toInterviewList(times);
         interviewRepository.saveAll(interviews);
     }
 
