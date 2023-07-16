@@ -118,7 +118,7 @@ public class ApplicationService {
     @Transactional
     public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
         // 기간 확인
-//        applicationHelper.validateBeforeStartDateDoc();
+        applicationHelper.validateBeforeStartDateDoc();
 
         // 남은 응답 확인
         applicationHelper.validateRemainApplications();
