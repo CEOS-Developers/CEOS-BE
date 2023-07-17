@@ -1,6 +1,10 @@
 package ceos.backend.domain.application.repository;
 
 import ceos.backend.domain.application.domain.Application;
+import ceos.backend.domain.application.domain.Pass;
+import ceos.backend.global.common.entity.Part;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +29,12 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
     @Query("select count(a) > 0 from Application a" +
             " where a.applicantInfo.email = :email")
     boolean existsByEmail(@Param("email") String email);
+
+    @Query("select a from Application a" +
+            " where a.applicationDetail.part = :part")
+    Page<Application> findAllByPart(@Param("part")Part part, PageRequest pageRequest);
+
+    Page<Application> findAllByFinalPass(Pass fail, PageRequest pageRequest);
+
+    Page<Application> findAllByDocumentPass(Pass fail, PageRequest pageRequest);
 }

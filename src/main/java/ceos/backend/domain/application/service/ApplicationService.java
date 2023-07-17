@@ -3,6 +3,7 @@ package ceos.backend.domain.application.service;
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.*;
+import ceos.backend.domain.application.enums.SortType;
 import ceos.backend.domain.application.exception.FileCreationFailed;
 import ceos.backend.domain.application.helper.ApplicationExcelHelper;
 import ceos.backend.domain.application.helper.ApplicationHelper;
@@ -55,11 +56,22 @@ public class ApplicationService {
 
 
     @Transactional(readOnly = true)
-    public GetApplications getApplications(int pageNum, int limit) {
+    public GetApplications getApplications(int pageNum, int limit, SortType sortType) {
         //페이징 요청 정보
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
 
-        Page<Application> pageManagements = applicationRepository.findAll(pageRequest);
+        Page<Application> pageManagements = null;
+        switch (sortType) {
+            case BACKEND -> pageManagements = applicationRepository.findAllByPart(Part.BACKEND, pageRequest);
+            case FRONTEND -> pageManagements = applicationRepository.findAllByPart(Part.FRONTEND, pageRequest);
+            case DESIGN -> pageManagements = applicationRepository.findAllByPart(Part.DESIGN, pageRequest);
+            case PRODUCT -> pageManagements = applicationRepository.findAllByPart(Part.PRODUCT, pageRequest);
+            case FINALFAIL -> pageManagements = applicationRepository.findAllByFinalPass(Pass.FAIL, pageRequest);
+            case FINALPASS -> pageManagements = applicationRepository.findAllByFinalPass(Pass.PASS, pageRequest);
+            case DOCFAIL -> pageManagements = applicationRepository.findAllByDocumentPass(Pass.FAIL, pageRequest);
+            case DOCPASS -> pageManagements = applicationRepository.findAllByDocumentPass(Pass.PASS, pageRequest);
+        }
+
 
         //페이징 정보
         PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(), pageManagements.getTotalElements());
