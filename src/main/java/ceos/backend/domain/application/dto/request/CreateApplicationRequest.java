@@ -20,6 +20,7 @@ import java.util.List;
 
 @Getter
 public class CreateApplicationRequest {
+    @Valid
     @JsonUnwrapped
     private ApplicantInfoVo applicantInfoVo;
 
