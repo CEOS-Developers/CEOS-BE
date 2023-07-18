@@ -68,7 +68,7 @@ public class ApplicationMapper {
                         .contains(InterviewDateFormatter.interviewDateFormatter(interview)))
                 .map(interview -> ApplicationInterview.of(application, interview))
                 .toList();
-        if (applicationInterviews.isEmpty()) {
+        if (applicationInterviews.isEmpty() && !unableTimes.isEmpty()) {
             throw InterviewNotFound.EXCEPTION;
         }
         return applicationInterviews;
