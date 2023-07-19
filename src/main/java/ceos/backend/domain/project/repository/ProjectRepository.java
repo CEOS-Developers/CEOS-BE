@@ -11,7 +11,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Optional<Project> findByNameAndGeneration(String name, int generation);
     List<Project> findByGeneration(int generation);
 
-    @Query("SELECT MAX(a.generation) FROM Project a")
+    @Query("SELECT MAX(p.generation) FROM Project p")
     int findMaxGeneration();
 
 }
