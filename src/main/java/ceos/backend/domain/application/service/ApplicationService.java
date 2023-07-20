@@ -63,31 +63,26 @@ public class ApplicationService {
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
 
         Page<Application> pageManagements = null;
+        Part part = applicationMapper.toPart(sortType);
         if (docPass == SortPassType.ALL && finalPass == SortPassType.ALL) {
             switch (sortType) {
                 case ALL -> pageManagements = applicationRepository.findAll(pageRequest);
-                case BACKEND -> pageManagements = applicationRepository.findAllByPart(Part.BACKEND, pageRequest);
-                case FRONTEND -> pageManagements = applicationRepository.findAllByPart(Part.FRONTEND, pageRequest);
-                case DESIGN -> pageManagements = applicationRepository.findAllByPart(Part.DESIGN, pageRequest);
-                case PRODUCT -> pageManagements = applicationRepository.findAllByPart(Part.PRODUCT, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPart(applicationMapper.toPart(sortType), pageRequest);
             }
         } else if (docPass != SortPassType.ALL && finalPass == SortPassType.ALL) {
             Pass pass = applicationMapper.toPass(docPass);
             switch (sortType) {
                 case ALL -> pageManagements = applicationRepository.findAllByDocumentPass(pass, pageRequest);
-                case BACKEND -> pageManagements = applicationRepository.findAllByPartAndDocumentPass(Part.BACKEND, pass, pageRequest);
-                case FRONTEND -> pageManagements = applicationRepository.findAllByPartAndDocumentPass(Part.FRONTEND, pass, pageRequest);
-                case DESIGN -> pageManagements = applicationRepository.findAllByPartAndDocumentPass(Part.DESIGN, pass, pageRequest);
-                case PRODUCT -> pageManagements = applicationRepository.findAllByPartAndDocumentPass(Part.PRODUCT, pass, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPartAndDocumentPass(applicationMapper.toPart(sortType), pass, pageRequest);
             }
         } else if (docPass == SortPassType.ALL && finalPass != SortPassType.ALL){
             Pass pass = applicationMapper.toPass(finalPass);
             switch (sortType) {
                 case ALL -> pageManagements = applicationRepository.findAllByFinalPass(pass, pageRequest);
-                case BACKEND -> pageManagements = applicationRepository.findAllByPartAndFinalPass(Part.BACKEND, pass, pageRequest);
-                case FRONTEND -> pageManagements = applicationRepository.findAllByPartAndFinalPass(Part.FRONTEND, pass, pageRequest);
-                case DESIGN -> pageManagements = applicationRepository.findAllByPartAndFinalPass(Part.DESIGN, pass, pageRequest);
-                case PRODUCT -> pageManagements = applicationRepository.findAllByPartAndFinalPass(Part.PRODUCT, pass, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPartAndFinalPass(applicationMapper.toPart(sortType), pass, pageRequest);
             }
         } else {
             Pass convertedDocPass = applicationMapper.toPass(docPass);
@@ -95,14 +90,11 @@ public class ApplicationService {
             switch (sortType) {
                 case ALL -> pageManagements = applicationRepository
                         .findAllByDocumentPassAndFinalPass(convertedDocPass, convertedFinalPass, pageRequest);
-                case BACKEND -> pageManagements = applicationRepository
-                        .findAllByPartAndDocumentPassAndFinalPass(Part.BACKEND, convertedDocPass, convertedFinalPass, pageRequest);
-                case FRONTEND -> pageManagements = applicationRepository
-                        .findAllByPartAndDocumentPassAndFinalPass(Part.FRONTEND, convertedDocPass, convertedFinalPass, pageRequest);
-                case DESIGN -> pageManagements = applicationRepository
-                        .findAllByPartAndDocumentPassAndFinalPass(Part.DESIGN, convertedDocPass, convertedFinalPass, pageRequest);
-                case PRODUCT -> pageManagements = applicationRepository
-                        .findAllByPartAndDocumentPassAndFinalPass(Part.PRODUCT, convertedDocPass, convertedFinalPass, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPartAndDocumentPassAndFinalPass(applicationMapper.toPart(sortType),
+                                convertedDocPass,
+                                convertedFinalPass,
+                                pageRequest);
             }
         }
 
