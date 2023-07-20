@@ -32,9 +32,6 @@ public class RecruitmentService {
     public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest){
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
 
-        //지원 기간동안 수정할 수 없음
-        recruitment.validAmenablePeriod(LocalDate.now());
-
         // 객체 업데이트
         recruitment.updateRecruitment(updateRecruitmentRequest);
         recruitmentRepository.save(recruitment);
