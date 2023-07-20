@@ -9,12 +9,12 @@ import java.util.List;
 
 @Getter
 public class AllAwardsResponse {
-    private List<GenerationAwardsResponse> generationAwards;
+    private List<GenerationAwardsResponse> content;
     PageInfo pageInfo;
 
     @Builder
     private AllAwardsResponse(List<GenerationAwardsResponse> generationAwards, PageInfo pageInfo) {
-        this.generationAwards = generationAwards;
+        this.content = generationAwards;
         this.pageInfo = pageInfo;
     }
 

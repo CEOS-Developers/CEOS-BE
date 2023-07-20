@@ -10,12 +10,12 @@ import java.util.List;
 @Getter
 public class GetProjectsResponse {
 
-    private List<ProjectBriefInfoVo> projectBriefInfoVos;
+    private List<ProjectBriefInfoVo> content;
     private PageInfo pageInfo;
 
     @Builder
     private GetProjectsResponse(List<ProjectBriefInfoVo> ProjectBriefInfoVos, PageInfo pageInfo) {
-        this.projectBriefInfoVos = ProjectBriefInfoVos;
+        this.content = ProjectBriefInfoVos;
         this.pageInfo = pageInfo;
     }
 

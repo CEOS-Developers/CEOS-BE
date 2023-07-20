@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/mangements")
+@RequestMapping(value = "/managements")
 @Tag(name = "Management")
 public class ManagementController {
 

@@ -12,12 +12,12 @@ import java.util.List;
 
 @Getter
 public class GetApplications {
-    private List<ApplicationBriefInfoVo> applicationBriefInfoVos;
+    private List<ApplicationBriefInfoVo> content;
     PageInfo pageInfo;
 
     @Builder
     private GetApplications(List<ApplicationBriefInfoVo> applicationBriefInfoVos, PageInfo pageInfo) {
-        this.applicationBriefInfoVos = applicationBriefInfoVos;
+        this.content = applicationBriefInfoVos;
         this.pageInfo = pageInfo;
     }
 

@@ -44,7 +44,7 @@ public class AwardsService {
         }
 
         int startIndex = pageNum * limit;
-        int endIndex = Math.min(startIndex + limit, generationAwardsResponses.size());
+        int endIndex = Math.max(startIndex + limit, generationAwardsResponses.size());
         int totalElements = generationAwardsResponses.size();
         int totalPages = (int) Math.ceil((double) totalElements / limit);
 
