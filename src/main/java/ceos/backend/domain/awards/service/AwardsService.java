@@ -44,11 +44,14 @@ public class AwardsService {
         }
 
         int startIndex = pageNum * limit;
-        int endIndex = Math.max(startIndex + limit, generationAwardsResponses.size());
+        int endIndex = Math.min(startIndex + limit, generationAwardsResponses.size());
         int totalElements = generationAwardsResponses.size();
         int totalPages = (int) Math.ceil((double) totalElements / limit);
+        List<GenerationAwardsResponse> pageAwards = new ArrayList<>();
 
-        List<GenerationAwardsResponse> pageAwards = generationAwardsResponses.subList(startIndex, endIndex);
+        if(startIndex < endIndex){
+            pageAwards = generationAwardsResponses.subList(startIndex, endIndex);
+        }
 
         //페이징 정보
         PageInfo pageInfo = PageInfo.of(pageNum, limit, totalPages, totalElements);
