@@ -32,9 +32,30 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     @Query("select a from Application a" +
             " where a.applicationDetail.part = :part")
-    Page<Application> findAllByPart(@Param("part")Part part, PageRequest pageRequest);
+    Page<Application> findAllByPart(@Param("part") Part part, PageRequest pageRequest);
 
     Page<Application> findAllByFinalPass(Pass fail, PageRequest pageRequest);
 
     Page<Application> findAllByDocumentPass(Pass fail, PageRequest pageRequest);
+
+    @Query("select a from Application a" +
+            " where a.applicationDetail.part = :part" +
+            " and a.documentPass = :pass")
+    Page<Application> findAllByPartAndDocumentPass(@Param("part") Part backend, @Param("pass") Pass pass, PageRequest pageRequest);
+
+    @Query("select a from Application a" +
+            " where a.applicationDetail.part = :part" +
+            " and a.finalPass = :pass")
+    Page<Application> findAllByPartAndFinalPass(@Param("part") Part product, @Param("pass") Pass pass, PageRequest pageRequest);
+
+    Page<Application> findAllByDocumentPassAndFinalPass(Pass documentPass, Pass finalPass, PageRequest pageRequest);
+
+    @Query("select a from Application a" +
+            " where a.applicationDetail.part = :part" +
+            " and a.documentPass = :convertedDocPass" +
+            " and a.finalPass = :convertedFinalPass")
+    Page<Application> findAllByPartAndDocumentPassAndFinalPass(@Param("part") Part backend,
+                                                               @Param("convertedDocPass") Pass convertedDocPass,
+                                                               @Param("convertedFinalPass") Pass convertedFinalPass,
+                                                               PageRequest pageRequest);
 }

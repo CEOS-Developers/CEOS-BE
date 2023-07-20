@@ -2,7 +2,8 @@ package ceos.backend.domain.application;
 
 import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.*;
-import ceos.backend.domain.application.enums.SortType;
+import ceos.backend.domain.application.enums.SortPartType;
+import ceos.backend.domain.application.enums.SortPassType;
 import ceos.backend.domain.application.service.ApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,11 +28,13 @@ public class ApplicationController {
 
     @Operation(summary = "지원자 목록 보기")
     @GetMapping
-    public GetApplications getApplications(@RequestParam("sort")SortType sortType,
+    public GetApplications getApplications(@RequestParam("part") SortPartType part,
+                                           @RequestParam("docPass") SortPassType docPass,
+                                           @RequestParam("finalPass") SortPassType finalPass,
                                            @RequestParam("pageNum") int pageNum,
                                            @RequestParam("limit") int limit) {
         log.info("지원자 목록 보기");
-        return applicationService.getApplications(pageNum, limit, sortType);
+        return applicationService.getApplications(pageNum, limit, part, docPass, finalPass);
     }
 
     @Operation(summary = "지원하기")

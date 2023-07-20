@@ -4,6 +4,8 @@ import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
 import ceos.backend.domain.application.dto.response.*;
+import ceos.backend.domain.application.enums.SortPartType;
+import ceos.backend.domain.application.enums.SortPassType;
 import ceos.backend.domain.application.exception.InterviewNotFound;
 import ceos.backend.domain.application.exception.QuestionNotFound;
 import ceos.backend.domain.application.vo.*;
@@ -231,5 +233,31 @@ public class ApplicationMapper {
                 .map(ApplicationBriefInfoVo::from)
                 .toList();
         return GetApplications.of(applicationBriefInfoVos, pageInfo);
+    }
+
+    public Pass toPass(SortPassType passType) {
+        Pass pass = Pass.FAIL;
+        if (passType == SortPassType.PASS) {
+            pass = Pass.PASS;
+        }
+        return pass;
+    }
+
+    public Part toPart(SortPartType sortType) {
+        switch (sortType) {
+            case DESIGN -> {
+                return Part.DESIGN;
+            }
+            case BACKEND -> {
+                return Part.BACKEND;
+            }
+            case PRODUCT -> {
+                return Part.PRODUCT;
+            }
+            case FRONTEND -> {
+                return Part.FRONTEND;
+            }
+        }
+        return null;
     }
 }

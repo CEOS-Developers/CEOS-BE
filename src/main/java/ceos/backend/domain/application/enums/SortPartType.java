@@ -1,13 +1,9 @@
 package ceos.backend.domain.application.enums;
 
-public enum SortType {
+public enum SortPartType {
     ALL,
     FRONTEND,
     BACKEND,
     PRODUCT,
-    DESIGN,
-    FINALPASS,
-    FINALFAIL,
-    DOCPASS,
-    DOCFAIL
+    DESIGN
 }

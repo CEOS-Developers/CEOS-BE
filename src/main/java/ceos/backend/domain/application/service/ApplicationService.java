@@ -3,7 +3,8 @@ package ceos.backend.domain.application.service;
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.*;
-import ceos.backend.domain.application.enums.SortType;
+import ceos.backend.domain.application.enums.SortPartType;
+import ceos.backend.domain.application.enums.SortPassType;
 import ceos.backend.domain.application.exception.FileCreationFailed;
 import ceos.backend.domain.application.helper.ApplicationExcelHelper;
 import ceos.backend.domain.application.helper.ApplicationHelper;
@@ -56,23 +57,46 @@ public class ApplicationService {
 
 
     @Transactional(readOnly = true)
-    public GetApplications getApplications(int pageNum, int limit, SortType sortType) {
+    public GetApplications getApplications(int pageNum, int limit, SortPartType sortType,
+                                           SortPassType docPass, SortPassType finalPass) {
         //페이징 요청 정보
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
 
         Page<Application> pageManagements = null;
-        switch (sortType) {
-            case ALL -> pageManagements = applicationRepository.findAll(pageRequest);
-            case BACKEND -> pageManagements = applicationRepository.findAllByPart(Part.BACKEND, pageRequest);
-            case FRONTEND -> pageManagements = applicationRepository.findAllByPart(Part.FRONTEND, pageRequest);
-            case DESIGN -> pageManagements = applicationRepository.findAllByPart(Part.DESIGN, pageRequest);
-            case PRODUCT -> pageManagements = applicationRepository.findAllByPart(Part.PRODUCT, pageRequest);
-            case FINALFAIL -> pageManagements = applicationRepository.findAllByFinalPass(Pass.FAIL, pageRequest);
-            case FINALPASS -> pageManagements = applicationRepository.findAllByFinalPass(Pass.PASS, pageRequest);
-            case DOCFAIL -> pageManagements = applicationRepository.findAllByDocumentPass(Pass.FAIL, pageRequest);
-            case DOCPASS -> pageManagements = applicationRepository.findAllByDocumentPass(Pass.PASS, pageRequest);
+        Part part = applicationMapper.toPart(sortType);
+        if (docPass == SortPassType.ALL && finalPass == SortPassType.ALL) {
+            switch (sortType) {
+                case ALL -> pageManagements = applicationRepository.findAll(pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPart(applicationMapper.toPart(sortType), pageRequest);
+            }
+        } else if (docPass != SortPassType.ALL && finalPass == SortPassType.ALL) {
+            Pass pass = applicationMapper.toPass(docPass);
+            switch (sortType) {
+                case ALL -> pageManagements = applicationRepository.findAllByDocumentPass(pass, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPartAndDocumentPass(applicationMapper.toPart(sortType), pass, pageRequest);
+            }
+        } else if (docPass == SortPassType.ALL && finalPass != SortPassType.ALL){
+            Pass pass = applicationMapper.toPass(finalPass);
+            switch (sortType) {
+                case ALL -> pageManagements = applicationRepository.findAllByFinalPass(pass, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPartAndFinalPass(applicationMapper.toPart(sortType), pass, pageRequest);
+            }
+        } else {
+            Pass convertedDocPass = applicationMapper.toPass(docPass);
+            Pass convertedFinalPass = applicationMapper.toPass(finalPass);
+            switch (sortType) {
+                case ALL -> pageManagements = applicationRepository
+                        .findAllByDocumentPassAndFinalPass(convertedDocPass, convertedFinalPass, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPartAndDocumentPassAndFinalPass(applicationMapper.toPart(sortType),
+                                convertedDocPass,
+                                convertedFinalPass,
+                                pageRequest);
+            }
         }
-
 
         //페이징 정보
         PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(), pageManagements.getTotalElements());
