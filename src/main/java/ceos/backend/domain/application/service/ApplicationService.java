@@ -62,6 +62,7 @@ public class ApplicationService {
 
         Page<Application> pageManagements = null;
         switch (sortType) {
+            case ALL -> pageManagements = applicationRepository.findAll(pageRequest);
             case BACKEND -> pageManagements = applicationRepository.findAllByPart(Part.BACKEND, pageRequest);
             case FRONTEND -> pageManagements = applicationRepository.findAllByPart(Part.FRONTEND, pageRequest);
             case DESIGN -> pageManagements = applicationRepository.findAllByPart(Part.DESIGN, pageRequest);
