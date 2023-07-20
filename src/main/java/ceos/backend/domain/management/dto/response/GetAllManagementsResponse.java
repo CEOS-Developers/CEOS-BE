@@ -10,12 +10,12 @@ import java.util.List;
 @Getter
 public class GetAllManagementsResponse {
 
-    List<ManagementDto> managers;
+    List<ManagementDto> content;
     PageInfo pageInfo;
 
     @Builder
     private GetAllManagementsResponse(List<ManagementDto> managers, PageInfo pageInfo) {
-        this.managers = managers;
+        this.content = managers;
         this.pageInfo = pageInfo;
     }
 

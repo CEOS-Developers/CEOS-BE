@@ -8,12 +8,12 @@ import java.util.List;
 
 @Getter
 public class GetAllActivitiesResponse {
-    List<ActivityResponse> activities;
+    List<ActivityResponse> content;
     PageInfo pageInfo;
 
     @Builder
     private GetAllActivitiesResponse(List<ActivityResponse> activities, PageInfo pageInfo) {
-        this.activities = activities;
+        this.content = activities;
         this.pageInfo = pageInfo;
     }
 

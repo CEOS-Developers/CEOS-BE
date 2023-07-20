@@ -10,12 +10,12 @@ import java.util.List;
 @Getter
 public class GetAllSponsorsResponse {
 
-    List<SponsorDto> sponsors;
+    List<SponsorDto> content;
     PageInfo pageInfo;
 
     @Builder
     private GetAllSponsorsResponse(List<SponsorDto> sponsors, PageInfo pageInfo) {
-        this.sponsors = sponsors;
+        this.content = sponsors;
         this.pageInfo = pageInfo;
     }
 
