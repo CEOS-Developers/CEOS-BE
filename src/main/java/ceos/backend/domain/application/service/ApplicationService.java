@@ -5,20 +5,17 @@ import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.enums.SortPartType;
 import ceos.backend.domain.application.enums.SortPassType;
-import ceos.backend.domain.application.helper.ApplicationExcelHelper;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.domain.application.validator.ApplicationValidator;
 import ceos.backend.domain.application.vo.QuestionListVo;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
-import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
-import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.common.event.Event;
-import ceos.backend.global.util.DurationFormatter;
-import ceos.backend.global.util.ParsingDuration;
+import ceos.backend.global.util.InterviewDateTimeConvertor;
+import ceos.backend.global.util.ParsedDurationConvertor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -69,7 +66,7 @@ public class ApplicationService {
         applicationValidator.validateQAMatching(applicationQuestions, createApplicationRequest);
 
         // 엔티티 생성 및 저장
-        final String UUID = applicationValidator.generateUUID();
+        final String UUID = applicationHelper.generateUUID();
         final int generation = recruitmentHelper.takeRecruitment().getGeneration();
         final Application application = applicationMapper.toEntity(createApplicationRequest, generation, UUID);
         final List<Interview> interviews = interviewRepository.findAll();
@@ -78,7 +75,7 @@ public class ApplicationService {
                 = applicationMapper.toAnswerList(createApplicationRequest, application, applicationQuestions);
         applicationAnswerRepository.saveAll(applicationAnswers);
 
-        final List<String> unableTimes = DurationFormatter
+        final List<String> unableTimes = InterviewDateTimeConvertor
                 .toStringDuration(createApplicationRequest.getUnableTimes());
         final List<ApplicationInterview> applicationInterviews
                 = applicationMapper.toApplicationInterviewList(unableTimes, application, interviews);
@@ -89,7 +86,7 @@ public class ApplicationService {
         applicationRepository.save(application);
 
         // 이메일 전송
-        applicationValidator.sendEmail(createApplicationRequest, generation, UUID);
+        applicationHelper.sendEmail(createApplicationRequest, generation, UUID);
     }
 
     @Transactional(readOnly = true)
@@ -121,7 +118,7 @@ public class ApplicationService {
         applicationQuestionRepository.saveAll(questionListVo.getApplicationQuestions());
         applicationQuestionDetailRepository.saveAll(questionListVo.getApplicationQuestionDetails());
 
-        List<String> times = DurationFormatter.toStringDuration(updateApplicationQuestion.getTimes());
+        List<String> times = InterviewDateTimeConvertor.toStringDuration(updateApplicationQuestion.getTimes());
         final List<Interview> interviews = applicationMapper.toInterviewList(times);
         interviewRepository.saveAll(interviews);
     }
@@ -244,7 +241,7 @@ public class ApplicationService {
 
         // 인터뷰 시간 검증
         final List<Interview> interviews = interviewRepository.findAll();
-        final String duration = ParsingDuration.toStringDuration(updateInterviewTime.getParsedDuration());
+        final String duration = ParsedDurationConvertor.toStringDuration(updateInterviewTime.getParsedDuration());
         applicationValidator.validateInterviewTime(interviews, duration);
 
          // status 변경

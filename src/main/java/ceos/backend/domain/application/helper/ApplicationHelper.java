@@ -4,25 +4,18 @@ import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.enums.SortPartType;
 import ceos.backend.domain.application.enums.SortPassType;
-import ceos.backend.domain.application.exception.*;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
-import ceos.backend.domain.application.vo.ApplicantInfoVo;
-import ceos.backend.domain.recruitment.domain.Recruitment;
-import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.common.event.Event;
-import ceos.backend.global.util.InterviewDateFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -31,6 +24,7 @@ import java.util.UUID;
 public class ApplicationHelper {
     private final ApplicationMapper applicationMapper;
     private final ApplicationRepository applicationRepository;
+    private final ApplicationQuestionRepository applicationQuestionRepository;
 
 
     public Page<Application> getApplications(SortPassType docPass, SortPassType finalPass,
@@ -72,4 +66,21 @@ public class ApplicationHelper {
         }
         return pageManagements;
     }
+
+    public String generateUUID() {
+        String newUUID;
+        while (true) {
+            newUUID = UUID.randomUUID().toString();
+            if (applicationRepository.findByUuid(newUUID).isEmpty()) {
+                break;
+            }
+        }
+        return newUUID;
+    }
+
+    public void sendEmail(CreateApplicationRequest request, int generation, String UUID) {
+        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
+        Event.raise(AwsSESMail.of(request, applicationQuestions, generation, UUID));
+    }
+
 }

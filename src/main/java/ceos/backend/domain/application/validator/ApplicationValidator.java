@@ -13,16 +13,13 @@ import ceos.backend.domain.application.repository.ApplicationRepository;
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
-import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.entity.Part;
-import ceos.backend.global.common.event.Event;
-import ceos.backend.global.util.InterviewDateFormatter;
+import ceos.backend.global.util.InterviewConvertor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -38,23 +35,6 @@ public class ApplicationValidator {    private final ApplicationRepository appli
             throw DuplicateApplicant.EXCEPTION;
         }
     }
-
-    public String generateUUID() {
-        String newUUID;
-        while (true) {
-            newUUID = UUID.randomUUID().toString();
-            if (applicationRepository.findByUuid(newUUID).isEmpty()) {
-                break;
-            }
-        }
-        return newUUID;
-    }
-
-    public void sendEmail(CreateApplicationRequest request, int generation, String UUID) {
-        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
-        Event.raise(AwsSESMail.of(request, applicationQuestions, generation, UUID));
-    }
-
     public void validateRecruitOption() {
         final LocalDate now = LocalDate.now();
         final Recruitment recruitment = recruitmentHelper.takeRecruitment();
@@ -124,7 +104,7 @@ public class ApplicationValidator {    private final ApplicationRepository appli
     public void validateInterviewTime(List<Interview> interviews, String interviewTime) {
         if(interviews.stream()
                 .noneMatch(interview -> interviewTime
-                        .equals(InterviewDateFormatter.interviewDateFormatter(interview)))) {
+                        .equals(InterviewConvertor.interviewDateFormatter(interview)))) {
             throw InterviewNotFound.EXCEPTION;
         }
     }

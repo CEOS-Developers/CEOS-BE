@@ -3,12 +3,10 @@ package ceos.backend.global.util;
 import ceos.backend.domain.application.vo.InterviewDateTimesVo;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class DurationFormatter {
+public class InterviewDateTimeConvertor {
     public static List<String> toStringDuration(List<InterviewDateTimesVo> times) {
         List<String> stringDuration = new ArrayList<>();
         times.forEach(timesVo -> {
