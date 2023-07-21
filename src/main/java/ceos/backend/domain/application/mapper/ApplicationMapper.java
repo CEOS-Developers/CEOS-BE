@@ -234,30 +234,4 @@ public class ApplicationMapper {
                 .toList();
         return GetApplications.of(applicationBriefInfoVos, pageInfo);
     }
-
-    public Pass toPass(SortPassType passType) {
-        Pass pass = Pass.FAIL;
-        if (passType == SortPassType.PASS) {
-            pass = Pass.PASS;
-        }
-        return pass;
-    }
-
-    public Part toPart(SortPartType sortType) {
-        switch (sortType) {
-            case DESIGN -> {
-                return Part.DESIGN;
-            }
-            case BACKEND -> {
-                return Part.BACKEND;
-            }
-            case PRODUCT -> {
-                return Part.PRODUCT;
-            }
-            case FRONTEND -> {
-                return Part.FRONTEND;
-            }
-        }
-        return null;
-    }
 }

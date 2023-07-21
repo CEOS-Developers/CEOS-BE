@@ -33,35 +33,35 @@ public class ApplicationHelper {
     public Page<Application> getApplications(SortPassType docPass, SortPassType finalPass,
                                              SortPartType sortType, PageRequest pageRequest) {
         Page<Application> pageManagements = null;
-        Part part = applicationMapper.toPart(sortType);
+        Part part = toPart(sortType);
         if (docPass == SortPassType.ALL && finalPass == SortPassType.ALL) {
             switch (sortType) {
                 case ALL -> pageManagements = applicationRepository.findAll(pageRequest);
                 default -> pageManagements = applicationRepository
-                        .findAllByPart(applicationMapper.toPart(sortType), pageRequest);
+                        .findAllByPart(toPart(sortType), pageRequest);
             }
         } else if (docPass != SortPassType.ALL && finalPass == SortPassType.ALL) {
-            Pass pass = applicationMapper.toPass(docPass);
+            Pass pass = toPass(docPass);
             switch (sortType) {
                 case ALL -> pageManagements = applicationRepository.findAllByDocumentPass(pass, pageRequest);
                 default -> pageManagements = applicationRepository
-                        .findAllByPartAndDocumentPass(applicationMapper.toPart(sortType), pass, pageRequest);
+                        .findAllByPartAndDocumentPass(toPart(sortType), pass, pageRequest);
             }
         } else if (docPass == SortPassType.ALL && finalPass != SortPassType.ALL){
-            Pass pass = applicationMapper.toPass(finalPass);
+            Pass pass = toPass(finalPass);
             switch (sortType) {
                 case ALL -> pageManagements = applicationRepository.findAllByFinalPass(pass, pageRequest);
                 default -> pageManagements = applicationRepository
-                        .findAllByPartAndFinalPass(applicationMapper.toPart(sortType), pass, pageRequest);
+                        .findAllByPartAndFinalPass(toPart(sortType), pass, pageRequest);
             }
         } else {
-            Pass convertedDocPass = applicationMapper.toPass(docPass);
-            Pass convertedFinalPass = applicationMapper.toPass(finalPass);
+            Pass convertedDocPass = toPass(docPass);
+            Pass convertedFinalPass = toPass(finalPass);
             switch (sortType) {
                 case ALL -> pageManagements = applicationRepository
                         .findAllByDocumentPassAndFinalPass(convertedDocPass, convertedFinalPass, pageRequest);
                 default -> pageManagements = applicationRepository
-                        .findAllByPartAndDocumentPassAndFinalPass(applicationMapper.toPart(sortType),
+                        .findAllByPartAndDocumentPassAndFinalPass(toPart(sortType),
                                 convertedDocPass,
                                 convertedFinalPass,
                                 pageRequest);
@@ -108,5 +108,31 @@ public class ApplicationHelper {
                 .orElseThrow(() -> {
                     throw ApplicantNotFound.EXCEPTION;
                 });
+    }
+
+    private Pass toPass(SortPassType passType) {
+        Pass pass = Pass.FAIL;
+        if (passType == SortPassType.PASS) {
+            pass = Pass.PASS;
+        }
+        return pass;
+    }
+
+    private Part toPart(SortPartType sortType) {
+        switch (sortType) {
+            case DESIGN -> {
+                return Part.DESIGN;
+            }
+            case BACKEND -> {
+                return Part.BACKEND;
+            }
+            case PRODUCT -> {
+                return Part.PRODUCT;
+            }
+            case FRONTEND -> {
+                return Part.FRONTEND;
+            }
+        }
+        return null;
     }
 }
