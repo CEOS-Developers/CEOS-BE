@@ -63,9 +63,9 @@ public class AwardsService {
     }
 
     @Transactional(readOnly = true)
-    public AwardsResponse getAward(Long id) {
-        Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
-        return AwardsResponse.to(awards);
+    public GenerationAwardsResponse getGenerationAwards(int generation) {
+        GenerationAwardsResponse generationAwardsResponse = GenerationAwardsResponse.of(generation, awardsHelper.getAwardsDto(generation), awardsHelper.getProjectVo(generation));
+        return generationAwardsResponse;
     }
 
     @Transactional

@@ -37,11 +37,11 @@ public class AwardsController {
         return awardsService.getAllAwards(pageNum, limit);
     }
 
-    @Operation(summary = "수상이력 하나보기")
-    @GetMapping("/{awardId}")
-    public AwardsResponse getAward(@PathVariable(name = "awardId") Long awardID){
+    @Operation(summary = "기수별 수상이력 보기")
+    @GetMapping("/{generation}")
+    public GenerationAwardsResponse getGenerationAwards(@PathVariable(name = "generation") int generation){
         log.info("수상이력 하나보기");
-        return awardsService.getAward(awardID);
+        return awardsService.getGenerationAwards(generation);
     }
 
     @Operation(summary = "수상이력 수정하기")
