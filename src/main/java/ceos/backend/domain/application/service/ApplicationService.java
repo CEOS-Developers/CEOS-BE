@@ -11,11 +11,11 @@ import ceos.backend.domain.application.repository.*;
 import ceos.backend.domain.application.validator.ApplicationValidator;
 import ceos.backend.domain.application.vo.QuestionListVo;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
+import ceos.backend.domain.recruitment.validator.RecruitmentValidator;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ApplicationService {
@@ -39,6 +38,7 @@ public class ApplicationService {
     private final ApplicationValidator applicationValidator;
 
     private final RecruitmentHelper recruitmentHelper;
+    private final RecruitmentValidator recruitmentValidator;
 
 
     @Transactional(readOnly = true)
@@ -54,7 +54,7 @@ public class ApplicationService {
 
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
-        applicationValidator.validateBetweenStartDateDocAndEndDateDoc(); // 제출 기간
+        recruitmentValidator.validateBetweenStartDateDocAndEndDateDoc(); // 제출 기간
         applicationValidator.validateFirstApplication(createApplicationRequest.getApplicantInfoVo()); // 중복 검사
         applicationValidator.validateQAMatching(createApplicationRequest); // 질문 다 채웠나 검사
 
@@ -84,7 +84,6 @@ public class ApplicationService {
 
     @Transactional(readOnly = true)
     public GetApplicationQuestion getApplicationQuestion() {
-        // dto
         final List<ApplicationQuestion> applicationQuestions
                 = applicationQuestionRepository.findAll();
         final List<ApplicationQuestionDetail> applicationQuestionDetails
@@ -96,7 +95,7 @@ public class ApplicationService {
 
     @Transactional
     public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
-        applicationValidator.validateBeforeStartDateDoc(); // 기간 확인
+        recruitmentValidator.validateBeforeStartDateDoc(); // 기간 확인
         applicationValidator.validateRemainApplications(); // 남은 응답 확인
 
         applicationQuestionRepository.deleteAll();
@@ -114,7 +113,7 @@ public class ApplicationService {
 
     @Transactional(readOnly = true)
     public GetResultResponse getDocumentResult(String uuid, String email) {
-        applicationValidator.validateBetweenResultDateDocAndResultDateFinal(); // 서류 합격 기간 검증
+        recruitmentValidator.validateBetweenResultDateDocAndResultDateFinal(); // 서류 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
 
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
@@ -123,7 +122,7 @@ public class ApplicationService {
 
     @Transactional
     public void updateInterviewAttendance(String uuid, String email, UpdateAttendanceRequest request) {
-        applicationValidator.validateBetweenResultDateDocAndResultDateFinal(); // 서류 합격 기간 검증
+        recruitmentValidator.validateBetweenResultDateDocAndResultDateFinal(); // 서류 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
         applicationValidator.validateApplicantInterviewCheckStatus(application); // 서류합격, 인터뷰 체크 검증
@@ -138,7 +137,7 @@ public class ApplicationService {
 
     @Transactional(readOnly = true)
     public GetResultResponse getFinalResult(String uuid, String email) {
-        applicationValidator.validateFinalResultAbleDuration(); // 최종 합격 기간 검증
+        recruitmentValidator.validateFinalResultAbleDuration(); // 최종 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
         applicationValidator.validateApplicantDocumentPass(application); // 유저 서류 합격 여부 검증
@@ -148,7 +147,7 @@ public class ApplicationService {
 
     @Transactional
     public void updateParticipationAvailability(String uuid, String email, UpdateAttendanceRequest request) {
-        applicationValidator.validateFinalResultAbleDuration(); // 최종 합격 기간 검증
+        recruitmentValidator.validateFinalResultAbleDuration(); // 최종 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
         applicationValidator.validateApplicantActivityCheckStatus(application); // 유저 확인 여부 검증
@@ -193,7 +192,7 @@ public class ApplicationService {
 
     @Transactional
     public void updateInterviewTime(Long applicationId, UpdateInterviewTime updateInterviewTime) {
-        applicationValidator.validateDocumentPassDuration(); // 기간 검증
+        recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
         final Application application = applicationHelper.getApplicationById(applicationId);
         applicationValidator.validateDocumentPassStatus(application);  // 서류 통과 검증
@@ -201,13 +200,12 @@ public class ApplicationService {
         final String duration = ParsedDurationConvertor.toStringDuration(updateInterviewTime.getParsedDuration());
         applicationValidator.validateInterviewTime(interviews, duration); // 인터뷰 시간 검증
 
-         // status 변경
         application.updateInterviewTime(duration);
     }
 
     @Transactional
     public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
-        applicationValidator.validateDocumentPassDuration(); // 기간 검증
+        recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
 
         final Application application = applicationHelper.getApplicationById(applicationId);
@@ -216,7 +214,7 @@ public class ApplicationService {
 
     @Transactional
     public void updateFinalPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
-        applicationValidator.validateFinalPassDuration(); // 기간 검증
+        recruitmentValidator.validateBetweenResultDateDocAndResultDateFinal(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
         final Application application = applicationHelper.getApplicationById(applicationId);
         applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증

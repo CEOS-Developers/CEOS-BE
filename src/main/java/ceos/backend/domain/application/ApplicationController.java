@@ -108,7 +108,7 @@ public class ApplicationController {
         return applicationService.getInterviewTime(applicationId);
     }
 
-    @Operation(summary = "면접 시간 결정하기, 서류 접수 날짜 ~ 서류 결과 발표 전 날")
+    @Operation(summary = "면접 시간 결정하기", description = "startDateDoc ~ resultDateDoc 전날")
     @PatchMapping(value = "/{applicationId}/interview")
     public void updateInterviewTime(@PathVariable("applicationId") Long applicationId,
                                     @RequestBody @Valid UpdateInterviewTime updateInterviewTime) {
@@ -116,7 +116,7 @@ public class ApplicationController {
         applicationService.updateInterviewTime(applicationId, updateInterviewTime);
     }
 
-    @Operation(summary = "서류 합격 여부 변경, 서류 접수 날짜 ~ 서류 결과 발표 전 날")
+    @Operation(summary = "서류 합격 여부 변경", description = "startDateDoc ~ resultDateDoc 전날")
     @PatchMapping(value = "/{applicationId}/document")
     public void updateDocumentPassStatus(@PathVariable("applicationId") Long applicationId,
                                          @RequestBody @Valid UpdatePassStatus updatePassStatus) {
@@ -124,7 +124,7 @@ public class ApplicationController {
         applicationService.updateDocumentPassStatus(applicationId, updatePassStatus);
     }
 
-    @Operation(summary = "최종 합격 여부 변경, 서류 결과 발표 날짜 ~ 최종 결과 발표 전 날")
+    @Operation(summary = "최종 합격 여부 변경", description = "resultDateDoc ~ ResultDateFinal 전날")
     @PatchMapping(value = "/{applicationId}/final")
     public void updateFinalPassStatus(@PathVariable("applicationId") Long applicationId,
                                       @RequestBody @Valid UpdatePassStatus updatePassStatus) {

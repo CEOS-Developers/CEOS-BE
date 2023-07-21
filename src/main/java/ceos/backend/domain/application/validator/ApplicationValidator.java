@@ -11,33 +11,26 @@ import ceos.backend.domain.application.repository.ApplicationInterviewRepository
 import ceos.backend.domain.application.repository.ApplicationQuestionRepository;
 import ceos.backend.domain.application.repository.ApplicationRepository;
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
-import ceos.backend.domain.recruitment.domain.Recruitment;
-import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.InterviewConvertor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class ApplicationValidator {    private final ApplicationRepository applicationRepository;
+public class ApplicationValidator {
+    private final ApplicationRepository applicationRepository;
     private final ApplicationQuestionRepository applicationQuestionRepository;
     private final ApplicationInterviewRepository applicationInterviewRepository;
     private final ApplicationAnswerRepository applicationAnswerRepository;
-    private final RecruitmentHelper recruitmentHelper;
 
     public void validateFirstApplication(ApplicantInfoVo applicantInfoVo) {
         if (applicationRepository
                 .existsByEmail(applicantInfoVo.getEmail())) {
             throw DuplicateApplicant.EXCEPTION;
         }
-    }
-    public void validateBetweenStartDateDocAndEndDateDoc() {
-        recruitmentHelper.takeRecruitment()
-                .validateBetweenStartDateDocAndEndDateDoc(LocalDate.now());
     }
 
     public void validateApplicantAccessible(String uuid, String email) {
@@ -47,17 +40,6 @@ public class ApplicationValidator {    private final ApplicationRepository appli
                 throw ApplicantNotFound.EXCEPTION;
             });
     }
-
-    public void validateBetweenResultDateDocAndResultDateFinal() {
-        recruitmentHelper.takeRecruitment()
-                .validateBetweenResultDateDocAndResultDateFinal(LocalDate.now());
-    }
-
-    public void validateFinalResultAbleDuration() {
-        recruitmentHelper.takeRecruitment()
-                .validateFinalResultAbleDuration(LocalDate.now());
-    }
-
 
     public void validateApplicantDocumentPass(Application application) {
         application.validateDocumentPass();
@@ -74,22 +56,12 @@ public class ApplicationValidator {    private final ApplicationRepository appli
         application.validateNotFinalCheck();
     }
 
-    public void validateDocumentPassDuration() {
-        recruitmentHelper.takeRecruitment()
-                .validateDocumentPassDuration(LocalDate.now());
-    }
-
     public void validateExistingApplicant(Long applicationId) {
         applicationRepository
             .findById(applicationId)
             .orElseThrow(() -> {
                 throw ApplicantNotFound.EXCEPTION;
             });
-    }
-
-    public void validateFinalPassDuration() {
-        recruitmentHelper.takeRecruitment()
-                .validateFinalPassDuration(LocalDate.now());
     }
 
     public void validateDocumentPassStatus(Application application) {
@@ -102,11 +74,6 @@ public class ApplicationValidator {    private final ApplicationRepository appli
                         .equals(InterviewConvertor.interviewDateFormatter(interview)))) {
             throw InterviewNotFound.EXCEPTION;
         }
-    }
-
-    public void validateBeforeStartDateDoc() {
-        recruitmentHelper.takeRecruitment()
-                .validateBeforeStartDateDoc(LocalDate.now());
     }
 
     public void validateRemainApplications() {
