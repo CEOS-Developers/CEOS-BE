@@ -39,7 +39,7 @@ public class ApplicationController {
         return applicationService.getApplications(pageNum, limit, part, docPass, finalPass);
     }
 
-    @Operation(summary = "지원하기")
+    @Operation(summary = "지원하기", description = "startDateDoc ~ endDateDoc 전날")
     @PostMapping
     public void createApplication(@RequestBody @Valid CreateApplicationRequest createApplicationRequest) {
         log.info("지원하기");
@@ -53,14 +53,14 @@ public class ApplicationController {
         return applicationService.getApplicationQuestion();
     }
 
-    @Operation(summary = "지원서 질문 수정")
+    @Operation(summary = "지원서 질문 수정", description = "~ startDateDoc 전날")
     @PutMapping(value = "/question")
     public void updateApplicationQuestion(@RequestBody @Valid UpdateApplicationQuestion updateApplicationQuestion) {
         log.info("지원서 질문 수정");
         applicationService.updateApplicationQuestion(updateApplicationQuestion);
     }
 
-    @Operation(summary = "서류 합격 여부 확인하기")
+    @Operation(summary = "서류 합격 여부 확인하기", description = "resultDateDoc ~ resultDateFinal 전날")
     @GetMapping(value = "/document")
     public GetResultResponse getDocumentResult(@RequestParam("uuid") String uuid,
                                                @RequestParam("email") String email) {
@@ -68,7 +68,7 @@ public class ApplicationController {
         return applicationService.getDocumentResult(uuid, email);
     }
 
-    @Operation(summary = "면접 참여 가능 여부 선택")
+    @Operation(summary = "면접 참여 가능 여부 선택", description = "resultDateDoc ~ resultDateFinal 전날")
     @PatchMapping(value = "/interview")
     public void updateInterviewAttendance(@RequestParam("uuid") String uuid,
                                           @RequestParam("email") String email,
@@ -77,7 +77,7 @@ public class ApplicationController {
         applicationService.updateInterviewAttendance(uuid, email, request);
     }
 
-    @Operation(summary = "최종 합격 여부 확인하기")
+    @Operation(summary = "최종 합격 여부 확인하기", description = "resultDateFinal ~ resultDateFinal 4일 후")
     @GetMapping(value = "/final")
     public GetResultResponse getFinalResult(@RequestParam("uuid") String uuid,
                                             @RequestParam("email") String email) {
@@ -85,13 +85,13 @@ public class ApplicationController {
         return applicationService.getFinalResult(uuid, email);
     }
 
-    @Operation(summary = "활동 가능 여부 선택")
+    @Operation(summary = "활동 가능 여부 선택", description = "resultDateFinal ~ resultDateFinal 4일 후")
     @PatchMapping(value = "/pass")
-    public void updateActivityAvailability(@RequestParam("uuid") String uuid,
+    public void updateParticipationAvailability(@RequestParam("uuid") String uuid,
                                            @RequestParam("email") String email,
                                            @RequestBody UpdateAttendanceRequest request) {
         log.info("활동 가능 여부 선택");
-        applicationService.updateActivityAvailability(uuid, email, request);
+        applicationService.updateParticipationAvailability(uuid, email, request);
     }
 
     @Operation(summary = "지원자 자기소개서 보기")

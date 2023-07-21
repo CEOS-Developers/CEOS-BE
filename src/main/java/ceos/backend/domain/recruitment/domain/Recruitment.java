@@ -127,7 +127,7 @@ public class Recruitment extends BaseEntity {
         }
     }
 
-    public void validateApplyDuration(LocalDate now) {
+    public void validateBetweenStartDateDocAndEndDateDoc(LocalDate now) {
         if (now.compareTo(this.getStartDateDoc()) < 0) {
             throw NotApplicationDuration.EXCEPTION;
         }
@@ -136,7 +136,7 @@ public class Recruitment extends BaseEntity {
         }
     }
 
-    public void validateDocumentResultDuration(LocalDate now) {
+    public void validateBetweenResultDateDocAndResultDateFinal(LocalDate now) {
         if (now.compareTo(this.resultDateDoc) < 0) {
             throw NotDocumentResultCheckDuration.EXCEPTION;
         }
@@ -145,7 +145,7 @@ public class Recruitment extends BaseEntity {
         }
     }
 
-    public void validateFinalResultDuration(LocalDate now) {
+    public void validateFinalResultAbleDuration(LocalDate now) {
         if (now.compareTo(this.resultDateFinal.plusDays(5)) >= 0) {
             throw NotFinalResultCheckDuration.EXCEPTION;
         }

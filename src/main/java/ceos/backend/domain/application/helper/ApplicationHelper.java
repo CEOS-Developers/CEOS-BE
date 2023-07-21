@@ -2,11 +2,14 @@ package ceos.backend.domain.application.helper;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
 import ceos.backend.domain.application.enums.SortPartType;
 import ceos.backend.domain.application.enums.SortPassType;
+import ceos.backend.domain.application.exception.ApplicantNotFound;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.global.common.dto.AwsSESMail;
+import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.common.event.Event;
 import lombok.RequiredArgsConstructor;
@@ -83,4 +86,27 @@ public class ApplicationHelper {
         Event.raise(AwsSESMail.of(request, applicationQuestions, generation, UUID));
     }
 
+    public void sendSlackUnableReasonMessage(Application application,
+                                             UpdateAttendanceRequest request,
+                                             boolean isfinal) {
+        final SlackUnavailableReason reason =
+                SlackUnavailableReason.of(application, request.getReason(), isfinal);
+        Event.raise(reason);
+    }
+
+    public Application getApplicationById(Long id) {
+        return applicationRepository
+                .findById(id)
+                .orElseThrow(() -> {
+                    throw ApplicantNotFound.EXCEPTION;
+                });
+    }
+
+    public Application getApplicationByUuidAndEmail(String uuid, String email) {
+        return applicationRepository
+                .findByUuidAndEmail(uuid, email)
+                .orElseThrow(() -> {
+                    throw ApplicantNotFound.EXCEPTION;
+                });
+    }
 }

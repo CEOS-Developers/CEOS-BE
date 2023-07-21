@@ -12,8 +12,6 @@ import ceos.backend.domain.application.validator.ApplicationValidator;
 import ceos.backend.domain.application.vo.QuestionListVo;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.PageInfo;
-import ceos.backend.global.common.dto.SlackUnavailableReason;
-import ceos.backend.global.common.event.Event;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
 import lombok.RequiredArgsConstructor;
@@ -36,11 +34,11 @@ public class ApplicationService {
     private final ApplicationInterviewRepository applicationInterviewRepository;
     private final ApplicationQuestionDetailRepository applicationQuestionDetailRepository;
 
-    private final RecruitmentHelper recruitmentHelper;
-
     private final ApplicationMapper applicationMapper;
     private final ApplicationHelper applicationHelper;
     private final ApplicationValidator applicationValidator;
+
+    private final RecruitmentHelper recruitmentHelper;
 
 
     @Transactional(readOnly = true)
@@ -49,34 +47,29 @@ public class ApplicationService {
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
         Page<Application> pageManagements = applicationHelper
                 .getApplications(docPass, finalPass, sortType, pageRequest);
-        PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(), pageManagements.getTotalElements());
+        PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(),
+                pageManagements.getTotalElements());
         return applicationMapper.toGetApplications(pageManagements, pageInfo);
     }
 
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
-        // 제출 기간, 기수 검사
-        applicationValidator.validateRecruitOption();
+        applicationValidator.validateBetweenStartDateDocAndEndDateDoc(); // 제출 기간
+        applicationValidator.validateFirstApplication(createApplicationRequest.getApplicantInfoVo()); // 중복 검사
+        applicationValidator.validateQAMatching(createApplicationRequest); // 질문 다 채웠나 검사
 
-        // 중복 검사
-        applicationValidator.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
-
-        // 질문 다 채웠나 검사
-        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
-        applicationValidator.validateQAMatching(applicationQuestions, createApplicationRequest);
-
-        // 엔티티 생성 및 저장
         final String UUID = applicationHelper.generateUUID();
         final int generation = recruitmentHelper.takeRecruitment().getGeneration();
         final Application application = applicationMapper.toEntity(createApplicationRequest, generation, UUID);
-        final List<Interview> interviews = interviewRepository.findAll();
 
+        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
         final List<ApplicationAnswer> applicationAnswers
                 = applicationMapper.toAnswerList(createApplicationRequest, application, applicationQuestions);
         applicationAnswerRepository.saveAll(applicationAnswers);
 
         final List<String> unableTimes = InterviewDateTimeConvertor
                 .toStringDuration(createApplicationRequest.getUnableTimes());
+        final List<Interview> interviews = interviewRepository.findAll();
         final List<ApplicationInterview> applicationInterviews
                 = applicationMapper.toApplicationInterviewList(unableTimes, application, interviews);
         applicationInterviewRepository.saveAll(applicationInterviews);
@@ -103,13 +96,9 @@ public class ApplicationService {
 
     @Transactional
     public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
-        // 기간 확인
-        applicationValidator.validateBeforeStartDateDoc();
+        applicationValidator.validateBeforeStartDateDoc(); // 기간 확인
+        applicationValidator.validateRemainApplications(); // 남은 응답 확인
 
-        // 남은 응답 확인
-        applicationValidator.validateRemainApplications();
-
-        // 변경
         applicationQuestionRepository.deleteAll();
         applicationQuestionDetailRepository.deleteAll();
         interviewRepository.deleteAll();
@@ -125,81 +114,58 @@ public class ApplicationService {
 
     @Transactional(readOnly = true)
     public GetResultResponse getDocumentResult(String uuid, String email) {
-        // 서류 합격 기간 검증
-        applicationValidator.validateDocumentResultOption();
+        applicationValidator.validateBetweenResultDateDocAndResultDateFinal(); // 서류 합격 기간 검증
+        applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
 
-        // 유저 검증
-        final Application application = applicationValidator.validateApplicantAccessible(uuid, email);
-
-        // dto
+        final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
         return applicationMapper.toGetResultResponse(application, true);
     }
 
     @Transactional
     public void updateInterviewAttendance(String uuid, String email, UpdateAttendanceRequest request) {
-        // 서류 합격 기간 검증
-        applicationValidator.validateDocumentResultOption();
+        applicationValidator.validateBetweenResultDateDocAndResultDateFinal(); // 서류 합격 기간 검증
+        applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
+        final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
+        applicationValidator.validateApplicantInterviewCheckStatus(application); // 서류합격, 인터뷰 체크 검증
 
-        // 유저 검증
-        final Application application = applicationValidator.validateApplicantAccessible(uuid, email);
-
-        // 유저 확인 여부 검증
-        applicationValidator.validateApplicantInterviewCheckStatus(application);
-
-        // 슬랙
         if (request.isAvailable()) {
             application.updateInterviewCheck(true);
             applicationRepository.save(application);
         } else {
-            final SlackUnavailableReason reason =
-                    SlackUnavailableReason.of(application, request.getReason(), false);
-            Event.raise(reason);
+            applicationHelper.sendSlackUnableReasonMessage(application, request, false);
         }
     }
 
     @Transactional(readOnly = true)
     public GetResultResponse getFinalResult(String uuid, String email) {
-        // 최종 합격 기간 검증
-        applicationValidator.validateFinalResultOption();
+        applicationValidator.validateFinalResultAbleDuration(); // 최종 합격 기간 검증
+        applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
+        final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
+        applicationValidator.validateApplicantDocumentPass(application); // 유저 서류 합격 여부 검증
 
-        // 유저 검증
-        final Application application = applicationValidator.validateApplicantAccessible(uuid, email);
-
-        // 유저 서류 합격 여부 검증
-        applicationValidator.validateApplicantDocumentPass(application);
-
-        // dto 생성
         return applicationMapper.toGetResultResponse(application, false);
     }
 
     @Transactional
-    public void updateActivityAvailability(String uuid, String email, UpdateAttendanceRequest request) {
-        // 최종 합격 기간 검증
-        applicationValidator.validateFinalResultOption();
+    public void updateParticipationAvailability(String uuid, String email, UpdateAttendanceRequest request) {
+        applicationValidator.validateFinalResultAbleDuration(); // 최종 합격 기간 검증
+        applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
+        final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
+        applicationValidator.validateApplicantActivityCheckStatus(application); // 유저 확인 여부 검증
 
-        // 유저 검증
-        final Application application = applicationValidator.validateApplicantAccessible(uuid, email);
-
-        // 유저 확인 여부 검증
-        applicationValidator.validateApplicantActivityCheckStatus(application);
-
-        // 슬랙
         if (request.isAvailable()) {
             application.updateFinalCheck(true);
             applicationRepository.save(application);
         } else {
-            final SlackUnavailableReason reason
-                    = SlackUnavailableReason.of(application, request.getReason(), true);
-            Event.raise(reason);
+            applicationHelper.sendSlackUnableReasonMessage(application, request, true);
         }
     }
 
     @Transactional(readOnly = true)
     public GetApplication getApplication(Long applicationId) {
-        // 유저 검증
-        final Application application = applicationValidator.validateExistingApplicant(applicationId);
+        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
 
-        // dto
+        final Application application = applicationHelper.getApplicationById(applicationId);
         final List<Interview> interviews = interviewRepository.findAll();
         final List<ApplicationInterview> applicationInterviews
                 = applicationInterviewRepository.findAllByApplication(application);
@@ -215,13 +181,10 @@ public class ApplicationService {
 
     @Transactional(readOnly = true)
     public GetInterviewTime getInterviewTime(Long applicationId) {
-        // 유저 검증
-        final Application application = applicationValidator.validateExistingApplicant(applicationId);
+        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
+        final Application application = applicationHelper.getApplicationById(applicationId);
+        applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
 
-        // 서류 통과 검증
-        applicationValidator.validateDocumentPassStatus(application);
-
-        // dto
         final List<Interview> interviews = interviewRepository.findAll();
         final List<ApplicationInterview> applicationInterviews
                 = applicationInterviewRepository.findAllByApplication(application);
@@ -230,19 +193,13 @@ public class ApplicationService {
 
     @Transactional
     public void updateInterviewTime(Long applicationId, UpdateInterviewTime updateInterviewTime) {
-        // 기간 검증
-        applicationValidator.validateDocumentPassDuration();
-
-        // 유저 검증
-        final Application application = applicationValidator.validateExistingApplicant(applicationId);
-
-        // 서류 통과 검증
-        applicationValidator.validateDocumentPassStatus(application);
-
-        // 인터뷰 시간 검증
+        applicationValidator.validateDocumentPassDuration(); // 기간 검증
+        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
+        final Application application = applicationHelper.getApplicationById(applicationId);
+        applicationValidator.validateDocumentPassStatus(application);  // 서류 통과 검증
         final List<Interview> interviews = interviewRepository.findAll();
         final String duration = ParsedDurationConvertor.toStringDuration(updateInterviewTime.getParsedDuration());
-        applicationValidator.validateInterviewTime(interviews, duration);
+        applicationValidator.validateInterviewTime(interviews, duration); // 인터뷰 시간 검증
 
          // status 변경
         application.updateInterviewTime(duration);
@@ -250,28 +207,20 @@ public class ApplicationService {
 
     @Transactional
     public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
-        // 기간 검증
-        applicationValidator.validateDocumentPassDuration();
+        applicationValidator.validateDocumentPassDuration(); // 기간 검증
+        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
 
-        // 유저 검증
-        final Application application = applicationValidator.validateExistingApplicant(applicationId);
-
-        // status 변경
+        final Application application = applicationHelper.getApplicationById(applicationId);
         application.updateDocumentPass(updatePassStatus.getPass());
     }
 
     @Transactional
     public void updateFinalPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
-        // 기간 검증
-        applicationValidator.validateFinalPassDuration();
+        applicationValidator.validateFinalPassDuration(); // 기간 검증
+        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
+        final Application application = applicationHelper.getApplicationById(applicationId);
+        applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
 
-        // 유저 검증
-        final Application application = applicationValidator.validateExistingApplicant(applicationId);
-
-        // 서류 통과 검증
-        applicationValidator.validateDocumentPassStatus(application);
-
-        // status 변경
         application.updateFinalPass(updatePassStatus.getPass());
     }
 }

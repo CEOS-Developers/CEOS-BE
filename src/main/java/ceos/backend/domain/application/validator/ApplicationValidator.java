@@ -35,30 +35,27 @@ public class ApplicationValidator {    private final ApplicationRepository appli
             throw DuplicateApplicant.EXCEPTION;
         }
     }
-    public void validateRecruitOption() {
-        final LocalDate now = LocalDate.now();
-        final Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        recruitment.validateApplyDuration(now);
-    }
-
-    public Application validateApplicantAccessible(String uuid, String email) {
-        return applicationRepository
-                .findByUuidAndEmail(uuid, email)
-                .orElseThrow(() -> {
-                    throw ApplicantNotFound.EXCEPTION;
-                });
-    }
-
-    public void validateDocumentResultOption() {
-        final LocalDate now = LocalDate.now();
+    public void validateBetweenStartDateDocAndEndDateDoc() {
         recruitmentHelper.takeRecruitment()
-                .validateDocumentResultDuration(now);
+                .validateBetweenStartDateDocAndEndDateDoc(LocalDate.now());
     }
 
-    public void validateFinalResultOption() {
-        LocalDate now = LocalDate.now();
+    public void validateApplicantAccessible(String uuid, String email) {
+        applicationRepository
+            .findByUuidAndEmail(uuid, email)
+            .orElseThrow(() -> {
+                throw ApplicantNotFound.EXCEPTION;
+            });
+    }
+
+    public void validateBetweenResultDateDocAndResultDateFinal() {
         recruitmentHelper.takeRecruitment()
-                .validateFinalResultDuration(now);
+                .validateBetweenResultDateDocAndResultDateFinal(LocalDate.now());
+    }
+
+    public void validateFinalResultAbleDuration() {
+        recruitmentHelper.takeRecruitment()
+                .validateFinalResultAbleDuration(LocalDate.now());
     }
 
 
@@ -78,23 +75,21 @@ public class ApplicationValidator {    private final ApplicationRepository appli
     }
 
     public void validateDocumentPassDuration() {
-        LocalDate now = LocalDate.now();
         recruitmentHelper.takeRecruitment()
-                .validateDocumentPassDuration(now);
+                .validateDocumentPassDuration(LocalDate.now());
     }
 
-    public Application validateExistingApplicant(Long applicationId) {
-        return applicationRepository
-                .findById(applicationId)
-                .orElseThrow(() -> {
-                    throw ApplicantNotFound.EXCEPTION;
-                });
+    public void validateExistingApplicant(Long applicationId) {
+        applicationRepository
+            .findById(applicationId)
+            .orElseThrow(() -> {
+                throw ApplicantNotFound.EXCEPTION;
+            });
     }
 
     public void validateFinalPassDuration() {
-        LocalDate now = LocalDate.now();
         recruitmentHelper.takeRecruitment()
-                .validateFinalPassDuration(now);
+                .validateFinalPassDuration(LocalDate.now());
     }
 
     public void validateDocumentPassStatus(Application application) {
@@ -110,9 +105,8 @@ public class ApplicationValidator {    private final ApplicationRepository appli
     }
 
     public void validateBeforeStartDateDoc() {
-        LocalDate now = LocalDate.now();
         recruitmentHelper.takeRecruitment()
-                .validateBeforeStartDateDoc(now);
+                .validateBeforeStartDateDoc(LocalDate.now());
     }
 
     public void validateRemainApplications() {
@@ -124,7 +118,8 @@ public class ApplicationValidator {    private final ApplicationRepository appli
         }
     }
 
-    public void validateQAMatching(List<ApplicationQuestion> applicationQuestions, CreateApplicationRequest createApplicationRequest) {
+    public void validateQAMatching(CreateApplicationRequest createApplicationRequest) {
+        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
         if (applicationQuestions.stream()
                 .filter(question -> question.getCategory() == QuestionCategory.COMMON)
                 .count() != createApplicationRequest.getCommonAnswers().size()) {
