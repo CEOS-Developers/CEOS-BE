@@ -1,5 +1,6 @@
 package ceos.backend.domain.admin.exception;
 
+
 import ceos.backend.global.error.BaseErrorException;
 
 public class MismatchPassword extends BaseErrorException {
@@ -10,4 +11,3 @@ public class MismatchPassword extends BaseErrorException {
         super(AdminErrorCode.MISMATCH_PASSWORD);
     }
 }
-

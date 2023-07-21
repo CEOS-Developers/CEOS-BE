@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.service;
 
+
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.*;
@@ -15,13 +16,12 @@ import ceos.backend.domain.recruitment.validator.RecruitmentValidator;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,38 +40,50 @@ public class ApplicationService {
     private final RecruitmentHelper recruitmentHelper;
     private final RecruitmentValidator recruitmentValidator;
 
-
     @Transactional(readOnly = true)
-    public GetApplications getApplications(int pageNum, int limit, SortPartType sortType,
-                                           SortPassType docPass, SortPassType finalPass) {
+    public GetApplications getApplications(
+            int pageNum,
+            int limit,
+            SortPartType sortType,
+            SortPassType docPass,
+            SortPassType finalPass) {
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
-        Page<Application> pageManagements = applicationHelper
-                .getApplications(docPass, finalPass, sortType, pageRequest);
-        PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(),
-                pageManagements.getTotalElements());
+        Page<Application> pageManagements =
+                applicationHelper.getApplications(docPass, finalPass, sortType, pageRequest);
+        PageInfo pageInfo =
+                PageInfo.of(
+                        pageNum,
+                        limit,
+                        pageManagements.getTotalPages(),
+                        pageManagements.getTotalElements());
         return applicationMapper.toGetApplications(pageManagements, pageInfo);
     }
 
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
         recruitmentValidator.validateBetweenStartDateDocAndEndDateDoc(); // 제출 기간
-        applicationValidator.validateFirstApplication(createApplicationRequest.getApplicantInfoVo()); // 중복 검사
+        applicationValidator.validateFirstApplication(
+                createApplicationRequest.getApplicantInfoVo()); // 중복 검사
         applicationValidator.validateQAMatching(createApplicationRequest); // 질문 다 채웠나 검사
 
         final String UUID = applicationHelper.generateUUID();
         final int generation = recruitmentHelper.takeRecruitment().getGeneration();
-        final Application application = applicationMapper.toEntity(createApplicationRequest, generation, UUID);
+        final Application application =
+                applicationMapper.toEntity(createApplicationRequest, generation, UUID);
 
-        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
-        final List<ApplicationAnswer> applicationAnswers
-                = applicationMapper.toAnswerList(createApplicationRequest, application, applicationQuestions);
+        final List<ApplicationQuestion> applicationQuestions =
+                applicationQuestionRepository.findAll();
+        final List<ApplicationAnswer> applicationAnswers =
+                applicationMapper.toAnswerList(
+                        createApplicationRequest, application, applicationQuestions);
         applicationAnswerRepository.saveAll(applicationAnswers);
 
-        final List<String> unableTimes = InterviewDateTimeConvertor
-                .toStringDuration(createApplicationRequest.getUnableTimes());
+        final List<String> unableTimes =
+                InterviewDateTimeConvertor.toStringDuration(
+                        createApplicationRequest.getUnableTimes());
         final List<Interview> interviews = interviewRepository.findAll();
-        final List<ApplicationInterview> applicationInterviews
-                = applicationMapper.toApplicationInterviewList(unableTimes, application, interviews);
+        final List<ApplicationInterview> applicationInterviews =
+                applicationMapper.toApplicationInterviewList(unableTimes, application, interviews);
         applicationInterviewRepository.saveAll(applicationInterviews);
 
         application.addApplicationAnswerList(applicationAnswers);
@@ -84,13 +96,13 @@ public class ApplicationService {
 
     @Transactional(readOnly = true)
     public GetApplicationQuestion getApplicationQuestion() {
-        final List<ApplicationQuestion> applicationQuestions
-                = applicationQuestionRepository.findAll();
-        final List<ApplicationQuestionDetail> applicationQuestionDetails
-                = applicationQuestionDetailRepository.findAll();
+        final List<ApplicationQuestion> applicationQuestions =
+                applicationQuestionRepository.findAll();
+        final List<ApplicationQuestionDetail> applicationQuestionDetails =
+                applicationQuestionDetailRepository.findAll();
         final List<Interview> interviews = interviewRepository.findAll();
-        return applicationMapper.toGetApplicationQuestion(applicationQuestions,
-                applicationQuestionDetails, interviews);
+        return applicationMapper.toGetApplicationQuestion(
+                applicationQuestions, applicationQuestionDetails, interviews);
     }
 
     @Transactional
@@ -102,11 +114,13 @@ public class ApplicationService {
         applicationQuestionDetailRepository.deleteAll();
         interviewRepository.deleteAll();
 
-        final QuestionListVo questionListVo = applicationMapper.toQuestionList(updateApplicationQuestion);
+        final QuestionListVo questionListVo =
+                applicationMapper.toQuestionList(updateApplicationQuestion);
         applicationQuestionRepository.saveAll(questionListVo.getApplicationQuestions());
         applicationQuestionDetailRepository.saveAll(questionListVo.getApplicationQuestionDetails());
 
-        List<String> times = InterviewDateTimeConvertor.toStringDuration(updateApplicationQuestion.getTimes());
+        List<String> times =
+                InterviewDateTimeConvertor.toStringDuration(updateApplicationQuestion.getTimes());
         final List<Interview> interviews = applicationMapper.toInterviewList(times);
         interviewRepository.saveAll(interviews);
     }
@@ -121,7 +135,8 @@ public class ApplicationService {
     }
 
     @Transactional
-    public void updateInterviewAttendance(String uuid, String email, UpdateAttendanceRequest request) {
+    public void updateInterviewAttendance(
+            String uuid, String email, UpdateAttendanceRequest request) {
         recruitmentValidator.validateBetweenResultDateDocAndResultDateFinal(); // 서류 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
@@ -146,7 +161,8 @@ public class ApplicationService {
     }
 
     @Transactional
-    public void updateParticipationAvailability(String uuid, String email, UpdateAttendanceRequest request) {
+    public void updateParticipationAvailability(
+            String uuid, String email, UpdateAttendanceRequest request) {
         recruitmentValidator.validateFinalResultAbleDuration(); // 최종 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
@@ -166,16 +182,21 @@ public class ApplicationService {
 
         final Application application = applicationHelper.getApplicationById(applicationId);
         final List<Interview> interviews = interviewRepository.findAll();
-        final List<ApplicationInterview> applicationInterviews
-                = applicationInterviewRepository.findAllByApplication(application);
-        final List<ApplicationQuestion> applicationQuestions
-                = applicationQuestionRepository.findAll();
-        final List<ApplicationQuestionDetail> applicationQuestionDetails
-                = applicationQuestionDetailRepository.findAll();
-        final List<ApplicationAnswer> applicationAnswers
-                = applicationAnswerRepository.findAllByApplication(application);
-        return applicationMapper.toGetApplication(application, interviews, applicationInterviews,
-                applicationQuestions, applicationQuestionDetails, applicationAnswers);
+        final List<ApplicationInterview> applicationInterviews =
+                applicationInterviewRepository.findAllByApplication(application);
+        final List<ApplicationQuestion> applicationQuestions =
+                applicationQuestionRepository.findAll();
+        final List<ApplicationQuestionDetail> applicationQuestionDetails =
+                applicationQuestionDetailRepository.findAll();
+        final List<ApplicationAnswer> applicationAnswers =
+                applicationAnswerRepository.findAllByApplication(application);
+        return applicationMapper.toGetApplication(
+                application,
+                interviews,
+                applicationInterviews,
+                applicationQuestions,
+                applicationQuestionDetails,
+                applicationAnswers);
     }
 
     @Transactional(readOnly = true)
@@ -185,8 +206,8 @@ public class ApplicationService {
         applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
 
         final List<Interview> interviews = interviewRepository.findAll();
-        final List<ApplicationInterview> applicationInterviews
-                = applicationInterviewRepository.findAllByApplication(application);
+        final List<ApplicationInterview> applicationInterviews =
+                applicationInterviewRepository.findAllByApplication(application);
         return applicationMapper.toGetInterviewTime(interviews, applicationInterviews);
     }
 
@@ -195,9 +216,10 @@ public class ApplicationService {
         recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
         final Application application = applicationHelper.getApplicationById(applicationId);
-        applicationValidator.validateDocumentPassStatus(application);  // 서류 통과 검증
+        applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
         final List<Interview> interviews = interviewRepository.findAll();
-        final String duration = ParsedDurationConvertor.toStringDuration(updateInterviewTime.getParsedDuration());
+        final String duration =
+                ParsedDurationConvertor.toStringDuration(updateInterviewTime.getParsedDuration());
         applicationValidator.validateInterviewTime(interviews, duration); // 인터뷰 시간 검증
 
         application.updateInterviewTime(duration);

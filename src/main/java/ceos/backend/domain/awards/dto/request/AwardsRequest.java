@@ -1,13 +1,13 @@
 package ceos.backend.domain.awards.dto.request;
 
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
 
 @Getter
 public class AwardsRequest {
@@ -33,7 +33,7 @@ public class AwardsRequest {
         this.startDate = startDate;
     }
 
-    public static AwardsRequest of(int generation, String content, LocalDate startDate){
+    public static AwardsRequest of(int generation, String content, LocalDate startDate) {
         return AwardsRequest.builder()
                 .generation(generation)
                 .content(content)

@@ -1,7 +1,8 @@
 package ceos.backend.domain.application.vo;
 
-import ceos.backend.domain.application.domain.ApplicationDetail;
+
 import ceos.backend.domain.application.domain.Application;
+import ceos.backend.domain.application.domain.ApplicationDetail;
 import ceos.backend.global.common.annotation.DateFormat;
 import ceos.backend.global.common.annotation.ValidEnum;
 import ceos.backend.global.common.entity.Part;
@@ -9,12 +10,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,7 +24,8 @@ public class ApplicationDetailVo {
     @Positive
     private int generation;
 
-    @Schema(type = "string",
+    @Schema(
+            type = "string",
             pattern = "yyyy.MM.dd",
             defaultValue = "2023.03.20",
             description = "ot 날짜")
@@ -32,7 +33,8 @@ public class ApplicationDetailVo {
     @DateFormat
     private LocalDate otDate;
 
-    @Schema(type = "string",
+    @Schema(
+            type = "string",
             pattern = "yyyy.MM.dd",
             defaultValue = "2023.03.20",
             description = "데모데이 날짜")
@@ -49,8 +51,12 @@ public class ApplicationDetailVo {
     private Part part;
 
     @Builder
-    private ApplicationDetailVo(int generation, LocalDate otDate, LocalDate demodayDate,
-                               String otherActivities, Part part) {
+    private ApplicationDetailVo(
+            int generation,
+            LocalDate otDate,
+            LocalDate demodayDate,
+            String otherActivities,
+            Part part) {
         this.generation = generation;
         this.otDate = otDate;
         this.demodayDate = demodayDate;

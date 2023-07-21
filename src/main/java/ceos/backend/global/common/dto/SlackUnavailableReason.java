@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto;
 
+
 import ceos.backend.domain.application.domain.Application;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,8 @@ public class SlackUnavailableReason {
         this.isFinal = isFinal;
     }
 
-    public static SlackUnavailableReason of(Application application, String reason, boolean isFinal) {
+    public static SlackUnavailableReason of(
+            Application application, String reason, boolean isFinal) {
         return SlackUnavailableReason.builder()
                 .application(application)
                 .reason(reason)

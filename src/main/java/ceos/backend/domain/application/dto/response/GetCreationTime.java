@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.dto.response;
 
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,8 +14,6 @@ public class GetCreationTime {
     }
 
     public static GetCreationTime from(String createAt) {
-        return GetCreationTime.builder()
-                .createAt(createAt)
-                .build();
+        return GetCreationTime.builder().createAt(createAt).build();
     }
 }

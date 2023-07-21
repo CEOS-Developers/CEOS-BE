@@ -1,10 +1,10 @@
 package ceos.backend.domain.recruitment.dto.response;
 
+
 import ceos.backend.domain.recruitment.domain.Recruitment;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
 
 @Getter
 @Builder

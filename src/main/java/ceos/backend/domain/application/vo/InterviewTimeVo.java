@@ -1,10 +1,8 @@
 package ceos.backend.domain.application.vo;
 
+
 import ceos.backend.global.common.dto.ParsedDuration;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,8 +10,7 @@ import lombok.Getter;
 public class InterviewTimeVo {
     private boolean isUnavailable;
 
-    @JsonUnwrapped
-    private ParsedDuration parsedDuration;
+    @JsonUnwrapped private ParsedDuration parsedDuration;
 
     @Builder
     private InterviewTimeVo(boolean isUnavailable, ParsedDuration parsedDuration) {

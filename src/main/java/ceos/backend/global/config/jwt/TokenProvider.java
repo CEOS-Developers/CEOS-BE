@@ -1,5 +1,6 @@
 package ceos.backend.global.config.jwt;
 
+
 import ceos.backend.domain.admin.exception.NotRefreshToken;
 import ceos.backend.global.config.user.AdminDetails;
 import ceos.backend.global.config.user.AdminDetailsService;
@@ -7,6 +8,11 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
+import java.security.Key;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -16,12 +22,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-
-import java.security.Key;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -33,14 +33,17 @@ public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
     private static final String ACCESS_KEY = "access";
     private static final String REFRESH_KEY = "refresh";
+
     @Value("${jwt.secret}")
     private String secret;
+
     @Value("${jwt.accesstoken-validity-in-seconds}")
     private int accessExpirationTime;
+
     @Value("${jwt.refreshtoken-validity-in-seconds}")
     private int refreshExpirationTime;
-    private Key key;
 
+    private Key key;
 
     @Override
     public void afterPropertiesSet() {
@@ -50,19 +53,20 @@ public class TokenProvider implements InitializingBean {
 
     public String getAccessToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if(bearerToken != null && bearerToken.startsWith("Bearer ")) {
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring("Bearer ".length());
         }
         return null;
     }
 
     public String createAccessToken(Long id, Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+        String authorities =
+                authentication.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.joining(","));
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, accessExpirationTime);  // 만료일 하루
+        cal.add(Calendar.SECOND, accessExpirationTime); // 만료일 하루
 
         final Date issuedAt = new Date();
         final Date validity = new Date(cal.getTimeInMillis());
@@ -79,32 +83,31 @@ public class TokenProvider implements InitializingBean {
     }
 
     public String createRefreshToken(Long id, Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+        String authorities =
+                authentication.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.joining(","));
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.SECOND, refreshExpirationTime);  // 만료일 14일
+        cal.add(Calendar.SECOND, refreshExpirationTime); // 만료일 14일
 
         final Date issuedAt = new Date();
         final Date validity = new Date(cal.getTimeInMillis());
 
-        String refreshToken = Jwts.builder()
-                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setSubject(id.toString())
-                .claim(AUTHORITIES_KEY, authorities)
-                .claim("type", REFRESH_KEY)
-                .setIssuedAt(issuedAt)
-                .setExpiration(validity)
-                .signWith(key, SignatureAlgorithm.HS512)
-                .compact();
+        String refreshToken =
+                Jwts.builder()
+                        .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                        .setSubject(id.toString())
+                        .claim(AUTHORITIES_KEY, authorities)
+                        .claim("type", REFRESH_KEY)
+                        .setIssuedAt(issuedAt)
+                        .setExpiration(validity)
+                        .signWith(key, SignatureAlgorithm.HS512)
+                        .compact();
 
-        redisTemplate.opsForValue().set(
-                id.toString(),
-                refreshToken,
-                refreshExpirationTime,
-                TimeUnit.MILLISECONDS
-        );
+        redisTemplate
+                .opsForValue()
+                .set(id.toString(), refreshToken, refreshExpirationTime, TimeUnit.MILLISECONDS);
 
         return refreshToken;
     }
@@ -118,12 +121,17 @@ public class TokenProvider implements InitializingBean {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
-                .getBody().getSubject();
+                .getBody()
+                .getSubject();
     }
 
     public Authentication getAuthentication(String token) {
-        AdminDetails adminDetails = (AdminDetails) adminDetailsService.loadAdminByUsername(Long.parseLong(getTokenUserId(token)));
-        return new UsernamePasswordAuthenticationToken(adminDetails, token, adminDetails.getAuthorities());
+        AdminDetails adminDetails =
+                (AdminDetails)
+                        adminDetailsService.loadAdminByUsername(
+                                Long.parseLong(getTokenUserId(token)));
+        return new UsernamePasswordAuthenticationToken(
+                adminDetails, token, adminDetails.getAuthorities());
     }
 
     public boolean validateAccessToken(String token) {
@@ -144,11 +152,8 @@ public class TokenProvider implements InitializingBean {
     }
 
     public void validateRefreshToken(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims =
+                Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         String typeValue = claims.get("type", String.class);
         if (!typeValue.equals("refresh")) {
             throw NotRefreshToken.EXCEPTION;

@@ -1,16 +1,16 @@
 package ceos.backend.domain.application.helper;
 
+
 import ceos.backend.domain.application.domain.ApplicationInterview;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.domain.Interview;
 import ceos.backend.domain.application.repository.InterviewRepository;
 import ceos.backend.global.util.InterviewConvertor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
@@ -18,7 +18,8 @@ public class ApplicationExcelHelper {
 
     private final InterviewRepository interviewRepository;
 
-    public Map<Long, Integer> getQuestionIndexMap(List<String> headers, List<ApplicationQuestion> questionList) {
+    public Map<Long, Integer> getQuestionIndexMap(
+            List<String> headers, List<ApplicationQuestion> questionList) {
         Map<Long, Integer> questionIndexMap = new HashMap<>();
         int colIndex = headers.size();
         for (ApplicationQuestion applicationQuestion : questionList) {
@@ -39,7 +40,9 @@ public class ApplicationExcelHelper {
         }
         return interviewTimeMap;
     }
-    public String getPossibleInterview(Map<Long, String> interviewTimeMap, List<ApplicationInterview> applicationInterviews) {
+
+    public String getPossibleInterview(
+            Map<Long, String> interviewTimeMap, List<ApplicationInterview> applicationInterviews) {
         String possibleInterview = "";
         for (ApplicationInterview interview : applicationInterviews) {
             possibleInterview += interviewTimeMap.get(interview.getInterview().getId()) + "\n";

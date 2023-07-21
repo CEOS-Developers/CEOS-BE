@@ -1,5 +1,6 @@
 package ceos.backend.domain.activity.dto;
 
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -31,10 +32,6 @@ public class ActivityRequest {
     }
 
     public static ActivityRequest of(String name, String content, String imageUrl) {
-        return ActivityRequest.builder()
-                .name(name)
-                .content(content)
-                .imageUrl(imageUrl)
-                .build();
+        return ActivityRequest.builder().name(name).content(content).imageUrl(imageUrl).build();
     }
 }

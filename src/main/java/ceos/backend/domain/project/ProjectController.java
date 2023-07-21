@@ -1,5 +1,6 @@
 package ceos.backend.domain.project;
 
+
 import ceos.backend.domain.project.dto.request.ProjectRequest;
 import ceos.backend.domain.project.dto.response.GetProjectResponse;
 import ceos.backend.domain.project.dto.response.GetProjectsResponse;
@@ -23,17 +24,15 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 목록 보기")
     @GetMapping
-    public GetProjectsResponse getProjects(@RequestParam("pageNum") int pageNum,
-                                           @RequestParam("limit") int limit) {
+    public GetProjectsResponse getProjects(
+            @RequestParam("pageNum") int pageNum, @RequestParam("limit") int limit) {
         log.info("프로젝트 목록 보기");
         return projectService.getProjects(pageNum, limit);
     }
 
     @Operation(summary = "프로젝트 하나 보기")
     @GetMapping("/{projectId}")
-    public GetProjectResponse getProject(
-            @PathVariable("projectId") Long projectId
-    ) {
+    public GetProjectResponse getProject(@PathVariable("projectId") Long projectId) {
         log.info("프로젝트 하나 보기");
         return projectService.getProject(projectId);
     }
@@ -47,17 +46,15 @@ public class ProjectController {
 
     @Operation(summary = "프로젝트 수정하기")
     @PatchMapping
-    public void updateProject(@RequestParam("id") Long projectId,
-                              @RequestBody @Valid ProjectRequest projectRequest) {
+    public void updateProject(
+            @RequestParam("id") Long projectId, @RequestBody @Valid ProjectRequest projectRequest) {
         log.info("프로젝트 수정하기");
         projectService.updateProject(projectId, projectRequest);
     }
 
     @Operation(summary = "프로젝트 삭제하기")
     @DeleteMapping("/{projectId}")
-    public void deleteActivity(
-            @PathVariable Long projectId
-    ) {
+    public void deleteActivity(@PathVariable Long projectId) {
         log.info("프로젝트 삭제하기");
         projectService.deleteProject(projectId);
     }

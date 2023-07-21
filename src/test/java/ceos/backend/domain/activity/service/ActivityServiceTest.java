@@ -1,20 +1,20 @@
-//package ceos.backend.domain.activity.service;
+// package ceos.backend.domain.activity.service;
 //
-//import ceos.backend.domain.activity.dto.ActivityRequest;
-//import ceos.backend.domain.activity.dto.ActivityResponse;
-//import ceos.backend.domain.activity.exception.ActivityNotFound;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.transaction.annotation.Transactional;
+// import ceos.backend.domain.activity.dto.ActivityRequest;
+// import ceos.backend.domain.activity.dto.ActivityResponse;
+// import ceos.backend.domain.activity.exception.ActivityNotFound;
+// import org.junit.jupiter.api.DisplayName;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.boot.test.context.SpringBootTest;
+// import org.springframework.transaction.annotation.Transactional;
 //
-//import static org.assertj.core.api.Assertions.*;
-//import static org.junit.jupiter.api.Assertions.assertThrows;
+// import static org.assertj.core.api.Assertions.*;
+// import static org.junit.jupiter.api.Assertions.assertThrows;
 //
-//@SpringBootTest
-//@Transactional
-//class ActivityServiceTest {
+// @SpringBootTest
+// @Transactional
+// class ActivityServiceTest {
 //
 //    @Autowired
 //    private ActivityService activityService;
@@ -83,4 +83,4 @@
 //            throw new ActivityNotFound();
 //        });
 //    }
-//}
+// }

@@ -1,5 +1,6 @@
 package ceos.backend.domain.project.domain;
 
+
 import ceos.backend.domain.project.vo.ParticipantVo;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.Part;
@@ -27,7 +28,7 @@ public class Participant extends BaseEntity {
     @Size(max = 30)
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // Cascade
+    @ManyToOne(fetch = FetchType.LAZY) // Cascade
     @JsonBackReference
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;

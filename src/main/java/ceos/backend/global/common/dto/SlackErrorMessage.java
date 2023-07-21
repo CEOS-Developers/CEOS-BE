@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto;
 
+
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -10,7 +11,8 @@ public class SlackErrorMessage {
     private ContentCachingRequestWrapper contentCachingRequestWrapper;
 
     @Builder
-    private SlackErrorMessage(Exception exception, ContentCachingRequestWrapper contentCachingRequestWrapper) {
+    private SlackErrorMessage(
+            Exception exception, ContentCachingRequestWrapper contentCachingRequestWrapper) {
         this.exception = exception;
         this.contentCachingRequestWrapper = contentCachingRequestWrapper;
     }

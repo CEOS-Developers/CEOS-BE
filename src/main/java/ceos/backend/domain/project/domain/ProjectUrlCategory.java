@@ -1,11 +1,11 @@
 package ceos.backend.domain.project.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
@@ -15,8 +15,7 @@ public enum ProjectUrlCategory {
     BEHANCE("비핸스"),
     INSTAGRAM("인스타");
 
-    @JsonValue
-    private final String projectUrlCategory;
+    @JsonValue private final String projectUrlCategory;
 
     @JsonCreator
     public static ProjectUrlCategory parsing(String inputValue) {

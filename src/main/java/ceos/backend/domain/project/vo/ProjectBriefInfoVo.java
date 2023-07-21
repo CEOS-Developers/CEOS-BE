@@ -1,12 +1,12 @@
 package ceos.backend.domain.project.vo;
 
+import static ceos.backend.domain.project.domain.ProjectImageCategory.THUMBNAIL;
+
 import ceos.backend.domain.project.domain.Project;
 import ceos.backend.domain.project.domain.ProjectImage;
 import ceos.backend.domain.project.exception.DataNotFound;
 import lombok.Builder;
 import lombok.Getter;
-
-import static ceos.backend.domain.project.domain.ProjectImageCategory.THUMBNAIL;
 
 @Getter
 public class ProjectBriefInfoVo {
@@ -19,12 +19,7 @@ public class ProjectBriefInfoVo {
 
     @Builder
     public ProjectBriefInfoVo(
-            Long id,
-            String name,
-            String description,
-            int generation,
-            ProjectImage thumbnailImage
-    ) {
+            Long id, String name, String description, int generation, ProjectImage thumbnailImage) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -38,10 +33,11 @@ public class ProjectBriefInfoVo {
                 .name(project.getName())
                 .description(project.getDescription())
                 .generation(project.getGeneration())
-                .thumbnailImage(project.getProjectImages().stream()
-                        .filter(image -> image.getCategory().equals(THUMBNAIL))
-                        .findFirst()
-                        .orElseThrow(() -> DataNotFound.EXCEPTION))
+                .thumbnailImage(
+                        project.getProjectImages().stream()
+                                .filter(image -> image.getCategory().equals(THUMBNAIL))
+                                .findFirst()
+                                .orElseThrow(() -> DataNotFound.EXCEPTION))
                 .build();
     }
 }

@@ -1,11 +1,13 @@
 package ceos.backend.domain.application.domain;
 
+
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.exception.*;
-import ceos.backend.global.common.annotation.DateTimeFormat;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,25 +15,20 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @DynamicInsert
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Application extends BaseEntity{
+public class Application extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "application_id")
     private Long id;
 
-    @Embedded
-    private ApplicantInfo applicantInfo;
+    @Embedded private ApplicantInfo applicantInfo;
 
-    @Embedded
-    private ApplicationDetail applicationDetail;
+    @Embedded private ApplicationDetail applicationDetail;
 
     private String interviewDatetime;
 
@@ -67,9 +64,11 @@ public class Application extends BaseEntity{
     }
 
     // 정적 팩토리 메서드
-    public static Application of(CreateApplicationRequest createApplicationRequest, int generation, String UUID) {
+    public static Application of(
+            CreateApplicationRequest createApplicationRequest, int generation, String UUID) {
         return Application.builder()
-                .applicantInfo(ApplicantInfo.of(createApplicationRequest.getApplicantInfoVo(), UUID))
+                .applicantInfo(
+                        ApplicantInfo.of(createApplicationRequest.getApplicantInfoVo(), UUID))
                 .applicationDetail(ApplicationDetail.of(createApplicationRequest, generation))
                 .build();
     }

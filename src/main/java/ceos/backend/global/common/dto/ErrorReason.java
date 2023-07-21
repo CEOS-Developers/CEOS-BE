@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto;
 
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,10 +18,6 @@ public class ErrorReason {
     }
 
     public static ErrorReason of(Integer status, String code, String reason) {
-        return ErrorReason.builder()
-                .status(status)
-                .code(code)
-                .reason(reason)
-                .build();
+        return ErrorReason.builder().status(status).code(code).reason(reason).build();
     }
 }

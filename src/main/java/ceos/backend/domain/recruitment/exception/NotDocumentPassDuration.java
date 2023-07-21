@@ -1,5 +1,6 @@
 package ceos.backend.domain.recruitment.exception;
 
+
 import ceos.backend.global.error.BaseErrorException;
 
 public class NotDocumentPassDuration extends BaseErrorException {

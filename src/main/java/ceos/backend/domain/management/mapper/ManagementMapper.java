@@ -1,16 +1,16 @@
 package ceos.backend.domain.management.mapper;
 
+
+import ceos.backend.domain.management.Vo.ManagementVo;
 import ceos.backend.domain.management.domain.Management;
 import ceos.backend.domain.management.domain.ManagementPart;
 import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
-import ceos.backend.domain.management.Vo.ManagementVo;
 import ceos.backend.domain.management.dto.response.GetAllPartManagementsResponse;
 import ceos.backend.global.common.dto.PageInfo;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ManagementMapper {
@@ -18,7 +18,8 @@ public class ManagementMapper {
         return Management.from(managementVo);
     }
 
-    public GetAllManagementsResponse toManagementsPage(List<Management> managements, PageInfo pageInfo) {
+    public GetAllManagementsResponse toManagementsPage(
+            List<Management> managements, PageInfo pageInfo) {
         List<ManagementDto> managementDtoList = new ArrayList<>();
         for (Management m : managements) {
             ManagementDto managementDto = ManagementDto.entityToDto(m);
@@ -27,12 +28,17 @@ public class ManagementMapper {
         return GetAllManagementsResponse.of(managementDtoList, pageInfo);
     }
 
-    public GetAllPartManagementsResponse toPartManagementList(List<Management> presidency, List<Management> generalAffairs, List<Management> partLeaders, List<Management> managements) {
+    public GetAllPartManagementsResponse toPartManagementList(
+            List<Management> presidency,
+            List<Management> generalAffairs,
+            List<Management> partLeaders,
+            List<Management> managements) {
         List<ManagementDto> presidencyList = toManagementDtoList(toOrderByPart(presidency));
         List<ManagementDto> generalAffairsList = toManagementDtoList(toOrderByPart(generalAffairs));
         List<ManagementDto> partLeadersList = toManagementDtoList(toOrderByPart(partLeaders));
         List<ManagementDto> managementsList = toManagementDtoList(toOrderByPart(managements));
-        return GetAllPartManagementsResponse.of(presidencyList, generalAffairsList, partLeadersList, managementsList);
+        return GetAllPartManagementsResponse.of(
+                presidencyList, generalAffairsList, partLeadersList, managementsList);
     }
 
     public List<ManagementDto> toManagementDtoList(List<Management> managements) {

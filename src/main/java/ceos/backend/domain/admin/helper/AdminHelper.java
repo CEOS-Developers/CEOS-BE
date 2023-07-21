@@ -1,5 +1,6 @@
 package ceos.backend.domain.admin.helper;
 
+
 import ceos.backend.domain.admin.domain.Admin;
 import ceos.backend.domain.admin.domain.AdminRole;
 import ceos.backend.domain.admin.dto.request.FindIdRequest;
@@ -7,10 +8,14 @@ import ceos.backend.domain.admin.dto.request.ResetPwdRequest;
 import ceos.backend.domain.admin.dto.request.SendRandomPwdRequest;
 import ceos.backend.domain.admin.dto.request.SignInRequest;
 import ceos.backend.domain.admin.exception.*;
+import ceos.backend.domain.admin.repository.AdminRepository;
+import ceos.backend.domain.admin.vo.AdminVo;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.event.Event;
 import ceos.backend.global.config.user.AdminDetailsService;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,12 +24,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import ceos.backend.domain.admin.repository.AdminRepository;
-import ceos.backend.domain.admin.vo.AdminVo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -50,11 +50,9 @@ public class AdminHelper {
     public Authentication adminAuthorizationInput(Admin admin) {
 
         UserDetails userDetails = adminDetailsService.loadAdminByUsername(admin.getId());
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                userDetails,
-                "",
-                userDetails.getAuthorities()
-        );
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(
+                        userDetails, "", userDetails.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -62,30 +60,27 @@ public class AdminHelper {
     }
 
     public void findDuplicateUsername(String username) {
-        if (adminRepository
-                .findByUsername(username)
-                .isPresent()) {
+        if (adminRepository.findByUsername(username).isPresent()) {
             throw DuplicateData.EXCEPTION;
         }
     }
 
     public void findDuplicateAdmin(AdminVo adminVo) {
-        if (adminRepository
-                .findByNameAndEmail(adminVo.getName(), adminVo.getEmail())
-                .isPresent()) {
+        if (adminRepository.findByNameAndEmail(adminVo.getName(), adminVo.getEmail()).isPresent()) {
             throw DuplicateAdmin.EXCEPTION;
         }
     }
 
     public Admin findForSignIn(SignInRequest signInRequest) {
-        Admin findAdmin = adminRepository.findByUsername(signInRequest.getUsername())
-                .orElseThrow(() -> {
-                    throw AdminNotFound.EXCEPTION;
-                });
+        Admin findAdmin =
+                adminRepository
+                        .findByUsername(signInRequest.getUsername())
+                        .orElseThrow(
+                                () -> {
+                                    throw AdminNotFound.EXCEPTION;
+                                });
 
-        if (!matchesPassword(
-                signInRequest.getPassword(),
-                findAdmin.getPassword())) {
+        if (!matchesPassword(signInRequest.getPassword(), findAdmin.getPassword())) {
             throw MismatchPassword.EXCEPTION;
         }
 
@@ -95,12 +90,11 @@ public class AdminHelper {
     public Admin findForFindId(FindIdRequest findIdRequest) {
         return adminRepository
                 .findByNameAndPartAndEmail(
-                        findIdRequest.getName(),
-                        findIdRequest.getPart(),
-                        findIdRequest.getEmail())
-                .orElseThrow(() -> {
-                    throw AdminNotFound.EXCEPTION;
-                });
+                        findIdRequest.getName(), findIdRequest.getPart(), findIdRequest.getEmail())
+                .orElseThrow(
+                        () -> {
+                            throw AdminNotFound.EXCEPTION;
+                        });
     }
 
     public Admin findForSendRandomPwd(SendRandomPwdRequest sendRandomPwdRequest) {
@@ -110,9 +104,10 @@ public class AdminHelper {
                         sendRandomPwdRequest.getName(),
                         sendRandomPwdRequest.getPart(),
                         sendRandomPwdRequest.getEmail())
-                .orElseThrow(() -> {
-                    throw AdminNotFound.EXCEPTION;
-                });
+                .orElseThrow(
+                        () -> {
+                            throw AdminNotFound.EXCEPTION;
+                        });
     }
 
     public void validateForResetPwd(ResetPwdRequest resetPwdRequest, Admin admin) {
@@ -158,13 +153,13 @@ public class AdminHelper {
         }
     }
 
-
     public Admin findAdmin(Long adminId) {
         return adminRepository
                 .findById(adminId)
-                .orElseThrow(() -> {
-                    throw AdminNotFound.EXCEPTION;
-                });
+                .orElseThrow(
+                        () -> {
+                            throw AdminNotFound.EXCEPTION;
+                        });
     }
 
     public List<Admin> findAdmins(Admin superAdmin) {

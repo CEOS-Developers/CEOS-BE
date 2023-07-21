@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto;
 
+
 import lombok.Builder;
 import lombok.Getter;
 

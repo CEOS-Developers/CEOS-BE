@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto;
 
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,10 +18,6 @@ public class AwsSESPasswordMail {
     }
 
     public static AwsSESPasswordMail of(String email, String name, String randomPwd) {
-        return AwsSESPasswordMail.builder()
-                .email(email)
-                .name(name)
-                .randomPwd(randomPwd)
-                .build();
+        return AwsSESPasswordMail.builder().email(email).name(name).randomPwd(randomPwd).build();
     }
 }

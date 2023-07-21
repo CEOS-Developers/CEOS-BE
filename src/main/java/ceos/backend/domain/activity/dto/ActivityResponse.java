@@ -1,5 +1,6 @@
 package ceos.backend.domain.activity.dto;
 
+
 import ceos.backend.domain.activity.domain.Activity;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.vo;
 
+
 import ceos.backend.domain.application.domain.ApplicationQuestionDetail;
 import ceos.backend.domain.application.domain.ExplainationColor;
 import ceos.backend.global.common.annotation.ValidEnum;

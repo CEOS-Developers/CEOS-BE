@@ -1,12 +1,12 @@
 package ceos.backend.global.config.user;
 
+
 import ceos.backend.domain.admin.domain.Admin;
+import java.util.ArrayList;
+import java.util.Collection;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 @Data
 public class AdminDetails implements UserDetails {
@@ -20,7 +20,7 @@ public class AdminDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
-        //collection.add((GrantedAuthority) () -> String.valueOf(admin.getRole()));
+        // collection.add((GrantedAuthority) () -> String.valueOf(admin.getRole()));
         collection.add((GrantedAuthority) () -> String.valueOf(admin.getRole()));
 
         return collection;

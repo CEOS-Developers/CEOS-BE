@@ -1,5 +1,6 @@
 package ceos.backend.domain.activity.domain;
 
+
 import ceos.backend.domain.activity.dto.ActivityRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -25,8 +26,7 @@ public class Activity extends BaseEntity {
     @Size(max = 255)
     private String content;
 
-    @NotNull
-    private String imageUrl;
+    @NotNull private String imageUrl;
 
     @Builder
     private Activity(String name, String content, String imageUrl) {

@@ -1,18 +1,18 @@
 package ceos.backend.domain.project.domain;
 
+
 import ceos.backend.domain.project.vo.ProjectInfoVo;
 import ceos.backend.global.common.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,8 +32,7 @@ public class Project extends BaseEntity {
     @Size(max = 100)
     private String description;
 
-    @NotNull
-    private int generation;
+    @NotNull private int generation;
 
     // Project : ProjectUrl = 1:N
     @OneToMany(mappedBy = "project")
@@ -52,9 +51,7 @@ public class Project extends BaseEntity {
 
     // 생성자
     @Builder
-    private Project(String name,
-                    String description,
-                    int generation) {
+    private Project(String name, String description, int generation) {
         this.name = name;
         this.description = description;
         this.generation = generation;

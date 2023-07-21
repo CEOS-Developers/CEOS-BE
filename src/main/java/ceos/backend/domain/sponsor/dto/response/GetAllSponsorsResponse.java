@@ -1,11 +1,11 @@
 package ceos.backend.domain.sponsor.dto.response;
 
+
 import ceos.backend.domain.sponsor.dto.SponsorDto;
 import ceos.backend.global.common.dto.PageInfo;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class GetAllSponsorsResponse {
@@ -20,9 +20,6 @@ public class GetAllSponsorsResponse {
     }
 
     public static GetAllSponsorsResponse of(List<SponsorDto> sponsors, PageInfo pageInfo) {
-        return GetAllSponsorsResponse.builder()
-                .sponsors(sponsors)
-                .pageInfo(pageInfo)
-                .build();
+        return GetAllSponsorsResponse.builder().sponsors(sponsors).pageInfo(pageInfo).build();
     }
 }

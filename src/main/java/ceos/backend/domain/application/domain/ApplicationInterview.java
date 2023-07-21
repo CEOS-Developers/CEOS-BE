@@ -1,9 +1,9 @@
 package ceos.backend.domain.application.domain;
 
+
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,18 +26,16 @@ public class ApplicationInterview extends BaseEntity {
     private Interview interview;
 
     @Builder
-    private ApplicationInterview(Application application, Interview interview)
-    {
+    private ApplicationInterview(Application application, Interview interview) {
         this.application = application;
         this.interview = interview;
     }
 
     public static ApplicationInterview of(Application application, Interview interview) {
-        return ApplicationInterview.builder()
-                .application(application)
-                .interview(interview)
-                .build();
+        return ApplicationInterview.builder().application(application).interview(interview).build();
     }
 
-    public void setApplication(Application application) { this.application = application; }
+    public void setApplication(Application application) {
+        this.application = application;
+    }
 }

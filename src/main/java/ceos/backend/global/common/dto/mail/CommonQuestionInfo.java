@@ -1,9 +1,9 @@
 package ceos.backend.global.common.dto.mail;
 
-import lombok.Builder;
-import lombok.Getter;
 
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 public class CommonQuestionInfo {
@@ -17,9 +17,6 @@ public class CommonQuestionInfo {
     }
 
     public static CommonQuestionInfo of(List<String> questions, List<String> answers) {
-        return CommonQuestionInfo.builder()
-                .questions(questions)
-                .answers(answers)
-                .build();
+        return CommonQuestionInfo.builder().questions(questions).answers(answers).build();
     }
 }

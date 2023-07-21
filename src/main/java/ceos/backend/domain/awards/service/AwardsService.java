@@ -1,5 +1,6 @@
 package ceos.backend.domain.awards.service;
 
+
 import ceos.backend.domain.awards.domain.Awards;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
@@ -8,13 +9,12 @@ import ceos.backend.domain.awards.helper.AwardsHelper;
 import ceos.backend.domain.awards.repository.AwardsRepository;
 import ceos.backend.domain.project.repository.ProjectRepository;
 import ceos.backend.global.common.dto.PageInfo;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -27,7 +27,7 @@ public class AwardsService {
 
     @Transactional
     public void createAwards(List<AwardsRequest> awardsRequestList) {
-        for(AwardsRequest awardsRequest : awardsRequestList){
+        for (AwardsRequest awardsRequest : awardsRequestList) {
             Awards awards = Awards.from(awardsRequest);
             awardsRepository.save(awards);
         }
@@ -38,8 +38,10 @@ public class AwardsService {
         List<GenerationAwardsResponse> generationAwardsResponses = new ArrayList<>();
 
         int maxGeneration = projectRepository.findMaxGeneration();
-        for(int i = maxGeneration; i > 0; i--){
-            GenerationAwardsResponse generationAwardsResponse = GenerationAwardsResponse.of(i, awardsHelper.getAwardsDto(i), awardsHelper.getProjectVo(i));
+        for (int i = maxGeneration; i > 0; i--) {
+            GenerationAwardsResponse generationAwardsResponse =
+                    GenerationAwardsResponse.of(
+                            i, awardsHelper.getAwardsDto(i), awardsHelper.getProjectVo(i));
             generationAwardsResponses.add(generationAwardsResponse);
         }
 
@@ -49,30 +51,33 @@ public class AwardsService {
         int totalPages = (int) Math.ceil((double) totalElements / limit);
         List<GenerationAwardsResponse> pageAwards = new ArrayList<>();
 
-        if(startIndex < endIndex){
+        if (startIndex < endIndex) {
             pageAwards = generationAwardsResponses.subList(startIndex, endIndex);
         }
 
-        //페이징 정보
+        // 페이징 정보
         PageInfo pageInfo = PageInfo.of(pageNum, limit, totalPages, totalElements);
 
         return AllAwardsResponse.of(pageAwards, pageInfo);
-
     }
 
     @Transactional(readOnly = true)
     public GenerationAwardsResponse getGenerationAwards(int generation) {
-        GenerationAwardsResponse generationAwardsResponse = GenerationAwardsResponse.of(generation, awardsHelper.getAwardsDto(generation), awardsHelper.getProjectVo(generation));
+        GenerationAwardsResponse generationAwardsResponse =
+                GenerationAwardsResponse.of(
+                        generation,
+                        awardsHelper.getAwardsDto(generation),
+                        awardsHelper.getProjectVo(generation));
         return generationAwardsResponse;
     }
 
     @Transactional
     public void updateAwards(int generation, List<AwardsRequest> awardsRequestList) {
-        //기존 데이터 삭제
+        // 기존 데이터 삭제
         List<Awards> awardsList = awardsRepository.findByGeneration(generation);
         awardsRepository.deleteAllInBatch(awardsList);
 
-        //수정된 데이터 넣기
+        // 수정된 데이터 넣기
         createAwards(awardsRequestList);
     }
 }

@@ -1,11 +1,11 @@
 package ceos.backend.domain.admin.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
@@ -14,8 +14,7 @@ public enum AdminRole {
     ROLE_ADMIN("운영진"),
     ROLE_ANONYMOUS("임시");
 
-    @JsonValue
-    private final String adminRole;
+    @JsonValue private final String adminRole;
 
     @JsonCreator
     public static AdminRole parsing(String inputValue) {

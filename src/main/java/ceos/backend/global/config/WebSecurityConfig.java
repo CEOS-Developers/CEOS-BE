@@ -1,9 +1,12 @@
 package ceos.backend.global.config;
 
+
 import ceos.backend.global.config.jwt.JwtAccessDeniedHandler;
 import ceos.backend.global.config.jwt.JwtAuthenticationEntryPoint;
 import ceos.backend.global.config.jwt.JwtAuthenticationFilter;
 import ceos.backend.global.config.jwt.JwtExceptionHandlerFilter;
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -21,9 +24,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
-
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnDefaultWebSecurity
@@ -40,66 +40,75 @@ public class WebSecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private final String[] SwaggerPatterns = {
-            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
+        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
     };
 
     private final String[] AdminPatterns = {
-            "/admin/newpassword", "/admin/logout", "admin/reissue",
-            "/applications/**", "recruitments/**", "projects/**", "activities/**", "awards/**"
+        "/admin/newpassword",
+        "/admin/logout",
+        "admin/reissue",
+        "/applications/**",
+        "recruitments/**",
+        "projects/**",
+        "activities/**",
+        "awards/**"
     };
 
     private final String[] GetPermittedPatterns = {
-            "/awards/**", "recruitments/**", "projects/**", "activities/**"
+        "/awards/**", "recruitments/**", "projects/**", "activities/**"
     };
 
     private final String[] AllPermittedPattern = {
-            "/applications", "/applications/question", "/applications/document", "/applications/final"
+        "/applications", "/applications/question", "/applications/document", "/applications/final"
     };
 
-    private final String[] RootPatterns = {
-            "/admin/super"
-    };
+    private final String[] RootPatterns = {"/admin/super"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(corsConfigurationSource())
+        http.cors()
+                .configurationSource(corsConfigurationSource())
                 .and()
-                .csrf().disable()
-
+                .csrf()
+                .disable()
                 .exceptionHandling()
                 .accessDeniedHandler(jwtAccessDeniedHandler)
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-
-
                 .and()
                 .headers()
                 .frameOptions()
                 .sameOrigin()
-
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .requestMatchers(HttpMethod.GET, GetPermittedPatterns).permitAll()
-                .requestMatchers(AllPermittedPattern).permitAll()
-                .requestMatchers(SwaggerPatterns).permitAll()
-                .requestMatchers(AdminPatterns).hasAnyRole("ROOT", "ADMIN")
-                .requestMatchers(RootPatterns).hasRole("ROOT")
-                .anyRequest().permitAll()
+                .requestMatchers(CorsUtils::isPreFlightRequest)
+                .permitAll()
+                .requestMatchers(HttpMethod.GET, GetPermittedPatterns)
+                .permitAll()
+                .requestMatchers(AllPermittedPattern)
+                .permitAll()
+                .requestMatchers(SwaggerPatterns)
+                .permitAll()
+                .requestMatchers(AdminPatterns)
+                .hasAnyRole("ROOT", "ADMIN")
+                .requestMatchers(RootPatterns)
+                .hasRole("ROOT")
+                .anyRequest()
+                .permitAll()
                 .and()
-                .headers().frameOptions().disable();
+                .headers()
+                .frameOptions()
+                .disable();
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtExceptionHandlerFilter, JwtAuthenticationFilter.class);
 
-
         return http.build();
     }
 
-    //@Bean
+    // @Bean
     protected CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", getDefaultCorsConfiguration());
@@ -110,12 +119,7 @@ public class WebSecurityConfig {
     private CorsConfiguration getDefaultCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
-                Arrays.asList(
-                        "http://localhost:8080",
-                        "http://localhost:3000",
-                        SERVER_URL
-                )
-        );
+                Arrays.asList("http://localhost:8080", "http://localhost:3000", SERVER_URL));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowCredentials(true);

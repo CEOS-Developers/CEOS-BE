@@ -1,5 +1,6 @@
 package ceos.backend.domain.faq.dto;
 
+
 import ceos.backend.domain.faq.domain.Faq;
 import ceos.backend.domain.faq.domain.FaqCategory;
 import lombok.Builder;
