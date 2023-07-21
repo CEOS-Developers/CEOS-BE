@@ -1,13 +1,25 @@
 package ceos.backend.global.common.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ParsedDuration {
+    @Schema(type = "string",
+            defaultValue = "2023/03/20",
+            description = "면접 날짜")
     private String date;
+
+    @Schema(type = "string",
+            defaultValue = "12:00-12:30",
+            description = "면접 시간")
     private String duration;
 
     @Builder

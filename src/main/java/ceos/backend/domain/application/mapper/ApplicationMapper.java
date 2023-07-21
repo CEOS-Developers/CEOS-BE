@@ -218,7 +218,7 @@ public class ApplicationMapper {
         return interviews.stream()
                 .map(interview -> {
                     final String duration = InterviewDateFormatter.interviewDateFormatter(interview);
-                    final ParsedDuration parsedDuration = ParsingDuration.parsingDuration(duration);
+                    final ParsedDuration parsedDuration = ParsingDuration.parsingYearDuration(duration);
                     if (applicationInterviews.stream()
                             .anyMatch(applicationInterview -> applicationInterview.getInterview().equals(interview))) {
                         return InterviewTimeVo.of(true, parsedDuration);

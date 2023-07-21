@@ -3,6 +3,7 @@ package ceos.backend.global.util;
 import ceos.backend.global.common.dto.ParsedDuration;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -11,9 +12,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ParsingDuration {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
-    private static final DateTimeFormatter yearDateFormmatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    private static final DateTimeFormatter yearDateSlashFormmatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    private static final DateTimeFormatter yearDateDotFormmatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
     private static final DateTimeFormatter dateFormmatter = DateTimeFormatter.ofPattern("MM/dd");
     private static final DateTimeFormatter timeFormmatter = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter timeSecondFormmatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     public static ParsedDuration parsingDuration(String duration) {
         final String[] strTimes = duration.split(" - ");
@@ -29,16 +32,25 @@ public class ParsingDuration {
         return ParsedDuration.of(date, time);
     }
 
+    public static String toStringDuration(ParsedDuration parsedDuration) {
+        String date = parsedDuration.getDate().replace("/",".");
+        String[] strTimes = parsedDuration.getDuration().split("-");
+        List<String> times = Arrays.stream(strTimes)
+                .map(time -> time + ":00")
+                .toList();
+        return date + " " + times.get(0) + " - " + date + " " + times.get(1);
+    }
+
     private static String doDateFormatting(String[] times, Boolean includeYear) {
         return Arrays.stream(times)
                 .map(time -> LocalDateTime.parse(time, formatter))
-                .map(formattedTime -> formattedTime.toLocalDate().format(selectFormatter(includeYear)))
+                .map(time -> time.toLocalDate().format(selectFormatter(includeYear)))
                 .findFirst()
                 .orElseThrow();
     }
 
     private static DateTimeFormatter selectFormatter(Boolean includeYear) {
-        return includeYear ? yearDateFormmatter : dateFormmatter;
+        return includeYear ? yearDateSlashFormmatter : dateFormmatter;
     }
 
     private static String doTimeFormatting(String[] strTimes) {
