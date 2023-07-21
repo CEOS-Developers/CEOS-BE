@@ -45,7 +45,7 @@ public class AwardsController {
     }
 
     @Operation(summary = "수상이력 수정하기")
-    @PatchMapping("/{generation}")
+    @PutMapping("/{generation}")
     public void updateAwards(@PathVariable(name = "generation") int generation,
                                        @RequestBody List<AwardsRequest> awardsRequest){
         log.info("수상이력 수정하기");
