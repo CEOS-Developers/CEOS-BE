@@ -74,10 +74,14 @@ public class AwardsService {
     @Transactional
     public void updateAwards(int generation, List<AwardsRequest> awardsRequestList) {
         // 기존 데이터 삭제
-        List<Awards> awardsList = awardsRepository.findByGeneration(generation);
-        awardsRepository.deleteAllInBatch(awardsList);
-
+        deleteAwards(generation);
         // 수정된 데이터 넣기
         createAwards(awardsRequestList);
+    }
+
+    @Transactional
+    public void deleteAwards(int generation) {
+        List<Awards> awardsList = awardsRepository.findByGeneration(generation);
+        awardsRepository.deleteAllInBatch(awardsList);
     }
 }

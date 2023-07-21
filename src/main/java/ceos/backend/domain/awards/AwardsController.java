@@ -41,7 +41,7 @@ public class AwardsController {
     @GetMapping("/{generation}")
     public GenerationAwardsResponse getGenerationAwards(
             @PathVariable(name = "generation") int generation) {
-        log.info("수상이력 하나보기");
+        log.info("기수별 수상이력 보기");
         return awardsService.getGenerationAwards(generation);
     }
 
@@ -52,5 +52,12 @@ public class AwardsController {
             @RequestBody List<AwardsRequest> awardsRequest) {
         log.info("수상이력 수정하기");
         awardsService.updateAwards(generation, awardsRequest);
+    }
+
+    @Operation(summary = "수상이력 삭제하기")
+    @DeleteMapping("/{generation}")
+    public void deleteAwards(@PathVariable(name = "generation") int generation) {
+        log.info("수상이력 삭제하기");
+        awardsService.deleteAwards(generation);
     }
 }
