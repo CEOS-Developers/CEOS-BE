@@ -1,7 +1,7 @@
 package ceos.backend.global.util;
 
-import ceos.backend.domain.application.vo.InterviewDateTimesVo;
 
+import ceos.backend.domain.application.vo.InterviewDateTimesVo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,15 +9,17 @@ import java.util.stream.Collectors;
 public class InterviewDateTimeConvertor {
     public static List<String> toStringDuration(List<InterviewDateTimesVo> times) {
         List<String> stringDuration = new ArrayList<>();
-        times.forEach(timesVo -> {
-            stringDuration.addAll(dateTimeAdder(timesVo));
-        });
+        times.forEach(
+                timesVo -> {
+                    stringDuration.addAll(dateTimeAdder(timesVo));
+                });
         return stringDuration;
     }
 
     private static List<String> dateTimeAdder(InterviewDateTimesVo timesVo) {
         final String date = dateformatter(timesVo.getDate());
-        return timesVo.getDurations().stream().map(timeVo -> toDuration(date, timeVo))
+        return timesVo.getDurations().stream()
+                .map(timeVo -> toDuration(date, timeVo))
                 .collect(Collectors.toList());
     }
 
@@ -33,5 +35,4 @@ public class InterviewDateTimeConvertor {
     private static String[] timeParser(String time) {
         return time.split("-");
     }
-
 }

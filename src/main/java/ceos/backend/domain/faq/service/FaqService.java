@@ -1,5 +1,6 @@
 package ceos.backend.domain.faq.service;
 
+
 import ceos.backend.domain.faq.domain.Faq;
 import ceos.backend.domain.faq.domain.FaqCategory;
 import ceos.backend.domain.faq.dto.FaqDto;
@@ -9,12 +10,11 @@ import ceos.backend.domain.faq.mapper.FaqMapper;
 import ceos.backend.domain.faq.repository.FaqRepository;
 import ceos.backend.domain.faq.vo.FaqVo;
 import ceos.backend.domain.faq.vo.UpdateFaqRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Slf4j
 @Service
@@ -32,20 +32,33 @@ public class FaqService {
 
     @Transactional(readOnly = true)
     public GetCategoryFaqResponse getCategoryFaq(String faqCategory) {
-        List<Faq> findCategoryFaqList = faqRepository.findAllByCategory(FaqCategory.parsing(faqCategory));
+        List<Faq> findCategoryFaqList =
+                faqRepository.findAllByCategory(FaqCategory.parsing(faqCategory));
         return faqMapper.toCategoryFaqResponse(findCategoryFaqList);
     }
 
     @Transactional
     public FaqDto updateFaq(Long id, UpdateFaqRequest updateFaqRequest) {
-        Faq findFaq = faqRepository.findById(id).orElseThrow(() -> {throw FaqNotFound.EXCEPTION;});
+        Faq findFaq =
+                faqRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () -> {
+                                    throw FaqNotFound.EXCEPTION;
+                                });
         findFaq.update(updateFaqRequest);
         return FaqDto.entityToDto(findFaq);
     }
 
     @Transactional
     public void deleteFaq(Long id) {
-        Faq findFaq = faqRepository.findById(id).orElseThrow(() -> {throw FaqNotFound.EXCEPTION;});
+        Faq findFaq =
+                faqRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () -> {
+                                    throw FaqNotFound.EXCEPTION;
+                                });
         faqRepository.delete(findFaq);
     }
 }

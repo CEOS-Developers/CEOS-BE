@@ -1,12 +1,12 @@
 package ceos.backend.domain.admin.repository;
 
+
 import ceos.backend.domain.admin.domain.Admin;
 import ceos.backend.domain.admin.dto.request.SignUpRequest;
 import ceos.backend.domain.admin.dto.response.*;
 import ceos.backend.domain.admin.vo.AdminBriefInfoVo;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class AdminMapper {
@@ -28,9 +28,8 @@ public class AdminMapper {
 
     public GetAdminsResponse toGetAdmins(List<Admin> adminList) {
 
-        List<AdminBriefInfoVo> adminBriefInfoVos = adminList.stream()
-                .map(AdminBriefInfoVo::from)
-                .toList();
+        List<AdminBriefInfoVo> adminBriefInfoVos =
+                adminList.stream().map(AdminBriefInfoVo::from).toList();
         return GetAdminsResponse.from(adminBriefInfoVos);
     }
 }

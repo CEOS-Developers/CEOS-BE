@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.vo;
 
+
 import ceos.backend.domain.application.domain.ApplicantInfo;
 import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.Gender;
@@ -12,11 +13,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
 
 @Getter
 @RequiredArgsConstructor
@@ -29,7 +29,8 @@ public class ApplicantInfoVo {
     @ValidEnum(target = Gender.class)
     private Gender gender;
 
-    @Schema(type = "string",
+    @Schema(
+            type = "string",
             pattern = "yyyy.MM.dd",
             defaultValue = "2023.03.20",
             description = "지원자 생년월일")
@@ -59,9 +60,15 @@ public class ApplicantInfoVo {
     private int semestersLeftNumber;
 
     @Builder
-    private ApplicantInfoVo(String name, Gender gender, LocalDate birth, String email,
-                            String phoneNumber, University university, String major,
-                            int semestersLeftNumber) {
+    private ApplicantInfoVo(
+            String name,
+            Gender gender,
+            LocalDate birth,
+            String email,
+            String phoneNumber,
+            University university,
+            String major,
+            int semestersLeftNumber) {
         this.name = name;
         this.gender = gender;
         this.birth = birth;

@@ -1,19 +1,22 @@
 package ceos.backend.domain.management.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
 public enum ManagementRole {
-    PRESIDENCY("회장단"), GENERAL_AFFAIRS("총무"), PART_LEADER("파트장"), MANAGEMENT("운영진"), MENTOR("멘토");
+    PRESIDENCY("회장단"),
+    GENERAL_AFFAIRS("총무"),
+    PART_LEADER("파트장"),
+    MANAGEMENT("운영진"),
+    MENTOR("멘토");
 
-    @JsonValue
-    private final String managementRole;
+    @JsonValue private final String managementRole;
 
     @JsonCreator
     public static ManagementRole parsing(String inputValue) {

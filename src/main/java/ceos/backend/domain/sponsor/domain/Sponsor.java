@@ -1,5 +1,6 @@
 package ceos.backend.domain.sponsor.domain;
 
+
 import ceos.backend.domain.sponsor.vo.SponsorVo;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -21,14 +22,11 @@ public class Sponsor extends BaseEntity {
     @Size(max = 30)
     private String name;
 
-    @NotNull
-    private String imageUrl;
+    @NotNull private String imageUrl;
 
     // 생성자
     @Builder
-    private Sponsor(String name,
-                    String imageUrl)
-    {
+    private Sponsor(String name, String imageUrl) {
         this.name = name;
         this.imageUrl = imageUrl;
     }

@@ -1,8 +1,9 @@
 package ceos.backend.domain.admin.vo;
 
+
+import ceos.backend.global.common.annotation.ValidEmail;
 import ceos.backend.global.common.annotation.ValidEnum;
 import ceos.backend.global.common.entity.Part;
-import ceos.backend.global.common.annotation.ValidEmail;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;

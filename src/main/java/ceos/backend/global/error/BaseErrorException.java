@@ -1,5 +1,6 @@
 package ceos.backend.global.error;
 
+
 import ceos.backend.global.common.dto.ErrorReason;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

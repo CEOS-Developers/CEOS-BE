@@ -1,5 +1,6 @@
 package ceos.backend.domain.faq.domain;
 
+
 import ceos.backend.domain.faq.vo.FaqVo;
 import ceos.backend.domain.faq.vo.UpdateFaqRequest;
 import ceos.backend.global.common.entity.BaseEntity;
@@ -7,7 +8,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,10 +33,7 @@ public class Faq extends BaseEntity {
 
     // 생성자
     @Builder
-    private Faq(FaqCategory category,
-                   String question,
-                   String answer)
-    {
+    private Faq(FaqCategory category, String question, String answer) {
         this.category = category;
         this.question = question;
         this.answer = answer;

@@ -1,12 +1,12 @@
 package ceos.backend.domain.faq.mapper;
 
+
 import ceos.backend.domain.faq.domain.Faq;
 import ceos.backend.domain.faq.dto.FaqDto;
 import ceos.backend.domain.faq.dto.response.GetCategoryFaqResponse;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class FaqMapper {

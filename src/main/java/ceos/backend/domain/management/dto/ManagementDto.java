@@ -1,15 +1,11 @@
 package ceos.backend.domain.management.dto;
 
+
 import ceos.backend.domain.management.Vo.ManagementVo;
 import ceos.backend.domain.management.domain.Management;
 import ceos.backend.domain.management.domain.ManagementPart;
 import ceos.backend.domain.management.domain.ManagementRole;
-import ceos.backend.global.common.annotation.ValidEnum;
 import ceos.backend.global.common.entity.University;
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -28,7 +24,17 @@ public class ManagementDto {
     private String imageUrl;
 
     @Builder
-    private ManagementDto(Long id, String name, ManagementRole role, ManagementPart part, int generation, int managementGeneration, University university, String major, String company, String imageUrl) {
+    private ManagementDto(
+            Long id,
+            String name,
+            ManagementRole role,
+            ManagementPart part,
+            int generation,
+            int managementGeneration,
+            University university,
+            String major,
+            String company,
+            String imageUrl) {
         this.id = id;
         this.name = name;
         this.role = role;

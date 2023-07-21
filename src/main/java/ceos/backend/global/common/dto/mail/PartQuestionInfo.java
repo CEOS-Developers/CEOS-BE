@@ -1,9 +1,9 @@
 package ceos.backend.global.common.dto.mail;
 
-import lombok.Builder;
-import lombok.Getter;
 
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 public class PartQuestionInfo {
@@ -19,10 +19,6 @@ public class PartQuestionInfo {
     }
 
     public static PartQuestionInfo of(String part, List<String> questions, List<String> answers) {
-        return PartQuestionInfo.builder()
-                .part(part)
-                .questions(questions)
-                .answers(answers)
-                .build();
+        return PartQuestionInfo.builder().part(part).questions(questions).answers(answers).build();
     }
 }

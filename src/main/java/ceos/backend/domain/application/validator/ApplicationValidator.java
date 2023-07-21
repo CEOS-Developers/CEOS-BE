@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.validator;
 
+
 import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.domain.Interview;
@@ -13,10 +14,9 @@ import ceos.backend.domain.application.repository.ApplicationRepository;
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.InterviewConvertor;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -27,18 +27,18 @@ public class ApplicationValidator {
     private final ApplicationAnswerRepository applicationAnswerRepository;
 
     public void validateFirstApplication(ApplicantInfoVo applicantInfoVo) {
-        if (applicationRepository
-                .existsByEmail(applicantInfoVo.getEmail())) {
+        if (applicationRepository.existsByEmail(applicantInfoVo.getEmail())) {
             throw DuplicateApplicant.EXCEPTION;
         }
     }
 
     public void validateApplicantAccessible(String uuid, String email) {
         applicationRepository
-            .findByUuidAndEmail(uuid, email)
-            .orElseThrow(() -> {
-                throw ApplicantNotFound.EXCEPTION;
-            });
+                .findByUuidAndEmail(uuid, email)
+                .orElseThrow(
+                        () -> {
+                            throw ApplicantNotFound.EXCEPTION;
+                        });
     }
 
     public void validateApplicantDocumentPass(Application application) {
@@ -58,10 +58,11 @@ public class ApplicationValidator {
 
     public void validateExistingApplicant(Long applicationId) {
         applicationRepository
-            .findById(applicationId)
-            .orElseThrow(() -> {
-                throw ApplicantNotFound.EXCEPTION;
-            });
+                .findById(applicationId)
+                .orElseThrow(
+                        () -> {
+                            throw ApplicantNotFound.EXCEPTION;
+                        });
     }
 
     public void validateDocumentPassStatus(Application application) {
@@ -69,9 +70,11 @@ public class ApplicationValidator {
     }
 
     public void validateInterviewTime(List<Interview> interviews, String interviewTime) {
-        if(interviews.stream()
-                .noneMatch(interview -> interviewTime
-                        .equals(InterviewConvertor.interviewDateFormatter(interview)))) {
+        if (interviews.stream()
+                .noneMatch(
+                        interview ->
+                                interviewTime.equals(
+                                        InterviewConvertor.interviewDateFormatter(interview)))) {
             throw InterviewNotFound.EXCEPTION;
         }
     }
@@ -86,16 +89,21 @@ public class ApplicationValidator {
     }
 
     public void validateQAMatching(CreateApplicationRequest createApplicationRequest) {
-        final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
+        final List<ApplicationQuestion> applicationQuestions =
+                applicationQuestionRepository.findAll();
         if (applicationQuestions.stream()
-                .filter(question -> question.getCategory() == QuestionCategory.COMMON)
-                .count() != createApplicationRequest.getCommonAnswers().size()) {
+                        .filter(question -> question.getCategory() == QuestionCategory.COMMON)
+                        .count()
+                != createApplicationRequest.getCommonAnswers().size()) {
             throw NotMatchingQnA.EXCEPTION;
         }
         final Part part = createApplicationRequest.getPart();
         if (applicationQuestions.stream()
-                .filter(question -> question.getCategory().toString().equals(part.toString()))
-                .count() != createApplicationRequest.getPartAnswers().size()) {
+                        .filter(
+                                question ->
+                                        question.getCategory().toString().equals(part.toString()))
+                        .count()
+                != createApplicationRequest.getPartAnswers().size()) {
             throw NotMatchingQnA.EXCEPTION;
         }
     }

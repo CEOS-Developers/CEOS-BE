@@ -1,5 +1,6 @@
 package ceos.backend.domain.sponsor;
 
+
 import ceos.backend.domain.sponsor.dto.SponsorDto;
 import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
 import ceos.backend.domain.sponsor.service.SponsorService;
@@ -11,7 +12,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
 
 @Slf4j
 @RestController
@@ -32,9 +32,7 @@ public class SponsorController {
     @Operation(summary = "스폰서 전체 보기")
     @GetMapping
     public GetAllSponsorsResponse getAllSponsors(
-            @RequestParam("pageNum") int pageNum,
-            @RequestParam("limit") int limit
-    ) {
+            @RequestParam("pageNum") int pageNum, @RequestParam("limit") int limit) {
         log.info("스폰서 전체 보기");
         return sponsorService.getAllSponsors(pageNum, limit);
     }
@@ -42,9 +40,7 @@ public class SponsorController {
     @Operation(summary = "스폰서 정보 수정")
     @PatchMapping("/{sponsorId}")
     public SponsorDto updateSponsor(
-            @PathVariable(name = "sponsorId") Long sponsorId,
-            @RequestBody SponsorVo sponsorVo
-    ) {
+            @PathVariable(name = "sponsorId") Long sponsorId, @RequestBody SponsorVo sponsorVo) {
         log.info("스폰서 정보 수정");
         return sponsorService.updateSponsor(sponsorId, sponsorVo);
     }

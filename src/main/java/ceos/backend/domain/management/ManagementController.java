@@ -1,6 +1,6 @@
 package ceos.backend.domain.management;
 
-import ceos.backend.domain.management.domain.ManagementRole;
+
 import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.CreateManagementRequest;
 import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
@@ -8,14 +8,12 @@ import ceos.backend.domain.management.dto.response.GetAllManagementsResponse;
 import ceos.backend.domain.management.dto.response.GetAllPartManagementsResponse;
 import ceos.backend.domain.management.service.ManagementService;
 import ceos.backend.global.common.dto.AwsS3Url;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
 
 @Slf4j
 @RestController
@@ -28,7 +26,8 @@ public class ManagementController {
 
     @Operation(summary = "임원진 추가하기")
     @PostMapping
-    public void createManagement(@RequestBody @Valid CreateManagementRequest createManagementRequest) {
+    public void createManagement(
+            @RequestBody @Valid CreateManagementRequest createManagementRequest) {
         log.info("임원진 추가히기");
         managementService.createManagement(createManagementRequest);
     }
@@ -36,9 +35,7 @@ public class ManagementController {
     @Operation(summary = "임원진 전체 보기")
     @GetMapping
     public GetAllManagementsResponse getAllManagements(
-            @RequestParam("pageNum") int pageNum,
-            @RequestParam("limit") int limit
-    ) {
+            @RequestParam("pageNum") int pageNum, @RequestParam("limit") int limit) {
         log.info("임원진 전체 보기");
         return managementService.getAllManagements(pageNum, limit);
     }
@@ -61,8 +58,7 @@ public class ManagementController {
     @PatchMapping("/{managerId}")
     public ManagementDto updateManagement(
             @PathVariable(name = "managerId") Long managerId,
-            @RequestBody UpdateManagementRequest updateManagementRequest
-    ) {
+            @RequestBody UpdateManagementRequest updateManagementRequest) {
         log.info("임원진 정보 수정");
         return managementService.updateManagementInfo(managerId, updateManagementRequest);
     }

@@ -1,5 +1,7 @@
 package ceos.backend.infra.slack;
 
+import static com.slack.api.model.block.composition.BlockCompositions.plainText;
+
 import ceos.backend.domain.application.domain.ApplicantInfo;
 import ceos.backend.global.common.dto.SlackErrorMessage;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
@@ -8,19 +10,16 @@ import com.slack.api.model.block.composition.MarkdownTextObject;
 import com.slack.api.model.block.composition.TextObject;
 import com.slack.api.webhook.Payload;
 import jakarta.servlet.ServletInputStream;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.slack.api.model.block.composition.BlockCompositions.plainText;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 
 @Component
 @RequiredArgsConstructor
@@ -29,7 +28,8 @@ public class SlackMessageGenerater {
     private final int MaxLen = 500;
 
     public Payload generateErrorMsg(SlackErrorMessage slackErrorMessage) throws IOException {
-        final ContentCachingRequestWrapper cachedRequest = slackErrorMessage.getContentCachingRequestWrapper();
+        final ContentCachingRequestWrapper cachedRequest =
+                slackErrorMessage.getContentCachingRequestWrapper();
         final Exception e = slackErrorMessage.getException();
 
         List<LayoutBlock> layoutBlocks = new ArrayList<>();
@@ -46,13 +46,10 @@ public class SlackMessageGenerater {
         // IP + Method, Addr
         layoutBlocks.add(makeSection(getErrMessage(e), getErrStack(e)));
 
-        return Payload.builder()
-                .text("에러 알림")
-                .blocks(layoutBlocks)
-                .build();
+        return Payload.builder().text("에러 알림").blocks(layoutBlocks).build();
     }
 
-    private LayoutBlock makeSection(TextObject first, TextObject second ) {
+    private LayoutBlock makeSection(TextObject first, TextObject second) {
         return Blocks.section(section -> section.fields(List.of(first, second)));
     }
 
@@ -109,10 +106,7 @@ public class SlackMessageGenerater {
         // reason
         layoutBlocks.add(getReason(reason));
 
-        return Payload.builder()
-                .text(title)
-                .blocks(layoutBlocks)
-                .build();
+        return Payload.builder().text(title).blocks(layoutBlocks).build();
     }
 
     private MarkdownTextObject getName(ApplicantInfo applicantInfo) {
@@ -126,9 +120,8 @@ public class SlackMessageGenerater {
     }
 
     private SectionBlock getReason(String reason) {
-        TextObject reasonObj = (TextObject) MarkdownTextObject.builder()
-                .text("* Reason :*\n" + reason)
-                .build();
+        TextObject reasonObj =
+                (TextObject) MarkdownTextObject.builder().text("* Reason :*\n" + reason).build();
         return Blocks.section(section -> section.fields(List.of(reasonObj)));
     }
 }

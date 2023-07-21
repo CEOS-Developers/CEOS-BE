@@ -1,9 +1,8 @@
 package ceos.backend.domain.recruitment.dto.request;
 
-import lombok.Getter;
-import lombok.Setter;
 
 import java.time.LocalDate;
+import lombok.Getter;
 
 @Getter
 public class UpdateRecruitmentRequest {

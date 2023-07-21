@@ -1,5 +1,6 @@
 package ceos.backend.domain.faq;
 
+
 import ceos.backend.domain.faq.dto.FaqDto;
 import ceos.backend.domain.faq.dto.response.GetCategoryFaqResponse;
 import ceos.backend.domain.faq.service.FaqService;
@@ -30,7 +31,8 @@ public class FaqController {
 
     @Operation(summary = "카테고리별 질문, 답변 불러오기")
     @GetMapping
-    public GetCategoryFaqResponse getCategoryFaq(@RequestParam(value = "category", defaultValue = "RECRUIT") String faqCategory) {
+    public GetCategoryFaqResponse getCategoryFaq(
+            @RequestParam(value = "category", defaultValue = "RECRUIT") String faqCategory) {
         log.info("카테고리별 질문, 답변 불러오기");
         return faqService.getCategoryFaq(faqCategory);
     }
@@ -38,9 +40,7 @@ public class FaqController {
     @Operation(summary = "FAQ 수정하기")
     @PatchMapping("/{faqId}")
     public FaqDto updateFaq(
-            @PathVariable("faqId") Long faqId,
-            @RequestBody UpdateFaqRequest updateFaqRequest
-    ) {
+            @PathVariable("faqId") Long faqId, @RequestBody UpdateFaqRequest updateFaqRequest) {
         log.info("FAQ 수정하기");
         return faqService.updateFaq(faqId, updateFaqRequest);
     }

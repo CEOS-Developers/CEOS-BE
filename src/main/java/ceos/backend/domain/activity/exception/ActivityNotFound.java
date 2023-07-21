@@ -1,5 +1,6 @@
 package ceos.backend.domain.activity.exception;
 
+
 import ceos.backend.global.error.BaseErrorException;
 
 public class ActivityNotFound extends BaseErrorException {

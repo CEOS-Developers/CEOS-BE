@@ -1,18 +1,18 @@
 package ceos.backend.global.error;
 
+import static org.springframework.http.HttpStatus.*;
+
 import ceos.backend.global.common.dto.ErrorReason;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static org.springframework.http.HttpStatus.*;
-
 @Getter
 @AllArgsConstructor
-public enum GlobalErrorCode implements BaseErrorCode{
+public enum GlobalErrorCode implements BaseErrorCode {
 
     /* global error */
-    HTTP_MESSAGE_NOT_READABLE(BAD_REQUEST,"GLOBAL_400_1", "잘못된 형식의 값을 입력했습니다."),
+    HTTP_MESSAGE_NOT_READABLE(BAD_REQUEST, "GLOBAL_400_1", "잘못된 형식의 값을 입력했습니다."),
     _INTERNAL_SERVER_ERROR(INTERNAL_SERVER_ERROR, "GLOBAL_500_1", "서버 오류. 관리자에게 문의 부탁드립니다."),
 
     /*토큰 에러*/

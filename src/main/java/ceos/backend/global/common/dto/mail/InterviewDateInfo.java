@@ -1,9 +1,9 @@
 package ceos.backend.global.common.dto.mail;
 
-import lombok.Builder;
-import lombok.Getter;
 
 import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 
 @Getter
 public class InterviewDateInfo {
@@ -17,9 +17,6 @@ public class InterviewDateInfo {
     }
 
     public static InterviewDateInfo of(List<List<String>> notAvailabletime, List<String> date) {
-        return InterviewDateInfo.builder()
-                .notAvailabletime(notAvailabletime)
-                .date(date)
-                .build();
+        return InterviewDateInfo.builder().notAvailabletime(notAvailabletime).date(date).build();
     }
 }

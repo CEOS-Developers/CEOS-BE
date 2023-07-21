@@ -1,13 +1,13 @@
 package ceos.backend.domain.project.dto.response;
 
+
 import ceos.backend.domain.project.domain.Participant;
 import ceos.backend.domain.project.domain.Project;
 import ceos.backend.domain.project.domain.ProjectImage;
 import ceos.backend.domain.project.domain.ProjectUrl;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class GetProjectResponse {
@@ -21,14 +21,14 @@ public class GetProjectResponse {
     private List<Participant> participants;
 
     @Builder
-    public GetProjectResponse(Long projectId,
-                              String name,
-                              String description,
-                              int generation,
-                              List<ProjectUrl> projectUrls,
-                              List<ProjectImage> projectImages,
-                              List<Participant> participants
-    ) {
+    public GetProjectResponse(
+            Long projectId,
+            String name,
+            String description,
+            int generation,
+            List<ProjectUrl> projectUrls,
+            List<ProjectImage> projectImages,
+            List<Participant> participants) {
         this.projectId = projectId;
         this.name = name;
         this.description = description;

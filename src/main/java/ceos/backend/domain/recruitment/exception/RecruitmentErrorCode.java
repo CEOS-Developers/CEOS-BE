@@ -1,12 +1,12 @@
 package ceos.backend.domain.recruitment.exception;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 import ceos.backend.global.common.dto.ErrorReason;
 import ceos.backend.global.error.BaseErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Getter
 @AllArgsConstructor
@@ -27,6 +27,5 @@ public enum RecruitmentErrorCode implements BaseErrorCode {
     @Override
     public ErrorReason getErrorReason() {
         return ErrorReason.of(status.value(), code, reason);
-
     }
 }

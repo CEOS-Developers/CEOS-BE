@@ -1,13 +1,13 @@
 package ceos.backend.domain.sponsor.mapper;
 
-import ceos.backend.domain.sponsor.dto.SponsorDto;
+
 import ceos.backend.domain.sponsor.domain.Sponsor;
+import ceos.backend.domain.sponsor.dto.SponsorDto;
 import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
 import ceos.backend.global.common.dto.PageInfo;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class SponsorMapper {

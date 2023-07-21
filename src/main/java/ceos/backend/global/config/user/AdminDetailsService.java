@@ -1,5 +1,6 @@
 package ceos.backend.global.config.user;
 
+
 import ceos.backend.domain.admin.domain.Admin;
 import ceos.backend.domain.admin.repository.AdminRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,8 @@ public class AdminDetailsService implements UserDetailsService {
 
     @Transactional
     public UserDetails loadAdminByUsername(Long id) throws UsernameNotFoundException {
-        return adminRepository.findById(id)
+        return adminRepository
+                .findById(id)
                 .map(admin -> createAdmin(id, admin))
                 .orElseThrow(() -> new UsernameNotFoundException(id + " -> DB에서 찾을 수 없음"));
     }

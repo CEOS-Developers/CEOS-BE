@@ -1,11 +1,10 @@
 package ceos.backend.domain.awards.dto.response;
 
-import ceos.backend.domain.awards.vo.ProjectInfoVo;
+
 import ceos.backend.global.common.dto.PageInfo;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class AllAwardsResponse {
@@ -18,7 +17,8 @@ public class AllAwardsResponse {
         this.pageInfo = pageInfo;
     }
 
-    public static AllAwardsResponse of(List<GenerationAwardsResponse> generationAwards, PageInfo pageInfo) {
+    public static AllAwardsResponse of(
+            List<GenerationAwardsResponse> generationAwards, PageInfo pageInfo) {
         return AllAwardsResponse.builder()
                 .generationAwards(generationAwards)
                 .pageInfo(pageInfo)

@@ -1,10 +1,10 @@
 package ceos.backend.domain.application.domain;
 
+
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,18 +31,15 @@ public class ApplicationAnswer extends BaseEntity {
     private String answer;
 
     @Builder
-    private ApplicationAnswer(ApplicationQuestion applicationQuestion,
-                              Application application,
-                              String answer)
-    {
+    private ApplicationAnswer(
+            ApplicationQuestion applicationQuestion, Application application, String answer) {
         this.applicationQuestion = applicationQuestion;
         this.application = application;
         this.answer = answer;
     }
 
-    public static ApplicationAnswer of(ApplicationQuestion applicationQuestion,
-                                         Application application,
-                                         String answer) {
+    public static ApplicationAnswer of(
+            ApplicationQuestion applicationQuestion, Application application, String answer) {
         return ApplicationAnswer.builder()
                 .applicationQuestion(applicationQuestion)
                 .application(application)

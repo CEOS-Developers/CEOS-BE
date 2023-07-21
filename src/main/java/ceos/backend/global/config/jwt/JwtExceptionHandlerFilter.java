@@ -1,5 +1,6 @@
 package ceos.backend.global.config.jwt;
 
+
 import ceos.backend.global.error.BaseErrorCode;
 import ceos.backend.global.error.ErrorResponse;
 import ceos.backend.global.error.exception.TokenValidateException;
@@ -8,12 +9,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
 
 @RequiredArgsConstructor
 @Component
@@ -23,15 +23,12 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
         } catch (TokenValidateException e) {
-            responseToClient(response,
-                    getErrorResponse(e.getErrorCode()));
+            responseToClient(response, getErrorResponse(e.getErrorCode()));
         }
     }
 

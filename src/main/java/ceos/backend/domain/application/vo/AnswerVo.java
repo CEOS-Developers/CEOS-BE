@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.vo;
 
+
 import ceos.backend.domain.application.domain.ApplicationAnswer;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,9 +28,6 @@ public class AnswerVo {
     }
 
     public static AnswerVo of(ApplicationQuestion question, ApplicationAnswer answer) {
-        return AnswerVo.builder()
-                .questionId(question.getId())
-                .answer(answer.getAnswer())
-                .build();
+        return AnswerVo.builder().questionId(question.getId()).answer(answer.getAnswer()).build();
     }
 }

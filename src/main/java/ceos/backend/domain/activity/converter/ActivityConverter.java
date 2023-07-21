@@ -1,13 +1,13 @@
 package ceos.backend.domain.activity.converter;
 
+
 import ceos.backend.domain.activity.domain.Activity;
 import ceos.backend.domain.activity.dto.ActivityResponse;
 import ceos.backend.domain.activity.dto.GetAllActivitiesResponse;
 import ceos.backend.global.common.dto.PageInfo;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ActivityConverter {

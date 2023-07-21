@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.domain;
 
+
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.global.common.entity.University;
 import jakarta.persistence.Column;
@@ -9,13 +10,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-import java.time.LocalDate;
 @Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,8 +29,7 @@ public class ApplicantInfo {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @NotNull
-    private LocalDate birth;
+    @NotNull private LocalDate birth;
 
     @NotNull
     @Size(max = 255)
@@ -54,13 +53,19 @@ public class ApplicantInfo {
     @Column(unique = true)
     private String uuid;
 
-    @NotNull
-    @Positive
-    private int semestersLeftNumber;
+    @NotNull @Positive private int semestersLeftNumber;
 
     @Builder
-    private ApplicantInfo(String name, Gender gender, LocalDate birth, String email, String phoneNumber,
-                          University university, String major, String uuid, int semestersLeftNumber) {
+    private ApplicantInfo(
+            String name,
+            Gender gender,
+            LocalDate birth,
+            String email,
+            String phoneNumber,
+            University university,
+            String major,
+            String uuid,
+            int semestersLeftNumber) {
         this.name = name;
         this.gender = gender;
         this.birth = birth;

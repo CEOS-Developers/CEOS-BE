@@ -1,12 +1,12 @@
 package ceos.backend.global.common.filter;
 
+
 import jakarta.servlet.ReadListener;
 import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-
 import java.io.*;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 public class MultiReadInputStream extends HttpServletRequestWrapper {
     private ByteArrayOutputStream cachedBytes;
@@ -17,13 +17,12 @@ public class MultiReadInputStream extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        if (cachedBytes == null)
-            cacheInputStream();
+        if (cachedBytes == null) cacheInputStream();
         return new CachedServletInputStream(cachedBytes.toByteArray());
     }
 
     @Override
-    public BufferedReader getReader() throws IOException{
+    public BufferedReader getReader() throws IOException {
         return new BufferedReader(new InputStreamReader(getInputStream()));
     }
 
@@ -31,7 +30,6 @@ public class MultiReadInputStream extends HttpServletRequestWrapper {
         cachedBytes = new ByteArrayOutputStream();
         IOUtils.copy(super.getInputStream(), cachedBytes);
     }
-
 
     private static class CachedServletInputStream extends ServletInputStream {
         private final ByteArrayInputStream buffer;

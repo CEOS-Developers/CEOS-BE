@@ -1,11 +1,11 @@
 package ceos.backend.domain.faq.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
@@ -14,8 +14,7 @@ public enum FaqCategory {
     ACTIVITY("ACTIVITY", "활동"),
     PART("PART", "파트");
 
-    @JsonValue
-    private final String faqCategory;
+    @JsonValue private final String faqCategory;
     private final String label;
 
     @JsonCreator

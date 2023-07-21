@@ -1,12 +1,12 @@
 package ceos.backend.domain.project.exception;
 
+import static org.springframework.http.HttpStatus.*;
+
 import ceos.backend.global.common.dto.ErrorReason;
 import ceos.backend.global.error.BaseErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-
-import static org.springframework.http.HttpStatus.*;
 
 @Getter
 @AllArgsConstructor
@@ -20,7 +20,6 @@ public enum ProjectErrorCode implements BaseErrorCode {
     DATA_NOT_FOUND(CONFLICT, "PROJECT_404_1", "존재하지 않는 데이터입니다"),
     INVALID_DATA(BAD_REQUEST, "PROJECT_400_2", "데이터 유효성 검증에 실패하였습니다.");
 
-
     private HttpStatus status;
     private String code;
     private String reason;
@@ -28,6 +27,5 @@ public enum ProjectErrorCode implements BaseErrorCode {
     @Override
     public ErrorReason getErrorReason() {
         return ErrorReason.of(status.value(), code, reason);
-
     }
 }

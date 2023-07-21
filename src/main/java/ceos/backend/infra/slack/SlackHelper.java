@@ -1,18 +1,19 @@
 package ceos.backend.infra.slack;
 
+
 import ceos.backend.global.common.helper.SpringEnvironmentHelper;
 import com.slack.api.Slack;
 import com.slack.api.webhook.Payload;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
 public class SlackHelper {
     private final SpringEnvironmentHelper springEnvironmentHelper;
+
     @Value("${slack.webhook.dev_url}")
     String devUrl;
 
@@ -32,7 +33,7 @@ public class SlackHelper {
                 slack.send(prodUrl, payload);
             }
         } catch (IOException e) {
-        throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
     }
 

@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto.mail;
 
+
 import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import lombok.Builder;
 import lombok.Getter;

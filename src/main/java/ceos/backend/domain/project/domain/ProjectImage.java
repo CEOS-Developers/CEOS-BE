@@ -1,5 +1,6 @@
 package ceos.backend.domain.project.domain;
 
+
 import ceos.backend.domain.project.vo.ProjectImageVo;
 import ceos.backend.global.common.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -21,21 +22,16 @@ public class ProjectImage extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProjectImageCategory category;
 
-    @NotNull
-    private String imageUrl;
+    @NotNull private String imageUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // Cascade
+    @ManyToOne(fetch = FetchType.LAZY) // Cascade
     @JsonBackReference
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
     // 생성자
     @Builder
-    private ProjectImage(
-            ProjectImageCategory category,
-            String imageUrl,
-            Project project
-    ) {
+    private ProjectImage(ProjectImageCategory category, String imageUrl, Project project) {
         this.category = category;
         this.imageUrl = imageUrl;
         this.project = project;

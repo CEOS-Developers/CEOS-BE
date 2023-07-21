@@ -1,5 +1,6 @@
 package ceos.backend.domain.recruitment.domain;
 
+
 import ceos.backend.domain.admin.exception.NotAllowedToModify;
 import ceos.backend.domain.application.exception.WrongGeneration;
 import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
@@ -7,13 +8,12 @@ import ceos.backend.domain.recruitment.exception.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,63 +25,51 @@ public class Recruitment extends BaseEntity {
     @Column(name = "recruitment_id")
     private Long id;
 
-    @NotNull
-    private int generation;
+    @NotNull private int generation;
 
-    @NotNull
-    private String prodStudyUrl;
+    @NotNull private String prodStudyUrl;
 
-    @NotNull
-    private String designStudyUrl;
+    @NotNull private String designStudyUrl;
 
-    @NotNull
-    private String devStudyUrl;
+    @NotNull private String devStudyUrl;
 
-    @NotNull
-    private LocalDate startDateDoc;
+    @NotNull private LocalDate startDateDoc;
 
-    @NotNull
-    private LocalDate endDateDoc;
+    @NotNull private LocalDate endDateDoc;
 
-    @NotNull
-    private LocalDate resultDateDoc;
+    @NotNull private LocalDate resultDateDoc;
 
-    @NotNull
-    private LocalDate startDateInterview;
+    @NotNull private LocalDate startDateInterview;
 
-    @NotNull
-    private LocalDate endDateInterview;
+    @NotNull private LocalDate endDateInterview;
 
-    @NotNull
-    private LocalDate resultDateFinal;
+    @NotNull private LocalDate resultDateFinal;
 
-    @NotNull
-    private String openChatUrl;
+    @NotNull private String openChatUrl;
 
-    @NotNull
-    private LocalDate otDate;
+    @NotNull private LocalDate otDate;
 
-    @NotNull
-    private LocalDate demodayDate;
+    @NotNull private LocalDate demodayDate;
 
     private LocalDateTime applicationExcelCreatedAt;
 
     // 생성자
     @Builder
-    private Recruitment(int generation,
-                        String prodStudyUrl,
-                        String designStudyUrl,
-                        String devStudyUrl,
-                        LocalDate startDateDoc,
-                        LocalDate endDateDoc,
-                        LocalDate resultDateDoc,
-                        LocalDate startDateInterview,
-                        LocalDate endDateInterview,
-                        LocalDate resultDateFinal,
-                        String openChatUrl,
-                        LocalDate otDate,
-                        LocalDate demodayDate,
-                        LocalDateTime applicationExcelCreatedAt) {
+    private Recruitment(
+            int generation,
+            String prodStudyUrl,
+            String designStudyUrl,
+            String devStudyUrl,
+            LocalDate startDateDoc,
+            LocalDate endDateDoc,
+            LocalDate resultDateDoc,
+            LocalDate startDateInterview,
+            LocalDate endDateInterview,
+            LocalDate resultDateFinal,
+            String openChatUrl,
+            LocalDate otDate,
+            LocalDate demodayDate,
+            LocalDateTime applicationExcelCreatedAt) {
         this.generation = generation;
         this.prodStudyUrl = prodStudyUrl;
         this.designStudyUrl = designStudyUrl;
@@ -97,7 +85,6 @@ public class Recruitment extends BaseEntity {
         this.demodayDate = demodayDate;
         this.applicationExcelCreatedAt = applicationExcelCreatedAt;
     }
-
 
     public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest) {
         this.generation = updateRecruitmentRequest.getGeneration();
@@ -118,7 +105,6 @@ public class Recruitment extends BaseEntity {
     public void updateApplicationExcelCreatedAt(LocalDateTime createdAt) {
         this.applicationExcelCreatedAt = createdAt;
     }
-
 
     // Validation 관련
     public void validateGeneration(int generation) {
@@ -168,10 +154,10 @@ public class Recruitment extends BaseEntity {
             throw AlreadyApplicationDuration.EXCEPTION;
         }
     }
-  
+
     public void validAmenablePeriod(LocalDate now) {
-      if (now.compareTo(this.startDateDoc) >= 0 && now.compareTo(this.resultDateFinal) <= 0) {
-          throw NotAllowedToModify.EXCEPTION;
-      }
+        if (now.compareTo(this.startDateDoc) >= 0 && now.compareTo(this.resultDateFinal) <= 0) {
+            throw NotAllowedToModify.EXCEPTION;
+        }
     }
 }
