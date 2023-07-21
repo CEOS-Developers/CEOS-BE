@@ -69,10 +69,13 @@ public class AwardsService {
     }
 
     @Transactional
-    public AwardsResponse updateAward(Long id, AwardsRequest awardsRequest) {
-        Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
-        awards.updateAward(awardsRequest);
-        return AwardsResponse.to(awards);
+    public void updateAwards(int generation, List<AwardsRequest> awardsRequestList) {
+        //기존 데이터 삭제
+        List<Awards> awardsList = awardsRepository.findByGeneration(generation);
+        awardsRepository.deleteAllInBatch(awardsList);
+
+        //수정된 데이터 넣기
+        createAwards(awardsRequestList);
     }
 
     @Transactional
