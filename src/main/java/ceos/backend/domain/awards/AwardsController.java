@@ -25,7 +25,7 @@ public class AwardsController {
 
     @Operation(summary = "수상이력 추가하기")
     @PostMapping
-    public void createAwards(@RequestBody @Valid AwardsRequest awardsRequest){
+    public void createAwards(@RequestBody @Valid List<AwardsRequest> awardsRequest){
         log.info("수상이력 추가하기");
         awardsService.createAwards(awardsRequest);
     }

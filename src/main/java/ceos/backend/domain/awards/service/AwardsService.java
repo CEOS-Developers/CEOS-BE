@@ -28,9 +28,11 @@ public class AwardsService {
     private final AwardsHelper awardsHelper;
 
     @Transactional
-    public void createAwards(AwardsRequest awardsRequest) {
-        Awards awards = Awards.from(awardsRequest);
-        awardsRepository.save(awards);
+    public void createAwards(List<AwardsRequest> awardsRequestList) {
+        for(AwardsRequest awardsRequest : awardsRequestList){
+            Awards awards = Awards.from(awardsRequest);
+            awardsRepository.save(awards);
+        }
     }
 
     @Transactional(readOnly = true)
