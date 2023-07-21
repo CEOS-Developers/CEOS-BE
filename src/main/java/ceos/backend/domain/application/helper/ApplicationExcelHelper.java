@@ -4,7 +4,7 @@ import ceos.backend.domain.application.domain.ApplicationInterview;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.domain.Interview;
 import ceos.backend.domain.application.repository.InterviewRepository;
-import ceos.backend.global.util.InterviewDateFormatter;
+import ceos.backend.global.util.InterviewConvertor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +34,7 @@ public class ApplicationExcelHelper {
         List<Interview> interviewList = interviewRepository.findAll();
 
         for (Interview interview : interviewList) {
-            String duration = InterviewDateFormatter.interviewDateFormatter(interview);
+            String duration = InterviewConvertor.interviewDateFormatter(interview);
             interviewTimeMap.put(interview.getId(), duration); // Map : 면접 시간 id, 면접 시간 format
         }
         return interviewTimeMap;

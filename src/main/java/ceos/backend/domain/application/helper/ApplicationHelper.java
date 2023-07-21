@@ -2,39 +2,72 @@ package ceos.backend.domain.application.helper;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.exception.*;
+import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
+import ceos.backend.domain.application.enums.SortPartType;
+import ceos.backend.domain.application.enums.SortPassType;
+import ceos.backend.domain.application.exception.ApplicantNotFound;
+import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
-import ceos.backend.domain.application.vo.ApplicantInfoVo;
-import ceos.backend.domain.recruitment.domain.Recruitment;
-import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESMail;
+import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.common.event.Event;
-import ceos.backend.global.util.InterviewDateFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class ApplicationHelper {
+    private final ApplicationMapper applicationMapper;
     private final ApplicationRepository applicationRepository;
     private final ApplicationQuestionRepository applicationQuestionRepository;
-    private final ApplicationInterviewRepository applicationInterviewRepository;
-    private final ApplicationAnswerRepository applicationAnswerRepository;
-    private final RecruitmentHelper recruitmentHelper;
 
-    public void validateFirstApplication(ApplicantInfoVo applicantInfoVo) {
-        if (applicationRepository
-                .existsByEmail(applicantInfoVo.getEmail())) {
-            throw DuplicateApplicant.EXCEPTION;
+
+    public Page<Application> getApplications(SortPassType docPass, SortPassType finalPass,
+                                             SortPartType sortType, PageRequest pageRequest) {
+        Page<Application> pageManagements = null;
+        Part part = toPart(sortType);
+        if (docPass == SortPassType.ALL && finalPass == SortPassType.ALL) {
+            switch (sortType) {
+                case ALL -> pageManagements = applicationRepository.findAll(pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPart(toPart(sortType), pageRequest);
+            }
+        } else if (docPass != SortPassType.ALL && finalPass == SortPassType.ALL) {
+            Pass pass = toPass(docPass);
+            switch (sortType) {
+                case ALL -> pageManagements = applicationRepository.findAllByDocumentPass(pass, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPartAndDocumentPass(toPart(sortType), pass, pageRequest);
+            }
+        } else if (docPass == SortPassType.ALL && finalPass != SortPassType.ALL){
+            Pass pass = toPass(finalPass);
+            switch (sortType) {
+                case ALL -> pageManagements = applicationRepository.findAllByFinalPass(pass, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPartAndFinalPass(toPart(sortType), pass, pageRequest);
+            }
+        } else {
+            Pass convertedDocPass = toPass(docPass);
+            Pass convertedFinalPass = toPass(finalPass);
+            switch (sortType) {
+                case ALL -> pageManagements = applicationRepository
+                        .findAllByDocumentPassAndFinalPass(convertedDocPass, convertedFinalPass, pageRequest);
+                default -> pageManagements = applicationRepository
+                        .findAllByPartAndDocumentPassAndFinalPass(toPart(sortType),
+                                convertedDocPass,
+                                convertedFinalPass,
+                                pageRequest);
+            }
         }
+        return pageManagements;
     }
 
     public String generateUUID() {
@@ -53,13 +86,23 @@ public class ApplicationHelper {
         Event.raise(AwsSESMail.of(request, applicationQuestions, generation, UUID));
     }
 
-    public void validateRecruitOption() {
-        final LocalDate now = LocalDate.now();
-        final Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        recruitment.validateApplyDuration(now);
+    public void sendSlackUnableReasonMessage(Application application,
+                                             UpdateAttendanceRequest request,
+                                             boolean isfinal) {
+        final SlackUnavailableReason reason =
+                SlackUnavailableReason.of(application, request.getReason(), isfinal);
+        Event.raise(reason);
     }
 
-    public Application validateApplicantAccessible(String uuid, String email) {
+    public Application getApplicationById(Long id) {
+        return applicationRepository
+                .findById(id)
+                .orElseThrow(() -> {
+                    throw ApplicantNotFound.EXCEPTION;
+                });
+    }
+
+    public Application getApplicationByUuidAndEmail(String uuid, String email) {
         return applicationRepository
                 .findByUuidAndEmail(uuid, email)
                 .orElseThrow(() -> {
@@ -67,92 +110,29 @@ public class ApplicationHelper {
                 });
     }
 
-    public void validateDocumentResultOption() {
-        final LocalDate now = LocalDate.now();
-        recruitmentHelper.takeRecruitment()
-                .validateDocumentResultDuration(now);
-    }
-
-    public void validateFinalResultOption() {
-        LocalDate now = LocalDate.now();
-        recruitmentHelper.takeRecruitment()
-                .validateFinalResultDuration(now);
-    }
-
-
-    public void validateApplicantDocumentPass(Application application) {
-        application.validateDocumentPass();
-    }
-
-    public void validateApplicantInterviewCheckStatus(Application application) {
-        application.validateDocumentPass();
-        application.validateNotInterviewCheck();
-    }
-
-    public void validateApplicantActivityCheckStatus(Application application) {
-        application.validateDocumentPass();
-        application.validateFinalPass();
-        application.validateNotFinalCheck();
-    }
-
-    public void validateDocumentPassDuration() {
-        LocalDate now = LocalDate.now();
-        recruitmentHelper.takeRecruitment()
-                .validateDocumentPassDuration(now);
-    }
-
-    public Application validateExistingApplicant(Long applicationId) {
-        return applicationRepository
-                .findById(applicationId)
-                .orElseThrow(() -> {
-                    throw ApplicantNotFound.EXCEPTION;
-                });
-    }
-
-    public void validateFinalPassDuration() {
-        LocalDate now = LocalDate.now();
-        recruitmentHelper.takeRecruitment()
-                .validateFinalPassDuration(now);
-    }
-
-    public void validateDocumentPassStatus(Application application) {
-        application.validateDocumentPass();
-    }
-
-    public void validateInterviewTime(List<Interview> interviews, String interviewTime) {
-        if(interviews.stream()
-                .noneMatch(interview -> interviewTime
-                        .equals(InterviewDateFormatter.interviewDateFormatter(interview)))) {
-            throw InterviewNotFound.EXCEPTION;
+    private Pass toPass(SortPassType passType) {
+        Pass pass = Pass.FAIL;
+        if (passType == SortPassType.PASS) {
+            pass = Pass.PASS;
         }
+        return pass;
     }
 
-    public void validateBeforeStartDateDoc() {
-        LocalDate now = LocalDate.now();
-        recruitmentHelper.takeRecruitment()
-                .validateBeforeStartDateDoc(now);
-    }
-
-    public void validateRemainApplications() {
-        if (applicationAnswerRepository.count() != 0) {
-            throw AnswerStillExist.EXCEPTION;
+    private Part toPart(SortPartType sortType) {
+        switch (sortType) {
+            case DESIGN -> {
+                return Part.DESIGN;
+            }
+            case BACKEND -> {
+                return Part.BACKEND;
+            }
+            case PRODUCT -> {
+                return Part.PRODUCT;
+            }
+            case FRONTEND -> {
+                return Part.FRONTEND;
+            }
         }
-        if (applicationInterviewRepository.count() != 0) {
-            throw ApplicationInterviewStillExist.EXCEPTION;
-        }
-    }
-
-    public void validateQAMatching(List<ApplicationQuestion> applicationQuestions, CreateApplicationRequest createApplicationRequest) {
-        if (applicationQuestions.stream()
-                .filter(question -> question.getCategory() == QuestionCategory.COMMON)
-                .count() != createApplicationRequest.getCommonAnswers().size()) {
-            throw NotMatchingQnA.EXCEPTION;
-        }
-        final Part part = createApplicationRequest.getPart();
-        if (applicationQuestions.stream()
-                .filter(question -> question.getCategory().toString().equals(part.toString()))
-                .count() != createApplicationRequest.getPartAnswers().size()) {
-            throw NotMatchingQnA.EXCEPTION;
-        }
+        return null;
     }
 }

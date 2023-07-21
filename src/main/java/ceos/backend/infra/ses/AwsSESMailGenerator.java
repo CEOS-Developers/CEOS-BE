@@ -10,8 +10,8 @@ import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.dto.mail.*;
 import ceos.backend.global.common.entity.Part;
-import ceos.backend.global.util.DurationFormatter;
-import ceos.backend.global.util.ParsingDuration;
+import ceos.backend.global.util.InterviewDateTimeConvertor;
+import ceos.backend.global.util.ParsedDurationConvertor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
@@ -52,10 +52,10 @@ public class AwsSESMailGenerator {
                 });
 
 
-        final List<String> unableTimes = DurationFormatter
+        final List<String> unableTimes = InterviewDateTimeConvertor
                 .toStringDuration(request.getUnableTimes());
         List<ParsedDuration> parsedDurations = unableTimes.stream()
-                .map(ParsingDuration::parsingDuration)
+                .map(ParsedDurationConvertor::parsingDuration)
                 .sorted(Comparator.comparing(ParsedDuration::getDuration))
                 .sorted(Comparator.comparing(ParsedDuration::getDate))
                 .toList();

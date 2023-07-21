@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class ParsingDuration {
+public class ParsedDurationConvertor {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
     private static final DateTimeFormatter yearDateSlashFormmatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
     private static final DateTimeFormatter yearDateDotFormmatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");

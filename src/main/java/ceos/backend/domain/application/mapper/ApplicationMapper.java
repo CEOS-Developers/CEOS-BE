@@ -12,8 +12,8 @@ import ceos.backend.domain.application.vo.*;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.entity.Part;
-import ceos.backend.global.util.InterviewDateFormatter;
-import ceos.backend.global.util.ParsingDuration;
+import ceos.backend.global.util.InterviewConvertor;
+import ceos.backend.global.util.ParsedDurationConvertor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -67,7 +67,7 @@ public class ApplicationMapper {
                                                       List<Interview> interviews) {
         List<ApplicationInterview> applicationInterviews = interviews.stream()
                 .filter(interview -> unableTimes
-                        .contains(InterviewDateFormatter.interviewDateFormatter(interview)))
+                        .contains(InterviewConvertor.interviewDateFormatter(interview)))
                 .map(interview -> ApplicationInterview.of(application, interview))
                 .toList();
         if (applicationInterviews.isEmpty() && !unableTimes.isEmpty()) {
@@ -157,8 +157,8 @@ public class ApplicationMapper {
         });
 
         final List<ParsedDuration> parsedDurations = interviews.stream()
-                .map(InterviewDateFormatter::interviewDateFormatter)
-                .map(ParsingDuration::parsingYearDuration)
+                .map(InterviewConvertor::interviewDateFormatter)
+                .map(ParsedDurationConvertor::parsingYearDuration)
                 .toList();
         final Set<String> dateSets = parsedDurations.stream()
                 .map(ParsedDuration::getDate)
@@ -217,8 +217,8 @@ public class ApplicationMapper {
     private List<InterviewTimeVo> toInterviewTimeVoList(List<Interview> interviews, List<ApplicationInterview> applicationInterviews) {
         return interviews.stream()
                 .map(interview -> {
-                    final String duration = InterviewDateFormatter.interviewDateFormatter(interview);
-                    final ParsedDuration parsedDuration = ParsingDuration.parsingYearDuration(duration);
+                    final String duration = InterviewConvertor.interviewDateFormatter(interview);
+                    final ParsedDuration parsedDuration = ParsedDurationConvertor.parsingYearDuration(duration);
                     if (applicationInterviews.stream()
                             .anyMatch(applicationInterview -> applicationInterview.getInterview().equals(interview))) {
                         return InterviewTimeVo.of(true, parsedDuration);
@@ -233,31 +233,5 @@ public class ApplicationMapper {
                 .map(ApplicationBriefInfoVo::from)
                 .toList();
         return GetApplications.of(applicationBriefInfoVos, pageInfo);
-    }
-
-    public Pass toPass(SortPassType passType) {
-        Pass pass = Pass.FAIL;
-        if (passType == SortPassType.PASS) {
-            pass = Pass.PASS;
-        }
-        return pass;
-    }
-
-    public Part toPart(SortPartType sortType) {
-        switch (sortType) {
-            case DESIGN -> {
-                return Part.DESIGN;
-            }
-            case BACKEND -> {
-                return Part.BACKEND;
-            }
-            case PRODUCT -> {
-                return Part.PRODUCT;
-            }
-            case FRONTEND -> {
-                return Part.FRONTEND;
-            }
-        }
-        return null;
     }
 }

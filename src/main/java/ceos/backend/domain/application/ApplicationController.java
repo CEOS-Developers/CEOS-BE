@@ -4,6 +4,7 @@ import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.enums.SortPartType;
 import ceos.backend.domain.application.enums.SortPassType;
+import ceos.backend.domain.application.service.ApplicationExcelService;
 import ceos.backend.domain.application.service.ApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +26,7 @@ import java.nio.file.Path;
 @Tag(name = "Application")
 public class ApplicationController {
     private final ApplicationService applicationService;
+    private final ApplicationExcelService applicationExcelService;
 
     @Operation(summary = "지원자 목록 보기")
     @GetMapping
@@ -37,7 +39,7 @@ public class ApplicationController {
         return applicationService.getApplications(pageNum, limit, part, docPass, finalPass);
     }
 
-    @Operation(summary = "지원하기")
+    @Operation(summary = "지원하기", description = "startDateDoc ~ endDateDoc 전날")
     @PostMapping
     public void createApplication(@RequestBody @Valid CreateApplicationRequest createApplicationRequest) {
         log.info("지원하기");
@@ -51,14 +53,14 @@ public class ApplicationController {
         return applicationService.getApplicationQuestion();
     }
 
-    @Operation(summary = "지원서 질문 수정")
+    @Operation(summary = "지원서 질문 수정", description = "~ startDateDoc 전날")
     @PutMapping(value = "/question")
     public void updateApplicationQuestion(@RequestBody @Valid UpdateApplicationQuestion updateApplicationQuestion) {
         log.info("지원서 질문 수정");
         applicationService.updateApplicationQuestion(updateApplicationQuestion);
     }
 
-    @Operation(summary = "서류 합격 여부 확인하기")
+    @Operation(summary = "서류 합격 여부 확인하기", description = "resultDateDoc ~ resultDateFinal 전날")
     @GetMapping(value = "/document")
     public GetResultResponse getDocumentResult(@RequestParam("uuid") String uuid,
                                                @RequestParam("email") String email) {
@@ -66,7 +68,7 @@ public class ApplicationController {
         return applicationService.getDocumentResult(uuid, email);
     }
 
-    @Operation(summary = "면접 참여 가능 여부 선택")
+    @Operation(summary = "면접 참여 가능 여부 선택", description = "resultDateDoc ~ resultDateFinal 전날")
     @PatchMapping(value = "/interview")
     public void updateInterviewAttendance(@RequestParam("uuid") String uuid,
                                           @RequestParam("email") String email,
@@ -75,7 +77,7 @@ public class ApplicationController {
         applicationService.updateInterviewAttendance(uuid, email, request);
     }
 
-    @Operation(summary = "최종 합격 여부 확인하기")
+    @Operation(summary = "최종 합격 여부 확인하기", description = "resultDateFinal ~ resultDateFinal 4일 후")
     @GetMapping(value = "/final")
     public GetResultResponse getFinalResult(@RequestParam("uuid") String uuid,
                                             @RequestParam("email") String email) {
@@ -83,13 +85,13 @@ public class ApplicationController {
         return applicationService.getFinalResult(uuid, email);
     }
 
-    @Operation(summary = "활동 가능 여부 선택")
+    @Operation(summary = "활동 가능 여부 선택", description = "resultDateFinal ~ resultDateFinal 4일 후")
     @PatchMapping(value = "/pass")
-    public void updateActivityAvailability(@RequestParam("uuid") String uuid,
+    public void updateParticipationAvailability(@RequestParam("uuid") String uuid,
                                            @RequestParam("email") String email,
                                            @RequestBody UpdateAttendanceRequest request) {
         log.info("활동 가능 여부 선택");
-        applicationService.updateActivityAvailability(uuid, email, request);
+        applicationService.updateParticipationAvailability(uuid, email, request);
     }
 
     @Operation(summary = "지원자 자기소개서 보기")
@@ -106,7 +108,7 @@ public class ApplicationController {
         return applicationService.getInterviewTime(applicationId);
     }
 
-    @Operation(summary = "면접 시간 결정하기, 서류 접수 날짜 ~ 서류 결과 발표 전 날")
+    @Operation(summary = "면접 시간 결정하기", description = "startDateDoc ~ resultDateDoc 전날")
     @PatchMapping(value = "/{applicationId}/interview")
     public void updateInterviewTime(@PathVariable("applicationId") Long applicationId,
                                     @RequestBody @Valid UpdateInterviewTime updateInterviewTime) {
@@ -114,7 +116,7 @@ public class ApplicationController {
         applicationService.updateInterviewTime(applicationId, updateInterviewTime);
     }
 
-    @Operation(summary = "서류 합격 여부 변경, 서류 접수 날짜 ~ 서류 결과 발표 전 날")
+    @Operation(summary = "서류 합격 여부 변경", description = "startDateDoc ~ resultDateDoc 전날")
     @PatchMapping(value = "/{applicationId}/document")
     public void updateDocumentPassStatus(@PathVariable("applicationId") Long applicationId,
                                          @RequestBody @Valid UpdatePassStatus updatePassStatus) {
@@ -122,7 +124,7 @@ public class ApplicationController {
         applicationService.updateDocumentPassStatus(applicationId, updatePassStatus);
     }
 
-    @Operation(summary = "최종 합격 여부 변경, 서류 결과 발표 날짜 ~ 최종 결과 발표 전 날")
+    @Operation(summary = "최종 합격 여부 변경", description = "resultDateDoc ~ ResultDateFinal 전날")
     @PatchMapping(value = "/{applicationId}/final")
     public void updateFinalPassStatus(@PathVariable("applicationId") Long applicationId,
                                       @RequestBody @Valid UpdatePassStatus updatePassStatus) {
@@ -134,14 +136,14 @@ public class ApplicationController {
     @GetMapping(value = "/file/create")
     public GetCreationTime createApplicationExcel() {
         log.info("지원서 엑셀 파일 생성");
-        return applicationService.createApplicationExcel();
+        return applicationExcelService.createApplicationExcel();
     }
 
     @Operation(summary = "지원서 엑셀 다운로드")
     @GetMapping(value = "/file/download")
     public ResponseEntity<FileSystemResource> getApplicationExcel() {
         log.info("지원서 엑셀 다운로드");
-        Path path = applicationService.getApplicationExcel();
+        Path path = applicationExcelService.getApplicationExcel();
 
         FileSystemResource resource = new FileSystemResource(path.toFile());
         HttpHeaders headers = new HttpHeaders();
