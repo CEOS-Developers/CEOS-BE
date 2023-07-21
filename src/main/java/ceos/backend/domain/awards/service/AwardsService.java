@@ -79,8 +79,7 @@ public class AwardsService {
     }
 
     @Transactional
-    public void deleteAward(Long id){
-        Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
-        awardsRepository.delete(awards);
+    public void deleteAward(List<Long> awardIdList){
+        awardsRepository.deleteAllByIdInBatch(awardIdList);
     }
 }

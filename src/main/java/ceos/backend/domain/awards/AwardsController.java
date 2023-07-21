@@ -53,9 +53,9 @@ public class AwardsController {
     }
 
     @Operation(summary = "수상이력 삭제하기")
-    @DeleteMapping("/{awardId}")
-    public void deleteAwards(@PathVariable(name = "awardId") Long awardID){
+    @DeleteMapping("/{generation}")
+    public void deleteAwards(@PathVariable(name = "generation") List<Long> awardIdList){
         log.info("수상이력 삭제하기");
-        awardsService.deleteAward(awardID);
+        awardsService.deleteAward(awardIdList);
     }
 }
