@@ -1,6 +1,7 @@
 package ceos.backend.domain.awards.service;
 
 import ceos.backend.domain.awards.domain.Awards;
+import ceos.backend.domain.awards.dto.request.AwardsIdList;
 import ceos.backend.domain.awards.dto.response.AwardsResponse;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
@@ -79,7 +80,7 @@ public class AwardsService {
     }
 
     @Transactional
-    public void deleteAward(List<Long> awardIdList){
-        awardsRepository.deleteAllByIdInBatch(awardIdList);
+    public void deleteAward(AwardsIdList awardsIdList){
+        awardsRepository.deleteAllByIdInBatch(awardsIdList.getAwardsIdList());
     }
 }

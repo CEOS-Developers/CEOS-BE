@@ -1,5 +1,6 @@
 package ceos.backend.domain.awards;
 
+import ceos.backend.domain.awards.dto.request.AwardsIdList;
 import ceos.backend.domain.awards.dto.response.AwardsResponse;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
@@ -54,8 +55,8 @@ public class AwardsController {
 
     @Operation(summary = "수상이력 삭제하기")
     @DeleteMapping("/{generation}")
-    public void deleteAwards(@PathVariable(name = "generation") List<Long> awardIdList){
+    public void deleteAwards(@PathVariable(name = "generation") int generation, @RequestBody AwardsIdList awardsIdList){
         log.info("수상이력 삭제하기");
-        awardsService.deleteAward(awardIdList);
+        awardsService.deleteAward(awardsIdList);
     }
 }
