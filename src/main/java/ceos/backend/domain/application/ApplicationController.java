@@ -4,6 +4,7 @@ import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.enums.SortPartType;
 import ceos.backend.domain.application.enums.SortPassType;
+import ceos.backend.domain.application.service.ApplicationExcelService;
 import ceos.backend.domain.application.service.ApplicationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,6 +26,7 @@ import java.nio.file.Path;
 @Tag(name = "Application")
 public class ApplicationController {
     private final ApplicationService applicationService;
+    private final ApplicationExcelService applicationExcelService;
 
     @Operation(summary = "지원자 목록 보기")
     @GetMapping
@@ -134,14 +136,14 @@ public class ApplicationController {
     @GetMapping(value = "/file/create")
     public GetCreationTime createApplicationExcel() {
         log.info("지원서 엑셀 파일 생성");
-        return applicationService.createApplicationExcel();
+        return applicationExcelService.createApplicationExcel();
     }
 
     @Operation(summary = "지원서 엑셀 다운로드")
     @GetMapping(value = "/file/download")
     public ResponseEntity<FileSystemResource> getApplicationExcel() {
         log.info("지원서 엑셀 다운로드");
-        Path path = applicationService.getApplicationExcel();
+        Path path = applicationExcelService.getApplicationExcel();
 
         FileSystemResource resource = new FileSystemResource(path.toFile());
         HttpHeaders headers = new HttpHeaders();
