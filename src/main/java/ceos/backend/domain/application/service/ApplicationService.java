@@ -5,13 +5,12 @@ import ceos.backend.domain.application.dto.request.*;
 import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.enums.SortPartType;
 import ceos.backend.domain.application.enums.SortPassType;
-import ceos.backend.domain.application.exception.FileCreationFailed;
 import ceos.backend.domain.application.helper.ApplicationExcelHelper;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
+import ceos.backend.domain.application.validator.ApplicationValidator;
 import ceos.backend.domain.application.vo.QuestionListVo;
-import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import ceos.backend.global.common.dto.PageInfo;
@@ -22,20 +21,12 @@ import ceos.backend.global.util.DurationFormatter;
 import ceos.backend.global.util.ParsingDuration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -49,76 +40,36 @@ public class ApplicationService {
     private final ApplicationQuestionDetailRepository applicationQuestionDetailRepository;
 
     private final RecruitmentHelper recruitmentHelper;
-    private final RecruitmentRepository recruitmentRepository;
 
     private final ApplicationMapper applicationMapper;
     private final ApplicationHelper applicationHelper;
-
-    private final ApplicationExcelHelper applicationExcelHelper;
+    private final ApplicationValidator applicationValidator;
 
 
     @Transactional(readOnly = true)
     public GetApplications getApplications(int pageNum, int limit, SortPartType sortType,
                                            SortPassType docPass, SortPassType finalPass) {
-        //페이징 요청 정보
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
-
-        Page<Application> pageManagements = null;
-        Part part = applicationMapper.toPart(sortType);
-        if (docPass == SortPassType.ALL && finalPass == SortPassType.ALL) {
-            switch (sortType) {
-                case ALL -> pageManagements = applicationRepository.findAll(pageRequest);
-                default -> pageManagements = applicationRepository
-                        .findAllByPart(applicationMapper.toPart(sortType), pageRequest);
-            }
-        } else if (docPass != SortPassType.ALL && finalPass == SortPassType.ALL) {
-            Pass pass = applicationMapper.toPass(docPass);
-            switch (sortType) {
-                case ALL -> pageManagements = applicationRepository.findAllByDocumentPass(pass, pageRequest);
-                default -> pageManagements = applicationRepository
-                        .findAllByPartAndDocumentPass(applicationMapper.toPart(sortType), pass, pageRequest);
-            }
-        } else if (docPass == SortPassType.ALL && finalPass != SortPassType.ALL){
-            Pass pass = applicationMapper.toPass(finalPass);
-            switch (sortType) {
-                case ALL -> pageManagements = applicationRepository.findAllByFinalPass(pass, pageRequest);
-                default -> pageManagements = applicationRepository
-                        .findAllByPartAndFinalPass(applicationMapper.toPart(sortType), pass, pageRequest);
-            }
-        } else {
-            Pass convertedDocPass = applicationMapper.toPass(docPass);
-            Pass convertedFinalPass = applicationMapper.toPass(finalPass);
-            switch (sortType) {
-                case ALL -> pageManagements = applicationRepository
-                        .findAllByDocumentPassAndFinalPass(convertedDocPass, convertedFinalPass, pageRequest);
-                default -> pageManagements = applicationRepository
-                        .findAllByPartAndDocumentPassAndFinalPass(applicationMapper.toPart(sortType),
-                                convertedDocPass,
-                                convertedFinalPass,
-                                pageRequest);
-            }
-        }
-
-        //페이징 정보
+        Page<Application> pageManagements = applicationHelper
+                .getApplications(docPass, finalPass, sortType, pageRequest);
         PageInfo pageInfo = PageInfo.of(pageNum, limit, pageManagements.getTotalPages(), pageManagements.getTotalElements());
-
         return applicationMapper.toGetApplications(pageManagements, pageInfo);
     }
 
     @Transactional
     public void createApplication(CreateApplicationRequest createApplicationRequest) {
         // 제출 기간, 기수 검사
-        applicationHelper.validateRecruitOption();
+        applicationValidator.validateRecruitOption();
 
         // 중복 검사
-        applicationHelper.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
+        applicationValidator.validateFirstApplication(createApplicationRequest.getApplicantInfoVo());
 
         // 질문 다 채웠나 검사
         final List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findAll();
-        applicationHelper.validateQAMatching(applicationQuestions, createApplicationRequest);
+        applicationValidator.validateQAMatching(applicationQuestions, createApplicationRequest);
 
         // 엔티티 생성 및 저장
-        final String UUID = applicationHelper.generateUUID();
+        final String UUID = applicationValidator.generateUUID();
         final int generation = recruitmentHelper.takeRecruitment().getGeneration();
         final Application application = applicationMapper.toEntity(createApplicationRequest, generation, UUID);
         final List<Interview> interviews = interviewRepository.findAll();
@@ -138,7 +89,7 @@ public class ApplicationService {
         applicationRepository.save(application);
 
         // 이메일 전송
-        applicationHelper.sendEmail(createApplicationRequest, generation, UUID);
+        applicationValidator.sendEmail(createApplicationRequest, generation, UUID);
     }
 
     @Transactional(readOnly = true)
@@ -156,10 +107,10 @@ public class ApplicationService {
     @Transactional
     public void updateApplicationQuestion(UpdateApplicationQuestion updateApplicationQuestion) {
         // 기간 확인
-        applicationHelper.validateBeforeStartDateDoc();
+        applicationValidator.validateBeforeStartDateDoc();
 
         // 남은 응답 확인
-        applicationHelper.validateRemainApplications();
+        applicationValidator.validateRemainApplications();
 
         // 변경
         applicationQuestionRepository.deleteAll();
@@ -178,10 +129,10 @@ public class ApplicationService {
     @Transactional(readOnly = true)
     public GetResultResponse getDocumentResult(String uuid, String email) {
         // 서류 합격 기간 검증
-        applicationHelper.validateDocumentResultOption();
+        applicationValidator.validateDocumentResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
+        final Application application = applicationValidator.validateApplicantAccessible(uuid, email);
 
         // dto
         return applicationMapper.toGetResultResponse(application, true);
@@ -190,13 +141,13 @@ public class ApplicationService {
     @Transactional
     public void updateInterviewAttendance(String uuid, String email, UpdateAttendanceRequest request) {
         // 서류 합격 기간 검증
-        applicationHelper.validateDocumentResultOption();
+        applicationValidator.validateDocumentResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
+        final Application application = applicationValidator.validateApplicantAccessible(uuid, email);
 
         // 유저 확인 여부 검증
-        applicationHelper.validateApplicantInterviewCheckStatus(application);
+        applicationValidator.validateApplicantInterviewCheckStatus(application);
 
         // 슬랙
         if (request.isAvailable()) {
@@ -212,13 +163,13 @@ public class ApplicationService {
     @Transactional(readOnly = true)
     public GetResultResponse getFinalResult(String uuid, String email) {
         // 최종 합격 기간 검증
-        applicationHelper.validateFinalResultOption();
+        applicationValidator.validateFinalResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
+        final Application application = applicationValidator.validateApplicantAccessible(uuid, email);
 
         // 유저 서류 합격 여부 검증
-        applicationHelper.validateApplicantDocumentPass(application);
+        applicationValidator.validateApplicantDocumentPass(application);
 
         // dto 생성
         return applicationMapper.toGetResultResponse(application, false);
@@ -227,13 +178,13 @@ public class ApplicationService {
     @Transactional
     public void updateActivityAvailability(String uuid, String email, UpdateAttendanceRequest request) {
         // 최종 합격 기간 검증
-        applicationHelper.validateFinalResultOption();
+        applicationValidator.validateFinalResultOption();
 
         // 유저 검증
-        final Application application = applicationHelper.validateApplicantAccessible(uuid, email);
+        final Application application = applicationValidator.validateApplicantAccessible(uuid, email);
 
         // 유저 확인 여부 검증
-        applicationHelper.validateApplicantActivityCheckStatus(application);
+        applicationValidator.validateApplicantActivityCheckStatus(application);
 
         // 슬랙
         if (request.isAvailable()) {
@@ -249,7 +200,7 @@ public class ApplicationService {
     @Transactional(readOnly = true)
     public GetApplication getApplication(Long applicationId) {
         // 유저 검증
-        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+        final Application application = applicationValidator.validateExistingApplicant(applicationId);
 
         // dto
         final List<Interview> interviews = interviewRepository.findAll();
@@ -268,10 +219,10 @@ public class ApplicationService {
     @Transactional(readOnly = true)
     public GetInterviewTime getInterviewTime(Long applicationId) {
         // 유저 검증
-        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+        final Application application = applicationValidator.validateExistingApplicant(applicationId);
 
         // 서류 통과 검증
-        applicationHelper.validateDocumentPassStatus(application);
+        applicationValidator.validateDocumentPassStatus(application);
 
         // dto
         final List<Interview> interviews = interviewRepository.findAll();
@@ -283,18 +234,18 @@ public class ApplicationService {
     @Transactional
     public void updateInterviewTime(Long applicationId, UpdateInterviewTime updateInterviewTime) {
         // 기간 검증
-        applicationHelper.validateDocumentPassDuration();
+        applicationValidator.validateDocumentPassDuration();
 
         // 유저 검증
-        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+        final Application application = applicationValidator.validateExistingApplicant(applicationId);
 
         // 서류 통과 검증
-        applicationHelper.validateDocumentPassStatus(application);
+        applicationValidator.validateDocumentPassStatus(application);
 
         // 인터뷰 시간 검증
         final List<Interview> interviews = interviewRepository.findAll();
         final String duration = ParsingDuration.toStringDuration(updateInterviewTime.getParsedDuration());
-        applicationHelper.validateInterviewTime(interviews, duration);
+        applicationValidator.validateInterviewTime(interviews, duration);
 
          // status 변경
         application.updateInterviewTime(duration);
@@ -303,10 +254,10 @@ public class ApplicationService {
     @Transactional
     public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         // 기간 검증
-        applicationHelper.validateDocumentPassDuration();
+        applicationValidator.validateDocumentPassDuration();
 
         // 유저 검증
-        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+        final Application application = applicationValidator.validateExistingApplicant(applicationId);
 
         // status 변경
         application.updateDocumentPass(updatePassStatus.getPass());
@@ -315,13 +266,13 @@ public class ApplicationService {
     @Transactional
     public void updateFinalPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         // 기간 검증
-        applicationHelper.validateFinalPassDuration();
+        applicationValidator.validateFinalPassDuration();
 
         // 유저 검증
-        final Application application = applicationHelper.validateExistingApplicant(applicationId);
+        final Application application = applicationValidator.validateExistingApplicant(applicationId);
 
         // 서류 통과 검증
-        applicationHelper.validateDocumentPassStatus(application);
+        applicationValidator.validateDocumentPassStatus(application);
 
         // status 변경
         application.updateFinalPass(updatePassStatus.getPass());
