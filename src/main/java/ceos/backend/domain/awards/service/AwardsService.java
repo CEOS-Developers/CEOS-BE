@@ -1,11 +1,9 @@
 package ceos.backend.domain.awards.service;
 
 import ceos.backend.domain.awards.domain.Awards;
-import ceos.backend.domain.awards.dto.response.AwardsResponse;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
 import ceos.backend.domain.awards.dto.response.GenerationAwardsResponse;
-import ceos.backend.domain.awards.exception.AwardNotFound;
 import ceos.backend.domain.awards.helper.AwardsHelper;
 import ceos.backend.domain.awards.repository.AwardsRepository;
 import ceos.backend.domain.project.repository.ProjectRepository;
@@ -28,9 +26,11 @@ public class AwardsService {
     private final AwardsHelper awardsHelper;
 
     @Transactional
-    public void createAwards(AwardsRequest awardsRequest) {
-        Awards awards = Awards.from(awardsRequest);
-        awardsRepository.save(awards);
+    public void createAwards(List<AwardsRequest> awardsRequestList) {
+        for(AwardsRequest awardsRequest : awardsRequestList){
+            Awards awards = Awards.from(awardsRequest);
+            awardsRepository.save(awards);
+        }
     }
 
     @Transactional(readOnly = true)
@@ -61,21 +61,18 @@ public class AwardsService {
     }
 
     @Transactional(readOnly = true)
-    public AwardsResponse getAward(Long id) {
-        Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
-        return AwardsResponse.to(awards);
+    public GenerationAwardsResponse getGenerationAwards(int generation) {
+        GenerationAwardsResponse generationAwardsResponse = GenerationAwardsResponse.of(generation, awardsHelper.getAwardsDto(generation), awardsHelper.getProjectVo(generation));
+        return generationAwardsResponse;
     }
 
     @Transactional
-    public AwardsResponse updateAward(Long id, AwardsRequest awardsRequest) {
-        Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
-        awards.updateAward(awardsRequest);
-        return AwardsResponse.to(awards);
-    }
+    public void updateAwards(int generation, List<AwardsRequest> awardsRequestList) {
+        //기존 데이터 삭제
+        List<Awards> awardsList = awardsRepository.findByGeneration(generation);
+        awardsRepository.deleteAllInBatch(awardsList);
 
-    @Transactional
-    public void deleteAward(Long id){
-        Awards awards = awardsRepository.findById(id).orElseThrow(() -> {throw AwardNotFound.EXCEPTION;});
-        awardsRepository.delete(awards);
+        //수정된 데이터 넣기
+        createAwards(awardsRequestList);
     }
 }

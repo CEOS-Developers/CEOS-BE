@@ -1,6 +1,5 @@
 package ceos.backend.domain.awards;
 
-import ceos.backend.domain.awards.dto.response.AwardsResponse;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
 import ceos.backend.domain.awards.dto.response.GenerationAwardsResponse;
@@ -25,7 +24,7 @@ public class AwardsController {
 
     @Operation(summary = "수상이력 추가하기")
     @PostMapping
-    public void createAwards(@RequestBody @Valid AwardsRequest awardsRequest){
+    public void createAwards(@RequestBody @Valid List<AwardsRequest> awardsRequest){
         log.info("수상이력 추가하기");
         awardsService.createAwards(awardsRequest);
     }
@@ -37,25 +36,19 @@ public class AwardsController {
         return awardsService.getAllAwards(pageNum, limit);
     }
 
-    @Operation(summary = "수상이력 하나보기")
-    @GetMapping("/{awardId}")
-    public AwardsResponse getAward(@PathVariable(name = "awardId") Long awardID){
+    @Operation(summary = "기수별 수상이력 보기")
+    @GetMapping("/{generation}")
+    public GenerationAwardsResponse getGenerationAwards(@PathVariable(name = "generation") int generation){
         log.info("수상이력 하나보기");
-        return awardsService.getAward(awardID);
+        return awardsService.getGenerationAwards(generation);
     }
 
     @Operation(summary = "수상이력 수정하기")
-    @PatchMapping("/{awardId}")
-    public AwardsResponse updateAward(@PathVariable(name = "awardId") Long awardID,
-                                       @RequestBody AwardsRequest awardsRequest){
+    @PutMapping("/{generation}")
+    public void updateAwards(@PathVariable(name = "generation") int generation,
+                                       @RequestBody List<AwardsRequest> awardsRequest){
         log.info("수상이력 수정하기");
-        return awardsService.updateAward(awardID, awardsRequest);
+        awardsService.updateAwards(generation, awardsRequest);
     }
 
-    @Operation(summary = "수상이력 삭제하기")
-    @DeleteMapping("/{awardId}")
-    public void deleteAwards(@PathVariable(name = "awardId") Long awardID){
-        log.info("수상이력 삭제하기");
-        awardsService.deleteAward(awardID);
-    }
 }
