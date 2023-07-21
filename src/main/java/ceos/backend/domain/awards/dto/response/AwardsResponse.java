@@ -9,19 +9,22 @@ import java.time.LocalDate;
 @Getter
 public class AwardsResponse {
 
+    private Long id;
     private String content;
     private LocalDate startDate;
 
     @Builder
-    private AwardsResponse(String content,
+    private AwardsResponse(Long id, String content,
                            LocalDate startDate)
     {
+        this.id = id;
         this.content = content;
         this.startDate = startDate;
     }
 
     public static AwardsResponse to(Awards awards){
         return AwardsResponse.builder()
+                .id(awards.getId())
                 .content(awards.getContent())
                 .startDate(awards.getStartDate())
                 .build();

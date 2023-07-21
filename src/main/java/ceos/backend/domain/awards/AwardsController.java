@@ -55,7 +55,7 @@ public class AwardsController {
 
     @Operation(summary = "수상이력 삭제하기")
     @DeleteMapping("/{generation}")
-    public void deleteAwards(@PathVariable(name = "generation") int generation, @RequestBody AwardsIdList awardsIdList){
+    public void deleteAwards(@RequestBody AwardsIdList awardsIdList){
         log.info("수상이력 삭제하기");
         awardsService.deleteAward(awardsIdList);
     }
