@@ -19,6 +19,7 @@ import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.common.event.Event;
 import ceos.backend.global.util.DurationFormatter;
+import ceos.backend.global.util.ParsingDuration;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
@@ -292,10 +293,11 @@ public class ApplicationService {
 
         // 인터뷰 시간 검증
         final List<Interview> interviews = interviewRepository.findAll();
-        applicationHelper.validateInterviewTime(interviews, updateInterviewTime.getInterviewTime());
+        final String duration = ParsingDuration.toStringDuration(updateInterviewTime.getParsedDuration());
+        applicationHelper.validateInterviewTime(interviews, duration);
 
          // status 변경
-        application.updateInterviewTime(updateInterviewTime.getInterviewTime());
+        application.updateInterviewTime(duration);
     }
 
     @Transactional
