@@ -1,7 +1,5 @@
 package ceos.backend.domain.awards;
 
-import ceos.backend.domain.awards.dto.request.AwardsIdList;
-import ceos.backend.domain.awards.dto.response.AwardsResponse;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
 import ceos.backend.domain.awards.dto.response.GenerationAwardsResponse;
@@ -53,10 +51,4 @@ public class AwardsController {
         awardsService.updateAwards(generation, awardsRequest);
     }
 
-    @Operation(summary = "수상이력 삭제하기")
-    @DeleteMapping("/{generation}")
-    public void deleteAwards(@RequestBody AwardsIdList awardsIdList){
-        log.info("수상이력 삭제하기");
-        awardsService.deleteAward(awardsIdList);
-    }
 }

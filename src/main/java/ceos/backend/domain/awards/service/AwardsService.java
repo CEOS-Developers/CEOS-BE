@@ -1,12 +1,9 @@
 package ceos.backend.domain.awards.service;
 
 import ceos.backend.domain.awards.domain.Awards;
-import ceos.backend.domain.awards.dto.request.AwardsIdList;
-import ceos.backend.domain.awards.dto.response.AwardsResponse;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
 import ceos.backend.domain.awards.dto.response.GenerationAwardsResponse;
-import ceos.backend.domain.awards.exception.AwardNotFound;
 import ceos.backend.domain.awards.helper.AwardsHelper;
 import ceos.backend.domain.awards.repository.AwardsRepository;
 import ceos.backend.domain.project.repository.ProjectRepository;
@@ -77,10 +74,5 @@ public class AwardsService {
 
         //수정된 데이터 넣기
         createAwards(awardsRequestList);
-    }
-
-    @Transactional
-    public void deleteAward(AwardsIdList awardsIdList){
-        awardsRepository.deleteAllByIdInBatch(awardsIdList.getAwardsIdList());
     }
 }
