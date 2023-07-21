@@ -3,6 +3,7 @@ package ceos.backend.global.util;
 import ceos.backend.global.common.dto.ParsedDuration;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
