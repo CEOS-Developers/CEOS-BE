@@ -171,4 +171,13 @@ public class ApplicationExcelService {
         // 워크북 및 자원 해제
         workbook.close();
     }
+
+    @Transactional(readOnly = true)
+    public GetCreationTime getApplicationExcelCreationTime() {
+        Recruitment recruitment = recruitmentRepository.findAll().get(0);
+        LocalDateTime applicationExcelCreatedAt = recruitment.getApplicationExcelCreatedAt();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        return GetCreationTime.from(applicationExcelCreatedAt.format(formatter));
+    }
 }
