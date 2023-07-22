@@ -1,5 +1,6 @@
 package ceos.backend.domain.application;
 
+
 import ceos.backend.domain.application.dto.response.GetCreationTime;
 import ceos.backend.domain.application.service.ApplicationExcelService;
 import org.assertj.core.api.Assertions;
@@ -11,8 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ApplicationExcelServiceTest {
 
-    @Autowired
-    ApplicationExcelService applicationExcelService;
+    @Autowired ApplicationExcelService applicationExcelService;
 
     @DisplayName("지원서 엑셀 파일 생성 시각")
     @Test
