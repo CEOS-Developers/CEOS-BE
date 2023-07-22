@@ -165,4 +165,11 @@ public class ApplicationController {
                                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
                 .body(resource);
     }
+
+    @Operation(summary = "지원서 엑셀 파일 생성 시각 확인")
+    @GetMapping(value = "/file/creationtime")
+    public GetCreationTime getApplicationExcelCreationTime() {
+        log.info("지원서 엑셀 파일 생성 시각 확인");
+        return applicationExcelService.getApplicationExcelCreationTime();
+    }
 }
