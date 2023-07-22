@@ -25,4 +25,8 @@ public class ParsedDuration {
     public static ParsedDuration of(String date, String duration) {
         return ParsedDuration.builder().date(date).duration(duration).build();
     }
+
+    public static ParsedDuration toNullParsedDuration() {
+        return ParsedDuration.builder().date(null).duration(null).build();
+    }
 }

@@ -4,6 +4,7 @@ package ceos.backend.domain.application.vo;
 import ceos.backend.domain.application.domain.ApplicantInfo;
 import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.Pass;
+import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.entity.Part;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Builder;
@@ -17,7 +18,8 @@ public class ApplicationBriefInfoVo {
     private Long id;
     private Pass documentPass;
     private Pass finalPass;
-    private String interviewTime;
+
+    @JsonUnwrapped private ParsedDuration interviewTime;
 
     @Builder
     private ApplicationBriefInfoVo(
@@ -26,7 +28,7 @@ public class ApplicationBriefInfoVo {
             Part part,
             Pass documentPass,
             Pass finalPass,
-            String interviewTime) {
+            ParsedDuration interviewTime) {
         this.applicantInfo = applicantInfo;
         this.id = id;
         this.part = part;
@@ -35,14 +37,14 @@ public class ApplicationBriefInfoVo {
         this.interviewTime = interviewTime;
     }
 
-    public static ApplicationBriefInfoVo from(Application application) {
+    public static ApplicationBriefInfoVo of(Application application, ParsedDuration interviewTime) {
         return ApplicationBriefInfoVo.builder()
                 .applicantInfo(application.getApplicantInfo())
                 .id(application.getId())
                 .part(application.getApplicationDetail().getPart())
                 .documentPass(application.getDocumentPass())
                 .finalPass(application.getFinalPass())
-                .interviewTime(application.getInterviewDatetime())
+                .interviewTime(interviewTime)
                 .build();
     }
 }
