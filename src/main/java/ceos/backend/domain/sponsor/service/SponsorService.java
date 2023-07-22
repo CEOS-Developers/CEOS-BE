@@ -54,6 +54,18 @@ public class SponsorService {
         return response;
     }
 
+    @Transactional(readOnly = true)
+    public SponsorDto getSponsor(Long id) {
+        Sponsor findSponsor =
+                sponsorRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () -> {
+                                    throw SponsorNotFound.EXCEPTION;
+                                });
+        return SponsorDto.entityToDto(findSponsor);
+    }
+
     @Transactional
     public SponsorDto updateSponsor(Long id, SponsorVo sponsorVo) {
         Sponsor findSponsor =
