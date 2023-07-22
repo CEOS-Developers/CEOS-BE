@@ -1,18 +1,18 @@
 package ceos.backend.global.config.jwt;
 
+
 import ceos.backend.global.error.BaseErrorCode;
 import ceos.backend.global.error.ErrorResponse;
 import ceos.backend.global.error.exception.ForbiddenAdminException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 @RequiredArgsConstructor
 @Component
@@ -24,9 +24,10 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(
             HttpServletRequest request,
             HttpServletResponse response,
-            AccessDeniedException accessDeniedException) throws IOException {
-        responseToClient(response,
-                getErrorResponse(ForbiddenAdminException.EXCEPTION.getErrorCode()));
+            AccessDeniedException accessDeniedException)
+            throws IOException {
+        responseToClient(
+                response, getErrorResponse(ForbiddenAdminException.EXCEPTION.getErrorCode()));
     }
 
     private ErrorResponse getErrorResponse(BaseErrorCode errorCode) {

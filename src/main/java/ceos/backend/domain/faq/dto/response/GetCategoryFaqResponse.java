@@ -1,10 +1,10 @@
 package ceos.backend.domain.faq.dto.response;
 
+
 import ceos.backend.domain.faq.dto.FaqDto;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class GetCategoryFaqResponse {
@@ -17,8 +17,6 @@ public class GetCategoryFaqResponse {
     }
 
     public static GetCategoryFaqResponse from(List<FaqDto> categoryFaqList) {
-        return GetCategoryFaqResponse.builder()
-                .categoryFaqList(categoryFaqList)
-                .build();
+        return GetCategoryFaqResponse.builder().categoryFaqList(categoryFaqList).build();
     }
 }

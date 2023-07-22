@@ -1,5 +1,6 @@
 package ceos.backend.domain.admin;
 
+
 import ceos.backend.domain.admin.dto.request.*;
 import ceos.backend.domain.admin.dto.response.*;
 import ceos.backend.domain.admin.service.AdminService;
@@ -23,7 +24,8 @@ public class AdminController {
 
     @Operation(summary = "닉네임 확인")
     @PostMapping("/username")
-    public CheckUsernameResponse checkUsername(@RequestBody @Valid CheckUsernameRequest checkUsernameRequest) {
+    public CheckUsernameResponse checkUsername(
+            @RequestBody @Valid CheckUsernameRequest checkUsernameRequest) {
         return adminService.checkUsername(checkUsernameRequest);
     }
 
@@ -59,8 +61,7 @@ public class AdminController {
     @PostMapping("/newpassword")
     public void resetPwd(
             @RequestBody @Valid ResetPwdRequest resetPwdRequest,
-            @AuthenticationPrincipal AdminDetails adminUser
-    ) {
+            @AuthenticationPrincipal AdminDetails adminUser) {
         log.info("비밀번호 재설정");
         adminService.resetPwd(resetPwdRequest, adminUser);
     }
@@ -83,8 +84,7 @@ public class AdminController {
 
     @Operation(summary = "슈퍼유저 - 유저 목록 보기")
     @GetMapping("/super")
-    public GetAdminsResponse getAdmins(
-            @AuthenticationPrincipal AdminDetails adminUser) {
+    public GetAdminsResponse getAdmins(@AuthenticationPrincipal AdminDetails adminUser) {
         log.info("슈퍼유저 - 유저 목록 보기");
         return adminService.getAdmins(adminUser);
     }
@@ -93,16 +93,14 @@ public class AdminController {
     @PostMapping("/super")
     public void grantAuthority(
             @AuthenticationPrincipal AdminDetails adminUser,
-            GrantAuthorityRequest grantAuthorityRequest ) {
+            GrantAuthorityRequest grantAuthorityRequest) {
         log.info("슈퍼유저 - 유저 권한 변경");
         adminService.grantAuthority(adminUser, grantAuthorityRequest);
     }
 
     @Operation(summary = "슈퍼유저 - 유저 삭제")
     @DeleteMapping("/super")
-    public void deleteAdmin(
-            @AuthenticationPrincipal AdminDetails adminUser,
-            Long adminId ) {
+    public void deleteAdmin(@AuthenticationPrincipal AdminDetails adminUser, Long adminId) {
         log.info("슈퍼유저 - 유저 삭제");
         adminService.deleteAdmin(adminUser, adminId);
     }

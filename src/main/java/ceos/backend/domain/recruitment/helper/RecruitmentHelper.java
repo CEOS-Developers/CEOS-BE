@@ -1,5 +1,6 @@
 package ceos.backend.domain.recruitment.helper;
 
+
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.exception.RecruitmentNotFound;
 import ceos.backend.domain.recruitment.repository.RecruitmentRepository;

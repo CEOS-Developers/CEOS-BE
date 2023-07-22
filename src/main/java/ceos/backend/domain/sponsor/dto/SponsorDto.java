@@ -1,5 +1,6 @@
 package ceos.backend.domain.sponsor.dto;
 
+
 import ceos.backend.domain.sponsor.domain.Sponsor;
 import ceos.backend.domain.sponsor.vo.SponsorVo;
 import lombok.Builder;

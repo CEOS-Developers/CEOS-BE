@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.exception;
 
+
 import ceos.backend.global.error.BaseErrorException;
 
 public class FileCreationFailed extends BaseErrorException {
@@ -10,4 +11,3 @@ public class FileCreationFailed extends BaseErrorException {
         super(ApplicationErrorCode.FILE_CREATION_FAILED);
     }
 }
-

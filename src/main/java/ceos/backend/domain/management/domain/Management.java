@@ -1,17 +1,16 @@
 package ceos.backend.domain.management.domain;
 
+
 import ceos.backend.domain.management.Vo.ManagementVo;
-import ceos.backend.domain.management.dto.ManagementDto;
 import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.University;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.Optional;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
-
-import java.util.Optional;
 
 @DynamicInsert
 @Getter
@@ -38,8 +37,7 @@ public class Management extends BaseEntity {
 
     private int generation;
 
-    @NotNull
-    private int managementGeneration;
+    @NotNull private int managementGeneration;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -57,16 +55,16 @@ public class Management extends BaseEntity {
 
     // 생성자
     @Builder
-    private Management(String name,
-                       ManagementRole role,
-                       ManagementPart part,
-                       int generation,
-                       int managementGeneration,
-                       University university,
-                       String major,
-                       String company,
-                       String imageUrl)
-    {
+    private Management(
+            String name,
+            ManagementRole role,
+            ManagementPart part,
+            int generation,
+            int managementGeneration,
+            University university,
+            String major,
+            String company,
+            String imageUrl) {
         this.name = name;
         this.role = role;
         this.part = part;

@@ -1,5 +1,6 @@
 package ceos.backend.infra.ses;
 
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +19,10 @@ public class AwsSESConfig {
 
     @Bean
     public SesAsyncClient sesAsyncClient() {
-        final AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials.create(AWS_ACCESS_KEY_ID, AWS_SECRET_KEY);
-        final StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsBasicCredentials);
+        final AwsBasicCredentials awsBasicCredentials =
+                AwsBasicCredentials.create(AWS_ACCESS_KEY_ID, AWS_SECRET_KEY);
+        final StaticCredentialsProvider staticCredentialsProvider =
+                StaticCredentialsProvider.create(awsBasicCredentials);
         return SesAsyncClient.builder()
                 .credentialsProvider(staticCredentialsProvider)
                 .region(Region.AP_NORTHEAST_2)

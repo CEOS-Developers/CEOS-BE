@@ -1,11 +1,10 @@
 package ceos.backend.global.common.dto.mail;
 
+
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.vo.ApplicationDetailVo;
+import java.time.format.DateTimeFormatter;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.format.DateTimeFormatter;
 
 @Getter
 public class CeosQuestionInfo {

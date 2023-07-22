@@ -1,12 +1,12 @@
 package ceos.backend.domain.admin.exception;
 
+import static org.springframework.http.HttpStatus.*;
+
 import ceos.backend.global.common.dto.ErrorReason;
 import ceos.backend.global.error.BaseErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-
-import static org.springframework.http.HttpStatus.*;
 
 @Getter
 @AllArgsConstructor
@@ -33,6 +33,5 @@ public enum AdminErrorCode implements BaseErrorCode {
     @Override
     public ErrorReason getErrorReason() {
         return ErrorReason.of(status.value(), code, reason);
-
     }
 }

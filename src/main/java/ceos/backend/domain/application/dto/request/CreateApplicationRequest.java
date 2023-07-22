@@ -1,30 +1,25 @@
 package ceos.backend.domain.application.dto.request;
 
+
 import ceos.backend.domain.application.vo.*;
 import ceos.backend.global.common.annotation.DateFormat;
-import ceos.backend.global.common.annotation.DateTimeFormat;
-import ceos.backend.global.common.annotation.ValidDuration;
 import ceos.backend.global.common.annotation.ValidEnum;
 import ceos.backend.global.common.entity.Part;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Getter;
 
 @Getter
 public class CreateApplicationRequest {
-    @Valid
-    @JsonUnwrapped
-    private ApplicantInfoVo applicantInfoVo;
+    @Valid @JsonUnwrapped private ApplicantInfoVo applicantInfoVo;
 
-    @Schema(type = "string",
+    @Schema(
+            type = "string",
             pattern = "yyyy.MM.dd",
             defaultValue = "2023.03.20",
             description = "ot 날짜")
@@ -32,7 +27,8 @@ public class CreateApplicationRequest {
     @DateFormat
     private LocalDate otDate;
 
-    @Schema(type = "string",
+    @Schema(
+            type = "string",
             pattern = "yyyy.MM.dd",
             defaultValue = "2023.03.20",
             description = "데모데이 날짜")
@@ -48,12 +44,9 @@ public class CreateApplicationRequest {
     @ValidEnum(target = Part.class)
     private Part part;
 
-    @Valid
-    private List<AnswerVo> commonAnswers;
+    @Valid private List<AnswerVo> commonAnswers;
 
-    @Valid
-    private List<AnswerVo> partAnswers;
+    @Valid private List<AnswerVo> partAnswers;
 
-    @Valid
-    private List<InterviewDateTimesVo> unableTimes;
+    @Valid private List<InterviewDateTimesVo> unableTimes;
 }

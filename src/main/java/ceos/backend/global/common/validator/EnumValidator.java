@@ -1,5 +1,6 @@
 package ceos.backend.global.common.validator;
 
+
 import ceos.backend.global.common.annotation.ValidEnum;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -16,8 +17,7 @@ public class EnumValidator implements ConstraintValidator<ValidEnum, Enum> {
 
     @Override
     public boolean isValid(Enum value, ConstraintValidatorContext context) {
-        if(value == null)
-            return false;
+        if (value == null) return false;
 
         Object[] enumValues = this.annotation.target().getEnumConstants();
         if (enumValues != null) {

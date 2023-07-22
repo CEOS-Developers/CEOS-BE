@@ -1,5 +1,6 @@
 package ceos.backend.domain.recruitment.service;
 
+
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
 import ceos.backend.domain.recruitment.dto.response.GetRecruitmentResponse;
@@ -9,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-
 
 @Slf4j
 @Service
@@ -23,13 +21,13 @@ public class RecruitmentService {
     private final RecruitmentHelper recruitmentHelper;
 
     @Transactional(readOnly = true)
-    public GetRecruitmentResponse getRecruitment(){
+    public GetRecruitmentResponse getRecruitment() {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
         return GetRecruitmentResponse.from(recruitment);
     }
 
     @Transactional
-    public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest){
+    public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest) {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
 
         // 객체 업데이트

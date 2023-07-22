@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.exception;
 
+
 import ceos.backend.global.error.BaseErrorException;
 
 public class ApplicantNotFound extends BaseErrorException {

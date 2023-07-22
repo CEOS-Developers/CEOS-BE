@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.service;
 
+
 import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.ApplicationAnswer;
 import ceos.backend.domain.application.domain.ApplicationInterview;
@@ -12,12 +13,6 @@ import ceos.backend.domain.application.repository.ApplicationRepository;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import ceos.backend.global.common.entity.Part;
-import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -28,6 +23,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -67,18 +67,23 @@ public class ApplicationExcelService {
         Sheet sheet = workbook.createSheet("Sheet1");
 
         // Header
-        List<String> headers = new ArrayList<>(List.of("", "파트", "이름", "성별", "생년월일", "email", "전화번호",
-                "대학교", "전공", "남은 학기 수", "OT", "데모데이", "다른 활동"));
+        List<String> headers =
+                new ArrayList<>(
+                        List.of(
+                                "", "파트", "이름", "성별", "생년월일", "email", "전화번호", "대학교", "전공",
+                                "남은 학기 수", "OT", "데모데이", "다른 활동"));
 
         // 지원서 질문
         List<ApplicationQuestion> questionList = applicationQuestionRepository.findAll();
-        questionList.sort(Comparator.comparing(ApplicationQuestion::getCategory)
-                .thenComparing(ApplicationQuestion::getNumber));
+        questionList.sort(
+                Comparator.comparing(ApplicationQuestion::getCategory)
+                        .thenComparing(ApplicationQuestion::getNumber));
 
         List<Application> applicationList = applicationRepository.findAll();
 
         Map<Long, String> interviewTimeMap = applicationExcelHelper.getInterviewTimeMap();
-        Map<Long, Integer> questionIndexMap = applicationExcelHelper.getQuestionIndexMap(headers, questionList);
+        Map<Long, Integer> questionIndexMap =
+                applicationExcelHelper.getQuestionIndexMap(headers, questionList);
 
         // Header
         headers.addAll(List.of("면접 가능한 시간", "서류 합격 여부", "면접 시간"));
@@ -103,26 +108,32 @@ public class ApplicationExcelService {
         for (Application application : applicationList) {
 
             List<ApplicationAnswer> applicationAnswers = application.getApplicationAnswers();
-            List<ApplicationInterview> applicationInterviews = application.getApplicationInterviews();
+            List<ApplicationInterview> applicationInterviews =
+                    application.getApplicationInterviews();
 
             Part part = application.getApplicationDetail().getPart();
 
             colIndex = 0;
             row = sheet.createRow(rowIndex);
             row.createCell(colIndex++).setCellValue(rowIndex);
-            row.createCell(colIndex++).setCellValue(application.getApplicationDetail().getPart().getPart());
+            row.createCell(colIndex++)
+                    .setCellValue(application.getApplicationDetail().getPart().getPart());
             row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getName());
-            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getGender().getGender());
+            row.createCell(colIndex++)
+                    .setCellValue(application.getApplicantInfo().getGender().getGender());
 
             cell = row.createCell(colIndex++);
             cell.setCellValue(application.getApplicantInfo().getBirth());
             cell.setCellStyle(cellStyle);
 
             row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getEmail());
-            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getPhoneNumber());
-            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getUniversity().getUniversity());
+            row.createCell(colIndex++)
+                    .setCellValue(application.getApplicantInfo().getPhoneNumber());
+            row.createCell(colIndex++)
+                    .setCellValue(application.getApplicantInfo().getUniversity().getUniversity());
             row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getMajor());
-            row.createCell(colIndex++).setCellValue(application.getApplicantInfo().getSemestersLeftNumber());
+            row.createCell(colIndex++)
+                    .setCellValue(application.getApplicantInfo().getSemestersLeftNumber());
 
             cell = row.createCell(colIndex++);
             cell.setCellValue(application.getApplicationDetail().getOtDate());
@@ -132,7 +143,8 @@ public class ApplicationExcelService {
             cell.setCellValue(application.getApplicationDetail().getDemodayDate());
             cell.setCellStyle(cellStyle);
 
-            row.createCell(colIndex++).setCellValue((application.getApplicationDetail().getOtherActivities()));
+            row.createCell(colIndex++)
+                    .setCellValue((application.getApplicationDetail().getOtherActivities()));
 
             // 질문 답변 입력
             for (ApplicationAnswer answer : applicationAnswers) {
@@ -141,7 +153,10 @@ public class ApplicationExcelService {
             }
             colIndex += questionList.size();
 
-            row.createCell(colIndex++).setCellValue(applicationExcelHelper.getPossibleInterview(interviewTimeMap, applicationInterviews)); // 면접 가능한 시간
+            row.createCell(colIndex++)
+                    .setCellValue(
+                            applicationExcelHelper.getPossibleInterview(
+                                    interviewTimeMap, applicationInterviews)); // 면접 가능한 시간
             row.createCell(colIndex++).setCellValue(application.getDocumentPass().getResult());
             row.createCell(colIndex++).setCellValue(application.getInterviewDatetime());
 

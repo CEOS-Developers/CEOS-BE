@@ -1,10 +1,10 @@
 package ceos.backend.domain.admin.dto.response;
 
+
 import ceos.backend.domain.admin.vo.AdminBriefInfoVo;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class GetAdminsResponse {
@@ -16,9 +16,6 @@ public class GetAdminsResponse {
     }
 
     public static GetAdminsResponse from(List<AdminBriefInfoVo> adminBriefInfoVos) {
-        return GetAdminsResponse.builder()
-                .adminBriefInfoVos(adminBriefInfoVos)
-                .build();
+        return GetAdminsResponse.builder().adminBriefInfoVos(adminBriefInfoVos).build();
     }
-
 }

@@ -1,5 +1,6 @@
 package ceos.backend.global.common.event;
 
+
 import org.springframework.context.ApplicationEventPublisher;
 
 public class Event {

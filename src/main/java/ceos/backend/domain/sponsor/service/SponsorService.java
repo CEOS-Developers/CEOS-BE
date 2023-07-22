@@ -1,7 +1,8 @@
 package ceos.backend.domain.sponsor.service;
 
-import ceos.backend.domain.sponsor.dto.SponsorDto;
+
 import ceos.backend.domain.sponsor.domain.Sponsor;
+import ceos.backend.domain.sponsor.dto.SponsorDto;
 import ceos.backend.domain.sponsor.dto.response.GetAllSponsorsResponse;
 import ceos.backend.domain.sponsor.exception.SponsorNotFound;
 import ceos.backend.domain.sponsor.mapper.SponsorMapper;
@@ -35,33 +36,51 @@ public class SponsorService {
 
     @Transactional(readOnly = true)
     public GetAllSponsorsResponse getAllSponsors(int pageNum, int limit) {
-        //페이징 요청 정보
-        PageRequest pageRequest = PageRequest.of(pageNum, limit, Sort.by("id").descending());   //최신순
+        // 페이징 요청 정보
+        PageRequest pageRequest = PageRequest.of(pageNum, limit, Sort.by("id").descending()); // 최신순
 
         Page<Sponsor> pageSponsors = sponsorRepository.findAll(pageRequest);
-        //페이징 정보
-        PageInfo pageInfo = PageInfo.of(pageNum, limit, pageSponsors.getTotalPages(), pageSponsors.getTotalElements());
-        //dto
-        GetAllSponsorsResponse response = sponsorMapper.toManagementsPage(pageSponsors.getContent(), pageInfo);
+        // 페이징 정보
+        PageInfo pageInfo =
+                PageInfo.of(
+                        pageNum,
+                        limit,
+                        pageSponsors.getTotalPages(),
+                        pageSponsors.getTotalElements());
+        // dto
+        GetAllSponsorsResponse response =
+                sponsorMapper.toManagementsPage(pageSponsors.getContent(), pageInfo);
 
         return response;
     }
 
     @Transactional
     public SponsorDto updateSponsor(Long id, SponsorVo sponsorVo) {
-        Sponsor findSponsor = sponsorRepository.findById(id).orElseThrow(() -> {throw SponsorNotFound.EXCEPTION;});
+        Sponsor findSponsor =
+                sponsorRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () -> {
+                                    throw SponsorNotFound.EXCEPTION;
+                                });
         findSponsor.update(sponsorVo);
         return SponsorDto.entityToDto(findSponsor);
     }
 
     @Transactional
     public void deleteSponsor(Long id) {
-        Sponsor findSponsor = sponsorRepository.findById(id).orElseThrow(() -> {throw SponsorNotFound.EXCEPTION;});
+        Sponsor findSponsor =
+                sponsorRepository
+                        .findById(id)
+                        .orElseThrow(
+                                () -> {
+                                    throw SponsorNotFound.EXCEPTION;
+                                });
         sponsorRepository.delete(findSponsor);
     }
 
     @Transactional(readOnly = true)
-    public AwsS3Url getImageUrl(){
+    public AwsS3Url getImageUrl() {
         return awsS3UrlHandler.handle("sponsors");
     }
 }

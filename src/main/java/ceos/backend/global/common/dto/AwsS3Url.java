@@ -1,6 +1,6 @@
 package ceos.backend.global.common.dto;
 
-import ceos.backend.infra.s3.AwsS3UrlGenerator;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,9 +14,6 @@ public class AwsS3Url {
     }
 
     public static AwsS3Url to(String url) {
-        return AwsS3Url.builder()
-                .url(url)
-                .build();
+        return AwsS3Url.builder().url(url).build();
     }
-
 }

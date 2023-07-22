@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.vo;
 
+
 import ceos.backend.domain.application.domain.ApplicantInfo;
 import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.Pass;
@@ -11,20 +12,23 @@ import lombok.Getter;
 
 @Getter
 public class ApplicationBriefInfoVo {
-    @JsonUnwrapped
-    private ApplicantInfo applicantInfo;
+    @JsonUnwrapped private ApplicantInfo applicantInfo;
 
     private Part part;
     private Long id;
     private Pass documentPass;
     private Pass finalPass;
 
-    @JsonUnwrapped
-    private ParsedDuration interviewTime;
+    @JsonUnwrapped private ParsedDuration interviewTime;
 
     @Builder
-    private ApplicationBriefInfoVo(ApplicantInfo applicantInfo, Long id, Part part,
-                                  Pass documentPass, Pass finalPass, ParsedDuration interviewTime) {
+    private ApplicationBriefInfoVo(
+            ApplicantInfo applicantInfo,
+            Long id,
+            Part part,
+            Pass documentPass,
+            Pass finalPass,
+            ParsedDuration interviewTime) {
         this.applicantInfo = applicantInfo;
         this.id = id;
         this.part = part;

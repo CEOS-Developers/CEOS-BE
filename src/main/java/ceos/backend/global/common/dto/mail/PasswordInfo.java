@@ -1,5 +1,6 @@
 package ceos.backend.global.common.dto.mail;
 
+
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import lombok.Builder;
 import lombok.Getter;

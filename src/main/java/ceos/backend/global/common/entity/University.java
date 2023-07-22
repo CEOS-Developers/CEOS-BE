@@ -1,12 +1,11 @@
 package ceos.backend.global.common.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
@@ -16,8 +15,7 @@ public enum University {
     EWHA("이화여자대학교"),
     HONGIK("홍익대학교");
 
-    @JsonValue
-    private final String university;
+    @JsonValue private final String university;
 
     @JsonCreator
     public static University parsing(String inputValue) {

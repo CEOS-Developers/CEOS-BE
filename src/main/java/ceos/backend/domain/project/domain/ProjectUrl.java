@@ -1,5 +1,6 @@
 package ceos.backend.domain.project.domain;
 
+
 import ceos.backend.domain.project.vo.ProjectUrlVo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -23,20 +24,15 @@ public class ProjectUrl {
     @Enumerated(EnumType.STRING)
     private ProjectUrlCategory category;
 
-    @NotNull
-    private String linkUrl;
+    @NotNull private String linkUrl;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // Cascade
+    @ManyToOne(fetch = FetchType.LAZY) // Cascade
     @JsonBackReference
     @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
     @Builder
-    private ProjectUrl(
-            ProjectUrlCategory category,
-            String linkUrl,
-            Project project
-    ) {
+    private ProjectUrl(ProjectUrlCategory category, String linkUrl, Project project) {
         this.category = category;
         this.linkUrl = linkUrl;
         this.project = project;

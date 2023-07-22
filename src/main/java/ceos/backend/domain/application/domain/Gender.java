@@ -1,12 +1,11 @@
 package ceos.backend.domain.application.domain;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.AllArgsConstructor;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
@@ -15,8 +14,7 @@ public enum Gender {
 
     M("남성");
 
-    @JsonValue
-    private final String gender;
+    @JsonValue private final String gender;
 
     @JsonCreator
     public static Gender parsing(String inputValue) {

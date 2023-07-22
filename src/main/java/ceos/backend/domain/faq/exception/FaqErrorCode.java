@@ -1,12 +1,12 @@
 package ceos.backend.domain.faq.exception;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 import ceos.backend.global.common.dto.ErrorReason;
 import ceos.backend.global.error.BaseErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Getter
 @AllArgsConstructor

@@ -1,5 +1,6 @@
 package ceos.backend.domain.project.repository;
 
+
 import ceos.backend.domain.project.domain.Participant;
 import ceos.backend.domain.project.domain.Project;
 import ceos.backend.domain.project.domain.ProjectImage;
@@ -12,18 +13,16 @@ import ceos.backend.domain.project.vo.ProjectBriefInfoVo;
 import ceos.backend.domain.project.vo.ProjectImageVo;
 import ceos.backend.domain.project.vo.ProjectUrlVo;
 import ceos.backend.global.common.dto.PageInfo;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ProjectMapper {
 
     public GetProjectsResponse toGetProjects(Page<Project> projectList, PageInfo pageInfo) {
-        List<ProjectBriefInfoVo> projectBriefInfoVos = projectList.stream()
-                .map(ProjectBriefInfoVo::from)
-                .toList();
+        List<ProjectBriefInfoVo> projectBriefInfoVos =
+                projectList.stream().map(ProjectBriefInfoVo::from).toList();
         return GetProjectsResponse.of(projectBriefInfoVos, pageInfo);
     }
 
@@ -35,7 +34,8 @@ public class ProjectMapper {
         return Project.from(projectRequest.getProjectInfoVo());
     }
 
-    public List<ProjectImage> toProjectImageList(Project project, List<ProjectImageVo> projectImageVos) {
+    public List<ProjectImage> toProjectImageList(
+            Project project, List<ProjectImageVo> projectImageVos) {
 
         return projectImageVos.stream()
                 .map(projectImageVo -> ProjectImage.of(projectImageVo, project))
@@ -49,7 +49,8 @@ public class ProjectMapper {
                 .toList();
     }
 
-    public List<Participant> toParticipantList(Project project, List<ParticipantVo> participantVos) {
+    public List<Participant> toParticipantList(
+            Project project, List<ParticipantVo> participantVos) {
 
         return participantVos.stream()
                 .map(participantVo -> Participant.of(participantVo, project))

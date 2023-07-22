@@ -1,5 +1,6 @@
 package ceos.backend.infra.ses;
 
+
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
@@ -21,8 +22,8 @@ public class AwsSESSendMailHandler {
         final CreateApplicationRequest request = awsSESMail.getCreateApplicationRequest();
 
         final String TO = request.getApplicantInfoVo().getEmail();
-        final String SUBJECT = awsSESMailGenerator
-                .generateApplicationMailSubject(awsSESMail.getGeneration());
+        final String SUBJECT =
+                awsSESMailGenerator.generateApplicationMailSubject(awsSESMail.getGeneration());
         final Context CONTEXT = awsSESMailGenerator.generateApplicationMailContext(awsSESMail);
         awsSesUtils.singleEmailRequest(TO, SUBJECT, "sendApplicationMail", CONTEXT);
     }

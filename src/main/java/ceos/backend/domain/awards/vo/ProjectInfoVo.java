@@ -16,10 +16,7 @@ public class ProjectInfoVo {
         this.description = description;
     }
 
-    public static ProjectInfoVo of(String name, String description){
-        return ProjectInfoVo.builder()
-                .name(name)
-                .description(description)
-                .build();
+    public static ProjectInfoVo of(String name, String description) {
+        return ProjectInfoVo.builder().name(name).description(description).build();
     }
 }

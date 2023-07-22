@@ -1,11 +1,11 @@
 package ceos.backend.global.common.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.stream.Stream;
 
 @Getter
 @RequiredArgsConstructor
@@ -15,8 +15,7 @@ public enum Part {
     FRONTEND("프론트엔드"),
     BACKEND("백엔드");
 
-    @JsonValue
-    private final String part;
+    @JsonValue private final String part;
 
     @JsonCreator
     public static Part parsing(String inputValue) {

@@ -1,5 +1,6 @@
 package ceos.backend.domain.admin.exception;
 
+
 import ceos.backend.global.error.BaseErrorException;
 
 public class DuplicateData extends BaseErrorException {

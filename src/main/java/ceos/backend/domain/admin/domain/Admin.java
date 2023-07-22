@@ -1,5 +1,6 @@
 package ceos.backend.domain.admin.domain;
 
+
 import ceos.backend.domain.admin.dto.request.SignUpRequest;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.Part;
@@ -30,8 +31,7 @@ public class Admin extends BaseEntity {
     @Size(max = 128)
     private String password;
 
-    @NotNull
-    private int generation;
+    @NotNull private int generation;
 
     @NotNull
     @Size(max = 30)
@@ -55,13 +55,14 @@ public class Admin extends BaseEntity {
 
     // 생성자
     @Builder
-    private Admin(String username,
-                  String password,
-                  int generation,
-                  String name,
-                  Part part,
-                  AdminRole role,
-                  String email) {
+    private Admin(
+            String username,
+            String password,
+            int generation,
+            String name,
+            Part part,
+            AdminRole role,
+            String email) {
 
         this.username = username;
         this.password = password;
@@ -91,7 +92,7 @@ public class Admin extends BaseEntity {
     public void updateRandomPwd(String randomPwd) {
         this.password = randomPwd;
     }
-    
+
     public void updatePwd(String encodedPassword) {
         this.password = encodedPassword;
     }

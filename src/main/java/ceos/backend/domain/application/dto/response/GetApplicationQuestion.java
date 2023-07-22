@@ -1,12 +1,11 @@
 package ceos.backend.domain.application.dto.response;
 
+
 import ceos.backend.domain.application.vo.InterviewDateTimesVo;
-import ceos.backend.domain.application.vo.QuestionVo;
 import ceos.backend.domain.application.vo.QuestionWithIdVo;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class GetApplicationQuestion {
@@ -18,9 +17,13 @@ public class GetApplicationQuestion {
     private List<InterviewDateTimesVo> times;
 
     @Builder
-    private GetApplicationQuestion(List<QuestionWithIdVo> commonQuestions, List<QuestionWithIdVo> productQuestions,
-                                  List<QuestionWithIdVo> designQuestions, List<QuestionWithIdVo> frontendQuestions,
-                                  List<QuestionWithIdVo> backendQuestions, List<InterviewDateTimesVo> times) {
+    private GetApplicationQuestion(
+            List<QuestionWithIdVo> commonQuestions,
+            List<QuestionWithIdVo> productQuestions,
+            List<QuestionWithIdVo> designQuestions,
+            List<QuestionWithIdVo> frontendQuestions,
+            List<QuestionWithIdVo> backendQuestions,
+            List<InterviewDateTimesVo> times) {
         this.commonQuestions = commonQuestions;
         this.productQuestions = productQuestions;
         this.designQuestions = designQuestions;
@@ -29,9 +32,13 @@ public class GetApplicationQuestion {
         this.times = times;
     }
 
-    public static GetApplicationQuestion of(List<QuestionWithIdVo> commonQuestions, List<QuestionWithIdVo> productQuestions,
-                                            List<QuestionWithIdVo> designQuestions, List<QuestionWithIdVo> frontendQuestions,
-                                            List<QuestionWithIdVo> backendQuestions, List<InterviewDateTimesVo> times) {
+    public static GetApplicationQuestion of(
+            List<QuestionWithIdVo> commonQuestions,
+            List<QuestionWithIdVo> productQuestions,
+            List<QuestionWithIdVo> designQuestions,
+            List<QuestionWithIdVo> frontendQuestions,
+            List<QuestionWithIdVo> backendQuestions,
+            List<InterviewDateTimesVo> times) {
         return GetApplicationQuestion.builder()
                 .commonQuestions(commonQuestions)
                 .productQuestions(productQuestions)

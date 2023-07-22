@@ -1,17 +1,18 @@
 package ceos.backend.global.common.filter;
 
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MultiReadInputStreamFilter implements Filter {
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-                         FilterChain chain) throws IOException, ServletException {
-        MultiReadInputStream multiReadRequest = new MultiReadInputStream((HttpServletRequest) request);
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        MultiReadInputStream multiReadRequest =
+                new MultiReadInputStream((HttpServletRequest) request);
         chain.doFilter(multiReadRequest, response);
     }
 

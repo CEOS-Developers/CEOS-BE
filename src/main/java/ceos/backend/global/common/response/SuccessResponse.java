@@ -1,14 +1,12 @@
 package ceos.backend.global.common.response;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 
-/**
- * api 공통 응답 형식입니다
- */
-
+/** api 공통 응답 형식입니다 */
 @Getter
 public class SuccessResponse<T> {
     @JsonProperty("status")
@@ -29,18 +27,10 @@ public class SuccessResponse<T> {
     }
 
     public static <T> SuccessResponse<T> onSuccess(int code) {
-        return SuccessResponse.<T>builder()
-                .code(code)
-                .message("요청에 성공하였습니다.")
-                .data(null)
-                .build();
+        return SuccessResponse.<T>builder().code(code).message("요청에 성공하였습니다.").data(null).build();
     }
 
     public static <T> SuccessResponse<T> onSuccess(int code, T data) {
-        return SuccessResponse.<T>builder()
-                .code(code)
-                .message("요청에 성공하였습니다.")
-                .data(data)
-                .build();
+        return SuccessResponse.<T>builder().code(code).message("요청에 성공하였습니다.").data(data).build();
     }
 }

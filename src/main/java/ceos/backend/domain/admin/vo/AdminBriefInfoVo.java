@@ -1,5 +1,6 @@
 package ceos.backend.domain.admin.vo;
 
+
 import ceos.backend.domain.admin.domain.Admin;
 import ceos.backend.domain.admin.domain.AdminRole;
 import lombok.Builder;

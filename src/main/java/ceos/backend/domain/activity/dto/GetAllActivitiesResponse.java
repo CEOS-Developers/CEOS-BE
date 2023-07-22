@@ -1,10 +1,10 @@
 package ceos.backend.domain.activity.dto;
 
+
 import ceos.backend.global.common.dto.PageInfo;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class GetAllActivitiesResponse {
@@ -17,10 +17,8 @@ public class GetAllActivitiesResponse {
         this.pageInfo = pageInfo;
     }
 
-    public static GetAllActivitiesResponse of(List<ActivityResponse> activities, PageInfo pageInfo) {
-        return GetAllActivitiesResponse.builder()
-                .activities(activities)
-                .pageInfo(pageInfo)
-                .build();
+    public static GetAllActivitiesResponse of(
+            List<ActivityResponse> activities, PageInfo pageInfo) {
+        return GetAllActivitiesResponse.builder().activities(activities).pageInfo(pageInfo).build();
     }
 }

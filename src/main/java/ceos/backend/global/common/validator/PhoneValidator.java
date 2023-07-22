@@ -1,9 +1,9 @@
 package ceos.backend.global.common.validator;
 
+
 import ceos.backend.global.common.annotation.ValidPhone;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
 import java.util.regex.Pattern;
 
 public class PhoneValidator implements ConstraintValidator<ValidPhone, String> {
@@ -11,8 +11,7 @@ public class PhoneValidator implements ConstraintValidator<ValidPhone, String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if(value == null)
-            return false;
+        if (value == null) return false;
         return Pattern.matches(pattern, value);
     }
 }

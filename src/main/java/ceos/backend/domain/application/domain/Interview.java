@@ -1,12 +1,11 @@
 package ceos.backend.domain.application.domain;
 
+
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import org.springframework.data.relational.core.sql.In;
-
 import java.time.LocalDateTime;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -17,11 +16,9 @@ public class Interview extends BaseEntity {
     @Column(name = "interview_id")
     private Long id;
 
-    @NotNull
-    private LocalDateTime fromDate;
+    @NotNull private LocalDateTime fromDate;
 
-    @NotNull
-    private LocalDateTime toDate;
+    @NotNull private LocalDateTime toDate;
 
     @Builder
     private Interview(Long id, LocalDateTime fromDate, LocalDateTime toDate) {
@@ -31,9 +28,6 @@ public class Interview extends BaseEntity {
     }
 
     public static Interview of(LocalDateTime fromDate, LocalDateTime toDate) {
-        return Interview.builder()
-                .fromDate(fromDate)
-                .toDate(toDate)
-                .build();
+        return Interview.builder().fromDate(fromDate).toDate(toDate).build();
     }
 }
