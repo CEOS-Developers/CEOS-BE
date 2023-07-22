@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public enum Pass {
     PASS("합격"),
 
-    FAIL("탈락");
+    FAIL("불합격");
 
     @JsonValue private final String result;
 
