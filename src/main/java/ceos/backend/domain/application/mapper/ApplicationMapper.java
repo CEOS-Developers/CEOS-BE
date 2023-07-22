@@ -230,8 +230,15 @@ public class ApplicationMapper {
 
     public GetApplications toGetApplications(Page<Application> pageManagements, PageInfo pageInfo) {
         List<ApplicationBriefInfoVo> applicationBriefInfoVos = pageManagements.stream()
-                .map(ApplicationBriefInfoVo::from)
+                .map(vo -> ApplicationBriefInfoVo.of(vo, toParsedDuration(vo.getInterviewDatetime())))
                 .toList();
         return GetApplications.of(applicationBriefInfoVos, pageInfo);
+    }
+
+    private ParsedDuration toParsedDuration(String time) {
+        if (time == null) {
+            return ParsedDuration.toNullParsedDuration();
+        }
+        return ParsedDurationConvertor.parsingYearDuration(time);
     }
 }

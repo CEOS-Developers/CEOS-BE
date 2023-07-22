@@ -34,4 +34,11 @@ public class ParsedDuration {
                 .duration(duration)
                 .build();
     }
+
+    public static ParsedDuration toNullParsedDuration() {
+        return ParsedDuration.builder()
+                .date(null)
+                .duration(null)
+                .build();
+    }
 }
