@@ -37,6 +37,13 @@ public class SponsorController {
         return sponsorService.getAllSponsors(pageNum, limit);
     }
 
+    @Operation(summary = "스폰서 하나 보기")
+    @GetMapping("/{sponsorId}")
+    public SponsorDto getSponsor(@PathVariable(name = "sponsorId") Long sponsorId) {
+        log.info("스폰서 하나 보기");
+        return sponsorService.getSponsor(sponsorId);
+    }
+
     @Operation(summary = "스폰서 정보 수정")
     @PatchMapping("/{sponsorId}")
     public SponsorDto updateSponsor(
