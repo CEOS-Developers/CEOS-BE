@@ -8,10 +8,13 @@ import ceos.backend.domain.admin.dto.response.*;
 import ceos.backend.domain.admin.helper.AdminHelper;
 import ceos.backend.domain.admin.repository.AdminMapper;
 import ceos.backend.domain.admin.repository.AdminRepository;
+import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.config.jwt.TokenProvider;
 import ceos.backend.global.config.user.AdminDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,9 +122,14 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    public GetAdminsResponse getAdmins(AdminDetails adminUser) {
+    public GetAdminsResponse getAdmins(AdminDetails adminUser, int pageNum, int limit) {
         final Admin superAdmin = adminUser.getAdmin();
-        return adminMapper.toGetAdmins(adminHelper.findAdmins(superAdmin));
+        PageRequest pageRequest = PageRequest.of(pageNum, limit);
+        Page<Admin> adminList = adminRepository.findAllByIdNot(pageRequest, superAdmin.getId());
+        PageInfo pageInfo =
+                PageInfo.of(
+                        pageNum, limit, adminList.getTotalPages(), adminList.getTotalElements());
+        return adminMapper.toGetAdmins(adminList, pageInfo);
     }
 
     @Transactional

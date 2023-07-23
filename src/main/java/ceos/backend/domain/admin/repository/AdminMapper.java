@@ -5,7 +5,9 @@ import ceos.backend.domain.admin.domain.Admin;
 import ceos.backend.domain.admin.dto.request.SignUpRequest;
 import ceos.backend.domain.admin.dto.response.*;
 import ceos.backend.domain.admin.vo.AdminBriefInfoVo;
+import ceos.backend.global.common.dto.PageInfo;
 import java.util.List;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,10 +28,10 @@ public class AdminMapper {
         return FindIdResponse.from(username);
     }
 
-    public GetAdminsResponse toGetAdmins(List<Admin> adminList) {
+    public GetAdminsResponse toGetAdmins(Page<Admin> adminList, PageInfo pageInfo) {
 
         List<AdminBriefInfoVo> adminBriefInfoVos =
                 adminList.stream().map(AdminBriefInfoVo::from).toList();
-        return GetAdminsResponse.from(adminBriefInfoVos);
+        return GetAdminsResponse.of(adminBriefInfoVos, pageInfo);
     }
 }
