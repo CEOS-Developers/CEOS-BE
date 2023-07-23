@@ -8,6 +8,7 @@ import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.exception.InterviewNotFound;
 import ceos.backend.domain.application.exception.QuestionNotFound;
 import ceos.backend.domain.application.vo.*;
+import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.entity.Part;
@@ -92,11 +93,11 @@ public class ApplicationMapper {
         return applicationInterviews;
     }
 
-    public GetResultResponse toGetResultResponse(Application application, boolean isDocument) {
+    public GetResultResponse toGetResultResponse(Application application, Recruitment recruitment, boolean isDocument) {
         if (isDocument) {
-            return GetResultResponse.toDocumentResult(application);
+            return GetResultResponse.toDocumentResult(application, recruitment);
         }
-        return GetResultResponse.toFinalResult(application);
+        return GetResultResponse.toFinalResult(application, recruitment);
     }
 
     public QuestionListVo toQuestionList(UpdateApplicationQuestion updateApplicationQuestion) {

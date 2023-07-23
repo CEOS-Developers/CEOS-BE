@@ -11,7 +11,9 @@ import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.domain.application.validator.ApplicationValidator;
 import ceos.backend.domain.application.vo.QuestionListVo;
+import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
+import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import ceos.backend.domain.recruitment.validator.RecruitmentValidator;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
@@ -131,7 +133,8 @@ public class ApplicationService {
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
 
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
-        return applicationMapper.toGetResultResponse(application, true);
+        final Recruitment recruitment = recruitmentHelper.takeRecruitment();
+        return applicationMapper.toGetResultResponse(application, recruitment, true);
     }
 
     @Transactional
@@ -157,7 +160,8 @@ public class ApplicationService {
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
         applicationValidator.validateApplicantDocumentPass(application); // 유저 서류 합격 여부 검증
 
-        return applicationMapper.toGetResultResponse(application, false);
+        final Recruitment recruitment = recruitmentHelper.takeRecruitment();
+        return applicationMapper.toGetResultResponse(application, recruitment, false);
     }
 
     @Transactional
