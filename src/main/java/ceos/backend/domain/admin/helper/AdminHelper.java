@@ -14,7 +14,6 @@ import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.event.Event;
 import ceos.backend.global.config.user.AdminDetailsService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -160,10 +159,6 @@ public class AdminHelper {
                         () -> {
                             throw AdminNotFound.EXCEPTION;
                         });
-    }
-
-    public List<Admin> findAdmins(Admin superAdmin) {
-        return adminRepository.findAllByIdNot(superAdmin.getId());
     }
 
     public void changeRole(Admin admin, AdminRole adminRole) {

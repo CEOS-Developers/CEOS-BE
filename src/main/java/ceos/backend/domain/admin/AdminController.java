@@ -84,16 +84,19 @@ public class AdminController {
 
     @Operation(summary = "슈퍼유저 - 유저 목록 보기")
     @GetMapping("/super")
-    public GetAdminsResponse getAdmins(@AuthenticationPrincipal AdminDetails adminUser) {
+    public GetAdminsResponse getAdmins(
+            @AuthenticationPrincipal AdminDetails adminUser,
+            @RequestParam("pageNum") int pageNum,
+            @RequestParam("limit") int limit) {
         log.info("슈퍼유저 - 유저 목록 보기");
-        return adminService.getAdmins(adminUser);
+        return adminService.getAdmins(adminUser, pageNum, limit);
     }
 
     @Operation(summary = "슈퍼유저 - 유저 권한 변경")
     @PostMapping("/super")
     public void grantAuthority(
             @AuthenticationPrincipal AdminDetails adminUser,
-            GrantAuthorityRequest grantAuthorityRequest) {
+            @RequestBody @Valid GrantAuthorityRequest grantAuthorityRequest) {
         log.info("슈퍼유저 - 유저 권한 변경");
         adminService.grantAuthority(adminUser, grantAuthorityRequest);
     }

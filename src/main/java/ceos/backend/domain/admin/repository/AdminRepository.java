@@ -3,8 +3,9 @@ package ceos.backend.domain.admin.repository;
 
 import ceos.backend.domain.admin.domain.Admin;
 import ceos.backend.global.common.entity.Part;
-import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AdminRepository extends JpaRepository<Admin, Long> {
@@ -18,5 +19,5 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
     Optional<Admin> findByUsernameAndNameAndPartAndEmail(
             String username, String name, Part part, String email);
 
-    List<Admin> findAllByIdNot(Long id);
+    Page<Admin> findAllByIdNot(PageRequest pageRequest, Long id);
 }
