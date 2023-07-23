@@ -45,9 +45,9 @@ public class ProjectController {
     }
 
     @Operation(summary = "프로젝트 수정하기")
-    @PatchMapping
+    @PatchMapping("/{projectId}")
     public void updateProject(
-            @RequestParam("id") Long projectId, @RequestBody @Valid ProjectRequest projectRequest) {
+            @PathVariable("projectId") Long projectId, @RequestBody @Valid ProjectRequest projectRequest) {
         log.info("프로젝트 수정하기");
         projectService.updateProject(projectId, projectRequest);
     }
