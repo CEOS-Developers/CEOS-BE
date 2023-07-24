@@ -55,11 +55,17 @@ public class WebSecurityConfig {
     };
 
     private final String[] GetPermittedPatterns = {
-        "/awards/**", "recruitments/**", "projects/**", "activities/**"
+        "/awards/**", "recruitments/**", "projects/**", "activities/**",
+            "/applications/question", "/applications/document", "/applications/final"
     };
 
-    private final String[] AllPermittedPattern = {
-        "/applications", "/applications/question", "/applications/document", "/applications/final"
+    private final String[] PostPermittedPatterns = {
+            "/applications"
+    };
+
+    private final String[] PatchPermittedPatterns = {
+            "/applications/interviews",
+            "/applications/pass"
     };
 
     private final String[] RootPatterns = {"/admin/super"};
@@ -87,7 +93,9 @@ public class WebSecurityConfig {
                 .permitAll()
                 .requestMatchers(HttpMethod.GET, GetPermittedPatterns)
                 .permitAll()
-                .requestMatchers(AllPermittedPattern)
+                .requestMatchers(HttpMethod.PATCH, PatchPermittedPatterns)
+                .permitAll()
+                .requestMatchers(HttpMethod.POST, PostPermittedPatterns)
                 .permitAll()
                 .requestMatchers(SwaggerPatterns)
                 .permitAll()

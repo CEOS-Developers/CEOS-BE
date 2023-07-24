@@ -9,6 +9,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import lombok.AccessLevel;
@@ -53,7 +54,8 @@ public class ApplicantInfo {
     @Column(unique = true)
     private String uuid;
 
-    @NotNull @Positive private int semestersLeftNumber;
+    @NotNull @PositiveOrZero
+    private int semestersLeftNumber;
 
     @Builder
     private ApplicantInfo(
