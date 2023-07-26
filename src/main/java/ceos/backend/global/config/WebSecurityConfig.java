@@ -64,7 +64,7 @@ public class WebSecurityConfig {
     };
 
     private final String[] PatchPermittedPatterns = {
-            "/applications/interviews",
+            "/applications/interview",
             "/applications/pass"
     };
 
