@@ -46,7 +46,6 @@ public class WebSecurityConfig {
     private final String[] AdminPatterns = {
         "/admin/newpassword",
         "/admin/logout",
-        "admin/reissue",
         "/applications/**",
         "recruitments/**",
         "projects/**",
@@ -55,17 +54,20 @@ public class WebSecurityConfig {
     };
 
     private final String[] GetPermittedPatterns = {
-        "/awards/**", "recruitments/**", "projects/**", "activities/**",
-            "/applications/question", "/applications/document", "/applications/final"
+        "/awards/**",
+        "recruitments/**",
+        "projects/**",
+        "activities/**",
+        "/applications/question",
+        "/applications/document",
+        "/applications/final",
+        "admin/reissue"
     };
 
-    private final String[] PostPermittedPatterns = {
-            "/applications"
-    };
+    private final String[] PostPermittedPatterns = {"/applications"};
 
     private final String[] PatchPermittedPatterns = {
-            "/applications/interview",
-            "/applications/pass"
+        "/applications/interview", "/applications/pass"
     };
 
     private final String[] RootPatterns = {"/admin/super"};

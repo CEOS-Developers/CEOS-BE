@@ -75,11 +75,9 @@ public class AdminController {
 
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public TokenResponse refreshToken(
-            @RequestBody @Valid RefreshTokenRequest refreshTokenRequest,
-            @AuthenticationPrincipal AdminDetails adminUser) {
+    public TokenResponse refreshToken(@RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
         log.info("토큰 재발급");
-        return adminService.reissueToken(refreshTokenRequest, adminUser);
+        return adminService.reissueToken(refreshTokenRequest);
     }
 
     @Operation(summary = "슈퍼유저 - 유저 목록 보기")

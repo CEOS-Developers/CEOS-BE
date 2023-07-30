@@ -103,11 +103,12 @@ public class AdminService {
     }
 
     @Transactional
-    public TokenResponse reissueToken(
-            RefreshTokenRequest refreshTokenRequest, AdminDetails adminUser) {
-        final Admin admin = adminUser.getAdmin();
-        final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
+    public TokenResponse reissueToken(RefreshTokenRequest refreshTokenRequest) {
         final String refreshToken = refreshTokenRequest.getRefreshToken();
+        final Admin admin =
+                adminHelper.findAdmin(Long.parseLong(tokenProvider.getTokenUserId(refreshToken)));
+        final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
+
         // 리프레시 토큰 검증
         tokenProvider.validateRefreshToken(refreshToken);
         adminHelper.matchesRefreshToken(refreshToken, admin);
