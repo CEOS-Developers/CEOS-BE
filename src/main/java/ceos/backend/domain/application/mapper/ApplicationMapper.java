@@ -93,7 +93,8 @@ public class ApplicationMapper {
         return applicationInterviews;
     }
 
-    public GetResultResponse toGetResultResponse(Application application, Recruitment recruitment, boolean isDocument) {
+    public GetResultResponse toGetResultResponse(
+            Application application, Recruitment recruitment, boolean isDocument) {
         if (isDocument) {
             return GetResultResponse.toDocumentResult(application, recruitment);
         }
