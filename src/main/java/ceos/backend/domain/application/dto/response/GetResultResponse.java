@@ -25,13 +25,16 @@ public class GetResultResponse {
 
     private LocalDate otDate;
 
+    private boolean attendanceStatus;
+
     @Builder
-    private GetResultResponse(Pass pass, int generation, String name, ParsedDuration parsedDuration, LocalDate otDate) {
+    private GetResultResponse(Pass pass, int generation, String name, ParsedDuration parsedDuration, LocalDate otDate, boolean attendanceStatus) {
         this.pass = pass;
         this.generation = generation;
         this.name = name;
         this.parsedDuration = parsedDuration;
         this.otDate = otDate;
+        this.attendanceStatus = attendanceStatus;
     }
 
     public static GetResultResponse toDocumentResult(Application application, Recruitment recruitment) {
@@ -39,13 +42,17 @@ public class GetResultResponse {
                 .generation(recruitment.getGeneration())
                 .name(application.getApplicantInfo().getName())
                 .parsedDuration(ParsedDurationConvertor.parsingDuration(application.getInterviewDatetime()))
-                .otDate(recruitment.getOtDate()).build();
+                .otDate(recruitment.getOtDate())
+                .attendanceStatus(application.isInterviewCheck())
+                .build();
     }
 
     public static GetResultResponse toFinalResult(Application application, Recruitment recruitment) {
         return GetResultResponse.builder().pass(application.getFinalPass()).generation(recruitment.getGeneration())
                 .name(application.getApplicantInfo().getName())
                 .parsedDuration(ParsedDurationConvertor.parsingDuration(application.getInterviewDatetime()))
-                .otDate(recruitment.getOtDate()).build();
+                .otDate(recruitment.getOtDate())
+                .attendanceStatus(application.isFinalCheck())
+                .build();
     }
 }
