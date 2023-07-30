@@ -13,7 +13,6 @@ import ceos.backend.domain.application.validator.ApplicationValidator;
 import ceos.backend.domain.application.vo.QuestionListVo;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
-import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import ceos.backend.domain.recruitment.validator.RecruitmentValidator;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
