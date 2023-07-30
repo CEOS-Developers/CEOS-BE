@@ -103,9 +103,8 @@ public class AdminService {
     }
 
     @Transactional
-    public TokenResponse reissueToken(
-            RefreshTokenRequest refreshTokenRequest, AdminDetails adminUser) {
-        final Admin admin = adminUser.getAdmin();
+    public TokenResponse reissueToken(RefreshTokenRequest refreshTokenRequest) {
+        final Admin admin = adminHelper.findAdmin(refreshTokenRequest.getUserId());
         final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
         final String refreshToken = refreshTokenRequest.getRefreshToken();
         // 리프레시 토큰 검증
