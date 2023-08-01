@@ -129,7 +129,11 @@ public class WebSecurityConfig {
     private CorsConfiguration getDefaultCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
-                Arrays.asList("http://localhost:8080", "http://localhost:3000", SERVER_URL));
+                Arrays.asList(
+                        "http://localhost:8080",
+                        "http://localhost:3000",
+                        "http://localhost:3001",
+                        SERVER_URL));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowCredentials(true);
