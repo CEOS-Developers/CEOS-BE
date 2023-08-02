@@ -130,6 +130,7 @@ public class ApplicationService {
     public GetResultResponse getDocumentResult(String uuid, String email) {
         recruitmentValidator.validateBetweenResultDateDocAndResultDateFinal(); // 서류 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
+        applicationValidator.validateInterviewTimeExist(uuid, email); // 유저 검증
 
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
         final Recruitment recruitment = recruitmentHelper.takeRecruitment();

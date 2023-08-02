@@ -20,6 +20,7 @@ public enum ApplicationErrorCode implements BaseErrorCode {
     NOT_PASS_FINAL(BAD_REQUEST, "APPLICATION_400_5", "최종 합격 상태가 아닙니다."),
     ALREADY_CHECK_FINAL(BAD_REQUEST, "APPLICATION_400_6", "활동 여부를 이미 선택했습니다."),
     SAME_PASS_STATUS(BAD_REQUEST, "APPLICATION_400_7", "같은 상태로 변경할 수 없습니다."),
+    NOT_SET_INTERVIEW_TIME(BAD_REQUEST, "APPLICATION_400_8", "면접 시간이 정해지지 않았습니다."),
 
     APPLICANT_NOT_FOUND(BAD_REQUEST, "APPLICATION_404_3", "존재하지 않는 지원자입니다."),
 
