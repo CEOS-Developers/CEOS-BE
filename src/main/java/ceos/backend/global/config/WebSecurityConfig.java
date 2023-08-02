@@ -34,6 +34,12 @@ public class WebSecurityConfig {
     @Value("${server.url}")
     private String SERVER_URL;
 
+    @Value("${server.user_url}")
+    private String USER_URL;
+
+    @Value("${server.admin_url}")
+    private String ADMIN_URL;
+
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -129,7 +135,13 @@ public class WebSecurityConfig {
     private CorsConfiguration getDefaultCorsConfiguration() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(
-                Arrays.asList("http://localhost:8080", "http://localhost:3000", SERVER_URL));
+                Arrays.asList(
+                        "http://localhost:8080",
+                        "http://localhost:3000",
+                        "http://localhost:3001",
+                        USER_URL,
+                        ADMIN_URL,
+                        SERVER_URL));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowCredentials(true);
