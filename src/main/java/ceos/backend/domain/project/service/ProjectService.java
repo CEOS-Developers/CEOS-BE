@@ -38,7 +38,6 @@ public class ProjectService {
     public GetProjectsResponse getProjects(int pageNum, int limit) {
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
         Page<Project> projectList = projectRepository.findAllByOrderByIdDesc(pageRequest);
-        System.out.println(projectList);
         PageInfo pageInfo =
                 PageInfo.of(
                         pageNum,
