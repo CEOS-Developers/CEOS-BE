@@ -37,7 +37,7 @@ public class ProjectService {
     @Transactional(readOnly = true)
     public GetProjectsResponse getProjects(int pageNum, int limit) {
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
-        Page<Project> projectList = projectRepository.findAll(pageRequest);
+        Page<Project> projectList = projectRepository.findAllByOrderByIdDesc(pageRequest);
         PageInfo pageInfo =
                 PageInfo.of(
                         pageNum,
