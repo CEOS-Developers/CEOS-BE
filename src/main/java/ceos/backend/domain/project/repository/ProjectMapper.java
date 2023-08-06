@@ -53,7 +53,6 @@ public class ProjectMapper {
             Project project, List<ParticipantVo> participantVos) {
 
         return participantVos.stream()
-                .filter(participantVo -> !participantVo.getName().isEmpty())
                 .map(participantVo -> Participant.of(participantVo, project))
                 .toList();
     }
