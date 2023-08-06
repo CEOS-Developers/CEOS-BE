@@ -5,7 +5,6 @@ import ceos.backend.domain.project.domain.*;
 import ceos.backend.global.common.annotation.ValidEnum;
 import ceos.backend.global.common.entity.Part;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,9 +15,7 @@ public class ParticipantVo {
     @ValidEnum(target = Part.class)
     private Part part;
 
-    @Schema()
-    @NotEmpty(message = "이름을 입력해주세요.")
-    private String name;
+    @Schema() private String name;
 
     @Builder
     public ParticipantVo(Part part, String name) {
