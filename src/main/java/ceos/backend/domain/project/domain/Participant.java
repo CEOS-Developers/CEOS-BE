@@ -5,6 +5,7 @@ import ceos.backend.domain.project.vo.ParticipantVo;
 import ceos.backend.global.common.entity.BaseEntity;
 import ceos.backend.global.common.entity.Part;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,7 @@ public class Participant extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Part part;
 
+    @Nullable
     @Size(max = 30)
     private String name;
 
