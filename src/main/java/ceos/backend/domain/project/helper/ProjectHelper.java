@@ -4,7 +4,6 @@ package ceos.backend.domain.project.helper;
 import ceos.backend.domain.project.domain.*;
 import ceos.backend.domain.project.exception.DataNotFound;
 import ceos.backend.domain.project.exception.DuplicateProject;
-import ceos.backend.domain.project.exception.InvalidData;
 import ceos.backend.domain.project.exception.ProjectNotFound;
 import ceos.backend.domain.project.repository.*;
 import ceos.backend.domain.project.vo.ParticipantVo;
@@ -42,16 +41,6 @@ public class ProjectHelper {
                 .isPresent()) {
             throw DuplicateProject.EXCEPTION;
         }
-    }
-
-    public void validateProjectImages(List<ProjectImageVo> projectImageVos) {
-        if (projectImageVos.size() < 2) {
-            throw InvalidData.EXCEPTION;
-        }
-
-        //        if (projectImageVos.get(0).getCategory()==projectImageVos.get(1).getCategory()) {
-        //            throw InvalidData.EXCEPTION;
-        //        }
     }
 
     public void updateImages(Project project, List<ProjectImageVo> projectImageVos) {

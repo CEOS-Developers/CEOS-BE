@@ -57,9 +57,6 @@ public class ProjectService {
         // 프로젝트 중복 검사
         projectHelper.findDuplicateProject(projectRequest.getProjectInfoVo());
 
-        // 프로젝트 이미지 검사
-        projectHelper.validateProjectImages(projectRequest.getProjectImages());
-
         // 프로젝트 생성
         final Project project = projectMapper.toEntity(projectRequest);
         projectRepository.save(project);
@@ -80,9 +77,6 @@ public class ProjectService {
     @Transactional
     public void updateProject(Long projectId, ProjectRequest projectRequest) {
         Project project = projectHelper.findById(projectId);
-
-        // 프로젝트 이미지 검사
-        projectHelper.validateProjectImages(projectRequest.getProjectImages());
 
         // 프로젝트 업데이트
         project.update(projectRequest.getProjectInfoVo());
