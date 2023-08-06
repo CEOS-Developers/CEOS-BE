@@ -24,28 +24,19 @@ public class Awards {
     @Size(max = 100)
     private String content;
 
-    @NotNull private LocalDate startDate;
-
     // 생성자
     @Builder
-    private Awards(int generation, String content, LocalDate startDate) {
+    private Awards(int generation, String content) {
         this.generation = generation;
         this.content = content;
-        this.startDate = startDate;
     }
 
     // 정적 팩토리 메서드
-    public static Awards from(AwardsRequest awardsRequest) {
+    public static Awards of(int generation, String content) {
         return Awards.builder()
-                .generation(awardsRequest.getGeneration())
-                .content(awardsRequest.getContent())
-                .startDate(awardsRequest.getStartDate())
+                .generation(generation)
+                .content(content)
                 .build();
     }
 
-    public void updateAward(AwardsRequest awardsRequest) {
-        this.generation = awardsRequest.getGeneration();
-        this.content = awardsRequest.getContent();
-        this.startDate = awardsRequest.getStartDate();
-    }
 }
