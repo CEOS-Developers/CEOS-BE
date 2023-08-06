@@ -3,7 +3,6 @@ package ceos.backend.domain.awards.domain;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +34,10 @@ public class StartDate {
                 .generation(awardsRequest.getGeneration())
                 .startDate(awardsRequest.getStartDate())
                 .build();
+    }
+
+    public void updateStartDate(LocalDate startDate){
+        this.startDate = startDate;
     }
 
 }
