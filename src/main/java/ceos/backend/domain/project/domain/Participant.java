@@ -24,7 +24,6 @@ public class Participant extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Part part;
 
-    @NotNull
     @Size(max = 30)
     private String name;
 
