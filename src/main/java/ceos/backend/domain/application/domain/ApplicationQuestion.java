@@ -44,6 +44,7 @@ public class ApplicationQuestion extends BaseEntity {
                 .category(category)
                 .question(questionVo.getQuestion())
                 .number(questionVo.getQuestionIndex())
+                .multiline(questionVo.isMultiline())
                 .build();
     }
 }
