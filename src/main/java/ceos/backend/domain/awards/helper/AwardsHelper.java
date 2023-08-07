@@ -13,7 +13,6 @@ import ceos.backend.domain.project.repository.ProjectRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -46,9 +45,9 @@ public class AwardsHelper {
         return awardsResponseList;
     }
 
-    public void validateGeneration(int generation){
+    public void validateGeneration(int generation) {
         Optional<StartDate> startDate = startDateRepository.findById(generation);
-        if(startDate.isPresent()){
+        if (startDate.isPresent()) {
             throw DuplicateGeneration.EXCEPTION;
         }
     }
