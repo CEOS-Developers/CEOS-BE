@@ -2,7 +2,7 @@ package ceos.backend.domain.recruitment.domain;
 
 
 import ceos.backend.domain.admin.exception.NotAllowedToModify;
-import ceos.backend.domain.application.exception.WrongGeneration;
+import ceos.backend.domain.application.exception.exceptions.WrongGeneration;
 import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
 import ceos.backend.domain.recruitment.exception.*;
 import ceos.backend.global.common.entity.BaseEntity;

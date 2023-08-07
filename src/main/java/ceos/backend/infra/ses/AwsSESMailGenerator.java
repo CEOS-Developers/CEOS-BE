@@ -4,7 +4,7 @@ package ceos.backend.infra.ses;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.domain.QuestionCategory;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.exception.QuestionNotFound;
+import ceos.backend.domain.application.exception.exceptions.QuestionNotFound;
 import ceos.backend.domain.application.vo.AnswerVo;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
