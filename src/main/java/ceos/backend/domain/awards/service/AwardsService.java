@@ -12,7 +12,6 @@ import ceos.backend.domain.awards.repository.AwardsRepository;
 import ceos.backend.domain.awards.repository.StartDateRepository;
 import ceos.backend.domain.project.repository.ProjectRepository;
 import ceos.backend.global.common.dto.PageInfo;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +50,20 @@ public class AwardsService {
 
         int maxGeneration = projectRepository.findMaxGeneration();
         for (int i = maxGeneration; i > 0; i--) {
-            LocalDate startDate = startDateRepository.findById(i).orElseThrow(() -> {throw StartDateNotFound.EXCEPTION;}).getStartDate();
+            LocalDate startDate =
+                    startDateRepository
+                            .findById(i)
+                            .orElseThrow(
+                                    () -> {
+                                        throw StartDateNotFound.EXCEPTION;
+                                    })
+                            .getStartDate();
             GenerationAwardsResponse generationAwardsResponse =
                     GenerationAwardsResponse.of(
-                            i, startDate, awardsHelper.getAwardsDto(i), awardsHelper.getProjectVo(i));
+                            i,
+                            startDate,
+                            awardsHelper.getAwardsDto(i),
+                            awardsHelper.getProjectVo(i));
             generationAwardsResponses.add(generationAwardsResponse);
         }
 
@@ -76,7 +85,14 @@ public class AwardsService {
 
     @Transactional(readOnly = true)
     public GenerationAwardsResponse getGenerationAwards(int generation) {
-        LocalDate startDate = startDateRepository.findById(generation).orElseThrow(() -> {throw StartDateNotFound.EXCEPTION;}).getStartDate();
+        LocalDate startDate =
+                startDateRepository
+                        .findById(generation)
+                        .orElseThrow(
+                                () -> {
+                                    throw StartDateNotFound.EXCEPTION;
+                                })
+                        .getStartDate();
         return GenerationAwardsResponse.of(
                 generation,
                 startDate,
@@ -90,7 +106,13 @@ public class AwardsService {
         deleteAwards(generation);
 
         // 활동시작시기 업데이트
-        StartDate startDate = startDateRepository.findById(generation).orElseThrow(() -> {throw StartDateNotFound.EXCEPTION;});
+        StartDate startDate =
+                startDateRepository
+                        .findById(generation)
+                        .orElseThrow(
+                                () -> {
+                                    throw StartDateNotFound.EXCEPTION;
+                                });
         startDate.updateStartDate(awardsRequest.getStartDate());
 
         // 수상 내역 저장

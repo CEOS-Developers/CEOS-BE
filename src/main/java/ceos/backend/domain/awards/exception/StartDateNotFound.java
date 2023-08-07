@@ -1,5 +1,6 @@
 package ceos.backend.domain.awards.exception;
 
+
 import ceos.backend.global.error.BaseErrorException;
 
 public class StartDateNotFound extends BaseErrorException {

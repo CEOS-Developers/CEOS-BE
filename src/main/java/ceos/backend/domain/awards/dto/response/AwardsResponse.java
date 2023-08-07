@@ -2,7 +2,6 @@ package ceos.backend.domain.awards.dto.response;
 
 
 import ceos.backend.domain.awards.domain.Awards;
-import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,9 +18,6 @@ public class AwardsResponse {
     }
 
     public static AwardsResponse to(Awards awards) {
-        return AwardsResponse.builder()
-                .id(awards.getId())
-                .content(awards.getContent())
-                .build();
+        return AwardsResponse.builder().id(awards.getId()).content(awards.getContent()).build();
     }
 }

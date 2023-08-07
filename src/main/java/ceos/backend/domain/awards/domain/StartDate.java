@@ -1,25 +1,23 @@
 package ceos.backend.domain.awards.domain;
 
+
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class StartDate {
 
-    @Id
-    private int generation;
+    @Id private int generation;
 
-    @NotNull
-    private LocalDate startDate;
+    @NotNull private LocalDate startDate;
 
     // 생성자
     @Builder
@@ -36,8 +34,7 @@ public class StartDate {
                 .build();
     }
 
-    public void updateStartDate(LocalDate startDate){
+    public void updateStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
-
 }

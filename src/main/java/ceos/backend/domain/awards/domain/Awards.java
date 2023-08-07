@@ -1,11 +1,9 @@
 package ceos.backend.domain.awards.domain;
 
 
-import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
 import lombok.*;
 
 @Getter
@@ -33,10 +31,6 @@ public class Awards {
 
     // 정적 팩토리 메서드
     public static Awards of(int generation, String content) {
-        return Awards.builder()
-                .generation(generation)
-                .content(content)
-                .build();
+        return Awards.builder().generation(generation).content(content).build();
     }
-
 }
