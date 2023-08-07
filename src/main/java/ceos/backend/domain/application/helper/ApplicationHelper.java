@@ -6,7 +6,7 @@ import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
 import ceos.backend.domain.application.enums.SortPartType;
 import ceos.backend.domain.application.enums.SortPassType;
-import ceos.backend.domain.application.exception.ApplicantNotFound;
+import ceos.backend.domain.application.exception.exceptions.ApplicantNotFound;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.*;
 import ceos.backend.global.common.dto.AwsSESMail;

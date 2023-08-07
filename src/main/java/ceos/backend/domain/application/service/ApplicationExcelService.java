@@ -6,7 +6,7 @@ import ceos.backend.domain.application.domain.ApplicationAnswer;
 import ceos.backend.domain.application.domain.ApplicationInterview;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.dto.response.GetCreationTime;
-import ceos.backend.domain.application.exception.FileCreationFailed;
+import ceos.backend.domain.application.exception.exceptions.FileCreationFailed;
 import ceos.backend.domain.application.helper.ApplicationExcelHelper;
 import ceos.backend.domain.application.repository.ApplicationQuestionRepository;
 import ceos.backend.domain.application.repository.ApplicationRepository;

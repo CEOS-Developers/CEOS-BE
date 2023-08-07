@@ -2,7 +2,7 @@ package ceos.backend.domain.application.domain;
 
 
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.exception.*;
+import ceos.backend.domain.application.exception.exceptions.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
