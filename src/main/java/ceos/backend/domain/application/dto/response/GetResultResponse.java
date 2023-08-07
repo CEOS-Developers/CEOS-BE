@@ -7,10 +7,9 @@ import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.util.ParsedDurationConvertor;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
 
 @Getter
 public class GetResultResponse {
