@@ -17,11 +17,11 @@ public class StartDate {
 
     @Id private int generation;
 
-    @NotNull private LocalDate startDate;
+    @NotNull private String startDate;
 
     // 생성자
     @Builder
-    public StartDate(int generation, LocalDate startDate) {
+    public StartDate(int generation, String startDate) {
         this.generation = generation;
         this.startDate = startDate;
     }
@@ -34,7 +34,7 @@ public class StartDate {
                 .build();
     }
 
-    public void updateStartDate(LocalDate startDate) {
+    public void updateStartDate(String startDate) {
         this.startDate = startDate;
     }
 }

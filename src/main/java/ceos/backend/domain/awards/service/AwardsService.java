@@ -54,7 +54,7 @@ public class AwardsService {
         int maxGeneration = projectRepository.findMaxGeneration();
         for (int i = maxGeneration; i > 0; i--) {
             Optional<StartDate> s = startDateRepository.findById(i);
-            LocalDate startDate = null;
+            String startDate = null;
             if (s.isPresent()) {
                 startDate = s.get().getStartDate();
             }
@@ -86,7 +86,7 @@ public class AwardsService {
     @Transactional(readOnly = true)
     public GenerationAwardsResponse getGenerationAwards(int generation) {
         Optional<StartDate> s = startDateRepository.findById(generation);
-        LocalDate startDate = null;
+        String startDate = null;
         if (s.isPresent()) {
             startDate = s.get().getStartDate();
         }

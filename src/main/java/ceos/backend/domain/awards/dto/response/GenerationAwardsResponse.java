@@ -10,14 +10,14 @@ import lombok.Getter;
 @Getter
 public class GenerationAwardsResponse {
     private int generation;
-    private LocalDate startDate;
+    private String startDate;
     private List<AwardsResponse> awards;
     private List<ProjectInfoVo> projects;
 
     @Builder
     public GenerationAwardsResponse(
             int generation,
-            LocalDate startDate,
+            String startDate,
             List<AwardsResponse> awards,
             List<ProjectInfoVo> projects) {
         this.generation = generation;
@@ -28,7 +28,7 @@ public class GenerationAwardsResponse {
 
     public static GenerationAwardsResponse of(
             int generation,
-            LocalDate startDate,
+            String startDate,
             List<AwardsResponse> awards,
             List<ProjectInfoVo> projects) {
         return GenerationAwardsResponse.builder()
