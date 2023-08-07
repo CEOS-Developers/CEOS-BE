@@ -6,7 +6,6 @@ import ceos.backend.domain.awards.domain.StartDate;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
 import ceos.backend.domain.awards.dto.response.GenerationAwardsResponse;
-import ceos.backend.domain.awards.exception.StartDateNotFound;
 import ceos.backend.domain.awards.helper.AwardsHelper;
 import ceos.backend.domain.awards.repository.AwardsRepository;
 import ceos.backend.domain.awards.repository.StartDateRepository;
@@ -15,6 +14,7 @@ import ceos.backend.global.common.dto.PageInfo;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -53,14 +53,11 @@ public class AwardsService {
 
         int maxGeneration = projectRepository.findMaxGeneration();
         for (int i = maxGeneration; i > 0; i--) {
-            LocalDate startDate =
-                    startDateRepository
-                            .findById(i)
-                            .orElseThrow(
-                                    () -> {
-                                        throw StartDateNotFound.EXCEPTION;
-                                    })
-                            .getStartDate();
+            Optional<StartDate> s = startDateRepository.findById(i);
+            LocalDate startDate = null;
+            if (s.isPresent()) {
+                startDate = s.get().getStartDate();
+            }
             GenerationAwardsResponse generationAwardsResponse =
                     GenerationAwardsResponse.of(
                             i,
@@ -88,14 +85,11 @@ public class AwardsService {
 
     @Transactional(readOnly = true)
     public GenerationAwardsResponse getGenerationAwards(int generation) {
-        LocalDate startDate =
-                startDateRepository
-                        .findById(generation)
-                        .orElseThrow(
-                                () -> {
-                                    throw StartDateNotFound.EXCEPTION;
-                                })
-                        .getStartDate();
+        Optional<StartDate> s = startDateRepository.findById(generation);
+        LocalDate startDate = null;
+        if (s.isPresent()) {
+            startDate = s.get().getStartDate();
+        }
         return GenerationAwardsResponse.of(
                 generation,
                 startDate,
@@ -109,14 +103,14 @@ public class AwardsService {
         deleteAwards(generation);
 
         // 활동시작시기 업데이트
-        StartDate startDate =
-                startDateRepository
-                        .findById(generation)
-                        .orElseThrow(
-                                () -> {
-                                    throw StartDateNotFound.EXCEPTION;
-                                });
-        startDate.updateStartDate(awardsRequest.getStartDate());
+        Optional<StartDate> startDate = startDateRepository.findById(awardsRequest.getGeneration());
+        if (startDate.isEmpty()) {
+            // 활동 시작 시기 저장
+            StartDate s = StartDate.from(awardsRequest);
+            startDateRepository.save(s);
+        } else { // 활동 시작 시기 수정
+            startDate.get().updateStartDate(awardsRequest.getStartDate());
+        }
 
         // 수상 내역 저장
         List<String> contentList = awardsRequest.getContent();
