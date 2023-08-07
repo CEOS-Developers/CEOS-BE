@@ -33,6 +33,7 @@ public class AwardsService {
     @Transactional
     public void createAwards(AwardsRequest awardsRequest) {
         // 활동 시작 시기 저장
+        awardsHelper.validateGeneration(awardsRequest.getGeneration());
         StartDate startDate = StartDate.from(awardsRequest);
         startDateRepository.save(startDate);
 
