@@ -4,7 +4,6 @@ package ceos.backend.domain.awards.domain;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

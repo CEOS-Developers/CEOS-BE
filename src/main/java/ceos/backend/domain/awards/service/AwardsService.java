@@ -11,7 +11,6 @@ import ceos.backend.domain.awards.repository.AwardsRepository;
 import ceos.backend.domain.awards.repository.StartDateRepository;
 import ceos.backend.domain.project.repository.ProjectRepository;
 import ceos.backend.global.common.dto.PageInfo;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.mapper;
 
+import static java.util.Map.*;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
@@ -20,8 +21,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
-
-import static java.util.Map.*;
 
 @Component
 public class ApplicationMapper {
@@ -196,7 +195,8 @@ public class ApplicationMapper {
         final Set<String> dateSets =
                 parsedDurations.stream().map(ParsedDuration::getDate).collect(Collectors.toSet());
 
-        final Comparator<InterviewDateTimesVo> order = Comparator.comparing(InterviewDateTimesVo::getDate);
+        final Comparator<InterviewDateTimesVo> order =
+                Comparator.comparing(InterviewDateTimesVo::getDate);
 
         final List<InterviewDateTimesVo> interviewDateTimesVos =
                 dateSets.stream()

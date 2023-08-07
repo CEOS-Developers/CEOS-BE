@@ -2,7 +2,6 @@ package ceos.backend.domain.awards.dto.response;
 
 
 import ceos.backend.domain.awards.vo.ProjectInfoVo;
-import java.time.LocalDate;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
