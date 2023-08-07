@@ -24,7 +24,7 @@ public class AwardsController {
 
     @Operation(summary = "수상이력 추가하기")
     @PostMapping
-    public void createAwards(@RequestBody @Valid List<AwardsRequest> awardsRequest) {
+    public void createAwards(@RequestBody @Valid AwardsRequest awardsRequest) {
         log.info("수상이력 추가하기");
         awardsService.createAwards(awardsRequest);
     }
@@ -49,7 +49,7 @@ public class AwardsController {
     @PutMapping("/{generation}")
     public void updateAwards(
             @PathVariable(name = "generation") int generation,
-            @RequestBody List<AwardsRequest> awardsRequest) {
+            @RequestBody AwardsRequest awardsRequest) {
         log.info("수상이력 수정하기");
         awardsService.updateAwards(generation, awardsRequest);
     }

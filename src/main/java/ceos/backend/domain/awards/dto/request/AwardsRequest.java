@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 import lombok.Builder;
@@ -23,7 +24,7 @@ public class AwardsRequest {
     @Valid
     private LocalDate startDate;
 
-    @Schema(defaultValue = "2023 예비창업패키지 최종선정", description = "수상 기록")
+    @Schema(description = "수상 기록 리스트")
     @NotEmpty(message = "수상 기록을 입력해주세요")
     @Valid
     private List<String> content;
