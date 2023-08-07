@@ -32,8 +32,10 @@ public class AwardsService {
 
     @Transactional
     public void createAwards(AwardsRequest awardsRequest) {
-        // 활동 시작 시기 저장
+        // 이미 기수의 수상 정보가 있다면 다시 추가할 수 없음
         awardsHelper.validateGeneration(awardsRequest.getGeneration());
+
+        // 활동 시작 시기 저장
         StartDate startDate = StartDate.from(awardsRequest);
         startDateRepository.save(startDate);
 
