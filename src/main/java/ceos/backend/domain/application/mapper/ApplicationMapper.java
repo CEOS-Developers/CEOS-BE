@@ -16,13 +16,12 @@ import ceos.backend.global.util.InterviewConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import static java.util.Map.*;
 
 @Component
 public class ApplicationMapper {
@@ -196,6 +195,9 @@ public class ApplicationMapper {
                         .toList();
         final Set<String> dateSets =
                 parsedDurations.stream().map(ParsedDuration::getDate).collect(Collectors.toSet());
+
+        final Comparator<InterviewDateTimesVo> order = Comparator.comparing(InterviewDateTimesVo::getDate);
+
         final List<InterviewDateTimesVo> interviewDateTimesVos =
                 dateSets.stream()
                         .map(
@@ -210,6 +212,7 @@ public class ApplicationMapper {
                                                                                 .equals(dateSet))
                                                         .map(ParsedDuration::getDuration)
                                                         .toList()))
+                        .sorted(order)
                         .toList();
 
         return GetApplicationQuestion.of(
