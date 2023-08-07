@@ -109,12 +109,13 @@ public class ApplicationValidator {
     }
 
     public void validateInterviewTimeExist(String uuid, String email) {
-        Application application = applicationRepository
-                .findByUuidAndEmail(uuid, email)
-                .orElseThrow(
-                        () -> {
-                            throw ApplicantNotFound.EXCEPTION;
-                        });
+        Application application =
+                applicationRepository
+                        .findByUuidAndEmail(uuid, email)
+                        .orElseThrow(
+                                () -> {
+                                    throw ApplicantNotFound.EXCEPTION;
+                                });
         if (application.getInterviewDatetime() == null) {
             throw NotSetInterviewTime.EXCEPTION;
         }

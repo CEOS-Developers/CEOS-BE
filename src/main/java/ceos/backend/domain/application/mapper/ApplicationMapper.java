@@ -111,7 +111,7 @@ public class ApplicationMapper {
         List<ApplicationQuestion> questions = new ArrayList<>();
         List<ApplicationQuestionDetail> questionDetails = new ArrayList<>();
         parsingQuestion(questions, questionDetails, commonQuestions, QuestionCategory.COMMON);
-        parsingQuestion(questions, questionDetails, productQuestions, QuestionCategory.STRATEGY);
+        parsingQuestion(questions, questionDetails, productQuestions, QuestionCategory.PRODUCT);
         parsingQuestion(questions, questionDetails, designQuestions, QuestionCategory.DESIGN);
         parsingQuestion(questions, questionDetails, frontendQuestions, QuestionCategory.FRONTEND);
         parsingQuestion(questions, questionDetails, backendQuestions, QuestionCategory.BACKEND);
@@ -182,7 +182,7 @@ public class ApplicationMapper {
                             QuestionWithIdVo.of(applicationQuestion, questionDetailVos);
                     switch (applicationQuestion.getCategory()) {
                         case COMMON -> commonQuestions.add(questionVo);
-                        case STRATEGY -> productQuestions.add(questionVo);
+                        case PRODUCT -> productQuestions.add(questionVo);
                         case DESIGN -> designQuestions.add(questionVo);
                         case FRONTEND -> frontendQuestions.add(questionVo);
                         case BACKEND -> backendQuestions.add(questionVo);

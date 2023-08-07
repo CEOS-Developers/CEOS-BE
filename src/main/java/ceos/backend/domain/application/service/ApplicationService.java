@@ -71,6 +71,7 @@ public class ApplicationService {
         final int generation = recruitmentHelper.takeRecruitment().getGeneration();
         final Application application =
                 applicationMapper.toEntity(createApplicationRequest, generation, UUID);
+        applicationRepository.save(application);
 
         final List<ApplicationQuestion> applicationQuestions =
                 applicationQuestionRepository.findAll();
@@ -89,7 +90,6 @@ public class ApplicationService {
 
         application.addApplicationAnswerList(applicationAnswers);
         application.addApplicationInterviewList(applicationInterviews);
-        applicationRepository.save(application);
 
         // 이메일 전송
         applicationHelper.sendEmail(createApplicationRequest, generation, UUID);
