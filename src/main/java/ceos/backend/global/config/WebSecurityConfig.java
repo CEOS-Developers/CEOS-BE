@@ -50,7 +50,6 @@ public class WebSecurityConfig {
     };
 
     private final String[] AdminPatterns = {
-        "/admin/signin",
         "/admin/newpassword",
         "/admin/logout",
         "/applications/**",
