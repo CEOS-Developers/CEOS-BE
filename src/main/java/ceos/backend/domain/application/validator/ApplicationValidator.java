@@ -6,7 +6,7 @@ import ceos.backend.domain.application.domain.ApplicationQuestion;
 import ceos.backend.domain.application.domain.Interview;
 import ceos.backend.domain.application.domain.QuestionCategory;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
-import ceos.backend.domain.application.exception.*;
+import ceos.backend.domain.application.exception.exceptions.*;
 import ceos.backend.domain.application.repository.ApplicationAnswerRepository;
 import ceos.backend.domain.application.repository.ApplicationInterviewRepository;
 import ceos.backend.domain.application.repository.ApplicationQuestionRepository;
@@ -80,6 +80,9 @@ public class ApplicationValidator {
     }
 
     public void validateRemainApplications() {
+        if (applicationRepository.count() != 0) {
+            throw ApplicationStillExist.EXCEPTION;
+        }
         if (applicationAnswerRepository.count() != 0) {
             throw AnswerStillExist.EXCEPTION;
         }
@@ -109,12 +112,13 @@ public class ApplicationValidator {
     }
 
     public void validateInterviewTimeExist(String uuid, String email) {
-        Application application = applicationRepository
-                .findByUuidAndEmail(uuid, email)
-                .orElseThrow(
-                        () -> {
-                            throw ApplicantNotFound.EXCEPTION;
-                        });
+        Application application =
+                applicationRepository
+                        .findByUuidAndEmail(uuid, email)
+                        .orElseThrow(
+                                () -> {
+                                    throw ApplicantNotFound.EXCEPTION;
+                                });
         if (application.getInterviewDatetime() == null) {
             throw NotSetInterviewTime.EXCEPTION;
         }

@@ -2,13 +2,17 @@ package ceos.backend.domain.awards.helper;
 
 
 import ceos.backend.domain.awards.domain.Awards;
+import ceos.backend.domain.awards.domain.StartDate;
 import ceos.backend.domain.awards.dto.response.AwardsResponse;
+import ceos.backend.domain.awards.exception.DuplicateGeneration;
 import ceos.backend.domain.awards.repository.AwardsRepository;
+import ceos.backend.domain.awards.repository.StartDateRepository;
 import ceos.backend.domain.awards.vo.ProjectInfoVo;
 import ceos.backend.domain.project.domain.Project;
 import ceos.backend.domain.project.repository.ProjectRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +22,7 @@ public class AwardsHelper {
 
     private final ProjectRepository projectRepository;
     private final AwardsRepository awardsRepository;
+    private final StartDateRepository startDateRepository;
 
     public List<ProjectInfoVo> getProjectVo(int generation) {
         List<Project> projectList = projectRepository.findByGeneration(generation);
@@ -38,5 +43,12 @@ public class AwardsHelper {
             awardsResponseList.add(awardsResponse);
         }
         return awardsResponseList;
+    }
+
+    public void validateGeneration(int generation) {
+        Optional<StartDate> startDate = startDateRepository.findById(generation);
+        if (startDate.isPresent()) {
+            throw DuplicateGeneration.EXCEPTION;
+        }
     }
 }

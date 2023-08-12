@@ -1,12 +1,13 @@
 package ceos.backend.domain.application.mapper;
 
+import static java.util.Map.*;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
 import ceos.backend.domain.application.dto.response.*;
-import ceos.backend.domain.application.exception.InterviewNotFound;
-import ceos.backend.domain.application.exception.QuestionNotFound;
+import ceos.backend.domain.application.exception.exceptions.InterviewNotFound;
+import ceos.backend.domain.application.exception.exceptions.QuestionNotFound;
 import ceos.backend.domain.application.vo.*;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.global.common.dto.PageInfo;
@@ -16,10 +17,7 @@ import ceos.backend.global.util.InterviewConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -111,7 +109,7 @@ public class ApplicationMapper {
         List<ApplicationQuestion> questions = new ArrayList<>();
         List<ApplicationQuestionDetail> questionDetails = new ArrayList<>();
         parsingQuestion(questions, questionDetails, commonQuestions, QuestionCategory.COMMON);
-        parsingQuestion(questions, questionDetails, productQuestions, QuestionCategory.STRATEGY);
+        parsingQuestion(questions, questionDetails, productQuestions, QuestionCategory.PRODUCT);
         parsingQuestion(questions, questionDetails, designQuestions, QuestionCategory.DESIGN);
         parsingQuestion(questions, questionDetails, frontendQuestions, QuestionCategory.FRONTEND);
         parsingQuestion(questions, questionDetails, backendQuestions, QuestionCategory.BACKEND);
@@ -182,7 +180,7 @@ public class ApplicationMapper {
                             QuestionWithIdVo.of(applicationQuestion, questionDetailVos);
                     switch (applicationQuestion.getCategory()) {
                         case COMMON -> commonQuestions.add(questionVo);
-                        case STRATEGY -> productQuestions.add(questionVo);
+                        case PRODUCT -> productQuestions.add(questionVo);
                         case DESIGN -> designQuestions.add(questionVo);
                         case FRONTEND -> frontendQuestions.add(questionVo);
                         case BACKEND -> backendQuestions.add(questionVo);
@@ -196,6 +194,10 @@ public class ApplicationMapper {
                         .toList();
         final Set<String> dateSets =
                 parsedDurations.stream().map(ParsedDuration::getDate).collect(Collectors.toSet());
+
+        final Comparator<InterviewDateTimesVo> order =
+                Comparator.comparing(InterviewDateTimesVo::getDate);
+
         final List<InterviewDateTimesVo> interviewDateTimesVos =
                 dateSets.stream()
                         .map(
@@ -210,6 +212,7 @@ public class ApplicationMapper {
                                                                                 .equals(dateSet))
                                                         .map(ParsedDuration::getDuration)
                                                         .toList()))
+                        .sorted(order)
                         .toList();
 
         return GetApplicationQuestion.of(

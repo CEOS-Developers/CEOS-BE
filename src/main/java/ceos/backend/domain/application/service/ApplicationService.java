@@ -71,6 +71,7 @@ public class ApplicationService {
         final int generation = recruitmentHelper.takeRecruitment().getGeneration();
         final Application application =
                 applicationMapper.toEntity(createApplicationRequest, generation, UUID);
+        applicationRepository.save(application);
 
         final List<ApplicationQuestion> applicationQuestions =
                 applicationQuestionRepository.findAll();
@@ -89,7 +90,6 @@ public class ApplicationService {
 
         application.addApplicationAnswerList(applicationAnswers);
         application.addApplicationInterviewList(applicationInterviews);
-        applicationRepository.save(application);
 
         // 이메일 전송
         applicationHelper.sendEmail(createApplicationRequest, generation, UUID);
@@ -157,6 +157,7 @@ public class ApplicationService {
     public GetResultResponse getFinalResult(String uuid, String email) {
         recruitmentValidator.validateFinalResultAbleDuration(); // 최종 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
+        applicationValidator.validateInterviewTimeExist(uuid, email); // 유저 검증
         final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
         applicationValidator.validateApplicantDocumentPass(application); // 유저 서류 합격 여부 검증
 

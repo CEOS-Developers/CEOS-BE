@@ -1,17 +1,16 @@
 package ceos.backend.domain.awards.domain;
 
 
-import ceos.backend.domain.awards.dto.request.AwardsRequest;
+import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDate;
 import lombok.*;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Awards {
+public class Awards extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,28 +23,15 @@ public class Awards {
     @Size(max = 100)
     private String content;
 
-    @NotNull private LocalDate startDate;
-
     // 생성자
     @Builder
-    private Awards(int generation, String content, LocalDate startDate) {
+    private Awards(int generation, String content) {
         this.generation = generation;
         this.content = content;
-        this.startDate = startDate;
     }
 
     // 정적 팩토리 메서드
-    public static Awards from(AwardsRequest awardsRequest) {
-        return Awards.builder()
-                .generation(awardsRequest.getGeneration())
-                .content(awardsRequest.getContent())
-                .startDate(awardsRequest.getStartDate())
-                .build();
-    }
-
-    public void updateAward(AwardsRequest awardsRequest) {
-        this.generation = awardsRequest.getGeneration();
-        this.content = awardsRequest.getContent();
-        this.startDate = awardsRequest.getStartDate();
+    public static Awards of(int generation, String content) {
+        return Awards.builder().generation(generation).content(content).build();
     }
 }

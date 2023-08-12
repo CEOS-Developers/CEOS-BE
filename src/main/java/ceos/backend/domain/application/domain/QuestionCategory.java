@@ -2,7 +2,7 @@ package ceos.backend.domain.application.domain;
 
 public enum QuestionCategory {
     COMMON,
-    STRATEGY,
+    PRODUCT,
     DESIGN,
     FRONTEND,
     BACKEND;
