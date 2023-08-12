@@ -4,11 +4,11 @@ package ceos.backend.global.error.exception;
 import ceos.backend.global.error.BaseErrorException;
 import ceos.backend.global.error.GlobalErrorCode;
 
-public class ForbiddenAdminException extends BaseErrorException {
+public class ForbiddenAdmin extends BaseErrorException {
 
-    public static final BaseErrorException EXCEPTION = new ForbiddenAdminException();
+    public static final BaseErrorException EXCEPTION = new ForbiddenAdmin();
 
-    private ForbiddenAdminException() {
+    private ForbiddenAdmin() {
         super(GlobalErrorCode.FORBIDDEN_ADMIN);
     }
 }
