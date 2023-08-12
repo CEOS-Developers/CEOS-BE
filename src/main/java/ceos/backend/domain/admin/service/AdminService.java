@@ -56,6 +56,8 @@ public class AdminService {
         final Admin admin = adminHelper.findForSignIn(signInRequest);
         final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
 
+        adminHelper.checkRole(admin);
+
         // 토큰 발급
         final String accessToken = tokenProvider.createAccessToken(admin.getId(), authentication);
         final String refreshToken = tokenProvider.createRefreshToken(admin.getId(), authentication);

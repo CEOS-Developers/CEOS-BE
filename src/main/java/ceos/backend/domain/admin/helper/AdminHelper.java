@@ -1,5 +1,6 @@
 package ceos.backend.domain.admin.helper;
 
+import static ceos.backend.domain.admin.domain.AdminRole.ROLE_ANONYMOUS;
 
 import ceos.backend.domain.admin.domain.Admin;
 import ceos.backend.domain.admin.domain.AdminRole;
@@ -14,6 +15,7 @@ import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.event.Event;
 import ceos.backend.global.config.user.AdminDetailsService;
+import ceos.backend.global.error.exception.ForbiddenAdmin;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -159,6 +161,12 @@ public class AdminHelper {
                         () -> {
                             throw AdminNotFound.EXCEPTION;
                         });
+    }
+
+    public void checkRole(Admin admin) {
+        if (admin.getRole().equals(ROLE_ANONYMOUS)) {
+            throw ForbiddenAdmin.EXCEPTION;
+        }
     }
 
     public void changeRole(Admin admin, AdminRole adminRole) {
