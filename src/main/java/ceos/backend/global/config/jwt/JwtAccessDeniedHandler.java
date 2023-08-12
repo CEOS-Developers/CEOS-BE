@@ -3,7 +3,7 @@ package ceos.backend.global.config.jwt;
 
 import ceos.backend.global.error.BaseErrorCode;
 import ceos.backend.global.error.ErrorResponse;
-import ceos.backend.global.error.exception.ForbiddenAdminException;
+import ceos.backend.global.error.exception.ForbiddenAdmin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,8 +26,7 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
             HttpServletResponse response,
             AccessDeniedException accessDeniedException)
             throws IOException {
-        responseToClient(
-                response, getErrorResponse(ForbiddenAdminException.EXCEPTION.getErrorCode()));
+        responseToClient(response, getErrorResponse(ForbiddenAdmin.EXCEPTION.getErrorCode()));
     }
 
     private ErrorResponse getErrorResponse(BaseErrorCode errorCode) {
