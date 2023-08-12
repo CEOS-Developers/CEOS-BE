@@ -50,24 +50,31 @@ public class WebSecurityConfig {
     };
 
     private final String[] AdminPatterns = {
+        "/admin/login",
         "/admin/newpassword",
         "/admin/logout",
         "/applications/**",
-        "recruitments/**",
-        "projects/**",
-        "activities/**",
-        "awards/**"
+        "/recruitments/**",
+        "/projects/**",
+        "/activities/**",
+        "/awards/**",
+        "/managements/**",
+        "/faq/**",
+        "/sponsors/**"
     };
 
     private final String[] GetPermittedPatterns = {
         "/awards/**",
-        "recruitments/**",
-        "projects/**",
-        "activities/**",
+        "/recruitments/**",
+        "/projects/**",
+        "/activities/**",
+        "/managements/**",
+        "/faq/**",
+        "/sponsors/**",
         "/applications/question",
         "/applications/document",
         "/applications/final",
-        "admin/reissue"
+        "/admin/reissue"
     };
 
     private final String[] PostPermittedPatterns = {"/applications"};
