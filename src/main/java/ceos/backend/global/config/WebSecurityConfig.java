@@ -40,6 +40,9 @@ public class WebSecurityConfig {
     @Value("${server.admin_url}")
     private String ADMIN_URL;
 
+    @Value("${server.temporary_url")
+    private String TEMPORARY_URL;
+
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -147,7 +150,8 @@ public class WebSecurityConfig {
                         "http://localhost:3001",
                         USER_URL,
                         ADMIN_URL,
-                        SERVER_URL));
+                        SERVER_URL,
+                        TEMPORARY_URL));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowCredentials(true);
