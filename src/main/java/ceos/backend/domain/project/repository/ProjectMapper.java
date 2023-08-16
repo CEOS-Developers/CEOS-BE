@@ -14,13 +14,12 @@ import ceos.backend.domain.project.vo.ProjectImageVo;
 import ceos.backend.domain.project.vo.ProjectUrlVo;
 import ceos.backend.global.common.dto.PageInfo;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProjectMapper {
 
-    public GetProjectsResponse toGetProjects(Page<Project> projectList, PageInfo pageInfo) {
+    public GetProjectsResponse toGetProjects(List<Project> projectList, PageInfo pageInfo) {
         List<ProjectBriefInfoVo> projectBriefInfoVos =
                 projectList.stream().map(ProjectBriefInfoVo::from).toList();
         return GetProjectsResponse.of(projectBriefInfoVos, pageInfo);

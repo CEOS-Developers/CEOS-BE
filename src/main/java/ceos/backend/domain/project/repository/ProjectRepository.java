@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
-    Page<Project> findAllByOrderByIdDesc(PageRequest pageRequest);
+    Page<Project> findAllByOrderByGenerationDesc(PageRequest pageRequest);
 
     Optional<Project> findByNameAndGeneration(String name, int generation);
 
