@@ -52,7 +52,7 @@ public class AwardsService {
 
         int maxGeneration = projectRepository.findMaxGeneration();
         for (int i = maxGeneration; i >= 0; i--) {
-            if (i <= 9 && i >= 1) continue;
+            if (i <= 9 && i >= 1) continue; // 1~9기 정확한 정보 없어서 0으로 합쳐서 저장함
             Optional<StartDate> s = startDateRepository.findById(i);
             String startDate = null;
             if (s.isPresent()) {
