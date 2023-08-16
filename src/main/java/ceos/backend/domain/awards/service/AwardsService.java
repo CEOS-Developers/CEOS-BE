@@ -51,7 +51,7 @@ public class AwardsService {
         List<GenerationAwardsResponse> generationAwardsResponses = new ArrayList<>();
 
         int maxGeneration = projectRepository.findMaxGeneration();
-        for (int i = maxGeneration; i > 0; i--) {
+        for (int i = maxGeneration; i >= 0; i--) {
             Optional<StartDate> s = startDateRepository.findById(i);
             String startDate = null;
             if (s.isPresent()) {
