@@ -52,6 +52,7 @@ public class AwardsService {
 
         int maxGeneration = projectRepository.findMaxGeneration();
         for (int i = maxGeneration; i >= 0; i--) {
+            if (i <= 9 && i >= 1) continue;
             Optional<StartDate> s = startDateRepository.findById(i);
             String startDate = null;
             if (s.isPresent()) {
