@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProjectMapper {
 
-    public GetProjectsResponse toGetProjects(Page<Project> projectList, PageInfo pageInfo) {
+    public GetProjectsResponse toGetProjects(List<Project> projectList, PageInfo pageInfo) {
         List<ProjectBriefInfoVo> projectBriefInfoVos =
                 projectList.stream().map(ProjectBriefInfoVo::from).toList();
         return GetProjectsResponse.of(projectBriefInfoVos, pageInfo);

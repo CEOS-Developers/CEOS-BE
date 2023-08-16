@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static ceos.backend.domain.project.domain.ProjectImageCategory.THUMBNAIL;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,14 +39,21 @@ public class ProjectService {
     @Transactional(readOnly = true)
     public GetProjectsResponse getProjects(int pageNum, int limit) {
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
-        Page<Project> projectList = projectRepository.findAllByOrderByIdDesc(pageRequest);
+        Page<Project> projectList =
+                        projectRepository
+                                .findAllByOrderByGenerationDesc(pageRequest);
+        List<Project> filteredProjects = projectList.getContent()
+                .stream()
+                .filter(project -> !project.getProjectImages().stream()
+                        .filter(image -> image.getCategory().equals(THUMBNAIL)).toList().isEmpty())
+                .toList();
         PageInfo pageInfo =
                 PageInfo.of(
                         pageNum,
                         limit,
                         projectList.getTotalPages(),
                         projectList.getTotalElements());
-        return projectMapper.toGetProjects(projectList, pageInfo);
+        return projectMapper.toGetProjects(filteredProjects, pageInfo);
     }
 
     @Transactional(readOnly = true)
