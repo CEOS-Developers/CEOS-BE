@@ -14,7 +14,6 @@ import ceos.backend.domain.project.vo.ProjectImageVo;
 import ceos.backend.domain.project.vo.ProjectUrlVo;
 import ceos.backend.global.common.dto.PageInfo;
 import java.util.List;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 @Component
