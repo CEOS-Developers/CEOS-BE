@@ -17,7 +17,6 @@ public class ProjectImageVo {
     private ProjectImageCategory category;
 
     @Schema()
-    @NotEmpty(message = "Url을 입력해주세요.")
     private String imageUrl;
 
     @Builder
