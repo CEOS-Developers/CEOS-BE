@@ -5,10 +5,12 @@ import ceos.backend.domain.awards.domain.Awards;
 import ceos.backend.domain.awards.domain.StartDate;
 import ceos.backend.domain.awards.dto.request.AwardsRequest;
 import ceos.backend.domain.awards.dto.response.AllAwardsResponse;
+import ceos.backend.domain.awards.dto.response.AwardsResponse;
 import ceos.backend.domain.awards.dto.response.GenerationAwardsResponse;
 import ceos.backend.domain.awards.helper.AwardsHelper;
 import ceos.backend.domain.awards.repository.AwardsRepository;
 import ceos.backend.domain.awards.repository.StartDateRepository;
+import ceos.backend.domain.awards.vo.ProjectInfoVo;
 import ceos.backend.domain.project.repository.ProjectRepository;
 import ceos.backend.global.common.dto.PageInfo;
 import java.util.ArrayList;
@@ -58,12 +60,16 @@ public class AwardsService {
             if (s.isPresent()) {
                 startDate = s.get().getStartDate();
             }
+            List<AwardsResponse> awardsList = awardsHelper.getAwardsDto(i);
+            List<ProjectInfoVo> projectList = awardsHelper.getProjectVo(i);
+            // awards 0기인 데이터에 1~9기 프로젝트 데이터 매칭
+            if (i == 0) {
+                for (int j = 1; j <= 9; j++) {
+                    projectList.addAll(awardsHelper.getProjectVo(j));
+                }
+            }
             GenerationAwardsResponse generationAwardsResponse =
-                    GenerationAwardsResponse.of(
-                            i,
-                            startDate,
-                            awardsHelper.getAwardsDto(i),
-                            awardsHelper.getProjectVo(i));
+                    GenerationAwardsResponse.of(i, startDate, awardsList, projectList);
             generationAwardsResponses.add(generationAwardsResponse);
         }
 
