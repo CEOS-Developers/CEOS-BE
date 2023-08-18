@@ -1,4 +1,4 @@
-package ceos.backend.domain.management.Vo;
+package ceos.backend.domain.management.vo;
 
 
 import ceos.backend.domain.management.domain.ManagementPart;
