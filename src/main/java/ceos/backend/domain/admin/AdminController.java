@@ -67,7 +67,7 @@ public class AdminController {
     }
 
     @Operation(summary = "로그아웃")
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public void logout(@AuthenticationPrincipal AdminDetails adminUser) {
         log.info("로그아웃");
         adminService.logout(adminUser);
