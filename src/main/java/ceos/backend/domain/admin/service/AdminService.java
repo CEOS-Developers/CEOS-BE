@@ -118,10 +118,8 @@ public class AdminService {
         // 토큰 재발급
         final String newAccessToken =
                 tokenProvider.createAccessToken(admin.getId(), authentication);
-        final String newRefreshToken =
-                tokenProvider.createRefreshToken(admin.getId(), authentication);
 
-        return adminMapper.toTokenResponse(newAccessToken, newRefreshToken);
+        return adminMapper.toTokenResponse(newAccessToken, refreshToken);
     }
 
     @Transactional(readOnly = true)
