@@ -12,15 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component("adminDetailsService")
 @RequiredArgsConstructor
-public class AdminDetailsService implements UserDetailsService {
+public class AdminDetailsService {
 
     public final AdminRepository adminRepository;
-
-    @Override
-    @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
-    }
 
     @Transactional
     public UserDetails loadAdminByUsername(Long id) throws UsernameNotFoundException {
