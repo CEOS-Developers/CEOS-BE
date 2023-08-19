@@ -1,5 +1,6 @@
 package ceos.backend.global.common.filter;
 
+
 import ceos.backend.global.error.BaseErrorCode;
 import ceos.backend.global.error.BaseErrorException;
 import ceos.backend.global.error.ErrorResponse;
@@ -9,6 +10,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,14 +18,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-
 @RequiredArgsConstructor
 @Component
 public class AccessDeniedFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper;
     private final String[] SwaggerPatterns = {
-            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
+        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
     };
 
     @Override

@@ -7,8 +7,9 @@ import ceos.backend.global.config.jwt.JwtAccessDeniedHandler;
 import ceos.backend.global.config.jwt.JwtAuthenticationEntryPoint;
 import ceos.backend.global.config.jwt.JwtAuthenticationFilter;
 import ceos.backend.global.config.jwt.JwtExceptionHandlerFilter;
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.security.ConditionalOnDefaultWebSecurity;
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,9 +33,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
-import java.util.List;
 
 @EnableWebSecurity
 @Configuration()
@@ -138,8 +135,11 @@ public class WebSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         if (springEnvironmentHelper.isProdAndDevProfile()) {
-            http.authorizeHttpRequests().requestMatchers(SwaggerPatterns).authenticated()
-                    .and().httpBasic(Customizer.withDefaults());
+            http.authorizeHttpRequests()
+                    .requestMatchers(SwaggerPatterns)
+                    .authenticated()
+                    .and()
+                    .httpBasic(Customizer.withDefaults());
         }
 
         http.authorizeHttpRequests()
@@ -164,9 +164,8 @@ public class WebSecurityConfig {
                 .frameOptions()
                 .disable();
 
-        http.exceptionHandling()
-                .accessDeniedHandler(jwtAccessDeniedHandler);
-//                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+        http.exceptionHandling().accessDeniedHandler(jwtAccessDeniedHandler);
+        //                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtExceptionHandlerFilter, JwtAuthenticationFilter.class);

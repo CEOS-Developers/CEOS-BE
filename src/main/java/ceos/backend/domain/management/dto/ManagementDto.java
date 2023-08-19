@@ -1,10 +1,10 @@
 package ceos.backend.domain.management.dto;
 
 
-import ceos.backend.domain.management.vo.ManagementVo;
 import ceos.backend.domain.management.domain.Management;
 import ceos.backend.domain.management.domain.ManagementPart;
 import ceos.backend.domain.management.domain.ManagementRole;
+import ceos.backend.domain.management.vo.ManagementVo;
 import ceos.backend.global.common.entity.University;
 import lombok.Builder;
 import lombok.Getter;
