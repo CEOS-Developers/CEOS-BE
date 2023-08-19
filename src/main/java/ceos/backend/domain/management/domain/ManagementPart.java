@@ -16,7 +16,8 @@ public enum ManagementPart {
     PLAN("기획"),
     DESIGN("디자인"),
     FRONTEND("프론트엔드"),
-    BACKEND("백엔드");
+    BACKEND("백엔드"),
+    DEVELOPMENT("개발");
 
     @JsonValue private final String managementPart;
 

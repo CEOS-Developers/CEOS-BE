@@ -13,7 +13,8 @@ public enum University {
     SOGANG("서강대학교"),
     YONSEI("연세대학교"),
     EWHA("이화여자대학교"),
-    HONGIK("홍익대학교");
+    HONGIK("홍익대학교"),
+    NEWYORK("뉴욕대학교");
 
     @JsonValue private final String university;
 
