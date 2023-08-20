@@ -158,7 +158,7 @@ public class WebSecurityConfig {
                 .requestMatchers(RootPatterns)
                 .hasRole("ROOT")
                 .anyRequest()
-                .hasRole("ADMIN")
+                .permitAll()
                 .and()
                 .headers()
                 .frameOptions()
