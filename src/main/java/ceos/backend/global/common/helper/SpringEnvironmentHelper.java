@@ -3,7 +3,6 @@ package ceos.backend.global.common.helper;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -17,14 +16,22 @@ public class SpringEnvironmentHelper {
     private final String DEV = "dev";
 
     public Boolean isProdProfile() {
-        String[] activeProfiles = environment.getActiveProfiles();
-        List<String> currentProfile = Arrays.stream(activeProfiles).collect(Collectors.toList());
+        List<String> currentProfile = getCurrentProfile();
         return currentProfile.contains(PROD);
     }
 
     public Boolean isDevProfile() {
-        String[] activeProfiles = environment.getActiveProfiles();
-        List<String> currentProfile = Arrays.stream(activeProfiles).collect(Collectors.toList());
+        List<String> currentProfile = getCurrentProfile();
         return currentProfile.contains(DEV);
+    }
+
+    public Boolean isProdAndDevProfile() {
+        List<String> currentProfile = getCurrentProfile();
+        return currentProfile.contains(PROD) || currentProfile.contains(DEV);
+    }
+
+    private List<String> getCurrentProfile() {
+        String[] activeProfiles = environment.getActiveProfiles();
+        return Arrays.stream(activeProfiles).toList();
     }
 }
