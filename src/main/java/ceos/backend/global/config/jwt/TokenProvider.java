@@ -107,7 +107,7 @@ public class TokenProvider implements InitializingBean {
 
         redisTemplate
                 .opsForValue()
-                .set(id.toString(), refreshToken, refreshExpirationTime, TimeUnit.MILLISECONDS);
+                .set(id.toString(), refreshToken, refreshExpirationTime, TimeUnit.SECONDS);
 
         return refreshToken;
     }
