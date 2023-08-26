@@ -38,7 +38,8 @@ public class ProjectService {
     @Transactional(readOnly = true)
     public GetProjectsResponse getProjects(int pageNum, int limit) {
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
-        Page<Project> projectList = projectRepository.findAllByOrderByGenerationDescIdAsc(pageRequest);
+        Page<Project> projectList =
+                projectRepository.findAllByOrderByGenerationDescIdAsc(pageRequest);
         List<Project> filteredProjects =
                 projectList.getContent().stream()
                         .filter(
