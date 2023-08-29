@@ -86,7 +86,7 @@ public class ApplicationExcelService {
                 applicationExcelHelper.getQuestionIndexMap(headers, questionList);
 
         // Header
-        headers.addAll(List.of("면접 가능한 시간", "서류 합격 여부", "면접 시간"));
+        headers.addAll(List.of("면접 불가능 시간", "서류 합격 여부", "면접 시간"));
 
         int colIndex = 0;
         int rowIndex = 0;
@@ -155,8 +155,8 @@ public class ApplicationExcelService {
 
             row.createCell(colIndex++)
                     .setCellValue(
-                            applicationExcelHelper.getPossibleInterview(
-                                    interviewTimeMap, applicationInterviews)); // 면접 가능한 시간
+                            applicationExcelHelper.getUnableInterview(
+                                    interviewTimeMap, applicationInterviews)); // 면접 불가능 시간
             row.createCell(colIndex++).setCellValue(application.getDocumentPass().getResult());
             row.createCell(colIndex++).setCellValue(application.getInterviewDatetime());
 

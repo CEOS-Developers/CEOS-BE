@@ -41,12 +41,12 @@ public class ApplicationExcelHelper {
         return interviewTimeMap;
     }
 
-    public String getPossibleInterview(
+    public String getUnableInterview(
             Map<Long, String> interviewTimeMap, List<ApplicationInterview> applicationInterviews) {
-        String possibleInterview = "";
+        String unableInterview = "";
         for (ApplicationInterview interview : applicationInterviews) {
-            possibleInterview += interviewTimeMap.get(interview.getInterview().getId()) + "\n";
+            unableInterview += interviewTimeMap.get(interview.getInterview().getId()) + "\n";
         }
-        return possibleInterview;
+        return unableInterview;
     }
 }

@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class ApplicationInterview extends BaseEntity {
+    // 면접 불가능 시간이 저장됨
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
