@@ -29,9 +29,9 @@ public class RecruitmentController {
 
     @Operation(summary = "리크루팅 정보 보기")
     @GetMapping
-    public UserRecruitmentDTO getOpenChatUrl() {
-        log.info("오픈채팅 링크");
-        return recruitmentService.getOpenChatUrl();
+    public UserRecruitmentDTO getUserRecruitment() {
+        log.info("리크루팅 정보 보기");
+        return recruitmentService.getUserRecruitment();
     }
 
     @Operation(summary = "리크루팅 정보 수정")

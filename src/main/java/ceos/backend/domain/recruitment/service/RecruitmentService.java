@@ -26,7 +26,7 @@ public class RecruitmentService {
         return RecruitmentDTO.from(recruitment);
     }
 
-    public UserRecruitmentDTO getOpenChatUrl() {
+    public UserRecruitmentDTO getUserRecruitment() {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
         return UserRecruitmentDTO.from(recruitment);
     }
