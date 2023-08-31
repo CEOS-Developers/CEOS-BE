@@ -1,4 +1,4 @@
-package ceos.backend.domain.recruitment.dto.response;
+package ceos.backend.domain.recruitment.dto;
 
 
 import ceos.backend.domain.recruitment.domain.Recruitment;
@@ -7,8 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
-public class GetRecruitmentResponse {
+public class UserRecruitmentDTO {
     private int generation;
     private String prodStudyUrl;
     private String designStudyUrl;
@@ -22,8 +21,36 @@ public class GetRecruitmentResponse {
     private LocalDate otDate;
     private LocalDate demodayDate;
 
-    public static GetRecruitmentResponse from(Recruitment recruitment) {
-        return GetRecruitmentResponse.builder()
+    @Builder
+    public UserRecruitmentDTO(
+            int generation,
+            String prodStudyUrl,
+            String designStudyUrl,
+            String devStudyUrl,
+            LocalDate startDateDoc,
+            LocalDate endDateDoc,
+            LocalDate resultDateDoc,
+            LocalDate startDateInterview,
+            LocalDate endDateInterview,
+            LocalDate resultDateFinal,
+            LocalDate otDate,
+            LocalDate demodayDate) {
+        this.generation = generation;
+        this.prodStudyUrl = prodStudyUrl;
+        this.designStudyUrl = designStudyUrl;
+        this.devStudyUrl = devStudyUrl;
+        this.startDateDoc = startDateDoc;
+        this.endDateDoc = endDateDoc;
+        this.resultDateDoc = resultDateDoc;
+        this.startDateInterview = startDateInterview;
+        this.endDateInterview = endDateInterview;
+        this.resultDateFinal = resultDateFinal;
+        this.otDate = otDate;
+        this.demodayDate = demodayDate;
+    }
+
+    public static UserRecruitmentDTO from(Recruitment recruitment) {
+        return UserRecruitmentDTO.builder()
                 .generation(recruitment.getGeneration())
                 .prodStudyUrl(recruitment.getProdStudyUrl())
                 .designStudyUrl(recruitment.getDesignStudyUrl())

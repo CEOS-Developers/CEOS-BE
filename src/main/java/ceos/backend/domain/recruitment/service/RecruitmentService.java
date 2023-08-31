@@ -2,9 +2,8 @@ package ceos.backend.domain.recruitment.service;
 
 
 import ceos.backend.domain.recruitment.domain.Recruitment;
-import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
-import ceos.backend.domain.recruitment.dto.response.GetRecruitmentResponse;
-import ceos.backend.domain.recruitment.dto.response.OpenChatUrlResponse;
+import ceos.backend.domain.recruitment.dto.RecruitmentDTO;
+import ceos.backend.domain.recruitment.dto.UserRecruitmentDTO;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,22 +21,22 @@ public class RecruitmentService {
     private final RecruitmentHelper recruitmentHelper;
 
     @Transactional(readOnly = true)
-    public GetRecruitmentResponse getRecruitment() {
+    public RecruitmentDTO getRecruitment() {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        return GetRecruitmentResponse.from(recruitment);
+        return RecruitmentDTO.from(recruitment);
     }
 
-    public OpenChatUrlResponse getOpenChatUrl() {
+    public UserRecruitmentDTO getOpenChatUrl() {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        return OpenChatUrlResponse.from(recruitment);
+        return UserRecruitmentDTO.from(recruitment);
     }
 
     @Transactional
-    public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest) {
+    public void updateRecruitment(RecruitmentDTO recruitmentDTO) {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
 
         // 객체 업데이트
-        recruitment.updateRecruitment(updateRecruitmentRequest);
+        recruitment.updateRecruitment(recruitmentDTO);
         recruitmentRepository.save(recruitment);
     }
 }

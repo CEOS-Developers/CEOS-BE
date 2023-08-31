@@ -3,7 +3,7 @@ package ceos.backend.domain.recruitment.domain;
 
 import ceos.backend.domain.admin.exception.NotAllowedToModify;
 import ceos.backend.domain.application.exception.exceptions.WrongGeneration;
-import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
+import ceos.backend.domain.recruitment.dto.RecruitmentDTO;
 import ceos.backend.domain.recruitment.exception.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -86,20 +86,20 @@ public class Recruitment extends BaseEntity {
         this.applicationExcelCreatedAt = applicationExcelCreatedAt;
     }
 
-    public void updateRecruitment(UpdateRecruitmentRequest updateRecruitmentRequest) {
-        this.generation = updateRecruitmentRequest.getGeneration();
-        this.prodStudyUrl = updateRecruitmentRequest.getProdStudyUrl();
-        this.designStudyUrl = updateRecruitmentRequest.getDesignStudyUrl();
-        this.devStudyUrl = updateRecruitmentRequest.getDevStudyUrl();
-        this.startDateDoc = updateRecruitmentRequest.getStartDateDoc();
-        this.endDateDoc = updateRecruitmentRequest.getEndDateDoc();
-        this.resultDateDoc = updateRecruitmentRequest.getResultDateDoc();
-        this.startDateInterview = updateRecruitmentRequest.getStartDateInterview();
-        this.endDateInterview = updateRecruitmentRequest.getEndDateInterview();
-        this.resultDateFinal = updateRecruitmentRequest.getResultDateFinal();
-        this.openChatUrl = updateRecruitmentRequest.getOpenChatUrl();
-        this.otDate = updateRecruitmentRequest.getOtDate();
-        this.demodayDate = updateRecruitmentRequest.getDemodayDate();
+    public void updateRecruitment(RecruitmentDTO recruitmentDTO) {
+        this.generation = recruitmentDTO.getGeneration();
+        this.prodStudyUrl = recruitmentDTO.getProdStudyUrl();
+        this.designStudyUrl = recruitmentDTO.getDesignStudyUrl();
+        this.devStudyUrl = recruitmentDTO.getDevStudyUrl();
+        this.startDateDoc = recruitmentDTO.getStartDateDoc();
+        this.endDateDoc = recruitmentDTO.getEndDateDoc();
+        this.resultDateDoc = recruitmentDTO.getResultDateDoc();
+        this.startDateInterview = recruitmentDTO.getStartDateInterview();
+        this.endDateInterview = recruitmentDTO.getEndDateInterview();
+        this.resultDateFinal = recruitmentDTO.getResultDateFinal();
+        this.openChatUrl = recruitmentDTO.getOpenChatUrl();
+        this.otDate = recruitmentDTO.getOtDate();
+        this.demodayDate = recruitmentDTO.getDemodayDate();
     }
 
     public void updateApplicationExcelCreatedAt(LocalDateTime createdAt) {
