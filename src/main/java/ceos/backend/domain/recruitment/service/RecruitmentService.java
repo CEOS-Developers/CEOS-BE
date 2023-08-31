@@ -4,6 +4,7 @@ package ceos.backend.domain.recruitment.service;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.dto.request.UpdateRecruitmentRequest;
 import ceos.backend.domain.recruitment.dto.response.GetRecruitmentResponse;
+import ceos.backend.domain.recruitment.dto.response.OpenChatUrlResponse;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.domain.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,11 @@ public class RecruitmentService {
     public GetRecruitmentResponse getRecruitment() {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
         return GetRecruitmentResponse.from(recruitment);
+    }
+
+    public OpenChatUrlResponse getOpenChatUrl() {
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
+        return OpenChatUrlResponse.from(recruitment);
     }
 
     @Transactional
