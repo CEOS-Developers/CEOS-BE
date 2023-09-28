@@ -67,7 +67,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/ceos-backend-dev
+          tags: ${{ secrets.DOCKER_USERNAME }}/ceos-backend
 
       - name: create remote directory
         uses: appleboy/ssh-action@master

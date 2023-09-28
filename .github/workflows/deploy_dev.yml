@@ -97,6 +97,6 @@ jobs:
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm $(sudo docker ps -a -q)
             sudo docker rmi $(sudo docker images -q)
-            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml pull
-            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml up --build -d
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.dev.yml pull
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.dev.yml up --build -d
 
