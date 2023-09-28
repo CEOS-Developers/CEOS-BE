@@ -67,14 +67,14 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/ceos-backend-dev
+          tags: ${{ secrets.DOCKER_USERNAME }}/ceos-backend
 
       - name: create remote directory
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST_PROD }}
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ secrets.EC2_KEY_PROD }}
           script: mkdir -p ~/srv/ubuntu/ceos_web_dev
 
       - name: copy source via ssh key
@@ -84,14 +84,14 @@ jobs:
           remote_path: ~/srv/ubuntu/
           remote_host: ${{ secrets.EC2_HOST_PROD }}
           remote_user: ubuntu
-          remote_key: ${{ secrets.EC2_KEY }}
+          remote_key: ${{ secrets.EC2_KEY_PROD }}
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST_PROD }}
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ secrets.EC2_KEY_PROD }}
           script: |
             sh ~/srv/ubuntu/config/scripts/deploy.sh
             sudo docker stop $(sudo docker ps -a -q)

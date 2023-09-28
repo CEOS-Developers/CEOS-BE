@@ -37,9 +37,9 @@ jobs:
       - name: Make application-secret.yml
         run: |
           touch ./src/main/resources/application-secret.yml
-          echo "${{ secrets.APPLICATION_SECRET }}" > ./src/main/resources/application-secret.yml
+          echo "${{ secrets.APPLICATION_SECRET_DEV }}" > ./src/main/resources/application-secret.yml
         env:
-          PROPERTIES_DEV: ${{ secrets.APPLICATION_SECRET }}
+          PROPERTIES_DEV: ${{ secrets.APPLICATION_SECRET_DEV }}
 
       # Gradle build
       - name: Build with Gradle
@@ -74,7 +74,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST_DEV }}
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ secrets.EC2_KEY_DEV }}
           script: mkdir -p ~/srv/ubuntu/ceos_web_dev
 
       - name: copy source via ssh key
@@ -84,19 +84,19 @@ jobs:
           remote_path: ~/srv/ubuntu/
           remote_host: ${{ secrets.EC2_HOST_DEV }}
           remote_user: ubuntu
-          remote_key: ${{ secrets.EC2_KEY }}
+          remote_key: ${{ secrets.EC2_KEY_DEV }}
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST_DEV }}
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ secrets.EC2_KEY_DEV }}
           script: |
             sh ~/srv/ubuntu/config/scripts/deploy.sh
             sudo docker stop $(sudo docker ps -a -q)
             sudo docker rm $(sudo docker ps -a -q)
             sudo docker rmi $(sudo docker images -q)
-            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml pull
-            sudo docker-compose -f ~/srv/ubuntu/docker-compose.yml up --build -d
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.dev.yml pull
+            sudo docker-compose -f ~/srv/ubuntu/docker-compose.dev.yml up --build -d
 
