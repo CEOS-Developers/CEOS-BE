@@ -74,7 +74,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST_DEV }}
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ secrets.EC2_KEY_DEV }}
           script: mkdir -p ~/srv/ubuntu/ceos_web_dev
 
       - name: copy source via ssh key
@@ -84,14 +84,14 @@ jobs:
           remote_path: ~/srv/ubuntu/
           remote_host: ${{ secrets.EC2_HOST_DEV }}
           remote_user: ubuntu
-          remote_key: ${{ secrets.EC2_KEY }}
+          remote_key: ${{ secrets.EC2_KEY_DEV }}
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST_DEV }}
           username: ubuntu
-          key: ${{ secrets.EC2_KEY }}
+          key: ${{ secrets.EC2_KEY_DEV }}
           script: |
             sh ~/srv/ubuntu/config/scripts/deploy.sh
             sudo docker stop $(sudo docker ps -a -q)
