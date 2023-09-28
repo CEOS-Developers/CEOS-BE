@@ -37,9 +37,9 @@ jobs:
       - name: Make application-secret.yml
         run: |
           touch ./src/main/resources/application-secret.yml
-          echo "${{ secrets.APPLICATION_SECRET }}" > ./src/main/resources/application-secret.yml
+          echo "${{ secrets.APPLICATION_SECRET_DEV }}" > ./src/main/resources/application-secret.yml
         env:
-          PROPERTIES_DEV: ${{ secrets.APPLICATION_SECRET }}
+          PROPERTIES_DEV: ${{ secrets.APPLICATION_SECRET_DEV }}
 
       # Gradle build
       - name: Build with Gradle
