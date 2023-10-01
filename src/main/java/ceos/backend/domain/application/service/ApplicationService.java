@@ -61,12 +61,7 @@ public class ApplicationService {
 
     @Transactional(readOnly = true)
     public GetApplications getApplications(
-            Part part,
-            Pass docPass,
-            Pass finalPass,
-            String applicantName,
-            int pageNum,
-            int limit) {
+            Part part, Pass docPass, Pass finalPass, String applicantName, int pageNum, int limit) {
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
         Page<Application> pageManagements =
                 applicationRepository.findApplications(

@@ -15,12 +15,10 @@ import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.InterviewConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 

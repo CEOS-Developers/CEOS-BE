@@ -9,9 +9,5 @@ import org.springframework.data.domain.PageRequest;
 
 public interface ApplicationRepositoryCustom {
     Page<Application> findApplications(
-            Part part,
-            Pass docPass,
-            Pass finalPass,
-            String applicantName,
-            PageRequest pageRequest);
+            Part part, Pass docPass, Pass finalPass, String applicantName, PageRequest pageRequest);
 }
