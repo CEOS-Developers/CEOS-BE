@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      - security_deploy
 
 permissions:
   contents: read
@@ -40,6 +41,13 @@ jobs:
           echo "${{ secrets.APPLICATION_SECRET_DEV }}" > ./src/main/resources/application-secret.yml
         env:
           PROPERTIES_DEV: ${{ secrets.APPLICATION_SECRET_DEV }}
+
+      - name: Make application-secret.yml
+        run: |
+          touch .env
+          echo "${{ secrets.ENV }}" > .env
+        env:
+          PROPERTIES_DEV: ${{ secrets.ENV }}
 
       # Gradle build
       - name: Build with Gradle
@@ -85,6 +93,16 @@ jobs:
           remote_host: ${{ secrets.EC2_HOST_DEV }}
           remote_user: ubuntu
           remote_key: ${{ secrets.EC2_KEY_DEV }}
+
+      - name: Send env files to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_KNOWN_HOSTS }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PEM_KEY }}
+          source: "./*.env"
+          target: "~/srv/ubuntu/"
+          strip_components: 2
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
