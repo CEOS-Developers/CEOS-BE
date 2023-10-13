@@ -1,12 +1,21 @@
 package ceos.backend.domain.application;
 
 
-import ceos.backend.domain.application.dto.request.*;
-import ceos.backend.domain.application.dto.response.*;
-import ceos.backend.domain.application.enums.SortPartType;
-import ceos.backend.domain.application.enums.SortPassType;
+import ceos.backend.domain.application.domain.Pass;
+import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
+import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
+import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
+import ceos.backend.domain.application.dto.request.UpdatePassStatus;
+import ceos.backend.domain.application.dto.response.GetApplication;
+import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
+import ceos.backend.domain.application.dto.response.GetApplications;
+import ceos.backend.domain.application.dto.response.GetCreationTime;
+import ceos.backend.domain.application.dto.response.GetInterviewTime;
+import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.service.ApplicationExcelService;
 import ceos.backend.domain.application.service.ApplicationService;
+import ceos.backend.global.common.entity.Part;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -17,7 +26,15 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -31,13 +48,15 @@ public class ApplicationController {
     @Operation(summary = "지원자 목록 보기")
     @GetMapping
     public GetApplications getApplications(
-            @RequestParam("part") SortPartType part,
-            @RequestParam("docPass") SortPassType docPass,
-            @RequestParam("finalPass") SortPassType finalPass,
+            @RequestParam(value = "part", required = false) Part part,
+            @RequestParam(value = "docPass", required = false) Pass docPass,
+            @RequestParam(value = "finalPass", required = false) Pass finalPass,
+            @RequestParam(value = "applicantName", required = false) String applicantName,
             @RequestParam("pageNum") int pageNum,
             @RequestParam("limit") int limit) {
         log.info("지원자 목록 보기");
-        return applicationService.getApplications(pageNum, limit, part, docPass, finalPass);
+        return applicationService.getApplications(
+                part, docPass, finalPass, applicantName, pageNum, limit);
     }
 
     @Operation(summary = "지원하기", description = "startDateDoc ~ endDateDoc 전날")

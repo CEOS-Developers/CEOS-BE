@@ -1,20 +1,38 @@
 package ceos.backend.domain.application.service;
 
 
-import ceos.backend.domain.application.domain.*;
-import ceos.backend.domain.application.dto.request.*;
-import ceos.backend.domain.application.dto.response.*;
-import ceos.backend.domain.application.enums.SortPartType;
-import ceos.backend.domain.application.enums.SortPassType;
+import ceos.backend.domain.application.domain.Application;
+import ceos.backend.domain.application.domain.ApplicationAnswer;
+import ceos.backend.domain.application.domain.ApplicationInterview;
+import ceos.backend.domain.application.domain.ApplicationQuestion;
+import ceos.backend.domain.application.domain.ApplicationQuestionDetail;
+import ceos.backend.domain.application.domain.Interview;
+import ceos.backend.domain.application.domain.Pass;
+import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
+import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
+import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
+import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
+import ceos.backend.domain.application.dto.request.UpdatePassStatus;
+import ceos.backend.domain.application.dto.response.GetApplication;
+import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
+import ceos.backend.domain.application.dto.response.GetApplications;
+import ceos.backend.domain.application.dto.response.GetInterviewTime;
+import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
-import ceos.backend.domain.application.repository.*;
+import ceos.backend.domain.application.repository.ApplicationAnswerRepository;
+import ceos.backend.domain.application.repository.ApplicationInterviewRepository;
+import ceos.backend.domain.application.repository.ApplicationQuestionDetailRepository;
+import ceos.backend.domain.application.repository.ApplicationQuestionRepository;
+import ceos.backend.domain.application.repository.ApplicationRepository;
+import ceos.backend.domain.application.repository.InterviewRepository;
 import ceos.backend.domain.application.validator.ApplicationValidator;
 import ceos.backend.domain.application.vo.QuestionListVo;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.domain.recruitment.validator.RecruitmentValidator;
 import ceos.backend.global.common.dto.PageInfo;
+import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
 import java.util.List;
@@ -43,14 +61,12 @@ public class ApplicationService {
 
     @Transactional(readOnly = true)
     public GetApplications getApplications(
-            int pageNum,
-            int limit,
-            SortPartType sortType,
-            SortPassType docPass,
-            SortPassType finalPass) {
+            Part part, Pass docPass, Pass finalPass, String applicantName, int pageNum, int limit) {
         PageRequest pageRequest = PageRequest.of(pageNum, limit);
         Page<Application> pageManagements =
-                applicationHelper.getApplications(docPass, finalPass, sortType, pageRequest);
+                applicationRepository.findApplications(
+                        part, docPass, finalPass, applicantName, pageRequest);
+        // applicationHelper.getApplications(docPass, finalPass, sortType, pageRequest);
         PageInfo pageInfo =
                 PageInfo.of(
                         pageNum,
