@@ -18,7 +18,7 @@ public enum Part {
     @JsonValue private final String part;
 
     @JsonCreator
-    public static Part parbsing(String inputValue) {
+    public static Part parsing(String inputValue) {
         return Stream.of(Part.values())
                 .filter(category -> category.getPart().equals(inputValue))
                 .findFirst()
