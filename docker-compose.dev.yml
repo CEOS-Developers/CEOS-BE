@@ -5,6 +5,8 @@ services:
     image: ceos17/ceos-backend-dev
     container_name: backend
     hostname: backend
+    env_file:
+      - .env
     expose:
       - "8080"
 

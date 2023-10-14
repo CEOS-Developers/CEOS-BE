@@ -34,12 +34,19 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Make application-secret.yml
+      - name: Make application-secret.yml without env
         run: |
           touch ./src/main/resources/application-secret.yml
           echo "${{ secrets.APPLICATION_SECRET }}" > ./src/main/resources/application-secret.yml
         env:
           PROPERTIES_DEV: ${{ secrets.APPLICATION_SECRET }}
+
+      - name: Make env
+        run: |
+          touch .env
+          echo "${{ secrets.ENV_PROD }}" > .env
+        env:
+          PROPERTIES_DEV: ${{ secrets.ENV_PROD }}
 
       # Gradle build
       - name: Build with Gradle
