@@ -85,7 +85,7 @@ public class WebSecurityConfig {
 
     private final String[] GetPermittedPatterns = {
         "/awards/**",
-        "/recruitments/**",
+        "/recruitments",
         "/projects/**",
         "/activities/**",
         "/managements/**",
