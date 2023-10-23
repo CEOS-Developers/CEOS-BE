@@ -49,6 +49,10 @@ public class Recruitment extends BaseEntity {
 
     @NotNull private LocalDate otDate;
 
+    @NotNull private LocalDate ideathonDate;
+
+    @NotNull private LocalDate hackathonDate;
+
     @NotNull private LocalDate demodayDate;
 
     private LocalDateTime applicationExcelCreatedAt;
@@ -68,6 +72,8 @@ public class Recruitment extends BaseEntity {
             LocalDate resultDateFinal,
             String openChatUrl,
             LocalDate otDate,
+            LocalDate ideathonDate,
+            LocalDate hackathonDate,
             LocalDate demodayDate,
             LocalDateTime applicationExcelCreatedAt) {
         this.generation = generation;
@@ -82,6 +88,8 @@ public class Recruitment extends BaseEntity {
         this.resultDateFinal = resultDateFinal;
         this.openChatUrl = openChatUrl;
         this.otDate = otDate;
+        this.ideathonDate = ideathonDate;
+        this.hackathonDate = hackathonDate;
         this.demodayDate = demodayDate;
         this.applicationExcelCreatedAt = applicationExcelCreatedAt;
     }
@@ -99,6 +107,8 @@ public class Recruitment extends BaseEntity {
         this.resultDateFinal = recruitmentDTO.getResultDateFinal();
         this.openChatUrl = recruitmentDTO.getOpenChatUrl();
         this.otDate = recruitmentDTO.getOtDate();
+        this.ideathonDate = recruitmentDTO.getIdeathonDate();
+        this.hackathonDate = recruitmentDTO.getHackathonDate();
         this.demodayDate = recruitmentDTO.getDemodayDate();
     }
 
