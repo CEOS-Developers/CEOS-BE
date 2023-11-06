@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import ceos.backend.domain.admin.exception.NotAllowedToModify;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +23,15 @@ class SettingsTest {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
 
         // when
-        LocalDate startDateDoc = recruitment.getStartDateDoc();
-        LocalDate date =
-                LocalDate.of(
+        LocalDateTime startDateDoc = recruitment.getStartDateDoc();
+
+        LocalDateTime date =
+                LocalDateTime.of(
                         startDateDoc.getYear(),
                         startDateDoc.getMonth(),
-                        startDateDoc.getDayOfMonth() + 1);
-
+                        startDateDoc.getDayOfMonth(),
+                        startDateDoc.getHour(),
+                        startDateDoc.getMinute() + 1);
         // then
         assertThrows(
                 NotAllowedToModify.class,
@@ -46,13 +48,14 @@ class SettingsTest {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
 
         // when
-        LocalDate startDateDoc = recruitment.getStartDateDoc();
-        LocalDate date =
-                LocalDate.of(
+        LocalDateTime startDateDoc = recruitment.getStartDateDoc();
+        LocalDateTime date =
+                LocalDateTime.of(
                         startDateDoc.getYear(),
                         startDateDoc.getMonth(),
-                        startDateDoc.getDayOfMonth() - 1);
-
+                        startDateDoc.getDayOfMonth(),
+                        startDateDoc.getHour(),
+                        startDateDoc.getMinute() - 1);
         // then
         recruitment.validAmenablePeriod(date);
     }

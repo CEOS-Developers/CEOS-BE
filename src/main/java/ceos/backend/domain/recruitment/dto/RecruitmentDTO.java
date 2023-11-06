@@ -3,6 +3,7 @@ package ceos.backend.domain.recruitment.dto;
 
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,12 +13,12 @@ public class RecruitmentDTO {
     private String prodStudyUrl;
     private String designStudyUrl;
     private String devStudyUrl;
-    private LocalDate startDateDoc;
-    private LocalDate endDateDoc;
-    private LocalDate resultDateDoc;
-    private LocalDate startDateInterview;
-    private LocalDate endDateInterview;
-    private LocalDate resultDateFinal;
+    private LocalDateTime startDateDoc;
+    private LocalDateTime endDateDoc;
+    private LocalDateTime resultDateDoc;
+    private LocalDateTime startDateInterview;
+    private LocalDateTime endDateInterview;
+    private LocalDateTime resultDateFinal;
     private String openChatUrl;
     private LocalDate otDate;
     private LocalDate ideathonDate;
@@ -30,12 +31,12 @@ public class RecruitmentDTO {
             String prodStudyUrl,
             String designStudyUrl,
             String devStudyUrl,
-            LocalDate startDateDoc,
-            LocalDate endDateDoc,
-            LocalDate resultDateDoc,
-            LocalDate startDateInterview,
-            LocalDate endDateInterview,
-            LocalDate resultDateFinal,
+            LocalDateTime startDateDoc,
+            LocalDateTime endDateDoc,
+            LocalDateTime resultDateDoc,
+            LocalDateTime startDateInterview,
+            LocalDateTime endDateInterview,
+            LocalDateTime resultDateFinal,
             String openChatUrl,
             LocalDate otDate,
             LocalDate ideathonDate,
