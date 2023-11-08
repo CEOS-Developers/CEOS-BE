@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.validator;
 
+import static ceos.backend.domain.application.domain.Pass.PASS;
 
 import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.ApplicationQuestion;
@@ -119,7 +120,7 @@ public class ApplicationValidator {
                                 () -> {
                                     throw ApplicantNotFound.EXCEPTION;
                                 });
-        if (application.getInterviewDatetime() == null) {
+        if (application.getDocumentPass() == PASS && application.getInterviewDatetime() == null) {
             throw NotSetInterviewTime.EXCEPTION;
         }
     }

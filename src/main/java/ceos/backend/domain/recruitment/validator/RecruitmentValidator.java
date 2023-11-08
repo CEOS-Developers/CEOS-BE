@@ -2,7 +2,7 @@ package ceos.backend.domain.recruitment.validator;
 
 
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -14,26 +14,26 @@ public class RecruitmentValidator {
     public void validateBetweenStartDateDocAndEndDateDoc() {
         recruitmentHelper
                 .takeRecruitment()
-                .validateBetweenStartDateDocAndEndDateDoc(LocalDate.now());
+                .validateBetweenStartDateDocAndEndDateDoc(LocalDateTime.now());
     }
 
     public void validateBeforeStartDateDoc() {
-        recruitmentHelper.takeRecruitment().validateBeforeStartDateDoc(LocalDate.now());
+        recruitmentHelper.takeRecruitment().validateBeforeStartDateDoc(LocalDateTime.now());
     }
 
     public void validateBetweenResultDateDocAndResultDateFinal() {
         recruitmentHelper
                 .takeRecruitment()
-                .validateBetweenResultDateDocAndResultDateFinal(LocalDate.now());
+                .validateBetweenResultDateDocAndResultDateFinal(LocalDateTime.now());
     }
 
     public void validateFinalResultAbleDuration() {
-        recruitmentHelper.takeRecruitment().validateFinalResultAbleDuration(LocalDate.now());
+        recruitmentHelper.takeRecruitment().validateFinalResultAbleDuration(LocalDateTime.now());
     }
 
     public void validateBetweenStartDateDocAndResultDateDoc() {
         recruitmentHelper
                 .takeRecruitment()
-                .validateBetweenStartDateDocAndResultDateDoc(LocalDate.now());
+                .validateBetweenStartDateDocAndResultDateDoc(LocalDateTime.now());
     }
 }
