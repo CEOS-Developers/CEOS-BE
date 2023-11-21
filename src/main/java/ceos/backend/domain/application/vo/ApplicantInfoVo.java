@@ -12,7 +12,7 @@ import ceos.backend.global.common.entity.University;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,7 +56,7 @@ public class ApplicantInfoVo {
 
     @Schema(defaultValue = "99999999", description = "지원자 남은 학기 수")
     @NotNull(message = "지원자 남은 학기 수를 입력해주세요")
-    @Positive
+    @PositiveOrZero
     private int semestersLeftNumber;
 
     @Builder

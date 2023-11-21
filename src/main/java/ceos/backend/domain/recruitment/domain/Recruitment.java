@@ -33,21 +33,25 @@ public class Recruitment extends BaseEntity {
 
     @NotNull private String devStudyUrl;
 
-    @NotNull private LocalDate startDateDoc;
+    @NotNull private LocalDateTime startDateDoc;
 
-    @NotNull private LocalDate endDateDoc;
+    @NotNull private LocalDateTime endDateDoc;
 
-    @NotNull private LocalDate resultDateDoc;
+    @NotNull private LocalDateTime resultDateDoc;
 
-    @NotNull private LocalDate startDateInterview;
+    @NotNull private LocalDateTime startDateInterview;
 
-    @NotNull private LocalDate endDateInterview;
+    @NotNull private LocalDateTime endDateInterview;
 
-    @NotNull private LocalDate resultDateFinal;
+    @NotNull private LocalDateTime resultDateFinal;
 
     @NotNull private String openChatUrl;
 
     @NotNull private LocalDate otDate;
+
+    @NotNull private LocalDate ideathonDate;
+
+    @NotNull private LocalDate hackathonDate;
 
     @NotNull private LocalDate demodayDate;
 
@@ -60,14 +64,16 @@ public class Recruitment extends BaseEntity {
             String prodStudyUrl,
             String designStudyUrl,
             String devStudyUrl,
-            LocalDate startDateDoc,
-            LocalDate endDateDoc,
-            LocalDate resultDateDoc,
-            LocalDate startDateInterview,
-            LocalDate endDateInterview,
-            LocalDate resultDateFinal,
+            LocalDateTime startDateDoc,
+            LocalDateTime endDateDoc,
+            LocalDateTime resultDateDoc,
+            LocalDateTime startDateInterview,
+            LocalDateTime endDateInterview,
+            LocalDateTime resultDateFinal,
             String openChatUrl,
             LocalDate otDate,
+            LocalDate ideathonDate,
+            LocalDate hackathonDate,
             LocalDate demodayDate,
             LocalDateTime applicationExcelCreatedAt) {
         this.generation = generation;
@@ -82,6 +88,8 @@ public class Recruitment extends BaseEntity {
         this.resultDateFinal = resultDateFinal;
         this.openChatUrl = openChatUrl;
         this.otDate = otDate;
+        this.ideathonDate = ideathonDate;
+        this.hackathonDate = hackathonDate;
         this.demodayDate = demodayDate;
         this.applicationExcelCreatedAt = applicationExcelCreatedAt;
     }
@@ -99,6 +107,8 @@ public class Recruitment extends BaseEntity {
         this.resultDateFinal = recruitmentDTO.getResultDateFinal();
         this.openChatUrl = recruitmentDTO.getOpenChatUrl();
         this.otDate = recruitmentDTO.getOtDate();
+        this.ideathonDate = recruitmentDTO.getIdeathonDate();
+        this.hackathonDate = recruitmentDTO.getHackathonDate();
         this.demodayDate = recruitmentDTO.getDemodayDate();
     }
 
@@ -113,7 +123,7 @@ public class Recruitment extends BaseEntity {
         }
     }
 
-    public void validateBetweenStartDateDocAndEndDateDoc(LocalDate now) {
+    public void validateBetweenStartDateDocAndEndDateDoc(LocalDateTime now) {
         if (now.compareTo(this.getStartDateDoc()) < 0) {
             throw NotApplicationDuration.EXCEPTION;
         }
@@ -122,7 +132,7 @@ public class Recruitment extends BaseEntity {
         }
     }
 
-    public void validateFinalResultAbleDuration(LocalDate now) {
+    public void validateFinalResultAbleDuration(LocalDateTime now) {
         if (now.compareTo(this.resultDateFinal.plusDays(5)) >= 0) {
             throw NotFinalResultCheckDuration.EXCEPTION;
         }
@@ -131,7 +141,7 @@ public class Recruitment extends BaseEntity {
         }
     }
 
-    public void validateBetweenStartDateDocAndResultDateDoc(LocalDate now) {
+    public void validateBetweenStartDateDocAndResultDateDoc(LocalDateTime now) {
         if (now.compareTo(this.startDateDoc) < 0) {
             throw NotDocumentPassDuration.EXCEPTION;
         }
@@ -140,7 +150,7 @@ public class Recruitment extends BaseEntity {
         }
     }
 
-    public void validateBetweenResultDateDocAndResultDateFinal(LocalDate now) {
+    public void validateBetweenResultDateDocAndResultDateFinal(LocalDateTime now) {
         if (now.compareTo(this.resultDateDoc) < 0) {
             throw NotFinalPassDuration.EXCEPTION;
         }
@@ -149,13 +159,13 @@ public class Recruitment extends BaseEntity {
         }
     }
 
-    public void validateBeforeStartDateDoc(LocalDate now) {
+    public void validateBeforeStartDateDoc(LocalDateTime now) {
         if (now.compareTo(this.startDateDoc) >= 0) {
             throw AlreadyApplicationDuration.EXCEPTION;
         }
     }
 
-    public void validAmenablePeriod(LocalDate now) {
+    public void validAmenablePeriod(LocalDateTime now) {
         if (now.compareTo(this.startDateDoc) >= 0 && now.compareTo(this.resultDateFinal) <= 0) {
             throw NotAllowedToModify.EXCEPTION;
         }
