@@ -3,16 +3,14 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - dev
+      - refact/os-migration
 
 permissions:
   contents: read
 
 jobs:
   build:
-    # runs-on을 ubuntu-lastest에서 변경했음
-    # 참고자료 https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on
-    runs-on: linux
+    runs-on: ubuntu-latest
     steps:
       # 기본 체크아웃
       - name: Checkout
