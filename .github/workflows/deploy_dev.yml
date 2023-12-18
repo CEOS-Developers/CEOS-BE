@@ -40,7 +40,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
-          platforms: linux/x86 #  linux/amd64에서 변경 (compatibility)
+          platforms: linux/amd64
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/ceos-backend-dev
 
