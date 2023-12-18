@@ -3,7 +3,7 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - refact/os-migration
+      - dev
 
 permissions:
   contents: read
@@ -69,7 +69,7 @@ jobs:
             sudo touch .env
             echo "${{ secrets.ENV_DEV }}" | sudo tee .env > /dev/null
             
-            sudo curl -o docker-compose.dev.yml https://raw.githubusercontent.com/CEOS-Developers/CEOS-BE/refact/os-migration/docker-compose.dev.yml
+            sudo curl -o docker-compose.dev.yml https://raw.githubusercontent.com/CEOS-Developers/CEOS-BE/dev/docker-compose.dev.yml
             
             sudo chmod 666 /var/run/docker.sock
             sudo docker rm -f $(docker ps -qa)
