@@ -70,6 +70,7 @@ jobs:
             
             sudo touch .env
             echo "${{ secrets.ENV_DEV }}" | sudo tee .env > /dev/null
+            echo "${{ secrets.APPLICATION_SECRET_DEV }}" | sudo tee test > /dev/null
             
             sudo curl -o docker-compose.dev.yml https://raw.githubusercontent.com/CEOS-Developers/CEOS-BE/refact/os-migration/docker-compose.dev.yml
             
