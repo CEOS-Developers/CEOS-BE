@@ -53,9 +53,9 @@ jobs:
             cd /home/ec2-user/ceos
             
             sudo touch .env
-            echo "${{ secrets.ENV_DEV }}" > .env
+            echo "${{ secrets.ENV_DEV }}" | sudo tee .env > /dev/null
             
-            sudo curl -o docker-compose.yml https://raw.githubusercontent.com/CEOS-Developers/CEOS-BE/dev/docker-compose.dev.yml
+            sudo curl -o docker-compose.dev.yml https://raw.githubusercontent.com/CEOS-Developers/CEOS-BE/dev/docker-compose.dev.yml
             
             sudo chmod 666 /var/run/docker.sock
             sudo docker rm -f $(docker ps -qa)
