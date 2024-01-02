@@ -11,18 +11,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class RetrospectService {
-
     private final RetrospectRepository retrospectRepository;
 
     // 1. 회고 작성 메서드
-
     @Transactional
     public void createRetrospect(CreateRetrospectRequest createRetrospectRequest) {
         retrospectRepository.save(createRetrospectRequest.toEntity());
@@ -31,17 +28,18 @@ public class RetrospectService {
     // 2. 회고 리스트 메서드(페이징)
     @Transactional(readOnly = true)
     public GetRetrospectsResponse getRetrospects(Integer pageNum, Integer limit) {
-        PageRequest pageRequest = PageRequest.of(pageNum, limit);
-        Sort sort = Sort.by(Direction.DESC, "id");
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        PageRequest pageRequest = PageRequest.of(pageNum, limit, sort);
 
-        Page<Retrospect> data = retrospectRepository.findAll(pageRequest, sort);
+        Page<Retrospect> data = retrospectRepository.findAll(pageRequest);
 
         return GetRetrospectsResponse.fromPageable(data);
     }
 
     // 3. 회고 수정 메서드
     @Transactional
-    public GetRetrospectResponse updateRetrospect(Long id, CreateRetrospectRequest createRetrospectRequest) {
+    public GetRetrospectResponse updateRetrospect(
+            Long id, CreateRetrospectRequest createRetrospectRequest) {
         Retrospect retrospect =
                 retrospectRepository.findById(id).orElseThrow(() -> new RetrospectNotFound());
 
@@ -49,7 +47,6 @@ public class RetrospectService {
 
         return GetRetrospectResponse.fromEntity(retrospect);
     }
-
 
     // 4. 회고 삭제 메서드
     @Transactional
@@ -63,7 +60,8 @@ public class RetrospectService {
     // 5. 회고 상세 조회 메서드
     @Transactional(readOnly = true)
     public GetRetrospectResponse getRetrospect(Long id) {
-        Retrospect retrospect = retrospectRepository.findById(id).orElseThrow(() -> new RetrospectNotFound());
+        Retrospect retrospect =
+                retrospectRepository.findById(id).orElseThrow(() -> new RetrospectNotFound());
 
         return GetRetrospectResponse.fromEntity(retrospect);
     }
