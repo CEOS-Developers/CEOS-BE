@@ -15,9 +15,9 @@ public class CreateRetrospectRequest {
     @Schema(type = "string", description = "회고 제목")
     private String title;
 
-    @NotBlank(message = "회고 내용을 입력해주세요")
+    @NotBlank(message = "회고 내용이 담긴 url을 입력해주세요")
     @Schema(type = "string", description = "회고 내용")
-    private String content;
+    private String url;
 
     @NotBlank(message = "작성자를 입력해주세요")
     @Schema(type = "string", description = "회고 제목")
@@ -35,7 +35,7 @@ public class CreateRetrospectRequest {
     public Retrospect toEntity() {
         return Retrospect.builder()
                 .title(title)
-                .content(content)
+                .url(url)
                 .writer(writer)
                 .generation(generation)
                 .part(part)

@@ -41,7 +41,7 @@ public class RetrospectService {
     public GetRetrospectResponse updateRetrospect(
             Long id, CreateRetrospectRequest createRetrospectRequest) {
         Retrospect retrospect =
-                retrospectRepository.findById(id).orElseThrow(() -> new RetrospectNotFound());
+                retrospectRepository.findById(id).orElseThrow(RetrospectNotFound::new);
 
         retrospect.update(createRetrospectRequest);
 
@@ -52,7 +52,7 @@ public class RetrospectService {
     @Transactional
     public void deleteRetrospect(Long id) {
         Retrospect retrospect =
-                retrospectRepository.findById(id).orElseThrow(() -> new RetrospectNotFound());
+                retrospectRepository.findById(id).orElseThrow(RetrospectNotFound::new);
 
         retrospectRepository.delete(retrospect);
     }
@@ -61,7 +61,7 @@ public class RetrospectService {
     @Transactional(readOnly = true)
     public GetRetrospectResponse getRetrospect(Long id) {
         Retrospect retrospect =
-                retrospectRepository.findById(id).orElseThrow(() -> new RetrospectNotFound());
+                retrospectRepository.findById(id).orElseThrow(RetrospectNotFound::new);
 
         return GetRetrospectResponse.fromEntity(retrospect);
     }

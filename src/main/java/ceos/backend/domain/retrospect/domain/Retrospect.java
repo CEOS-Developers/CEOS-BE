@@ -30,7 +30,7 @@ public class Retrospect extends BaseEntity {
 
     @NotBlank private String title;
 
-    @NotBlank private String content;
+    @NotBlank private String url;
 
     @NotBlank private String writer;
 
@@ -41,9 +41,9 @@ public class Retrospect extends BaseEntity {
     private Part part;
 
     @Builder
-    public Retrospect(String title, String content, String writer, Integer generation, Part part) {
+    public Retrospect(String title, String url, String writer, Integer generation, Part part) {
         this.title = title;
-        this.content = content;
+        this.url = url;
         this.writer = writer;
         this.generation = generation;
         this.part = part;
@@ -51,7 +51,7 @@ public class Retrospect extends BaseEntity {
 
     public void update(CreateRetrospectRequest createRetrospectRequest) {
         title = createRetrospectRequest.getTitle();
-        content = createRetrospectRequest.getContent();
+        url = createRetrospectRequest.getUrl();
         writer = createRetrospectRequest.getWriter();
         generation = createRetrospectRequest.getGeneration();
         part = createRetrospectRequest.getPart();

@@ -8,7 +8,7 @@ import lombok.Data;
 public class GetRetrospectResponse {
     private Long id;
     private String title;
-    private String content;
+    private String url;
     private String writer;
 
     public static GetRetrospectResponse fromEntity(Retrospect retrospect) {
@@ -16,7 +16,7 @@ public class GetRetrospectResponse {
 
         getRetrospectResponse.setId(retrospect.getId());
         getRetrospectResponse.setTitle(retrospect.getTitle());
-        getRetrospectResponse.setContent(retrospect.getContent());
+        getRetrospectResponse.setUrl(retrospect.getUrl());
         getRetrospectResponse.setWriter(retrospect.getWriter());
 
         return getRetrospectResponse;
