@@ -33,9 +33,9 @@ public class SubscriberService {
         subscriberRepository.save(subscriber);
     }
 
-    @Transactional
-    public void sendRecruitMail() {
-        LocalDate date = recruitmentRepository.findAll().get(1).getStartDateDoc().toLocalDate();
+    @Transactional(readOnly = true)
+    public void sendRecruitingMail() {
+        LocalDate date = recruitmentRepository.findAll().get(0).getStartDateDoc().toLocalDate();
         LocalDate now = LocalDate.now();
         List<Subscriber> subscribers = subscriberRepository.findAll();
 
