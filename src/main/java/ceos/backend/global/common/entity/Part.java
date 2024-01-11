@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Part {
+    ALL("전체"),
     PRODUCT("기획"),
     DESIGN("디자인"),
     FRONTEND("프론트엔드"),
