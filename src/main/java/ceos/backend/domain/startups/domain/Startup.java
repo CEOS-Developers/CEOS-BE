@@ -19,7 +19,9 @@ public class Startup {
     private Long id;
 
     @NotBlank
-    private String startupName;
+    private String serviceName;
+
+    private String companyName;
 
     @NotBlank
     private String imageUrl;
@@ -31,15 +33,16 @@ public class Startup {
     private Integer generation;
 
     @NotBlank
-    private String founderName;
+    private String founder;
 
     @Builder
-    public Startup(String startupName, String imageUrl, String serviceUrl, Integer generation, String founderName) {
-        this.startupName = startupName;
+    public Startup(String serviceName, String companyName, String imageUrl, String serviceUrl, Integer generation, String founder) {
+        this.serviceName = serviceName;
+        this.companyName = companyName;
         this.imageUrl = imageUrl;
         this.serviceUrl = serviceUrl;
         this.generation = generation;
-        this.founderName = founderName;
+        this.founder = founder;
     }
 
 }
