@@ -1,4 +1,4 @@
-package ceos.backend.domain.startups.exception;
+package ceos.backend.domain.startup.exception;
 
 
 import ceos.backend.global.error.BaseErrorException;

@@ -1,6 +1,6 @@
-package ceos.backend.domain.startups.dto.response;
+package ceos.backend.domain.startup.dto.response;
 
-import ceos.backend.domain.startups.domain.Startup;
+import ceos.backend.domain.startup.domain.Startup;
 import lombok.Builder;
 import lombok.Getter;
 

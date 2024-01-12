@@ -1,11 +1,11 @@
-package ceos.backend.domain.startups.service;
+package ceos.backend.domain.startup.service;
 
-import ceos.backend.domain.startups.domain.Startup;
-import ceos.backend.domain.startups.dto.request.StartupRequest;
-import ceos.backend.domain.startups.dto.response.StartupResponse;
-import ceos.backend.domain.startups.dto.response.StartupsResponse;
-import ceos.backend.domain.startups.exception.StartupNotFound;
-import ceos.backend.domain.startups.repository.StartupRepository;
+import ceos.backend.domain.startup.domain.Startup;
+import ceos.backend.domain.startup.dto.request.StartupRequest;
+import ceos.backend.domain.startup.dto.response.StartupResponse;
+import ceos.backend.domain.startup.dto.response.StartupsResponse;
+import ceos.backend.domain.startup.exception.StartupNotFound;
+import ceos.backend.domain.startup.repository.StartupRepository;
 import ceos.backend.global.common.dto.AwsS3Url;
 import ceos.backend.infra.s3.AwsS3UrlHandler;
 import lombok.RequiredArgsConstructor;

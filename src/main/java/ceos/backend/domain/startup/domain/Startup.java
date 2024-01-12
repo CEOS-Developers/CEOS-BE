@@ -1,6 +1,6 @@
-package ceos.backend.domain.startups.domain;
+package ceos.backend.domain.startup.domain;
 
-import ceos.backend.domain.startups.dto.request.StartupRequest;
+import ceos.backend.domain.startup.dto.request.StartupRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
