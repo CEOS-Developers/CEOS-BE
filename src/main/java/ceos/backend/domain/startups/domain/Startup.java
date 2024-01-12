@@ -1,5 +1,6 @@
 package ceos.backend.domain.startups.domain;
 
+import ceos.backend.domain.startups.dto.request.StartupRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -43,6 +44,15 @@ public class Startup {
         this.serviceUrl = serviceUrl;
         this.generation = generation;
         this.founder = founder;
+    }
+
+    public void update(StartupRequest startupRequest) {
+        this.serviceName = startupRequest.getServiceName();
+        this.companyName = startupRequest.getCompanyName();
+        this.imageUrl = startupRequest.getImageUrl();
+        this.serviceUrl = startupRequest.getServiceUrl();
+        this.generation = startupRequest.getGeneration();
+        this.founder = startupRequest.getFounder();
     }
 
 }
