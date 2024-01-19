@@ -11,12 +11,10 @@ services:
       - "8080"
 
   nginx:
+    image: ceos17/ceos-nginx
     depends_on:
       - backend
     restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./config/nginx
     ports:
       - "80:80"
 
