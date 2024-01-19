@@ -103,7 +103,7 @@ public class WebSecurityConfig {
         "/applications/interview", "/applications/pass"
     };
 
-    private final String[] RootPatterns = {"/admin/super"};
+    private final String[] RootPatterns = {"/admin/super", "/subscribe/mail"};
 
     @Bean
     public UserDetailsService userDetailsService() {
