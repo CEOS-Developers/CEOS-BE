@@ -16,8 +16,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Make application-secret.yml without env
+      - name: Recreate application-secret.yml
         run: |
+          rm -f ./src/main/resources/application-secret.yml
           touch ./src/main/resources/application-secret.yml
           echo "${{ secrets.APPLICATION_SECRET_DEV }}" > ./src/main/resources/application-secret.yml
 

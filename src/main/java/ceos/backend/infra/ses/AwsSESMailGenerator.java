@@ -8,6 +8,7 @@ import ceos.backend.domain.application.exception.exceptions.QuestionNotFound;
 import ceos.backend.domain.application.vo.AnswerVo;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
+import ceos.backend.global.common.dto.AwsSESRecruitMail;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.dto.mail.*;
 import ceos.backend.global.common.entity.Part;
@@ -127,5 +128,17 @@ public class AwsSESMailGenerator {
 
     public String generatePasswordMailSubject() {
         return "세오스 관리자 페이지 임시 비밀번호 발급";
+    }
+
+    public Context generateRecruitMailContext(AwsSESRecruitMail awsSESRecruitMail) {
+        Context context = new Context();
+        context.setVariable("email", EmailInfo.from(awsSESRecruitMail));
+
+        return context;
+    }
+
+    // 수정 예정
+    public String generateRecruitMailSubject() {
+        return "세오스 리쿠르팅 메일 발송";
     }
 }
