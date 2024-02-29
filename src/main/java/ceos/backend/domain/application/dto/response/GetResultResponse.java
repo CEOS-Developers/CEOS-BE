@@ -47,12 +47,17 @@ public class GetResultResponse {
 
     public static GetResultResponse toDocumentResult(
             Application application, Recruitment recruitment) {
+        ParsedDuration duration = null;
+
+        if (application.getInterviewDatetime() != null) {
+            duration = ParsedDurationConvertor.parsingDuration(application.getInterviewDatetime());
+        }
+
         return GetResultResponse.builder()
                 .pass(application.getDocumentPass())
                 .generation(recruitment.getGeneration())
                 .name(application.getApplicantInfo().getName())
-                .parsedDuration(
-                        ParsedDurationConvertor.parsingDuration(application.getInterviewDatetime()))
+                .parsedDuration(duration)
                 .otDate(recruitment.getOtDate())
                 .attendanceStatus(application.isInterviewCheck())
                 .openChatUrl(recruitment.getOpenChatUrl())
