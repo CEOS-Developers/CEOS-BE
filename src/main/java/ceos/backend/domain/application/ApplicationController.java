@@ -26,15 +26,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -190,5 +182,12 @@ public class ApplicationController {
     public GetCreationTime getApplicationExcelCreationTime() {
         log.info("지원서 엑셀 파일 생성 시각 확인");
         return applicationExcelService.getApplicationExcelCreationTime();
+    }
+
+    @Operation(summary = "지원서 전체 삭제")
+    @DeleteMapping(value = "/delete")
+    public void deleteAllApplications() {
+        log.info("지원서 전체 삭제");
+        applicationService.deleteAllApplications();
     }
 }
