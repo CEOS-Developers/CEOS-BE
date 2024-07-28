@@ -48,4 +48,25 @@ public class ApplicationControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @DisplayName("지원서 목록 보기 API - enum 타입 영어로 처리")
+    @Test
+    void successGetApplications() throws Exception {
+        Authentication authentication = new TestingAuthenticationToken(null, null, "ROLE_ADMIN");
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/applications?part=PRODUCT&docPass=PASS&finalPass=FAIL&applicantName=&pageNum=0&limit=7")
+                        .with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @DisplayName("지원서 목록 보기 API - enum 타입 한글로 처리 시 예외 발생")
+    @Test
+    void failGetApplications() throws Exception {
+        Authentication authentication = new TestingAuthenticationToken(null, null, "ROLE_ADMIN");
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/applications?part=기획&docPass=합격&finalPass=불합격&applicantName=&pageNum=0&limit=7")
+                        .with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
 }
