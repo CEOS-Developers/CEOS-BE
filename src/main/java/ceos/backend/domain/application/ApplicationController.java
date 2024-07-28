@@ -17,6 +17,8 @@ import ceos.backend.domain.application.service.ApplicationExcelService;
 import ceos.backend.domain.application.service.ApplicationService;
 import ceos.backend.global.common.entity.Part;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.nio.file.Path;
@@ -40,8 +42,11 @@ public class ApplicationController {
     @Operation(summary = "지원자 목록 보기")
     @GetMapping
     public GetApplications getApplications(
+            @Parameter(schema = @Schema(allowableValues = {"PRODUCT", "DESIGN", "FRONTEND", "BACKEND"}))
             @RequestParam(value = "part", required = false, defaultValue = "") Part part,
+            @Parameter(schema = @Schema(allowableValues = {"PASS", "FAIL"}))
             @RequestParam(value = "docPass", required = false, defaultValue = "") Pass docPass,
+            @Parameter(schema = @Schema(allowableValues = {"PASS", "FAIL"}))
             @RequestParam(value = "finalPass", required = false, defaultValue = "") Pass finalPass,
             @RequestParam(value = "applicantName", required = false, defaultValue = "") String applicantName,
             @RequestParam("pageNum") int pageNum,
