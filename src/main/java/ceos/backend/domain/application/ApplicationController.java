@@ -40,10 +40,10 @@ public class ApplicationController {
     @Operation(summary = "지원자 목록 보기")
     @GetMapping
     public GetApplications getApplications(
-            @RequestParam(value = "part", required = false) Part part,
-            @RequestParam(value = "docPass", required = false) Pass docPass,
-            @RequestParam(value = "finalPass", required = false) Pass finalPass,
-            @RequestParam(value = "applicantName", required = false) String applicantName,
+            @RequestParam(value = "part", required = false, defaultValue = "") Part part,
+            @RequestParam(value = "docPass", required = false, defaultValue = "") Pass docPass,
+            @RequestParam(value = "finalPass", required = false, defaultValue = "") Pass finalPass,
+            @RequestParam(value = "applicantName", required = false, defaultValue = "") String applicantName,
             @RequestParam("pageNum") int pageNum,
             @RequestParam("limit") int limit) {
         log.info("지원자 목록 보기");
