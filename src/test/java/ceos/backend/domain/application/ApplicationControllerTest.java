@@ -23,7 +23,7 @@ public class ApplicationControllerTest {
     @Test
     void getApplicationExcelCreationTime() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/applications/file/creationtime"))
-                .andExpect(MockMvcResultMatchers.status().is(401));
+                .andExpect(MockMvcResultMatchers.status().is(403));
     }
 
     @DisplayName("지원서 목록 보기 API - 필수 아닌 파라미터들 길이 0인 문자열로 처리")
