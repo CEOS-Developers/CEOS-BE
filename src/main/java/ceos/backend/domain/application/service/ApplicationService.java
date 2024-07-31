@@ -13,11 +13,7 @@ import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
 import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
 import ceos.backend.domain.application.dto.request.UpdatePassStatus;
-import ceos.backend.domain.application.dto.response.GetApplication;
-import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
-import ceos.backend.domain.application.dto.response.GetApplications;
-import ceos.backend.domain.application.dto.response.GetInterviewTime;
-import ceos.backend.domain.application.dto.response.GetResultResponse;
+import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.exception.exceptions.NotDeletableDuringRecruitment;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
@@ -168,6 +164,7 @@ public class ApplicationService {
             application.updateInterviewCheck(true);
             applicationRepository.save(application);
         } else {
+            application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, false);
         }
     }
@@ -196,6 +193,7 @@ public class ApplicationService {
             application.updateFinalCheck(true);
             applicationRepository.save(application);
         } else {
+            application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, true);
         }
     }
