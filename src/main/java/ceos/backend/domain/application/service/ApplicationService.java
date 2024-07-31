@@ -247,6 +247,16 @@ public class ApplicationService {
         application.updateInterviewTime(duration);
     }
 
+    @Transactional(readOnly = true)
+    public GetInterviewAvailability getInterviewAvailability(Long applicationId) {
+        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
+        final Application application = applicationHelper.getApplicationById(applicationId);
+        applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
+
+        return GetInterviewAvailability.of(application);
+    }
+
+
     @Transactional
     public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
@@ -265,6 +275,16 @@ public class ApplicationService {
 
         application.updateFinalPass(updatePassStatus.getPass());
     }
+
+    @Transactional(readOnly = true)
+    public GetFinalAvailability getFinalAvailability(Long applicationId) {
+        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
+        final Application application = applicationHelper.getApplicationById(applicationId);
+        applicationValidator.validateFinalPassStatus(application); // 최종 합격 검증
+
+        return GetFinalAvailability.of(application);
+    }
+
 
     @Transactional
     public void deleteAllApplications() {
