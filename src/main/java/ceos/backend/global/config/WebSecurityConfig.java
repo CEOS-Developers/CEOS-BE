@@ -80,7 +80,8 @@ public class WebSecurityConfig {
         "/awards/**",
         "/managements/**",
         "/faq/**",
-        "/sponsors/**"
+        "/sponsors/**",
+        "/start-ups/**"
     };
 
     private final String[] GetPermittedPatterns = {
@@ -94,7 +95,8 @@ public class WebSecurityConfig {
         "/applications/question",
         "/applications/document",
         "/applications/final",
-        "/admin/reissue"
+        "/admin/reissue",
+        "/start-ups/**"
     };
 
     private final String[] PostPermittedPatterns = {"/applications"};

@@ -13,11 +13,7 @@ import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
 import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
 import ceos.backend.domain.application.dto.request.UpdatePassStatus;
-import ceos.backend.domain.application.dto.response.GetApplication;
-import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
-import ceos.backend.domain.application.dto.response.GetApplications;
-import ceos.backend.domain.application.dto.response.GetInterviewTime;
-import ceos.backend.domain.application.dto.response.GetResultResponse;
+import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.exception.exceptions.NotDeletableDuringRecruitment;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
@@ -168,6 +164,7 @@ public class ApplicationService {
             application.updateInterviewCheck(true);
             applicationRepository.save(application);
         } else {
+            application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, false);
         }
     }
@@ -196,6 +193,7 @@ public class ApplicationService {
             application.updateFinalCheck(true);
             applicationRepository.save(application);
         } else {
+            application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, true);
         }
     }
@@ -249,6 +247,16 @@ public class ApplicationService {
         application.updateInterviewTime(duration);
     }
 
+    @Transactional(readOnly = true)
+    public GetInterviewAvailability getInterviewAvailability(Long applicationId) {
+        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
+        final Application application = applicationHelper.getApplicationById(applicationId);
+        applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
+
+        return GetInterviewAvailability.of(application);
+    }
+
+
     @Transactional
     public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
@@ -267,6 +275,16 @@ public class ApplicationService {
 
         application.updateFinalPass(updatePassStatus.getPass());
     }
+
+    @Transactional(readOnly = true)
+    public GetFinalAvailability getFinalAvailability(Long applicationId) {
+        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
+        final Application application = applicationHelper.getApplicationById(applicationId);
+        applicationValidator.validateFinalPassStatus(application); // 최종 합격 검증
+
+        return GetFinalAvailability.of(application);
+    }
+
 
     @Transactional
     public void deleteAllApplications() {

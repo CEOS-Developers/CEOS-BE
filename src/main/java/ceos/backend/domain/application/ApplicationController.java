@@ -1,3 +1,4 @@
+
 package ceos.backend.domain.application;
 
 
@@ -7,12 +8,7 @@ import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
 import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
 import ceos.backend.domain.application.dto.request.UpdatePassStatus;
-import ceos.backend.domain.application.dto.response.GetApplication;
-import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
-import ceos.backend.domain.application.dto.response.GetApplications;
-import ceos.backend.domain.application.dto.response.GetCreationTime;
-import ceos.backend.domain.application.dto.response.GetInterviewTime;
-import ceos.backend.domain.application.dto.response.GetResultResponse;
+import ceos.backend.domain.application.dto.response.*;
 import ceos.backend.domain.application.service.ApplicationExcelService;
 import ceos.backend.domain.application.service.ApplicationService;
 import ceos.backend.global.common.entity.Part;
@@ -147,6 +143,13 @@ public class ApplicationController {
         applicationService.updateDocumentPassStatus(applicationId, updatePassStatus);
     }
 
+    @Operation(summary = "면접 참여 가능 여부 확인", description = "resultDateDoc ~ resultDateFinal 전날")
+    @GetMapping(value = "/{applicationId}/interview/availability")
+    public GetInterviewAvailability getInterviewAvailability(@PathVariable("applicationId") Long applicationId) {
+        log.info("면접 참여 가능 여부 확인");
+        return applicationService.getInterviewAvailability(applicationId);
+    }
+
     @Operation(summary = "최종 합격 여부 변경", description = "resultDateDoc ~ ResultDateFinal 전날")
     @PatchMapping(value = "/{applicationId}/final")
     public void updateFinalPassStatus(
@@ -154,6 +157,13 @@ public class ApplicationController {
             @RequestBody @Valid UpdatePassStatus updatePassStatus) {
         log.info("최종 합격 여부 변경");
         applicationService.updateFinalPassStatus(applicationId, updatePassStatus);
+    }
+
+    @Operation(summary = "활동 가능 여부 확인", description = "resultDateDoc ~ resultDateFinal 전날")
+    @GetMapping(value = "/{applicationId}/final/availability")
+    public GetFinalAvailability getFinalPass(@PathVariable("applicationId") Long applicationId) {
+        log.info("활동 가능 여부 확인");
+        return applicationService.getFinalAvailability(applicationId);
     }
 
     @Operation(summary = "지원서 엑셀 파일 생성")
