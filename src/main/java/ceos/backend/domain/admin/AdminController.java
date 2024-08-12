@@ -7,6 +7,7 @@ import ceos.backend.domain.admin.service.AdminService;
 import ceos.backend.global.config.user.AdminDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +39,10 @@ public class AdminController {
 
     @Operation(summary = "로그인")
     @PostMapping("/signin")
-    public TokenResponse signIn(@RequestBody @Valid SignInRequest signInRequest) {
+    public TokenResponse signIn(HttpServletRequest request, @RequestBody @Valid SignInRequest signInRequest) {
         log.info("로그인");
-        return adminService.signIn(signInRequest);
+        String device = request.getHeader("User-Agent").contains("mobile") ? "mobile" : "web";
+        return adminService.signIn(device, signInRequest);
     }
 
     @Operation(summary = "아이디 찾기")
@@ -68,9 +70,10 @@ public class AdminController {
 
     @Operation(summary = "로그아웃")
     @PostMapping("/logout")
-    public void logout(@AuthenticationPrincipal AdminDetails adminUser) {
+    public void logout(HttpServletRequest request, @AuthenticationPrincipal AdminDetails adminUser) {
         log.info("로그아웃");
-        adminService.logout(adminUser);
+        String device = request.getHeader("User-Agent").contains("mobile") ? "mobile" : "web";
+        adminService.logout(device, adminUser);
     }
 
     @Operation(summary = "토큰 재발급")
