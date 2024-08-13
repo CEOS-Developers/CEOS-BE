@@ -6,6 +6,8 @@ import ceos.backend.domain.application.domain.QuestionCategory;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.exception.exceptions.QuestionNotFound;
 import ceos.backend.domain.application.vo.AnswerVo;
+import ceos.backend.domain.recruitment.domain.Recruitment;
+import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.dto.AwsSESRecruitMail;
@@ -26,6 +28,8 @@ import org.thymeleaf.context.Context;
 @Component
 @RequiredArgsConstructor
 public class AwsSESMailGenerator {
+
+    private final RecruitmentHelper recruitmentHelper;
 
     public Context generateApplicationMailContext(AwsSESMail awsSESMail) {
         final CreateApplicationRequest request = awsSESMail.getCreateApplicationRequest();
@@ -137,8 +141,8 @@ public class AwsSESMailGenerator {
         return context;
     }
 
-    // 수정 예정
     public String generateRecruitMailSubject() {
-        return "세오스 리쿠르팅 메일 발송";
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
+        return "[CEOS] 세오스 " + recruitment.getGeneration() + "기 리크루팅을 시작합니다!";
     }
 }
