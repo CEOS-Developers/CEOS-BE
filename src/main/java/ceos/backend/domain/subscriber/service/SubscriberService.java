@@ -35,12 +35,13 @@ public class SubscriberService {
 
     @Transactional(readOnly = true)
     public void sendRecruitingMail() {
-        LocalDate date = recruitmentRepository.findAll().get(0).getStartDateDoc().toLocalDate();
+        LocalDate startDate = recruitmentRepository.findAll().get(0).getStartDateDoc().toLocalDate();
+        LocalDate endDate = recruitmentRepository.findAll().get(0).getEndDateDoc().toLocalDate();
         LocalDate now = LocalDate.now();
         List<Subscriber> subscribers = subscriberRepository.findAll();
 
-        //리쿠르팅 시작 날짜 검증
-        subscriberHelper.validateDate(date, now);
+        //리쿠르팅 기간 검증
+        subscriberHelper.validateDate(startDate, endDate, now);
 
         // 메일 보내기
         for (Subscriber subscriber : subscribers) {
