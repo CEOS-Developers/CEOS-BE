@@ -24,9 +24,9 @@ public class SubscriberHelper {
     }
 
     public void validateDate(LocalDate startDate, LocalDate endDate,  LocalDate now) {
-        if (startDate.isBefore(now)) {
+        if (now.isBefore(startDate)) {
             throw InvalidActionBefore.EXCEPTION;
-        } else if (endDate.isAfter(now)) {
+        } else if (now.isAfter(endDate)) {
             throw InvalidActionAfter.EXCEPTION;
         }
     }
