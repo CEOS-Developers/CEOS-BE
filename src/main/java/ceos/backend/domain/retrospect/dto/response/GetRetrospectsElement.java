@@ -10,16 +10,14 @@ import lombok.Data;
 public class GetRetrospectsElement {
     private Long id;
     private String title;
-    private String url;
-    private String writer;
     private Integer generation;
+    private String part;
 
     public static GetRetrospectsElement fromEntity(Retrospect retrospect) {
         return new GetRetrospectsElement(
                 retrospect.getId(),
                 retrospect.getTitle(),
-                retrospect.getUrl(),
-                retrospect.getWriter(),
-                retrospect.getGeneration());
+                retrospect.getGeneration(),
+                retrospect.getPart().getPart());
     }
 }
