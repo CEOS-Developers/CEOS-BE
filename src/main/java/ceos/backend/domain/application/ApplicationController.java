@@ -1,4 +1,3 @@
-
 package ceos.backend.domain.application;
 
 
@@ -8,13 +7,16 @@ import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
 import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
 import ceos.backend.domain.application.dto.request.UpdatePassStatus;
-import ceos.backend.domain.application.dto.response.*;
+import ceos.backend.domain.application.dto.response.GetApplication;
+import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
+import ceos.backend.domain.application.dto.response.GetApplications;
+import ceos.backend.domain.application.dto.response.GetCreationTime;
+import ceos.backend.domain.application.dto.response.GetInterviewTime;
+import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.service.ApplicationExcelService;
 import ceos.backend.domain.application.service.ApplicationService;
 import ceos.backend.global.common.entity.Part;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.nio.file.Path;
@@ -24,7 +26,15 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -38,13 +48,10 @@ public class ApplicationController {
     @Operation(summary = "지원자 목록 보기")
     @GetMapping
     public GetApplications getApplications(
-            @Parameter(schema = @Schema(allowableValues = {"PRODUCT", "DESIGN", "FRONTEND", "BACKEND"}))
-            @RequestParam(value = "part", required = false, defaultValue = "") Part part,
-            @Parameter(schema = @Schema(allowableValues = {"PASS", "FAIL"}))
-            @RequestParam(value = "docPass", required = false, defaultValue = "") Pass docPass,
-            @Parameter(schema = @Schema(allowableValues = {"PASS", "FAIL"}))
-            @RequestParam(value = "finalPass", required = false, defaultValue = "") Pass finalPass,
-            @RequestParam(value = "applicantName", required = false, defaultValue = "") String applicantName,
+            @RequestParam(value = "part", required = false) Part part,
+            @RequestParam(value = "docPass", required = false) Pass docPass,
+            @RequestParam(value = "finalPass", required = false) Pass finalPass,
+            @RequestParam(value = "applicantName", required = false) String applicantName,
             @RequestParam("pageNum") int pageNum,
             @RequestParam("limit") int limit) {
         log.info("지원자 목록 보기");
@@ -143,13 +150,6 @@ public class ApplicationController {
         applicationService.updateDocumentPassStatus(applicationId, updatePassStatus);
     }
 
-    @Operation(summary = "면접 참여 가능 여부 확인", description = "resultDateDoc ~ resultDateFinal 전날")
-    @GetMapping(value = "/{applicationId}/interview/availability")
-    public GetInterviewAvailability getInterviewAvailability(@PathVariable("applicationId") Long applicationId) {
-        log.info("면접 참여 가능 여부 확인");
-        return applicationService.getInterviewAvailability(applicationId);
-    }
-
     @Operation(summary = "최종 합격 여부 변경", description = "resultDateDoc ~ ResultDateFinal 전날")
     @PatchMapping(value = "/{applicationId}/final")
     public void updateFinalPassStatus(
@@ -157,13 +157,6 @@ public class ApplicationController {
             @RequestBody @Valid UpdatePassStatus updatePassStatus) {
         log.info("최종 합격 여부 변경");
         applicationService.updateFinalPassStatus(applicationId, updatePassStatus);
-    }
-
-    @Operation(summary = "활동 가능 여부 확인", description = "resultDateDoc ~ resultDateFinal 전날")
-    @GetMapping(value = "/{applicationId}/final/availability")
-    public GetFinalAvailability getFinalPass(@PathVariable("applicationId") Long applicationId) {
-        log.info("활동 가능 여부 확인");
-        return applicationService.getFinalAvailability(applicationId);
     }
 
     @Operation(summary = "지원서 엑셀 파일 생성")
@@ -197,12 +190,5 @@ public class ApplicationController {
     public GetCreationTime getApplicationExcelCreationTime() {
         log.info("지원서 엑셀 파일 생성 시각 확인");
         return applicationExcelService.getApplicationExcelCreationTime();
-    }
-
-    @Operation(summary = "지원서 전체 삭제")
-    @DeleteMapping(value = "/delete")
-    public void deleteAllApplications() {
-        log.info("지원서 전체 삭제");
-        applicationService.deleteAllApplications();
     }
 }

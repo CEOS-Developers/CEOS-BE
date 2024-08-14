@@ -10,8 +10,6 @@ public class GetRetrospectResponse {
     private String title;
     private String url;
     private String writer;
-    private Integer generation;
-    private String part;
 
     public static GetRetrospectResponse fromEntity(Retrospect retrospect) {
         GetRetrospectResponse getRetrospectResponse = new GetRetrospectResponse();
@@ -20,8 +18,6 @@ public class GetRetrospectResponse {
         getRetrospectResponse.setTitle(retrospect.getTitle());
         getRetrospectResponse.setUrl(retrospect.getUrl());
         getRetrospectResponse.setWriter(retrospect.getWriter());
-        getRetrospectResponse.setGeneration(retrospect.getGeneration());
-        getRetrospectResponse.setPart(retrospect.getPart().getPart());
 
         return getRetrospectResponse;
     }

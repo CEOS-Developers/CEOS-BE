@@ -22,7 +22,6 @@ public enum ApplicationErrorCode implements BaseErrorCode {
     SAME_PASS_STATUS(BAD_REQUEST, "APPLICATION_400_7", "같은 상태로 변경할 수 없습니다."),
     NOT_SET_INTERVIEW_TIME(BAD_REQUEST, "APPLICATION_400_8", "면접 시간이 정해지지 않았습니다."),
     APPLICATION_STILL_EXIST(BAD_REQUEST, "APPLICATION_400_9", "기존 지원자 데이터가 남아있습니다."),
-    NOT_DELETABLE_DURING_RECRUITMENT(BAD_REQUEST, "APPLICATION_400_10", "최종 발표 전 지원자를 삭제할 수 없습니다."),
 
     APPLICANT_NOT_FOUND(BAD_REQUEST, "APPLICATION_404_3", "존재하지 않는 지원자입니다."),
 

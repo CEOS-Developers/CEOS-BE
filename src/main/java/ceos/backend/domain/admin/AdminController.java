@@ -7,7 +7,6 @@ import ceos.backend.domain.admin.service.AdminService;
 import ceos.backend.global.config.user.AdminDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private final AdminService adminService;
-    private static final String MOBILE = "mobile";
-    private static final String WEB = "web";
 
     @Operation(summary = "닉네임 확인")
     @PostMapping("/username")
@@ -41,10 +38,9 @@ public class AdminController {
 
     @Operation(summary = "로그인")
     @PostMapping("/signin")
-    public TokenResponse signIn(HttpServletRequest request, @RequestBody @Valid SignInRequest signInRequest) {
+    public TokenResponse signIn(@RequestBody @Valid SignInRequest signInRequest) {
         log.info("로그인");
-        String device = request.getHeader("User-Agent").contains("mobile") ? MOBILE : WEB;
-        return adminService.signIn(device, signInRequest);
+        return adminService.signIn(signInRequest);
     }
 
     @Operation(summary = "아이디 찾기")
@@ -72,10 +68,9 @@ public class AdminController {
 
     @Operation(summary = "로그아웃")
     @PostMapping("/logout")
-    public void logout(HttpServletRequest request, @AuthenticationPrincipal AdminDetails adminUser) {
+    public void logout(@AuthenticationPrincipal AdminDetails adminUser) {
         log.info("로그아웃");
-        String device = request.getHeader("User-Agent").contains("mobile") ? MOBILE : WEB;
-        adminService.logout(device, adminUser);
+        adminService.logout(adminUser);
     }
 
     @Operation(summary = "토큰 재발급")
