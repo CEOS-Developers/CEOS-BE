@@ -13,8 +13,11 @@ import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
 import ceos.backend.domain.application.dto.request.UpdateInterviewTime;
 import ceos.backend.domain.application.dto.request.UpdatePassStatus;
-import ceos.backend.domain.application.dto.response.*;
-import ceos.backend.domain.application.exception.exceptions.NotDeletableDuringRecruitment;
+import ceos.backend.domain.application.dto.response.GetApplication;
+import ceos.backend.domain.application.dto.response.GetApplicationQuestion;
+import ceos.backend.domain.application.dto.response.GetApplications;
+import ceos.backend.domain.application.dto.response.GetInterviewTime;
+import ceos.backend.domain.application.dto.response.GetResultResponse;
 import ceos.backend.domain.application.helper.ApplicationHelper;
 import ceos.backend.domain.application.mapper.ApplicationMapper;
 import ceos.backend.domain.application.repository.ApplicationAnswerRepository;
@@ -32,8 +35,6 @@ import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -164,7 +165,6 @@ public class ApplicationService {
             application.updateInterviewCheck(true);
             applicationRepository.save(application);
         } else {
-            application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, false);
         }
     }
@@ -193,7 +193,6 @@ public class ApplicationService {
             application.updateFinalCheck(true);
             applicationRepository.save(application);
         } else {
-            application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, true);
         }
     }
@@ -247,16 +246,6 @@ public class ApplicationService {
         application.updateInterviewTime(duration);
     }
 
-    @Transactional(readOnly = true)
-    public GetInterviewAvailability getInterviewAvailability(Long applicationId) {
-        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
-        final Application application = applicationHelper.getApplicationById(applicationId);
-        applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
-
-        return GetInterviewAvailability.of(application);
-    }
-
-
     @Transactional
     public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
@@ -275,26 +264,4 @@ public class ApplicationService {
 
         application.updateFinalPass(updatePassStatus.getPass());
     }
-
-    @Transactional(readOnly = true)
-    public GetFinalAvailability getFinalAvailability(Long applicationId) {
-        applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
-        final Application application = applicationHelper.getApplicationById(applicationId);
-        applicationValidator.validateFinalPassStatus(application); // 최종 합격 검증
-
-        return GetFinalAvailability.of(application);
-    }
-
-
-    @Transactional
-    public void deleteAllApplications() {
-        Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        // 현재 시간이 resultDateFinal 이전이면 삭제 불가
-        if(LocalDateTime.now().isBefore(recruitment.getResultDateFinal())) {
-            throw NotDeletableDuringRecruitment.EXCEPTION;
-        }
-        // application, applicationAnswer, applicationInterview 삭제 (cascade)
-        applicationRepository.deleteAll();
-    }
-
 }

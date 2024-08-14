@@ -8,8 +8,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
-
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,20 +36,17 @@ public class Application extends BaseEntity {
     @ColumnDefault("false")
     private boolean interviewCheck;
 
-    @Size(max = 100)
-    private String unableReason;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private Pass documentPass;
 
     @NotNull
     @ColumnDefault("false")
-    private boolean finalCheck; // 활동 가능 여부
+    private boolean finalCheck;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Pass finalPass; // 최종 합격 결과
+    private Pass finalPass;
 
     @OneToMany(mappedBy = "application", cascade = CascadeType.ALL)
     private List<ApplicationAnswer> applicationAnswers = new ArrayList<>();
@@ -89,8 +84,6 @@ public class Application extends BaseEntity {
     public void updateInterviewCheck(boolean check) {
         this.interviewCheck = check;
     }
-
-    public void updateUnableReason(String reason) { this.unableReason = reason; }
 
     public void updateFinalCheck(boolean check) {
         this.finalCheck = check;

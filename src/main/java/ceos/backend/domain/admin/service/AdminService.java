@@ -51,18 +51,16 @@ public class AdminService {
     }
 
     @Transactional
-    public TokenResponse signIn(String device, SignInRequest signInRequest) {
+    public TokenResponse signIn(SignInRequest signInRequest) {
 
         final Admin admin = adminHelper.findForSignIn(signInRequest);
         final Authentication authentication = adminHelper.adminAuthorizationInput(admin);
 
         adminHelper.checkRole(admin);
 
-        String redisKey = admin.getId().toString() + ":" + device;
-
         // 토큰 발급
         final String accessToken = tokenProvider.createAccessToken(admin.getId(), authentication);
-        final String refreshToken = tokenProvider.createRefreshToken(admin.getId(), authentication, redisKey);
+        final String refreshToken = tokenProvider.createRefreshToken(admin.getId(), authentication);
 
         return adminMapper.toTokenResponse(accessToken, refreshToken);
     }
@@ -99,13 +97,11 @@ public class AdminService {
     }
 
     @Transactional
-    public void logout(String device, AdminDetails adminUser) {
+    public void logout(AdminDetails adminUser) {
         final Admin admin = adminUser.getAdmin();
 
-        String redisKey = admin.getId().toString() + ":" + device;
-
         // 레디스 삭제
-        tokenProvider.deleteRefreshToken(redisKey);
+        tokenProvider.deleteRefreshToken(admin.getId());
     }
 
     @Transactional

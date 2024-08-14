@@ -17,7 +17,7 @@ public class ApplicationAnswer extends BaseEntity {
     private Long id;
 
     // Question : Answer = 1:1 (단방향)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "application_question_id")
     private ApplicationQuestion applicationQuestion;
 

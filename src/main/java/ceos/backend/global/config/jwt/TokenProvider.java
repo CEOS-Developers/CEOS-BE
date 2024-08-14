@@ -82,7 +82,7 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
-    public String createRefreshToken(Long id, Authentication authentication, String redisKey) {
+    public String createRefreshToken(Long id, Authentication authentication) {
         String authorities =
                 authentication.getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
@@ -107,13 +107,13 @@ public class TokenProvider implements InitializingBean {
 
         redisTemplate
                 .opsForValue()
-                .set(redisKey, refreshToken, refreshExpirationTime, TimeUnit.SECONDS);
+                .set(id.toString(), refreshToken, refreshExpirationTime, TimeUnit.SECONDS);
 
         return refreshToken;
     }
 
-    public void deleteRefreshToken(String redisKey) {
-        redisTemplate.delete(redisKey);
+    public void deleteRefreshToken(Long id) {
+        redisTemplate.delete(id.toString());
     }
 
     public String getTokenUserId(String token) {

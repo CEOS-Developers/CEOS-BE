@@ -70,10 +70,6 @@ public class ApplicationValidator {
         application.validateDocumentPass();
     }
 
-    public void validateFinalPassStatus(Application application) {
-        application.validateFinalPass();
-    }
-
     public void validateInterviewTime(List<Interview> interviews, String interviewTime) {
         if (interviews.stream()
                 .noneMatch(

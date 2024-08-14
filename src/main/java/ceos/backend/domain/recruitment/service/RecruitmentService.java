@@ -11,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,7 +34,6 @@ public class RecruitmentService {
     @Transactional
     public void updateRecruitment(RecruitmentDTO recruitmentDTO) {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
-        recruitment.validAmenablePeriod(LocalDateTime.now());
 
         // 객체 업데이트
         recruitment.updateRecruitment(recruitmentDTO);
