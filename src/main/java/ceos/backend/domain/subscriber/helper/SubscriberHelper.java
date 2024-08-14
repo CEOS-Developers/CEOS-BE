@@ -1,7 +1,8 @@
 package ceos.backend.domain.subscriber.helper;
 
 import ceos.backend.domain.subscriber.exception.DuplicateData;
-import ceos.backend.domain.subscriber.exception.InvalidAction;
+import ceos.backend.domain.subscriber.exception.InvalidActionAfter;
+import ceos.backend.domain.subscriber.exception.InvalidActionBefore;
 import ceos.backend.domain.subscriber.repository.SubscriberRepository;
 import ceos.backend.global.common.dto.AwsSESRecruitMail;
 import ceos.backend.global.common.event.Event;
@@ -22,9 +23,11 @@ public class SubscriberHelper {
         }
     }
 
-    public void validateDate(LocalDate date,  LocalDate now) {
-        if (!date.equals(now)) {
-            throw InvalidAction.EXCEPTION;
+    public void validateDate(LocalDate startDate, LocalDate endDate,  LocalDate now) {
+        if (startDate.isBefore(now)) {
+            throw InvalidActionBefore.EXCEPTION;
+        } else if (endDate.isAfter(now)) {
+            throw InvalidActionAfter.EXCEPTION;
         }
     }
 
