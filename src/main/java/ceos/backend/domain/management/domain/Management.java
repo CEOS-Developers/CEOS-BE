@@ -1,6 +1,5 @@
 package ceos.backend.domain.management.domain;
 
-
 import ceos.backend.domain.management.dto.request.UpdateManagementRequest;
 import ceos.backend.domain.management.vo.ManagementVo;
 import ceos.backend.global.common.entity.BaseEntity;
