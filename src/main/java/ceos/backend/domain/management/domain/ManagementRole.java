@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ManagementRole {
     PRESIDENCY("회장단"),
+    ADVISOR("고문"),
     GENERAL_AFFAIRS("총무"),
     PART_LEADER("파트장"),
     MANAGEMENT("운영진"),

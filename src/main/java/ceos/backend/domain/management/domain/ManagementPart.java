@@ -13,6 +13,7 @@ public enum ManagementPart {
     CHAIRMAN("회장"),
     VICE_CHAIRMAN("부회장"),
     CO_PRESIDENT("공동회장"),
+    ADVISOR("고문"),
     PLAN("기획"),
     DESIGN("디자인"),
     FRONTEND("프론트엔드"),
