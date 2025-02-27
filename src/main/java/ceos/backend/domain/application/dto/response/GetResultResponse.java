@@ -5,6 +5,7 @@ import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.Pass;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.global.common.dto.ParsedDuration;
+import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.ParsedDurationConvertor;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import java.time.LocalDate;
@@ -19,6 +20,8 @@ public class GetResultResponse {
 
     private String name;
 
+    private Part part;
+
     @JsonUnwrapped private ParsedDuration parsedDuration;
 
     private LocalDate otDate;
@@ -32,6 +35,7 @@ public class GetResultResponse {
             Pass pass,
             int generation,
             String name,
+            Part part,
             ParsedDuration parsedDuration,
             LocalDate otDate,
             boolean attendanceStatus,
@@ -39,6 +43,7 @@ public class GetResultResponse {
         this.pass = pass;
         this.generation = generation;
         this.name = name;
+        this.part = part;
         this.parsedDuration = parsedDuration;
         this.otDate = otDate;
         this.attendanceStatus = attendanceStatus;
@@ -57,6 +62,7 @@ public class GetResultResponse {
                 .pass(application.getDocumentPass())
                 .generation(recruitment.getGeneration())
                 .name(application.getApplicantInfo().getName())
+                .part(application.getApplicationDetail().getPart())
                 .parsedDuration(duration)
                 .otDate(recruitment.getOtDate())
                 .attendanceStatus(application.isInterviewCheck())
@@ -70,6 +76,7 @@ public class GetResultResponse {
                 .pass(application.getFinalPass())
                 .generation(recruitment.getGeneration())
                 .name(application.getApplicantInfo().getName())
+                .part(application.getApplicationDetail().getPart())
                 .parsedDuration(
                         ParsedDurationConvertor.parsingDuration(application.getInterviewDatetime()))
                 .otDate(recruitment.getOtDate())
