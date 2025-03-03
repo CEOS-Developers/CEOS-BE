@@ -1,6 +1,5 @@
 package ceos.backend.domain.management.domain;
 
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.stream.Stream;
@@ -15,7 +14,8 @@ public enum ManagementRole {
     GENERAL_AFFAIRS("총무"),
     PART_LEADER("파트장"),
     MANAGEMENT("운영진"),
-    MENTOR("멘토");
+    ACTIVE_MENTOR("active 멘토"),
+    OB_MENTOR("OB 멘토");
 
     @JsonValue private final String managementRole;
 
