@@ -85,7 +85,7 @@ jobs:
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/ceos-backend
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/ceos-nginx
-            docker-compose -f docker-compose.yml --env-file ./.env up -d
+            docker compose -f docker-compose.yml --env-file .env up -d
             docker image prune -f
 
 #name: Deploy to EC2
