@@ -71,10 +71,10 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST_PROD }}
-          username: ec2-user #  ubuntu 에서 변경
+          username: ubuntu #  ec2-user 에서 변경
           key: ${{ secrets.EC2_KEY_PROD }}
           script: |
-            cd /home/ec2-user/ceos
+            cd /home/ubuntu/ceos
             
             sudo touch .env
             echo "${{ secrets.ENV_PROD }}" | sudo tee .env > /dev/null
