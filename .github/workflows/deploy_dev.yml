@@ -62,10 +62,10 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST_DEV }}
-          username: ec2-user #  ubuntu 에서 변경
+          username: ubuntu #  ubuntu 에서 변경
           key: ${{ secrets.EC2_KEY_DEV }}
           script: |
-            cd /home/ec2-user/ceos
+            cd /home/ubuntu/ceos
             
             sudo touch .env
             echo "${{ secrets.ENV_DEV }}" | sudo tee .env > /dev/null
@@ -76,7 +76,7 @@ jobs:
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/ceos-backend-dev
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/ceos-nginx-dev
-            docker-compose -f docker-compose.dev.yml --env-file ./.env up -d
+            docker compose -f docker-compose.dev.yml --env-file .env up -d
             docker image prune -f
 
 
