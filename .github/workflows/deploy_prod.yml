@@ -4,6 +4,16 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'admin'
+        required: true
+        default: 'user'
+      message:
+        description: 'message'
+        required: false
+        default: '수동 워크플로우 트리거'
 
 permissions:
   contents: read
@@ -61,10 +71,10 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST_PROD }}
-          username: ec2-user #  ubuntu 에서 변경
+          username: ubuntu #  ec2-user 에서 변경
           key: ${{ secrets.EC2_KEY_PROD }}
           script: |
-            cd /home/ec2-user/ceos
+            cd /home/ubuntu/ceos
             
             sudo touch .env
             echo "${{ secrets.ENV_PROD }}" | sudo tee .env > /dev/null
@@ -75,7 +85,7 @@ jobs:
             sudo docker rm -f $(docker ps -qa)
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/ceos-backend
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/ceos-nginx
-            docker-compose -f docker-compose.yml --env-file ./.env up -d
+            docker compose -f docker-compose.yml --env-file .env up -d
             docker image prune -f
 
 #name: Deploy to EC2

@@ -30,15 +30,17 @@ public class ManagementMapper {
 
     public GetAllPartManagementsResponse toPartManagementList(
             List<Management> presidency,
+            List<Management> advisors,
             List<Management> generalAffairs,
             List<Management> partLeaders,
             List<Management> managements) {
         List<ManagementDto> presidencyList = toManagementDtoList(toOrderByPart(presidency));
+        List<ManagementDto> advisorsList = toManagementDtoList(toOrderByPart(advisors));
         List<ManagementDto> generalAffairsList = toManagementDtoList(toOrderByPart(generalAffairs));
         List<ManagementDto> partLeadersList = toManagementDtoList(toOrderByPart(partLeaders));
         List<ManagementDto> managementsList = toManagementDtoList(toOrderByPart(managements));
         return GetAllPartManagementsResponse.of(
-                presidencyList, generalAffairsList, partLeadersList, managementsList);
+                presidencyList, advisorsList, generalAffairsList, partLeadersList, managementsList);
     }
 
     public List<ManagementDto> toManagementDtoList(List<Management> managements) {

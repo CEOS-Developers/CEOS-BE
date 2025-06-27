@@ -18,11 +18,11 @@ public class ManagementVo {
     @NotEmpty(message = "임원진 이름을 입력해주세요")
     private String name;
 
-    @Schema(defaultValue = "회장단", description = "임원진 역할(회장단/총무/파트장/운영진/멘토)")
+    @Schema(defaultValue = "회장단", description = "임원진 역할(회장단/고문/총무/파트장/운영진/멘토)")
     @ValidEnum(target = ManagementRole.class)
     private ManagementRole role;
 
-    @Schema(defaultValue = "기획", description = "임원진 파트(회장/부회장/공동회장/기획/디자인/프론트엔드/백엔드)")
+    @Schema(defaultValue = "기획", description = "임원진 파트(회장/부회장/공동회장/고문/기획/디자인/프론트엔드/백엔드)")
     @ValidEnum(target = ManagementPart.class)
     private ManagementPart part;
 
