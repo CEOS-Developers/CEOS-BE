@@ -35,6 +35,7 @@ services:
       MYSQL_DATABASE: ceos-dev
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       TZ: Asia/Seoul
     ports:
       - "3306:3306"
