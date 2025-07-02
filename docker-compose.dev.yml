@@ -9,6 +9,8 @@ services:
       - .env
     expose:
       - "8080"
+    depends_on:
+      - mysql
 
   nginx:
     image: ceos17/ceos-nginx-dev
@@ -23,11 +25,17 @@ services:
     container_name: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ceos-dev
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       TZ: Asia/Seoul
     ports:
       - "3306:3306"
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
     volumes:
       - ./data:/var/lib/mysql
 
@@ -40,5 +48,4 @@ services:
     hostname: redis
     ports:
       - "6379:6379"
-
 
