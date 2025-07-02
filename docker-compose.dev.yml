@@ -18,9 +18,27 @@ services:
     ports:
       - "80:80"
 
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ceos-dev
+      TZ: Asia/Seoul
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+
+
+
+
   redis:
     image: redis:latest
     container_name: redis
     hostname: redis
     ports:
       - "6379:6379"
+
+
