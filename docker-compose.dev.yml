@@ -20,13 +20,6 @@ services:
     ports:
       - "80:80"
 
-  redis:
-    image: redis:latest
-    container_name: redis
-    hostname: redis
-    ports:
-      - "6379:6379"
-
   mysql:
     image: mysql:latest
     container_name: mysql
@@ -43,3 +36,16 @@ services:
       - "mysqld"
       - "--character-set-server=utf8mb4"
       - "--collation-server=utf8mb4_unicode_ci"
+    volumes:
+      - ./data:/var/lib/mysql
+
+
+
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    hostname: redis
+    ports:
+      - "6379:6379"
+
