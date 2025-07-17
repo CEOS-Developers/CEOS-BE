@@ -21,7 +21,7 @@ springdoc:
   default-produces-media-type: application/json
   swagger-ui:
     operations-sorter: alpha # 오름차순
-    path: /swagger-ui.html
+    path: /swagger
 
 logging.level:
   org.hibernate.SQL: debug
