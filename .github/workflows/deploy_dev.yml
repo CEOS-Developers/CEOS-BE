@@ -20,7 +20,7 @@ jobs:
         run: |
           rm -f ./src/main/resources/application-secret.yml
           touch ./src/main/resources/application-secret.yml
-          echo "${{ secrets.APPLICATION_SECRET_DEV }}" > ./src/main/resources/application-secret.yml
+          echo "${{ secrets.APPLICATION_SECRET }}" > ./src/main/resources/application-secret.yml
 
       # JDK version 설정
       - name: Set up JDK 17
