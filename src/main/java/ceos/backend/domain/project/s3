@@ -1,0 +1,255 @@
+copy: s3://ceos-web-20/activities/1ad06f40-ad0a-4539-8466-636ab53bd4e5 to s3://ceos-bucket-20/activities/1ad06f40-ad0a-4539-8466-636ab53bd4e5
+copy: s3://ceos-web-20/activities/52929b18-931d-4e69-861d-d5de76007348 to s3://ceos-bucket-20/activities/52929b18-931d-4e69-861d-d5de76007348
+copy: s3://ceos-web-20/activities/2928a1eb-6c11-4f79-a213-9b64a574fe95 to s3://ceos-bucket-20/activities/2928a1eb-6c11-4f79-a213-9b64a574fe95
+copy: s3://ceos-web-20/activities/4f391eeb-b604-4648-aae2-affd2bffeafc to s3://ceos-bucket-20/activities/4f391eeb-b604-4648-aae2-affd2bffeafc
+copy: s3://ceos-web-20/managements/01397192-24a9-44fc-b33f-f53640662622 to s3://ceos-bucket-20/managements/01397192-24a9-44fc-b33f-f53640662622
+copy failed: s3://ceos-web-20/projects/2ac1b3eb-d0c1-431e-96e7-60ddb4e612f5 to s3://ceos-bucket-20/projects/2ac1b3eb-d0c1-431e-96e7-60ddb4e612f5 An error occurred (AccessDenied) when calling the GetObjectTagging operation: Access Denied
+copy: s3://ceos-web-20/activities/5cb5c6f0-a5a1-464b-bb31-067f944dff57 to s3://ceos-bucket-20/activities/5cb5c6f0-a5a1-464b-bb31-067f944dff57
+copy: s3://ceos-web-20/activities/944eaa31-1f1f-4b28-b952-ccdac3fffeed to s3://ceos-bucket-20/activities/944eaa31-1f1f-4b28-b952-ccdac3fffeed
+copy: s3://ceos-web-20/activities/b0a61908-8009-45b2-b6b1-5cdb6000729c to s3://ceos-bucket-20/activities/b0a61908-8009-45b2-b6b1-5cdb6000729c
+copy failed: s3://ceos-web-20/projects/ca3a3438-e353-40a7-a172-5a39de487353 to s3://ceos-bucket-20/projects/ca3a3438-e353-40a7-a172-5a39de487353 An error occurred (AccessDenied) when calling the GetObjectTagging operation: Access Denied
+copy failed: s3://ceos-web-20/projects/8f958d81-f04e-4e2c-ab8e-c16e434dc554 to s3://ceos-bucket-20/projects/8f958d81-f04e-4e2c-ab8e-c16e434dc554 An error occurred (AccessDenied) when calling the GetObjectTagging operation: Access Denied
+copy failed: s3://ceos-web-20/projects/18e78ce4-5f62-4bf7-ae94-34967427a186 to s3://ceos-bucket-20/projects/18e78ce4-5f62-4bf7-ae94-34967427a186 An error occurred (AccessDenied) when calling the GetObjectTagging operation: Access Denied
+copy failed: s3://ceos-web-20/managements/fb601bbe-3b4a-4fc2-b084-44cea050cf5e to s3://ceos-bucket-20/managements/fb601bbe-3b4a-4fc2-b084-44cea050cf5e An error occurred (AccessDenied) when calling the GetObjectTagging operation: Access Denied
+copy failed: s3://ceos-web-20/projects/f300948a-be57-4345-a5a3-993c23d0cf04 to s3://ceos-bucket-20/projects/f300948a-be57-4345-a5a3-993c23d0cf04 An error occurred (AccessDenied) when calling the GetObjectTagging operation: Access Denied
+copy: s3://ceos-web-20/managements/1c633890-2e38-41f3-89d4-989dbbda02cd to s3://ceos-bucket-20/managements/1c633890-2e38-41f3-89d4-989dbbda02cd
+copy: s3://ceos-web-20/activities/dfd379ea-039e-4b54-b6d6-0ce495f0978f to s3://ceos-bucket-20/activities/dfd379ea-039e-4b54-b6d6-0ce495f0978f
+copy: s3://ceos-web-20/activities/86afbdcf-aaaa-4cfc-89b7-380fff4fdfd1 to s3://ceos-bucket-20/activities/86afbdcf-aaaa-4cfc-89b7-380fff4fdfd1
+copy: s3://ceos-web-20/managements/1c2e8b8d-2379-49b2-bdaf-19d3e5396333 to s3://ceos-bucket-20/managements/1c2e8b8d-2379-49b2-bdaf-19d3e5396333
+copy: s3://ceos-web-20/mail/CEOSlogo.png to s3://ceos-bucket-20/mail/CEOSlogo.png
+copy: s3://ceos-web-20/managements/092f8ce8-bb70-4027-accb-a6c37d5c29cb to s3://ceos-bucket-20/managements/092f8ce8-bb70-4027-accb-a6c37d5c29cb
+copy: s3://ceos-web-20/managements/131a3f6d-4e7c-49ec-9b98-ca8fb0c39294 to s3://ceos-bucket-20/managements/131a3f6d-4e7c-49ec-9b98-ca8fb0c39294
+copy: s3://ceos-web-20/managements/16f37fea-c52e-4149-af4d-9d4f05fcf824 to s3://ceos-bucket-20/managements/16f37fea-c52e-4149-af4d-9d4f05fcf824
+copy: s3://ceos-web-20/managements/3801c94d-b021-4a8d-9235-759685344b64 to s3://ceos-bucket-20/managements/3801c94d-b021-4a8d-9235-759685344b64
+copy: s3://ceos-web-20/managements/1ce8e40b-b30d-410b-a4f8-c0e36d700aed to s3://ceos-bucket-20/managements/1ce8e40b-b30d-410b-a4f8-c0e36d700aed
+copy: s3://ceos-web-20/managements/528b0b19-6379-402f-9bd3-84d950ba6d22 to s3://ceos-bucket-20/managements/528b0b19-6379-402f-9bd3-84d950ba6d22
+copy: s3://ceos-web-20/managements/567a043d-d263-4bdd-a082-93056baa2223 to s3://ceos-bucket-20/managements/567a043d-d263-4bdd-a082-93056baa2223
+copy: s3://ceos-web-20/managements/3766eef5-c20c-47ed-975b-48914d427699 to s3://ceos-bucket-20/managements/3766eef5-c20c-47ed-975b-48914d427699
+copy: s3://ceos-web-20/managements/88470d3d-eb1c-40e7-af4b-b4c1256495ab to s3://ceos-bucket-20/managements/88470d3d-eb1c-40e7-af4b-b4c1256495ab
+copy: s3://ceos-web-20/managements/76c5b791-137f-4d1a-976e-f6a2ffb80fb5 to s3://ceos-bucket-20/managements/76c5b791-137f-4d1a-976e-f6a2ffb80fb5
+copy: s3://ceos-web-20/managements/7bae0fdb-4d4c-429b-ae82-123d17f6bb7f to s3://ceos-bucket-20/managements/7bae0fdb-4d4c-429b-ae82-123d17f6bb7f
+copy: s3://ceos-web-20/managements/858c8e79-30e4-4ed2-80f4-ef9a7c4a43db to s3://ceos-bucket-20/managements/858c8e79-30e4-4ed2-80f4-ef9a7c4a43db
+copy: s3://ceos-web-20/managements/8b978bf9-78cc-4f3d-b03f-c80b19ad10c7 to s3://ceos-bucket-20/managements/8b978bf9-78cc-4f3d-b03f-c80b19ad10c7
+copy: s3://ceos-web-20/managements/75a70425-45ec-4779-8d95-6f9354566b28 to s3://ceos-bucket-20/managements/75a70425-45ec-4779-8d95-6f9354566b28
+copy: s3://ceos-web-20/managements/73581cbb-bb0d-4de5-ae61-ddbf2edc32c9 to s3://ceos-bucket-20/managements/73581cbb-bb0d-4de5-ae61-ddbf2edc32c9
+copy: s3://ceos-web-20/managements/a4d4ffc2-de4d-47b1-bef7-1c6d901a6d63 to s3://ceos-bucket-20/managements/a4d4ffc2-de4d-47b1-bef7-1c6d901a6d63
+copy: s3://ceos-web-20/managements/a13cdb2f-f599-44de-957f-8ad507ca68af to s3://ceos-bucket-20/managements/a13cdb2f-f599-44de-957f-8ad507ca68af
+copy: s3://ceos-web-20/managements/a0c6bb78-deed-4a85-b20a-f1646017b701 to s3://ceos-bucket-20/managements/a0c6bb78-deed-4a85-b20a-f1646017b701
+copy: s3://ceos-web-20/managements/b58fab8e-eaaf-43c3-86dd-8eecfed5e6f1 to s3://ceos-bucket-20/managements/b58fab8e-eaaf-43c3-86dd-8eecfed5e6f1
+copy: s3://ceos-web-20/managements/aca0fe01-5edc-4f3d-b937-16399e9b1b61 to s3://ceos-bucket-20/managements/aca0fe01-5edc-4f3d-b937-16399e9b1b61
+copy: s3://ceos-web-20/managements/c84fdea9-b4f3-4382-9f17-bad63c3dd510 to s3://ceos-bucket-20/managements/c84fdea9-b4f3-4382-9f17-bad63c3dd510
+copy: s3://ceos-web-20/managements/ceb252a4-153a-4f35-9ff7-aa20b8574479 to s3://ceos-bucket-20/managements/ceb252a4-153a-4f35-9ff7-aa20b8574479
+copy: s3://ceos-web-20/managements/8e73eaaa-5157-4d4a-8855-5a1c497eb1c1 to s3://ceos-bucket-20/managements/8e73eaaa-5157-4d4a-8855-5a1c497eb1c1
+copy: s3://ceos-web-20/managements/8f07b953-6e0e-4946-8aba-04e3e0326813 to s3://ceos-bucket-20/managements/8f07b953-6e0e-4946-8aba-04e3e0326813
+copy: s3://ceos-web-20/managements/b387bfa6-491b-47c9-a369-178624c44e73 to s3://ceos-bucket-20/managements/b387bfa6-491b-47c9-a369-178624c44e73
+copy: s3://ceos-web-20/managements/a6bce910-1a37-44ee-92f8-933766147b35 to s3://ceos-bucket-20/managements/a6bce910-1a37-44ee-92f8-933766147b35
+copy: s3://ceos-web-20/managements/d52c971f-b776-42d9-9365-73bcf8fa4cc3 to s3://ceos-bucket-20/managements/d52c971f-b776-42d9-9365-73bcf8fa4cc3
+copy: s3://ceos-web-20/managements/cae55fa7-faa9-4578-9fb6-648c88fa90da to s3://ceos-bucket-20/managements/cae55fa7-faa9-4578-9fb6-648c88fa90da
+copy: s3://ceos-web-20/managements/dd4881a0-5c5d-43bd-baf4-866b59608c65 to s3://ceos-bucket-20/managements/dd4881a0-5c5d-43bd-baf4-866b59608c65
+copy: s3://ceos-web-20/managements/deb3e42d-bed8-48fe-bea4-7224caa6ead5 to s3://ceos-bucket-20/managements/deb3e42d-bed8-48fe-bea4-7224caa6ead5
+copy: s3://ceos-web-20/managements/f13443a2-96b5-4862-a716-e007cdb4cebf to s3://ceos-bucket-20/managements/f13443a2-96b5-4862-a716-e007cdb4cebf
+copy: s3://ceos-web-20/managements/e9bacde0-5d05-4330-909a-f0e2aa1ff7ae to s3://ceos-bucket-20/managements/e9bacde0-5d05-4330-909a-f0e2aa1ff7ae
+copy: s3://ceos-web-20/managements/d6f09256-cb05-41dd-9d25-ef9824abe673 to s3://ceos-bucket-20/managements/d6f09256-cb05-41dd-9d25-ef9824abe673
+copy: s3://ceos-web-20/managements/f1354313-5353-4418-baa3-3256ed7d6eaa to s3://ceos-bucket-20/managements/f1354313-5353-4418-baa3-3256ed7d6eaa
+copy: s3://ceos-web-20/managements/e2d69ab0-220c-43d5-834f-70cd344b5bee to s3://ceos-bucket-20/managements/e2d69ab0-220c-43d5-834f-70cd344b5bee
+copy: s3://ceos-web-20/managements/df4c41ab-a07e-4b41-b071-da0f77e818eb to s3://ceos-bucket-20/managements/df4c41ab-a07e-4b41-b071-da0f77e818eb
+copy: s3://ceos-web-20/managements/e705b3dc-9b6c-47e1-bf2c-9b1bdc3a6522 to s3://ceos-bucket-20/managements/e705b3dc-9b6c-47e1-bf2c-9b1bdc3a6522
+copy: s3://ceos-web-20/managements/eaf630b7-6a90-4247-a55b-1a005b2f7feb to s3://ceos-bucket-20/managements/eaf630b7-6a90-4247-a55b-1a005b2f7feb
+copy: s3://ceos-web-20/managements/f45596b5-8653-459b-96d9-5785ed929c79 to s3://ceos-bucket-20/managements/f45596b5-8653-459b-96d9-5785ed929c79
+copy: s3://ceos-web-20/managements/ed8852c3-25ec-4f0a-8d56-c60430a3a0f0 to s3://ceos-bucket-20/managements/ed8852c3-25ec-4f0a-8d56-c60430a3a0f0
+copy: s3://ceos-web-20/managements/3dcbd21d-4972-4f4f-b8a6-7be81e4270f0 to s3://ceos-bucket-20/managements/3dcbd21d-4972-4f4f-b8a6-7be81e4270f0
+copy: s3://ceos-web-20/managements/fbabc413-2030-48c0-8d1b-4a9d27c072a8 to s3://ceos-bucket-20/managements/fbabc413-2030-48c0-8d1b-4a9d27c072a8
+copy: s3://ceos-web-20/managements/511a71bc-241f-47f9-aa9b-fd1b9092f69a to s3://ceos-bucket-20/managements/511a71bc-241f-47f9-aa9b-fd1b9092f69a
+copy: s3://ceos-web-20/managements/4b5418e0-06e6-4f29-8644-67a8da4ad041 to s3://ceos-bucket-20/managements/4b5418e0-06e6-4f29-8644-67a8da4ad041
+copy: s3://ceos-web-20/sponsors/0f01bf4e-8ef6-48ee-9216-a0b88ffb7f03 to s3://ceos-bucket-20/sponsors/0f01bf4e-8ef6-48ee-9216-a0b88ffb7f03
+copy: s3://ceos-web-20/projects/5f9d4bba-51dc-481a-92cc-39bec04e2c31 to s3://ceos-bucket-20/projects/5f9d4bba-51dc-481a-92cc-39bec04e2c31
+copy: s3://ceos-web-20/sponsors/0a71a63b-7abf-4454-8326-f35f8dea24c3 to s3://ceos-bucket-20/sponsors/0a71a63b-7abf-4454-8326-f35f8dea24c3
+copy: s3://ceos-web-20/projects/847fbca6-9f6a-4443-8b36-8937f46d8a10 to s3://ceos-bucket-20/projects/847fbca6-9f6a-4443-8b36-8937f46d8a10
+copy: s3://ceos-web-20/managements/4cca62f9-02ff-4e28-8af5-8ec616ad8abb to s3://ceos-bucket-20/managements/4cca62f9-02ff-4e28-8af5-8ec616ad8abb
+copy: s3://ceos-web-20/projects/297e6f9d-d0c6-4e0c-a11d-7a45abc969ed to s3://ceos-bucket-20/projects/297e6f9d-d0c6-4e0c-a11d-7a45abc969ed
+copy: s3://ceos-web-20/sponsors/31022d70-4722-46ff-93f4-04995f4748f8 to s3://ceos-bucket-20/sponsors/31022d70-4722-46ff-93f4-04995f4748f8
+copy: s3://ceos-web-20/projects/16877535-733e-447f-b2d9-9093993164fd to s3://ceos-bucket-20/projects/16877535-733e-447f-b2d9-9093993164fd
+copy: s3://ceos-web-20/sponsors/8b2f284a-7c01-4dc2-a36b-4479b602eee4 to s3://ceos-bucket-20/sponsors/8b2f284a-7c01-4dc2-a36b-4479b602eee4
+copy: s3://ceos-web-20/sponsors/32430d42-e10d-43a3-9ca5-c7597c2d4d3c to s3://ceos-bucket-20/sponsors/32430d42-e10d-43a3-9ca5-c7597c2d4d3c
+copy: s3://ceos-web-20/projects/ff8a0545-7a9a-42fd-8cfc-6203236bb4ea to s3://ceos-bucket-20/projects/ff8a0545-7a9a-42fd-8cfc-6203236bb4ea
+copy: s3://ceos-web-20/sponsors/4bc1279d-28cf-4c0f-afc7-480ee6993059 to s3://ceos-bucket-20/sponsors/4bc1279d-28cf-4c0f-afc7-480ee6993059
+copy: s3://ceos-web-20/sponsors/ce249b8d-0a2f-42ee-b9fd-1d16ab8eacde to s3://ceos-bucket-20/sponsors/ce249b8d-0a2f-42ee-b9fd-1d16ab8eacde
+copy: s3://ceos-web-20/sponsors/32fd8d1d-cdd6-48ab-86be-ecf686589c0f to s3://ceos-bucket-20/sponsors/32fd8d1d-cdd6-48ab-86be-ecf686589c0f
+copy: s3://ceos-web-20/sponsors/eb0f346b-1929-4681-bb50-6ab36f8b2d14 to s3://ceos-bucket-20/sponsors/eb0f346b-1929-4681-bb50-6ab36f8b2d14
+copy: s3://ceos-web-20/sponsors/5cf2f267-4953-4ac1-b1f9-818261222c5f to s3://ceos-bucket-20/sponsors/5cf2f267-4953-4ac1-b1f9-818261222c5f
+copy: s3://ceos-web-20/sponsors/e74fc0b4-29b9-4bdd-8e7c-c3fc6c9f5a75 to s3://ceos-bucket-20/sponsors/e74fc0b4-29b9-4bdd-8e7c-c3fc6c9f5a75
+copy: s3://ceos-web-20/sponsors/e80e4ade-30e9-4383-b288-5b5372d77cff to s3://ceos-bucket-20/sponsors/e80e4ade-30e9-4383-b288-5b5372d77cff
+copy: s3://ceos-web-20/projects/1757f696-366c-4558-adbe-c42a676427d6 to s3://ceos-bucket-20/projects/1757f696-366c-4558-adbe-c42a676427d6
+copy: s3://ceos-web-20/managements/a6f29c4c-16a3-48cc-9260-0b6a31c69f04 to s3://ceos-bucket-20/managements/a6f29c4c-16a3-48cc-9260-0b6a31c69f04
+
+
+
+
+s3://ceos-web-20/activities/1ad06f40-ad0a-4539-8466-636ab53bd4e5
+s3://ceos-web-20/activities/52929b18-931d-4e69-861d-d5de76007348
+s3://ceos-web-20/activities/2928a1eb-6c11-4f79-a213-9b64a574fe95
+s3://ceos-web-20/activities/4f391eeb-b604-4648-aae2-affd2bffeafc
+s3://ceos-web-20/managements/01397192-24a9-44fc-b33f-f53640662622
+s3://ceos-web-20/projects/2ac1b3eb-d0c1-431e-96e7-60ddb4e612f5
+s3://ceos-web-20/activities/5cb5c6f0-a5a1-464b-bb31-067f944dff57
+s3://ceos-web-20/activities/944eaa31-1f1f-4b28-b952-ccdac3fffeed
+s3://ceos-web-20/activities/b0a61908-8009-45b2-b6b1-5cdb6000729c
+s3://ceos-web-20/projects/ca3a3438-e353-40a7-a172-5a39de487353
+s3://ceos-web-20/projects/8f958d81-f04e-4e2c-ab8e-c16e434dc554
+s3://ceos-web-20/projects/18e78ce4-5f62-4bf7-ae94-34967427a186
+s3://ceos-web-20/managements/fb601bbe-3b4a-4fc2-b084-44cea050cf5e
+s3://ceos-web-20/projects/f300948a-be57-4345-a5a3-993c23d0cf04
+s3://ceos-web-20/managements/1c633890-2e38-41f3-89d4-989dbbda02cd
+s3://ceos-web-20/activities/dfd379ea-039e-4b54-b6d6-0ce495f0978f
+s3://ceos-web-20/activities/86afbdcf-aaaa-4cfc-89b7-380fff4fdfd1
+s3://ceos-web-20/managements/1c2e8b8d-2379-49b2-bdaf-19d3e5396333
+s3://ceos-web-20/mail/CEOSlogo.png
+s3://ceos-web-20/managements/092f8ce8-bb70-4027-accb-a6c37d5c29cb
+s3://ceos-web-20/managements/131a3f6d-4e7c-49ec-9b98-ca8fb0c39294
+s3://ceos-web-20/managements/16f37fea-c52e-4149-af4d-9d4f05fcf824
+s3://ceos-web-20/managements/3801c94d-b021-4a8d-9235-759685344b64
+s3://ceos-web-20/managements/1ce8e40b-b30d-410b-a4f8-c0e36d700aed
+s3://ceos-web-20/managements/528b0b19-6379-402f-9bd3-84d950ba6d22
+s3://ceos-web-20/managements/567a043d-d263-4bdd-a082-93056baa2223
+s3://ceos-web-20/managements/3766eef5-c20c-47ed-975b-48914d427699
+s3://ceos-web-20/managements/88470d3d-eb1c-40e7-af4b-b4c1256495ab
+s3://ceos-web-20/managements/76c5b791-137f-4d1a-976e-f6a2ffb80fb5
+s3://ceos-web-20/managements/7bae0fdb-4d4c-429b-ae82-123d17f6bb7f
+s3://ceos-web-20/managements/858c8e79-30e4-4ed2-80f4-ef9a7c4a43db
+s3://ceos-web-20/managements/8b978bf9-78cc-4f3d-b03f-c80b19ad10c7
+s3://ceos-web-20/managements/75a70425-45ec-4779-8d95-6f9354566b28
+s3://ceos-web-20/managements/73581cbb-bb0d-4de5-ae61-ddbf2edc32c9
+s3://ceos-web-20/managements/a4d4ffc2-de4d-47b1-bef7-1c6d901a6d63
+s3://ceos-web-20/managements/a13cdb2f-f599-44de-957f-8ad507ca68af
+s3://ceos-web-20/managements/a0c6bb78-deed-4a85-b20a-f1646017b701
+s3://ceos-web-20/managements/b58fab8e-eaaf-43c3-86dd-8eecfed5e6f1
+s3://ceos-web-20/managements/aca0fe01-5edc-4f3d-b937-16399e9b1b61
+s3://ceos-web-20/managements/c84fdea9-b4f3-4382-9f17-bad63c3dd510
+s3://ceos-web-20/managements/ceb252a4-153a-4f35-9ff7-aa20b8574479
+s3://ceos-web-20/managements/8e73eaaa-5157-4d4a-8855-5a1c497eb1c1
+s3://ceos-web-20/managements/8f07b953-6e0e-4946-8aba-04e3e0326813
+s3://ceos-web-20/managements/b387bfa6-491b-47c9-a369-178624c44e73
+s3://ceos-web-20/managements/a6bce910-1a37-44ee-92f8-933766147b35
+s3://ceos-web-20/managements/d52c971f-b776-42d9-9365-73bcf8fa4cc3
+s3://ceos-web-20/managements/cae55fa7-faa9-4578-9fb6-648c88fa90da
+s3://ceos-web-20/managements/dd4881a0-5c5d-43bd-baf4-866b59608c65
+s3://ceos-web-20/managements/deb3e42d-bed8-48fe-bea4-7224caa6ead5
+s3://ceos-web-20/managements/f13443a2-96b5-4862-a716-e007cdb4cebf
+s3://ceos-web-20/managements/e9bacde0-5d05-4330-909a-f0e2aa1ff7ae
+s3://ceos-web-20/managements/d6f09256-cb05-41dd-9d25-ef9824abe673
+s3://ceos-web-20/managements/f1354313-5353-4418-baa3-3256ed7d6eaa
+s3://ceos-web-20/managements/e2d69ab0-220c-43d5-834f-70cd344b5bee
+s3://ceos-web-20/managements/df4c41ab-a07e-4b41-b071-da0f77e818eb
+s3://ceos-web-20/managements/e705b3dc-9b6c-47e1-bf2c-9b1bdc3a6522
+s3://ceos-web-20/managements/eaf630b7-6a90-4247-a55b-1a005b2f7feb
+s3://ceos-web-20/managements/f45596b5-8653-459b-96d9-5785ed929c79
+s3://ceos-web-20/managements/ed8852c3-25ec-4f0a-8d56-c60430a3a0f0
+s3://ceos-web-20/managements/3dcbd21d-4972-4f4f-b8a6-7be81e4270f0
+s3://ceos-web-20/managements/fbabc413-2030-48c0-8d1b-4a9d27c072a8
+s3://ceos-web-20/managements/511a71bc-241f-47f9-aa9b-fd1b9092f69a
+s3://ceos-web-20/managements/4b5418e0-06e6-4f29-8644-67a8da4ad041
+s3://ceos-web-20/sponsors/0f01bf4e-8ef6-48ee-9216-a0b88ffb7f03
+s3://ceos-web-20/projects/5f9d4bba-51dc-481a-92cc-39bec04e2c31
+s3://ceos-web-20/sponsors/0a71a63b-7abf-4454-8326-f35f8dea24c3
+s3://ceos-web-20/projects/847fbca6-9f6a-4443-8b36-8937f46d8a10
+s3://ceos-web-20/managements/4cca62f9-02ff-4e28-8af5-8ec616ad8abb
+s3://ceos-web-20/projects/297e6f9d-d0c6-4e0c-a11d-7a45abc969ed
+s3://ceos-web-20/sponsors/31022d70-4722-46ff-93f4-04995f4748f8
+s3://ceos-web-20/projects/16877535-733e-447f-b2d9-9093993164fd
+s3://ceos-web-20/sponsors/8b2f284a-7c01-4dc2-a36b-4479b602eee4
+s3://ceos-web-20/sponsors/32430d42-e10d-43a3-9ca5-c7597c2d4d3c
+s3://ceos-web-20/projects/ff8a0545-7a9a-42fd-8cfc-6203236bb4ea
+s3://ceos-web-20/sponsors/4bc1279d-28cf-4c0f-afc7-480ee6993059
+s3://ceos-web-20/sponsors/ce249b8d-0a2f-42ee-b9fd-1d16ab8eacde
+s3://ceos-web-20/sponsors/32fd8d1d-cdd6-48ab-86be-ecf686589c0f
+s3://ceos-web-20/sponsors/eb0f346b-1929-4681-bb50-6ab36f8b2d14
+s3://ceos-web-20/sponsors/5cf2f267-4953-4ac1-b1f9-818261222c5f
+s3://ceos-web-20/sponsors/e74fc0b4-29b9-4bdd-8e7c-c3fc6c9f5a75
+s3://ceos-web-20/sponsors/e80e4ade-30e9-4383-b288-5b5372d77cff
+s3://ceos-web-20/projects/1757f696-366c-4558-adbe-c42a676427d6
+s3://ceos-web-20/managements/a6f29c4c-16a3-48cc-9260-0b6a31c69f04
+
+
+s3://ceos-bucket-20/activities/1ad06f40-ad0a-4539-8466-636ab53bd4e5
+s3://ceos-bucket-20/activities/52929b18-931d-4e69-861d-d5de76007348
+s3://ceos-bucket-20/activities/2928a1eb-6c11-4f79-a213-9b64a574fe95
+s3://ceos-bucket-20/activities/4f391eeb-b604-4648-aae2-affd2bffeafc
+s3://ceos-bucket-20/managements/01397192-24a9-44fc-b33f-f53640662622
+s3://ceos-bucket-20/projects/2ac1b3eb-d0c1-431e-96e7-60ddb4e612f5
+s3://ceos-bucket-20/activities/5cb5c6f0-a5a1-464b-bb31-067f944dff57
+s3://ceos-bucket-20/activities/944eaa31-1f1f-4b28-b952-ccdac3fffeed
+s3://ceos-bucket-20/activities/b0a61908-8009-45b2-b6b1-5cdb6000729c
+s3://ceos-bucket-20/projects/ca3a3438-e353-40a7-a172-5a39de487353
+s3://ceos-bucket-20/projects/8f958d81-f04e-4e2c-ab8e-c16e434dc554
+s3://ceos-bucket-20/projects/18e78ce4-5f62-4bf7-ae94-34967427a186
+s3://ceos-bucket-20/managements/fb601bbe-3b4a-4fc2-b084-44cea050cf5e
+s3://ceos-bucket-20/projects/f300948a-be57-4345-a5a3-993c23d0cf04
+s3://ceos-bucket-20/managements/1c633890-2e38-41f3-89d4-989dbbda02cd
+s3://ceos-bucket-20/activities/dfd379ea-039e-4b54-b6d6-0ce495f0978f
+s3://ceos-bucket-20/activities/86afbdcf-aaaa-4cfc-89b7-380fff4fdfd1
+s3://ceos-bucket-20/managements/1c2e8b8d-2379-49b2-bdaf-19d3e5396333
+s3://ceos-bucket-20/mail/CEOSlogo.png
+s3://ceos-bucket-20/managements/092f8ce8-bb70-4027-accb-a6c37d5c29cb
+s3://ceos-bucket-20/managements/131a3f6d-4e7c-49ec-9b98-ca8fb0c39294
+s3://ceos-bucket-20/managements/16f37fea-c52e-4149-af4d-9d4f05fcf824
+s3://ceos-bucket-20/managements/3801c94d-b021-4a8d-9235-759685344b64
+s3://ceos-bucket-20/managements/1ce8e40b-b30d-410b-a4f8-c0e36d700aed
+s3://ceos-bucket-20/managements/528b0b19-6379-402f-9bd3-84d950ba6d22
+s3://ceos-bucket-20/managements/567a043d-d263-4bdd-a082-93056baa2223
+s3://ceos-bucket-20/managements/3766eef5-c20c-47ed-975b-48914d427699
+s3://ceos-bucket-20/managements/88470d3d-eb1c-40e7-af4b-b4c1256495ab
+s3://ceos-bucket-20/managements/76c5b791-137f-4d1a-976e-f6a2ffb80fb5
+s3://ceos-bucket-20/managements/7bae0fdb-4d4c-429b-ae82-123d17f6bb7f
+s3://ceos-bucket-20/managements/858c8e79-30e4-4ed2-80f4-ef9a7c4a43db
+s3://ceos-bucket-20/managements/8b978bf9-78cc-4f3d-b03f-c80b19ad10c7
+s3://ceos-bucket-20/managements/75a70425-45ec-4779-8d95-6f9354566b28
+s3://ceos-bucket-20/managements/73581cbb-bb0d-4de5-ae61-ddbf2edc32c9
+s3://ceos-bucket-20/managements/a4d4ffc2-de4d-47b1-bef7-1c6d901a6d63
+s3://ceos-bucket-20/managements/a13cdb2f-f599-44de-957f-8ad507ca68af
+s3://ceos-bucket-20/managements/a0c6bb78-deed-4a85-b20a-f1646017b701
+s3://ceos-bucket-20/managements/b58fab8e-eaaf-43c3-86dd-8eecfed5e6f1
+s3://ceos-bucket-20/managements/aca0fe01-5edc-4f3d-b937-16399e9b1b61
+s3://ceos-bucket-20/managements/c84fdea9-b4f3-4382-9f17-bad63c3dd510
+s3://ceos-bucket-20/managements/ceb252a4-153a-4f35-9ff7-aa20b8574479
+s3://ceos-bucket-20/managements/8e73eaaa-5157-4d4a-8855-5a1c497eb1c1
+s3://ceos-bucket-20/managements/8f07b953-6e0e-4946-8aba-04e3e0326813
+s3://ceos-bucket-20/managements/b387bfa6-491b-47c9-a369-178624c44e73
+s3://ceos-bucket-20/managements/a6bce910-1a37-44ee-92f8-933766147b35
+s3://ceos-bucket-20/managements/d52c971f-b776-42d9-9365-73bcf8fa4cc3
+s3://ceos-bucket-20/managements/cae55fa7-faa9-4578-9fb6-648c88fa90da
+s3://ceos-bucket-20/managements/dd4881a0-5c5d-43bd-baf4-866b59608c65
+s3://ceos-bucket-20/managements/deb3e42d-bed8-48fe-bea4-7224caa6ead5
+s3://ceos-bucket-20/managements/f13443a2-96b5-4862-a716-e007cdb4cebf
+s3://ceos-bucket-20/managements/e9bacde0-5d05-4330-909a-f0e2aa1ff7ae
+s3://ceos-bucket-20/managements/d6f09256-cb05-41dd-9d25-ef9824abe673
+s3://ceos-bucket-20/managements/f1354313-5353-4418-baa3-3256ed7d6eaa
+s3://ceos-bucket-20/managements/e2d69ab0-220c-43d5-834f-70cd344b5bee
+s3://ceos-bucket-20/managements/df4c41ab-a07e-4b41-b071-da0f77e818eb
+s3://ceos-bucket-20/managements/e705b3dc-9b6c-47e1-bf2c-9b1bdc3a6522
+s3://ceos-bucket-20/managements/eaf630b7-6a90-4247-a55b-1a005b2f7feb
+s3://ceos-bucket-20/managements/f45596b5-8653-459b-96d9-5785ed929c79
+s3://ceos-bucket-20/managements/ed8852c3-25ec-4f0a-8d56-c60430a3a0f0
+s3://ceos-bucket-20/managements/3dcbd21d-4972-4f4f-b8a6-7be81e4270f0
+s3://ceos-bucket-20/managements/fbabc413-2030-48c0-8d1b-4a9d27c072a8
+s3://ceos-bucket-20/managements/511a71bc-241f-47f9-aa9b-fd1b9092f69a
+s3://ceos-bucket-20/managements/4b5418e0-06e6-4f29-8644-67a8da4ad041
+s3://ceos-bucket-20/sponsors/0f01bf4e-8ef6-48ee-9216-a0b88ffb7f03
+s3://ceos-bucket-20/projects/5f9d4bba-51dc-481a-92cc-39bec04e2c31
+s3://ceos-bucket-20/sponsors/0a71a63b-7abf-4454-8326-f35f8dea24c3
+s3://ceos-bucket-20/projects/847fbca6-9f6a-4443-8b36-8937f46d8a10
+s3://ceos-bucket-20/managements/4cca62f9-02ff-4e28-8af5-8ec616ad8abb
+s3://ceos-bucket-20/projects/297e6f9d-d0c6-4e0c-a11d-7a45abc969ed
+s3://ceos-bucket-20/sponsors/31022d70-4722-46ff-93f4-04995f4748f8
+s3://ceos-bucket-20/projects/16877535-733e-447f-b2d9-9093993164fd
+s3://ceos-bucket-20/sponsors/8b2f284a-7c01-4dc2-a36b-4479b602eee4
+s3://ceos-bucket-20/sponsors/32430d42-e10d-43a3-9ca5-c7597c2d4d3c
+s3://ceos-bucket-20/projects/ff8a0545-7a9a-42fd-8cfc-6203236bb4ea
+s3://ceos-bucket-20/sponsors/4bc1279d-28cf-4c0f-afc7-480ee6993059
+s3://ceos-bucket-20/sponsors/ce249b8d-0a2f-42ee-b9fd-1d16ab8eacde
+s3://ceos-bucket-20/sponsors/32fd8d1d-cdd6-48ab-86be-ecf686589c0f
+s3://ceos-bucket-20/sponsors/eb0f346b-1929-4681-bb50-6ab36f8b2d14
+s3://ceos-bucket-20/sponsors/5cf2f267-4953-4ac1-b1f9-818261222c5f
+s3://ceos-bucket-20/sponsors/e74fc0b4-29b9-4bdd-8e7c-c3fc6c9f5a75
+s3://ceos-bucket-20/sponsors/e80e4ade-30e9-4383-b288-5b5372d77cff
+s3://ceos-bucket-20/projects/1757f696-366c-4558-adbe-c42a676427d6
+s3://ceos-bucket-20/managements/a6f29c4c-16a3-48cc-9260-0b6a31c69f04
