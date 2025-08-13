@@ -49,8 +49,9 @@ public class ApplicationHelper {
     }
 
     public Application getApplicationById(Long id) {
+
         return applicationRepository
-                .findById(id)
+                .findByIdWithPessimisticLock(id)
                 .orElseThrow(
                         () -> {
                             throw ApplicantNotFound.EXCEPTION;
