@@ -237,7 +237,7 @@ public class ApplicationService {
     public void updateInterviewTime(Long applicationId, UpdateInterviewTime updateInterviewTime) {
         recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
-        final Application application = applicationHelper.getApplicationById(applicationId);
+        final Application application = applicationHelper.getApplicationByIdForUpdate(applicationId);
         applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
         final List<Interview> interviews = interviewRepository.findAll();
         final String duration =
@@ -262,7 +262,7 @@ public class ApplicationService {
         recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
 
-        final Application application = applicationHelper.getApplicationById(applicationId);
+        final Application application = applicationHelper.getApplicationByIdForUpdate(applicationId);
         application.updateDocumentPass(updatePassStatus.getPass());
     }
 
@@ -270,7 +270,7 @@ public class ApplicationService {
     public void updateFinalPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         recruitmentValidator.validateBetweenResultDateDocAndResultDateFinal(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
-        final Application application = applicationHelper.getApplicationById(applicationId);
+        final Application application = applicationHelper.getApplicationByIdForUpdate(applicationId);
         applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
 
         application.updateFinalPass(updatePassStatus.getPass());

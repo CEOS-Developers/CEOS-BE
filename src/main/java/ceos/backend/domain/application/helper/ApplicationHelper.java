@@ -49,7 +49,15 @@ public class ApplicationHelper {
     }
 
     public Application getApplicationById(Long id) {
+        return applicationRepository
+                .findById(id)
+                .orElseThrow(
+                        () -> {
+                            throw ApplicantNotFound.EXCEPTION;
+                        });
+    }
 
+    public Application getApplicationByIdForUpdate(Long id) {
         return applicationRepository
                 .findByIdWithPessimisticLock(id)
                 .orElseThrow(
