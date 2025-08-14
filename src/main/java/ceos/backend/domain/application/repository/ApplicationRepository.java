@@ -5,9 +5,12 @@ import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.Pass;
 import ceos.backend.global.common.entity.Part;
 import java.util.Optional;
+
+import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -63,4 +66,10 @@ public interface ApplicationRepository
             @Param("convertedDocPass") Pass convertedDocPass,
             @Param("convertedFinalPass") Pass convertedFinalPass,
             PageRequest pageRequest);
+
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select a from Application a where a.id = :id")
+    Optional<Application> findByIdWithPessimisticLock(@Param("id") Long id);
+
 }
