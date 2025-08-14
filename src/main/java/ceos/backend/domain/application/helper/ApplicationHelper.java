@@ -57,6 +57,15 @@ public class ApplicationHelper {
                         });
     }
 
+    public Application getApplicationByIdForUpdate(Long id) {
+        return applicationRepository
+                .findByIdWithPessimisticLock(id)
+                .orElseThrow(
+                        () -> {
+                            throw ApplicantNotFound.EXCEPTION;
+                        });
+    }
+
     public Application getApplicationByUuidAndEmail(String uuid, String email) {
         return applicationRepository
                 .findByUuidAndEmail(uuid, email)
