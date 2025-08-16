@@ -23,6 +23,8 @@ public class UserRecruitmentDTO {
     private LocalDate ideathonDate;
     private LocalDate hackathonDate;
     private LocalDate demodayDate;
+    private LocalDate startMTDate;
+    private LocalDate endMTDate;
 
     @Builder
     public UserRecruitmentDTO(
@@ -39,7 +41,9 @@ public class UserRecruitmentDTO {
             LocalDate otDate,
             LocalDate ideathonDate,
             LocalDate hackathonDate,
-            LocalDate demodayDate) {
+            LocalDate demodayDate,
+            LocalDate startMTDate,
+            LocalDate endMTDate) {
         this.generation = generation;
         this.prodStudyUrl = prodStudyUrl;
         this.designStudyUrl = designStudyUrl;
@@ -54,6 +58,8 @@ public class UserRecruitmentDTO {
         this.ideathonDate = ideathonDate;
         this.hackathonDate = hackathonDate;
         this.demodayDate = demodayDate;
+        this.startMTDate = startMTDate;
+        this.endMTDate = endMTDate;
     }
 
     public static UserRecruitmentDTO from(Recruitment recruitment) {
@@ -72,6 +78,8 @@ public class UserRecruitmentDTO {
                 .ideathonDate(recruitment.getIdeathonDate())
                 .hackathonDate(recruitment.getHackathonDate())
                 .demodayDate(recruitment.getDemodayDate())
+                .startMTDate(recruitment.getStartMTDate())
+                .endMTDate(recruitment.getEndMTDate())
                 .build();
     }
 }
