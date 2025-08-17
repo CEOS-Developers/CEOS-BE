@@ -55,6 +55,10 @@ public class Recruitment extends BaseEntity {
 
     @NotNull private LocalDate demodayDate;
 
+    private LocalDate startMTDate;
+
+    private LocalDate endMTDate;
+
     private LocalDateTime applicationExcelCreatedAt;
 
     // 생성자
@@ -75,6 +79,8 @@ public class Recruitment extends BaseEntity {
             LocalDate ideathonDate,
             LocalDate hackathonDate,
             LocalDate demodayDate,
+            LocalDate startMTDate,
+            LocalDate endMTDate,
             LocalDateTime applicationExcelCreatedAt) {
         this.generation = generation;
         this.prodStudyUrl = prodStudyUrl;
@@ -91,6 +97,8 @@ public class Recruitment extends BaseEntity {
         this.ideathonDate = ideathonDate;
         this.hackathonDate = hackathonDate;
         this.demodayDate = demodayDate;
+        this.startMTDate = startMTDate;
+        this.endMTDate = endMTDate;
         this.applicationExcelCreatedAt = applicationExcelCreatedAt;
     }
 
@@ -110,6 +118,8 @@ public class Recruitment extends BaseEntity {
         this.ideathonDate = recruitmentDTO.getIdeathonDate();
         this.hackathonDate = recruitmentDTO.getHackathonDate();
         this.demodayDate = recruitmentDTO.getDemodayDate();
+        this.startMTDate = recruitmentDTO.getStartMTDate();
+        this.endMTDate = recruitmentDTO.getEndMTDate();
     }
 
     public void updateApplicationExcelCreatedAt(LocalDateTime createdAt) {

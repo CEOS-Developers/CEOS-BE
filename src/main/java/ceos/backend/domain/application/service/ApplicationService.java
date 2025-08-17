@@ -28,6 +28,7 @@ import ceos.backend.domain.application.vo.QuestionListVo;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.domain.recruitment.validator.RecruitmentValidator;
+import ceos.backend.global.common.annotation.TransactionLog;
 import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
@@ -258,6 +259,7 @@ public class ApplicationService {
 
 
     @Transactional
+    @TransactionLog
     public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
@@ -267,6 +269,7 @@ public class ApplicationService {
     }
 
     @Transactional
+    @TransactionLog
     public void updateFinalPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         recruitmentValidator.validateBetweenResultDateDocAndResultDateFinal(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
