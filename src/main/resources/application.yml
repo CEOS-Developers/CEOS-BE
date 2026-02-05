@@ -23,6 +23,8 @@ springdoc:
     operations-sorter: alpha # 오름차순
     path: /swagger
 
-logging.level:
-  org.hibernate.SQL: debug
-  org.hibernate.orm.jdbc.bind: trace
+logging:
+  level:
+    ceos.backend: INFO
+#    org.hibernate.SQL: debug
+#    org.hibernate.orm.jdbc.bind: trace
