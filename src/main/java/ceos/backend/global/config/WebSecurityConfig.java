@@ -7,8 +7,6 @@ import ceos.backend.global.config.jwt.JwtAccessDeniedHandler;
 import ceos.backend.global.config.jwt.JwtAuthenticationEntryPoint;
 import ceos.backend.global.config.jwt.JwtAuthenticationFilter;
 import ceos.backend.global.config.jwt.JwtExceptionHandlerFilter;
-import java.util.Arrays;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -33,6 +31,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @EnableWebSecurity
 @Configuration()
@@ -191,8 +192,13 @@ public class WebSecurityConfig {
                         "http://localhost:8080",
                         "http://localhost:3000",
                         "http://localhost:3001",
+                        // 프론트 테스트
+                        "dev-ceos.netlify.app",
+                        "dev-admin-ceos.netlify.app",
+                        // 프론트 운영
                         USER_URL,
                         ADMIN_URL,
+                        //
                         SERVER_URL,
                         DEV_URL));
         configuration.setAllowedHeaders(List.of("*"));
