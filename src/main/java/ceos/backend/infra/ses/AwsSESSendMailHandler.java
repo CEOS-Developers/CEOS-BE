@@ -5,6 +5,7 @@ import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.dto.AwsSESPasswordMail;
 import ceos.backend.global.common.dto.AwsSESRecruitMail;
+import ceos.backend.infra.ses.domain.EmailType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -26,7 +27,8 @@ public class AwsSESSendMailHandler {
         final String SUBJECT =
                 awsSESMailGenerator.generateApplicationMailSubject(awsSESMail.getGeneration());
         final Context CONTEXT = awsSESMailGenerator.generateApplicationMailContext(awsSESMail);
-        awsSesUtils.singleEmailRequest(TO, SUBJECT, "sendApplicationMail", CONTEXT);
+        awsSesUtils.singleEmailRequest(
+                TO, SUBJECT, "sendApplicationMail", CONTEXT, EmailType.APPLICATION);
     }
 
     @EventListener(AwsSESPasswordMail.class)
@@ -34,7 +36,7 @@ public class AwsSESSendMailHandler {
         final String TO = awsSESPasswordMail.getEmail();
         final String SUBJECT = awsSESMailGenerator.generatePasswordMailSubject();
         final Context CONTEXT = awsSESMailGenerator.generatePasswordMailContext(awsSESPasswordMail);
-        awsSesUtils.singleEmailRequest(TO, SUBJECT, "sendPasswordMail", CONTEXT);
+        awsSesUtils.singleEmailRequest(TO, SUBJECT, "sendPasswordMail", CONTEXT, EmailType.PASSWORD);
     }
 
     @EventListener(AwsSESRecruitMail.class)
@@ -42,6 +44,6 @@ public class AwsSESSendMailHandler {
         final String TO = awsSESRecruitMail.getEmail();
         final String SUBJECT = awsSESMailGenerator.generateRecruitMailSubject();
         final Context CONTEXT = awsSESMailGenerator.generateRecruitMailContext(awsSESRecruitMail);
-        awsSesUtils.singleEmailRequest(TO, SUBJECT, "sendRecruitMail", CONTEXT);
+        awsSesUtils.singleEmailRequest(TO, SUBJECT, "sendRecruitMail", CONTEXT, EmailType.RECRUIT);
     }
 }
