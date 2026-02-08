@@ -158,12 +158,12 @@ public class ApplicationService {
             String uuid, String email, UpdateAttendanceRequest request) {
         recruitmentValidator.validateBetweenResultDateDocAndResultDateFinal(); // 서류 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
-        final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
+        final Application application =
+                applicationHelper.getApplicationByUuidAndEmailForUpdate(uuid, email);
         applicationValidator.validateApplicantInterviewCheckStatus(application); // 서류합격, 인터뷰 체크 검증
 
         if (request.isAvailable()) {
             application.updateInterviewCheck(true);
-            applicationRepository.save(application);
         } else {
             application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, false);
@@ -187,12 +187,12 @@ public class ApplicationService {
             String uuid, String email, UpdateAttendanceRequest request) {
         recruitmentValidator.validateFinalResultAbleDuration(); // 최종 합격 기간 검증
         applicationValidator.validateApplicantAccessible(uuid, email); // 유저 검증
-        final Application application = applicationHelper.getApplicationByUuidAndEmail(uuid, email);
+        final Application application =
+                applicationHelper.getApplicationByUuidAndEmailForUpdate(uuid, email);
         applicationValidator.validateApplicantActivityCheckStatus(application); // 유저 확인 여부 검증
 
         if (request.isAvailable()) {
             application.updateFinalCheck(true);
-            applicationRepository.save(application);
         } else {
             application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, true);
