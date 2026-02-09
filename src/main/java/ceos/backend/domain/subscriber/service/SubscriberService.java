@@ -29,7 +29,7 @@ public class SubscriberService {
         //이메일 중복 검증
         subscriberHelper.validateEmail(subscribeRequest.getEmail());
 
-        Subscriber subscriber = Subscriber.from(subscribeRequest.getEmail());
+        Subscriber subscriber = Subscriber.from(subscribeRequest.getEmail(), subscribeRequest.getPhoneNum());
         subscriberRepository.save(subscriber);
     }
 
