@@ -135,8 +135,10 @@ public class AwsSESMailGenerator {
     }
 
     public Context generateRecruitMailContext(AwsSESRecruitMail awsSESRecruitMail) {
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         Context context = new Context();
         context.setVariable("email", EmailInfo.from(awsSESRecruitMail));
+        context.setVariable("generation", recruitment.getGeneration());
 
         return context;
     }
