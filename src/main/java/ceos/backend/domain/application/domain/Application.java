@@ -34,9 +34,7 @@ public class Application extends BaseEntity {
 
     private String interviewDatetime;
 
-    @NotNull
-    @ColumnDefault("false")
-    private boolean interviewCheck;
+    private Boolean interviewCheck;
 
     @Size(max = 100)
     private String unableReason;
@@ -45,9 +43,7 @@ public class Application extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Pass documentPass;
 
-    @NotNull
-    @ColumnDefault("false")
-    private boolean finalCheck; // 활동 가능 여부
+    private Boolean finalCheck; // 활동 가능 여부
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -76,6 +72,13 @@ public class Application extends BaseEntity {
                         ApplicantInfo.of(createApplicationRequest.getApplicantInfoVo(), UUID))
                 .applicationDetail(ApplicationDetail.of(createApplicationRequest, generation))
                 .build();
+    }
+
+    public boolean isInterviewCheck() {
+        return Boolean.TRUE.equals(interviewCheck);
+    }
+    public boolean isFinalCheck() {
+        return Boolean.TRUE.equals(finalCheck);
     }
 
     public void addApplicationAnswerList(List<ApplicationAnswer> applicationAnswers) {
