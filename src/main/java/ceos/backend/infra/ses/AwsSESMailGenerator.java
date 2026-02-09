@@ -139,6 +139,7 @@ public class AwsSESMailGenerator {
         Context context = new Context();
         context.setVariable("email", EmailInfo.from(awsSESRecruitMail));
         context.setVariable("generation", recruitment.getGeneration());
+        context.setVariable("recruitment", recruitment);
 
         return context;
     }

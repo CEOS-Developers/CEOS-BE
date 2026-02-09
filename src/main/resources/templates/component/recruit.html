@@ -36,13 +36,15 @@
     </span>
 
         <span style="font-weight: 600;">[접수기간]</span>
-        8월 20일 (수) ~ 8월 27일 (수) 24:00 <br>
+        <span th:text="${#temporals.format(recruitment.startDateDoc, 'M월 d일 (E)')}">8월 20일 (수)</span> ~
+        <span th:text="${#temporals.format(recruitment.endDateDoc, 'M월 d일 (E) HH:mm')}">8월 27일 (수) 24:00</span> <br>
         <span style="font-weight: 600;">[서류발표]</span>
-        8월 29일 (금) <br>
+        <span th:text="${#temporals.format(recruitment.resultDateDoc, 'M월 d일 (E)')}">8월 29일 (금)</span> <br>
         <span style="font-weight: 600;">[개별면접]</span>
-        8월 30일 (토) ~ 8월 31일 (일) <br>
+        <span th:text="${#temporals.format(recruitment.startDateInterview, 'M월 d일 (E)')}">8월 30일 (토)</span> ~
+        <span th:text="${#temporals.format(recruitment.endDateInterview, 'M월 d일 (E)')}">8월 31일 (일)</span> <br>
         <span style="font-weight: 600;">[최종발표]</span>
-        9월 1일 (월) <br>
+        <span th:text="${#temporals.format(recruitment.resultDateFinal, 'M월 d일 (E)')}">9월 1일 (월)</span> <br>
         <br> <br>
 
 
