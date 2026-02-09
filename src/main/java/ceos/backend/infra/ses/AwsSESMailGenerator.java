@@ -16,14 +16,13 @@ import ceos.backend.global.common.dto.mail.*;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
+
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -135,8 +134,12 @@ public class AwsSESMailGenerator {
     }
 
     public Context generateRecruitMailContext(AwsSESRecruitMail awsSESRecruitMail) {
+        Recruitment recruitment = recruitmentHelper.takeRecruitment();
         Context context = new Context();
         context.setVariable("email", EmailInfo.from(awsSESRecruitMail));
+        context.setVariable("generation", recruitment.getGeneration());
+
+        addRecruitDateToContext(context, recruitment);
 
         return context;
     }
@@ -144,5 +147,24 @@ public class AwsSESMailGenerator {
     public String generateRecruitMailSubject() {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
         return "[CEOS] 세오스 " + recruitment.getGeneration() + "기 리크루팅을 시작합니다!";
+    }
+
+    private void addRecruitDateToContext(Context context, Recruitment recruitment) {
+        // 모집 일정 포맷팅 (한국어 요일)
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("M월 d일 (E)", Locale.KOREAN);
+        DateTimeFormatter dateTimeFormatter =
+                DateTimeFormatter.ofPattern("M월 d일 (E) HH:mm", Locale.KOREAN);
+
+        context.setVariable(
+                "startDateDoc", recruitment.getStartDateDoc().format(dateFormatter));
+        context.setVariable("endDateDoc", recruitment.getEndDateDoc().format(dateTimeFormatter));
+        context.setVariable(
+                "resultDateDoc", recruitment.getResultDateDoc().format(dateFormatter));
+        context.setVariable(
+                "startDateInterview", recruitment.getStartDateInterview().format(dateFormatter));
+        context.setVariable(
+                "endDateInterview", recruitment.getEndDateInterview().format(dateFormatter));
+        context.setVariable(
+                "resultDateFinal", recruitment.getResultDateFinal().format(dateFormatter));
     }
 }

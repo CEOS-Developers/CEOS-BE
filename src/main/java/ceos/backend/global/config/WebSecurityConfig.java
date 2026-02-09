@@ -193,8 +193,8 @@ public class WebSecurityConfig {
                         "http://localhost:3000",
                         "http://localhost:3001",
                         // 프론트 테스트
-                        "dev-ceos.netlify.app",
-                        "dev-admin-ceos.netlify.app",
+                        "https://dev-ceos.netlify.app/",
+                        "https://dev-admin-ceos.netlify.app/",
                         // 프론트 운영
                         USER_URL,
                         ADMIN_URL,
