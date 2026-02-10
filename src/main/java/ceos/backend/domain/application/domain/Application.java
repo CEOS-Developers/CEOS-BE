@@ -78,16 +78,8 @@ public class Application extends BaseEntity {
                 .build();
     }
 
-    public boolean isInterviewAvailable() {
-        return interviewCheck == AvailableCheck.AVAILABLE;
-    }
-
     public boolean isInterviewChecked() {
         return interviewCheck != AvailableCheck.UNDECIDED;
-    }
-
-    public boolean isFinalAvailable() {
-        return finalCheck == AvailableCheck.AVAILABLE;
     }
 
     public boolean isFinalChecked() {
