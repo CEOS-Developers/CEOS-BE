@@ -34,7 +34,9 @@ public class Application extends BaseEntity {
 
     private String interviewDatetime;
 
-    private Boolean interviewCheck;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AvailableCheck interviewCheck = AvailableCheck.UNDECIDED;
 
     @Size(max = 100)
     private String unableReason;
@@ -43,7 +45,9 @@ public class Application extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Pass documentPass;
 
-    private Boolean finalCheck; // 활동 가능 여부
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AvailableCheck finalCheck = AvailableCheck.UNDECIDED; // 활동 가능 여부
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -74,11 +78,20 @@ public class Application extends BaseEntity {
                 .build();
     }
 
-    public boolean isInterviewCheck() {
-        return Boolean.TRUE.equals(interviewCheck);
+    public boolean isInterviewAvailable() {
+        return interviewCheck == AvailableCheck.AVAILABLE;
     }
-    public boolean isFinalCheck() {
-        return Boolean.TRUE.equals(finalCheck);
+
+    public boolean isInterviewChecked() {
+        return interviewCheck != AvailableCheck.UNDECIDED;
+    }
+
+    public boolean isFinalAvailable() {
+        return finalCheck == AvailableCheck.AVAILABLE;
+    }
+
+    public boolean isFinalChecked() {
+        return finalCheck != AvailableCheck.UNDECIDED;
     }
 
     public void addApplicationAnswerList(List<ApplicationAnswer> applicationAnswers) {
@@ -89,13 +102,13 @@ public class Application extends BaseEntity {
         this.applicationInterviews = applicationInterviews;
     }
 
-    public void updateInterviewCheck(boolean check) {
+    public void updateInterviewCheck(AvailableCheck check) {
         this.interviewCheck = check;
     }
 
     public void updateUnableReason(String reason) { this.unableReason = reason; }
 
-    public void updateFinalCheck(boolean check) {
+    public void updateFinalCheck(AvailableCheck check) {
         this.finalCheck = check;
     }
 
@@ -130,13 +143,13 @@ public class Application extends BaseEntity {
     }
 
     public void validateNotFinalCheck() {
-        if (this.isFinalCheck()) {
+        if (this.isFinalChecked()) {
             throw AlreadyCheckFinal.EXCEPTION;
         }
     }
 
     public void validateNotInterviewCheck() {
-        if (this.isInterviewCheck()) {
+        if (this.isInterviewChecked()) {
             throw AlreadyCheckInterview.EXCEPTION;
         }
     }
