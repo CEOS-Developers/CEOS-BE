@@ -78,14 +78,6 @@ public class Application extends BaseEntity {
                 .build();
     }
 
-    public boolean isInterviewChecked() {
-        return interviewCheck != AvailableCheck.UNDECIDED;
-    }
-
-    public boolean isFinalChecked() {
-        return finalCheck != AvailableCheck.UNDECIDED;
-    }
-
     public void addApplicationAnswerList(List<ApplicationAnswer> applicationAnswers) {
         this.applicationAnswers = applicationAnswers;
     }
@@ -135,13 +127,13 @@ public class Application extends BaseEntity {
     }
 
     public void validateNotFinalCheck() {
-        if (this.isFinalChecked()) {
+        if (this.finalCheck != AvailableCheck.UNDECIDED) {
             throw AlreadyCheckFinal.EXCEPTION;
         }
     }
 
     public void validateNotInterviewCheck() {
-        if (this.isInterviewChecked()) {
+        if (this.interviewCheck != AvailableCheck.UNDECIDED) {
             throw AlreadyCheckInterview.EXCEPTION;
         }
     }
