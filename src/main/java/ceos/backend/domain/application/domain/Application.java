@@ -6,16 +6,15 @@ import ceos.backend.domain.application.exception.exceptions.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @DynamicInsert
 @Getter
@@ -39,7 +38,7 @@ public class Application extends BaseEntity {
     private AvailableCheck interviewCheck = AvailableCheck.UNDECIDED;
 
     @Size(max = 100)
-    private String unableReason;
+    private String interviewUnableReason;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -48,6 +47,9 @@ public class Application extends BaseEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     private AvailableCheck finalCheck = AvailableCheck.UNDECIDED; // 활동 가능 여부
+
+    @Size(max = 100)
+    private String finalUnableReason;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -90,10 +92,16 @@ public class Application extends BaseEntity {
         this.interviewCheck = check;
     }
 
-    public void updateUnableReason(String reason) { this.unableReason = reason; }
+    public void updateInterviewUnableReason(String reason) {
+        this.interviewUnableReason = reason;
+    }
 
     public void updateFinalCheck(AvailableCheck check) {
         this.finalCheck = check;
+    }
+
+    public void updateFinalUnableReason(String reason) {
+        this.finalUnableReason = reason;
     }
 
     public void updateDocumentPass(Pass pass) {

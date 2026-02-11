@@ -20,7 +20,7 @@ public class GetFinalAvailability {
     public static GetFinalAvailability of(Application application) {
         return GetFinalAvailability.builder()
                 .finalAvailability(application.getFinalCheck())
-                .reason(application.getUnableReason())
+                .reason(application.getFinalUnableReason())
                 .build();
     }
 
