@@ -2,6 +2,7 @@ package ceos.backend.domain.application.dto.response;
 
 
 import ceos.backend.domain.application.domain.Application;
+import ceos.backend.domain.application.domain.AvailableCheck;
 import ceos.backend.domain.application.domain.Pass;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.global.common.dto.ParsedDuration;
@@ -28,7 +29,7 @@ public class GetResultResponse {
 
     private String openChatUrl;
 
-    private boolean attendanceStatus;
+    private AvailableCheck attendanceStatus;
 
     @Builder
     private GetResultResponse(
@@ -38,7 +39,7 @@ public class GetResultResponse {
             Part part,
             ParsedDuration parsedDuration,
             LocalDate otDate,
-            boolean attendanceStatus,
+            AvailableCheck attendanceStatus,
             String openChatUrl) {
         this.pass = pass;
         this.generation = generation;
@@ -65,7 +66,7 @@ public class GetResultResponse {
                 .part(application.getApplicationDetail().getPart())
                 .parsedDuration(duration)
                 .otDate(recruitment.getOtDate())
-                .attendanceStatus(application.isInterviewCheck())
+                .attendanceStatus(application.getInterviewCheck())
                 .openChatUrl(recruitment.getOpenChatUrl())
                 .build();
     }
@@ -81,7 +82,7 @@ public class GetResultResponse {
                         ParsedDurationConvertor.parsingDuration(application.getInterviewDatetime()))
                 .otDate(recruitment.getOtDate())
                 .openChatUrl(recruitment.getOpenChatUrl())
-                .attendanceStatus(application.isFinalCheck())
+                .attendanceStatus(application.getFinalCheck())
                 .build();
     }
 }
