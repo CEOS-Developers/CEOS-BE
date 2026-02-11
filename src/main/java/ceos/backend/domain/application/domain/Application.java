@@ -35,8 +35,8 @@ public class Application extends BaseEntity {
     private String interviewDatetime;
 
     @NotNull
-    @ColumnDefault("false")
-    private boolean interviewCheck;
+    @Enumerated(EnumType.STRING)
+    private AvailableCheck interviewCheck = AvailableCheck.UNDECIDED;
 
     @Size(max = 100)
     private String unableReason;
@@ -46,8 +46,8 @@ public class Application extends BaseEntity {
     private Pass documentPass;
 
     @NotNull
-    @ColumnDefault("false")
-    private boolean finalCheck; // 활동 가능 여부
+    @Enumerated(EnumType.STRING)
+    private AvailableCheck finalCheck = AvailableCheck.UNDECIDED; // 활동 가능 여부
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -86,13 +86,13 @@ public class Application extends BaseEntity {
         this.applicationInterviews = applicationInterviews;
     }
 
-    public void updateInterviewCheck(boolean check) {
+    public void updateInterviewCheck(AvailableCheck check) {
         this.interviewCheck = check;
     }
 
     public void updateUnableReason(String reason) { this.unableReason = reason; }
 
-    public void updateFinalCheck(boolean check) {
+    public void updateFinalCheck(AvailableCheck check) {
         this.finalCheck = check;
     }
 
@@ -127,13 +127,13 @@ public class Application extends BaseEntity {
     }
 
     public void validateNotFinalCheck() {
-        if (this.isFinalCheck()) {
+        if (this.finalCheck != AvailableCheck.UNDECIDED) {
             throw AlreadyCheckFinal.EXCEPTION;
         }
     }
 
     public void validateNotInterviewCheck() {
-        if (this.isInterviewCheck()) {
+        if (this.interviewCheck != AvailableCheck.UNDECIDED) {
             throw AlreadyCheckInterview.EXCEPTION;
         }
     }
