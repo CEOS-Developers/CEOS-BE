@@ -23,15 +23,20 @@ public class Subscriber extends BaseEntity {
     @Size(max = 255)
     private String email;
 
+    @Size(max = 255)
+    private String phoneNum;
+
     // 생성자
     @Builder
-    private Subscriber(String email) {
+    private Subscriber(String email, String phoneNum) {
         this.email = email;
+        this.phoneNum = phoneNum;
     }
 
-    public static Subscriber from(String email) {
+    public static Subscriber from(String email, String phoneNum) {
         return Subscriber.builder()
                 .email(email)
+                .phoneNum(phoneNum)
                 .build();
     }
 }
