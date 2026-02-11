@@ -163,7 +163,7 @@ public class ApplicationService {
             application.updateInterviewCheck(AVAILABLE);
         } else {
             application.updateInterviewCheck(UNAVAILABLE);
-            application.updateUnableReason(request.getReason());
+            application.updateInterviewUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, false);
         }
     }
@@ -193,7 +193,7 @@ public class ApplicationService {
             application.updateFinalCheck(AVAILABLE);
         } else {
             application.updateFinalCheck(UNAVAILABLE);
-            application.updateUnableReason(request.getReason());
+            application.updateFinalUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, true);
         }
     }

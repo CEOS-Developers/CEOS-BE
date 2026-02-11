@@ -20,7 +20,7 @@ public class GetInterviewAvailability {
     public static GetInterviewAvailability of(Application application) {
         return GetInterviewAvailability.builder()
                 .interviewAvailability(application.getInterviewCheck())
-                .reason(application.getUnableReason())
+                .reason(application.getInterviewUnableReason())
                 .build();
     }
 }
