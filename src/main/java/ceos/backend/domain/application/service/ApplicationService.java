@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static ceos.backend.domain.application.domain.AvailableCheck.AVAILABLE;
+import static ceos.backend.domain.application.domain.AvailableCheck.UNAVAILABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -161,6 +162,7 @@ public class ApplicationService {
         if (request.getAvailable() == AVAILABLE) {
             application.updateInterviewCheck(AVAILABLE);
         } else {
+            application.updateInterviewCheck(UNAVAILABLE);
             application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, false);
         }
@@ -190,6 +192,7 @@ public class ApplicationService {
         if (request.getAvailable() == AVAILABLE) {
             application.updateFinalCheck(AVAILABLE);
         } else {
+            application.updateFinalCheck(UNAVAILABLE);
             application.updateUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, true);
         }
