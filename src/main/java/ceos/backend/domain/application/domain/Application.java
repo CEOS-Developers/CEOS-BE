@@ -6,16 +6,15 @@ import ceos.backend.domain.application.exception.exceptions.*;
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @DynamicInsert
 @Getter
@@ -35,19 +34,22 @@ public class Application extends BaseEntity {
     private String interviewDatetime;
 
     @NotNull
-    @ColumnDefault("false")
-    private boolean interviewCheck;
+    @Enumerated(EnumType.STRING)
+    private AvailableCheck interviewCheck = AvailableCheck.UNDECIDED;
 
     @Size(max = 100)
-    private String unableReason;
+    private String interviewUnableReason;
 
     @NotNull
     @Enumerated(EnumType.STRING)
     private Pass documentPass;
 
     @NotNull
-    @ColumnDefault("false")
-    private boolean finalCheck; // 활동 가능 여부
+    @Enumerated(EnumType.STRING)
+    private AvailableCheck finalCheck = AvailableCheck.UNDECIDED; // 활동 가능 여부
+
+    @Size(max = 100)
+    private String finalUnableReason;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -86,14 +88,20 @@ public class Application extends BaseEntity {
         this.applicationInterviews = applicationInterviews;
     }
 
-    public void updateInterviewCheck(boolean check) {
+    public void updateInterviewCheck(AvailableCheck check) {
         this.interviewCheck = check;
     }
 
-    public void updateUnableReason(String reason) { this.unableReason = reason; }
+    public void updateInterviewUnableReason(String reason) {
+        this.interviewUnableReason = reason;
+    }
 
-    public void updateFinalCheck(boolean check) {
+    public void updateFinalCheck(AvailableCheck check) {
         this.finalCheck = check;
+    }
+
+    public void updateFinalUnableReason(String reason) {
+        this.finalUnableReason = reason;
     }
 
     public void updateDocumentPass(Pass pass) {
@@ -127,13 +135,13 @@ public class Application extends BaseEntity {
     }
 
     public void validateNotFinalCheck() {
-        if (this.isFinalCheck()) {
+        if (this.finalCheck != AvailableCheck.UNDECIDED) {
             throw AlreadyCheckFinal.EXCEPTION;
         }
     }
 
     public void validateNotInterviewCheck() {
-        if (this.isInterviewCheck()) {
+        if (this.interviewCheck != AvailableCheck.UNDECIDED) {
             throw AlreadyCheckInterview.EXCEPTION;
         }
     }

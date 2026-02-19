@@ -3,6 +3,7 @@ package ceos.backend.domain.application.vo;
 
 import ceos.backend.domain.application.domain.ApplicantInfo;
 import ceos.backend.domain.application.domain.Application;
+import ceos.backend.domain.application.domain.AvailableCheck;
 import ceos.backend.domain.application.domain.Pass;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.entity.Part;
@@ -18,6 +19,8 @@ public class ApplicationBriefInfoVo {
     private Long id;
     private Pass documentPass;
     private Pass finalPass;
+    private AvailableCheck interviewCheck;
+    private AvailableCheck finalCheck;
 
     @JsonUnwrapped private ParsedDuration interviewTime;
 
@@ -28,13 +31,17 @@ public class ApplicationBriefInfoVo {
             Part part,
             Pass documentPass,
             Pass finalPass,
-            ParsedDuration interviewTime) {
+            ParsedDuration interviewTime,
+            AvailableCheck interviewCheck,
+            AvailableCheck finalCheck) {
         this.applicantInfo = applicantInfo;
         this.id = id;
         this.part = part;
         this.documentPass = documentPass;
         this.finalPass = finalPass;
         this.interviewTime = interviewTime;
+        this.interviewCheck = interviewCheck;
+        this.finalCheck = finalCheck;
     }
 
     public static ApplicationBriefInfoVo of(Application application, ParsedDuration interviewTime) {
@@ -45,6 +52,8 @@ public class ApplicationBriefInfoVo {
                 .documentPass(application.getDocumentPass())
                 .finalPass(application.getFinalPass())
                 .interviewTime(interviewTime)
+                .interviewCheck(application.getInterviewCheck())
+                .finalCheck(application.getFinalCheck())
                 .build();
     }
 }

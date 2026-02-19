@@ -1,13 +1,7 @@
 package ceos.backend.domain.application.service;
 
 
-import ceos.backend.domain.application.domain.Application;
-import ceos.backend.domain.application.domain.ApplicationAnswer;
-import ceos.backend.domain.application.domain.ApplicationInterview;
-import ceos.backend.domain.application.domain.ApplicationQuestion;
-import ceos.backend.domain.application.domain.ApplicationQuestionDetail;
-import ceos.backend.domain.application.domain.Interview;
-import ceos.backend.domain.application.domain.Pass;
+import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.dto.request.UpdateApplicationQuestion;
 import ceos.backend.domain.application.dto.request.UpdateAttendanceRequest;
@@ -41,6 +35,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static ceos.backend.domain.application.domain.AvailableCheck.AVAILABLE;
+import static ceos.backend.domain.application.domain.AvailableCheck.UNAVAILABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -162,10 +159,11 @@ public class ApplicationService {
                 applicationHelper.getApplicationByUuidAndEmailForUpdate(uuid, email);
         applicationValidator.validateApplicantInterviewCheckStatus(application); // 서류합격, 인터뷰 체크 검증
 
-        if (request.isAvailable()) {
-            application.updateInterviewCheck(true);
+        if (request.getAvailable() == AVAILABLE) {
+            application.updateInterviewCheck(AVAILABLE);
         } else {
-            application.updateUnableReason(request.getReason());
+            application.updateInterviewCheck(UNAVAILABLE);
+            application.updateInterviewUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, false);
         }
     }
@@ -191,10 +189,11 @@ public class ApplicationService {
                 applicationHelper.getApplicationByUuidAndEmailForUpdate(uuid, email);
         applicationValidator.validateApplicantActivityCheckStatus(application); // 유저 확인 여부 검증
 
-        if (request.isAvailable()) {
-            application.updateFinalCheck(true);
+        if (request.getAvailable() == AVAILABLE) {
+            application.updateFinalCheck(AVAILABLE);
         } else {
-            application.updateUnableReason(request.getReason());
+            application.updateFinalCheck(UNAVAILABLE);
+            application.updateFinalUnableReason(request.getReason());
             applicationHelper.sendSlackUnableReasonMessage(application, request, true);
         }
     }
