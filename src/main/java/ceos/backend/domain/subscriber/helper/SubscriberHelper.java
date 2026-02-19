@@ -1,15 +1,15 @@
 package ceos.backend.domain.subscriber.helper;
 
+
 import ceos.backend.domain.subscriber.exception.DuplicateData;
 import ceos.backend.domain.subscriber.exception.InvalidActionAfter;
 import ceos.backend.domain.subscriber.exception.InvalidActionBefore;
 import ceos.backend.domain.subscriber.repository.SubscriberRepository;
 import ceos.backend.global.common.dto.AwsSESRecruitMail;
 import ceos.backend.global.common.event.Event;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 @Component
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class SubscriberHelper {
         }
     }
 
-    public void validateDate(LocalDate startDate, LocalDate endDate,  LocalDate now) {
+    public void validateDate(LocalDate startDate, LocalDate endDate, LocalDate now) {
         if (now.isBefore(startDate)) {
             throw InvalidActionBefore.EXCEPTION;
         } else if (now.isAfter(endDate)) {
@@ -34,5 +34,4 @@ public class SubscriberHelper {
     public void sendRecruitEmail(String email) {
         Event.raise(AwsSESRecruitMail.from(email));
     }
-
 }

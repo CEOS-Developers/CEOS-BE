@@ -10,5 +10,4 @@ public class StartupNotFound extends BaseErrorException {
     public StartupNotFound() {
         super(StartupErrorCode.STARTUP_NOT_FOUND);
     }
-
 }

@@ -1,5 +1,7 @@
 package ceos.backend.domain.application.service;
 
+import static ceos.backend.domain.application.domain.AvailableCheck.AVAILABLE;
+import static ceos.backend.domain.application.domain.AvailableCheck.UNAVAILABLE;
 
 import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
@@ -27,7 +29,6 @@ import ceos.backend.global.common.dto.PageInfo;
 import ceos.backend.global.common.entity.Part;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +36,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static ceos.backend.domain.application.domain.AvailableCheck.AVAILABLE;
-import static ceos.backend.domain.application.domain.AvailableCheck.UNAVAILABLE;
 
 @Service
 @RequiredArgsConstructor
@@ -237,7 +235,8 @@ public class ApplicationService {
     public void updateInterviewTime(Long applicationId, UpdateInterviewTime updateInterviewTime) {
         recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
-        final Application application = applicationHelper.getApplicationByIdForUpdate(applicationId);
+        final Application application =
+                applicationHelper.getApplicationByIdForUpdate(applicationId);
         applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
         final List<Interview> interviews = interviewRepository.findAll();
         final String duration =
@@ -256,14 +255,14 @@ public class ApplicationService {
         return GetInterviewAvailability.of(application);
     }
 
-
     @Transactional
     @TransactionLog
     public void updateDocumentPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         recruitmentValidator.validateBetweenStartDateDocAndResultDateDoc(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
 
-        final Application application = applicationHelper.getApplicationByIdForUpdate(applicationId);
+        final Application application =
+                applicationHelper.getApplicationByIdForUpdate(applicationId);
         application.updateDocumentPass(updatePassStatus.getPass());
     }
 
@@ -272,7 +271,8 @@ public class ApplicationService {
     public void updateFinalPassStatus(Long applicationId, UpdatePassStatus updatePassStatus) {
         recruitmentValidator.validateBetweenResultDateDocAndResultDateFinal(); // 기간 검증
         applicationValidator.validateExistingApplicant(applicationId); // 유저 검증
-        final Application application = applicationHelper.getApplicationByIdForUpdate(applicationId);
+        final Application application =
+                applicationHelper.getApplicationByIdForUpdate(applicationId);
         applicationValidator.validateDocumentPassStatus(application); // 서류 통과 검증
 
         application.updateFinalPass(updatePassStatus.getPass());
@@ -287,16 +287,14 @@ public class ApplicationService {
         return GetFinalAvailability.of(application);
     }
 
-
     @Transactional
     public void deleteAllApplications() {
         Recruitment recruitment = recruitmentHelper.takeRecruitment();
         // 현재 시간이 resultDateFinal 이전이면 삭제 불가
-        if(LocalDateTime.now().isBefore(recruitment.getResultDateFinal())) {
+        if (LocalDateTime.now().isBefore(recruitment.getResultDateFinal())) {
             throw NotDeletableDuringRecruitment.EXCEPTION;
         }
         // application, applicationAnswer, applicationInterview 삭제 (cascade)
         applicationRepository.deleteAll();
     }
-
 }

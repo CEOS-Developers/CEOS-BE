@@ -1,5 +1,6 @@
 package ceos.backend.domain.startup.service;
 
+
 import ceos.backend.domain.startup.domain.Startup;
 import ceos.backend.domain.startup.dto.request.StartupRequest;
 import ceos.backend.domain.startup.dto.response.StartupResponse;
@@ -38,18 +39,16 @@ public class StartupService {
 
     @Transactional(readOnly = true)
     public StartupResponse getStartup(Long startupId) {
-        Startup startup = startupRepository.findById(startupId).orElseThrow(
-                () -> StartupNotFound.EXCEPTION
-        );
+        Startup startup =
+                startupRepository.findById(startupId).orElseThrow(() -> StartupNotFound.EXCEPTION);
 
         return StartupResponse.fromEntity(startup);
     }
 
     @Transactional
     public StartupResponse updateStartup(Long startupId, StartupRequest startupRequest) {
-        Startup startup = startupRepository.findById(startupId).orElseThrow(
-                () -> StartupNotFound.EXCEPTION
-        );
+        Startup startup =
+                startupRepository.findById(startupId).orElseThrow(() -> StartupNotFound.EXCEPTION);
 
         startup.update(startupRequest);
         return StartupResponse.fromEntity(startup);
@@ -57,9 +56,8 @@ public class StartupService {
 
     @Transactional
     public void deleteStartup(Long startupId) {
-        Startup startup = startupRepository.findById(startupId).orElseThrow(
-                () -> StartupNotFound.EXCEPTION
-        );
+        Startup startup =
+                startupRepository.findById(startupId).orElseThrow(() -> StartupNotFound.EXCEPTION);
 
         startupRepository.delete(startup);
     }
@@ -68,5 +66,4 @@ public class StartupService {
     public AwsS3Url getImageUrl() {
         return awsS3UrlHandler.handle("startups");
     }
-
 }

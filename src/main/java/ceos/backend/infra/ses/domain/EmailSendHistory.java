@@ -3,6 +3,7 @@ package ceos.backend.infra.ses.domain;
 
 import ceos.backend.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "email_send_history")
 public class EmailSendHistory extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "recipient_email")
@@ -40,6 +42,12 @@ public class EmailSendHistory extends BaseEntity {
     @Column(name = "error_message", length = 1000)
     private String errorMessage;
 
+    @Column(name = "retry_count")
+    private Integer retryCount;
+
+    @Column(name = "last_retried_at")
+    private LocalDateTime lastRetriedAt;
+
     @Builder(access = AccessLevel.PRIVATE)
     private EmailSendHistory(
             String recipientEmail,
@@ -48,7 +56,9 @@ public class EmailSendHistory extends BaseEntity {
             EmailType emailType,
             SendStatus sendStatus,
             String messageId,
-            String errorMessage) {
+            String errorMessage,
+            Integer retryCount,
+            LocalDateTime lastRetriedAt) {
         this.recipientEmail = recipientEmail;
         this.subject = subject;
         this.templateName = templateName;
@@ -56,6 +66,8 @@ public class EmailSendHistory extends BaseEntity {
         this.sendStatus = sendStatus;
         this.messageId = messageId;
         this.errorMessage = errorMessage;
+        this.retryCount = retryCount;
+        this.lastRetriedAt = lastRetriedAt;
     }
 
     public static EmailSendHistory createSuccess(
@@ -71,6 +83,7 @@ public class EmailSendHistory extends BaseEntity {
                 .emailType(emailType)
                 .sendStatus(SendStatus.SUCCESS)
                 .messageId(messageId)
+                .retryCount(0)
                 .build();
     }
 
@@ -87,6 +100,25 @@ public class EmailSendHistory extends BaseEntity {
                 .emailType(emailType)
                 .sendStatus(SendStatus.FAILURE)
                 .errorMessage(errorMessage)
+                .retryCount(0)
                 .build();
+    }
+
+    public void markRetryAttempt() {
+        int currentRetryCount = this.retryCount == null ? 0 : this.retryCount;
+        this.retryCount = currentRetryCount + 1;
+        this.lastRetriedAt = LocalDateTime.now();
+    }
+
+    public void markSuccess(String messageId) {
+        this.sendStatus = SendStatus.SUCCESS;
+        this.messageId = messageId;
+        this.errorMessage = null;
+    }
+
+    public void markFailure(String errorMessage) {
+        this.sendStatus = SendStatus.FAILURE;
+        this.errorMessage = errorMessage;
+        this.messageId = null;
     }
 }
