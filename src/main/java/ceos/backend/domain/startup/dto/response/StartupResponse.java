@@ -1,5 +1,6 @@
 package ceos.backend.domain.startup.dto.response;
 
+
 import ceos.backend.domain.startup.domain.Startup;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +23,14 @@ public class StartupResponse {
     private String founder;
 
     @Builder
-    public StartupResponse(Long startupId, String serviceName, String companyName, String imageUrl, String serviceUrl, Integer generation, String founder) {
+    public StartupResponse(
+            Long startupId,
+            String serviceName,
+            String companyName,
+            String imageUrl,
+            String serviceUrl,
+            Integer generation,
+            String founder) {
         this.startupId = startupId;
         this.serviceName = serviceName;
         this.companyName = companyName;
@@ -43,5 +51,4 @@ public class StartupResponse {
                 .founder(startup.getFounder())
                 .build();
     }
-
 }

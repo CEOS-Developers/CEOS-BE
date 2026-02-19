@@ -45,3 +45,5 @@ application-secret.yml
 
 ###
 .env**
+
+AGENTS.md

@@ -7,6 +7,8 @@ import ceos.backend.global.config.jwt.JwtAccessDeniedHandler;
 import ceos.backend.global.config.jwt.JwtAuthenticationEntryPoint;
 import ceos.backend.global.config.jwt.JwtAuthenticationFilter;
 import ceos.backend.global.config.jwt.JwtExceptionHandlerFilter;
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -31,9 +33,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.Arrays;
-import java.util.List;
 
 @EnableWebSecurity
 @Configuration()

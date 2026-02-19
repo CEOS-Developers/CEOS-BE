@@ -1,5 +1,6 @@
 package ceos.backend.domain.application.dto.response;
 
+
 import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.AvailableCheck;
 import lombok.Builder;
@@ -23,5 +24,4 @@ public class GetFinalAvailability {
                 .reason(application.getFinalUnableReason())
                 .build();
     }
-
 }

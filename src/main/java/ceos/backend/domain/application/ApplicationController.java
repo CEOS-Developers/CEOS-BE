@@ -1,4 +1,3 @@
-
 package ceos.backend.domain.application;
 
 
@@ -38,13 +37,25 @@ public class ApplicationController {
     @Operation(summary = "지원자 목록 보기")
     @GetMapping
     public GetApplications getApplications(
-            @Parameter(schema = @Schema(allowableValues = {"PRODUCT", "DESIGN", "FRONTEND", "BACKEND"}))
-            @RequestParam(value = "part", required = false, defaultValue = "") Part part,
+            @Parameter(
+                            schema =
+                                    @Schema(
+                                            allowableValues = {
+                                                "PRODUCT",
+                                                "DESIGN",
+                                                "FRONTEND",
+                                                "BACKEND"
+                                            }))
+                    @RequestParam(value = "part", required = false, defaultValue = "")
+                    Part part,
             @Parameter(schema = @Schema(allowableValues = {"PASS", "FAIL"}))
-            @RequestParam(value = "docPass", required = false, defaultValue = "") Pass docPass,
+                    @RequestParam(value = "docPass", required = false, defaultValue = "")
+                    Pass docPass,
             @Parameter(schema = @Schema(allowableValues = {"PASS", "FAIL"}))
-            @RequestParam(value = "finalPass", required = false, defaultValue = "") Pass finalPass,
-            @RequestParam(value = "applicantName", required = false, defaultValue = "") String applicantName,
+                    @RequestParam(value = "finalPass", required = false, defaultValue = "")
+                    Pass finalPass,
+            @RequestParam(value = "applicantName", required = false, defaultValue = "")
+                    String applicantName,
             @RequestParam("pageNum") int pageNum,
             @RequestParam("limit") int limit) {
         log.info("지원자 목록 보기");
@@ -145,7 +156,8 @@ public class ApplicationController {
 
     @Operation(summary = "면접 참여 가능 여부 확인", description = "resultDateDoc ~ resultDateFinal 전날")
     @GetMapping(value = "/{applicationId}/interview/availability")
-    public GetInterviewAvailability getInterviewAvailability(@PathVariable("applicationId") Long applicationId) {
+    public GetInterviewAvailability getInterviewAvailability(
+            @PathVariable("applicationId") Long applicationId) {
         log.info("면접 참여 가능 여부 확인");
         return applicationService.getInterviewAvailability(applicationId);
     }

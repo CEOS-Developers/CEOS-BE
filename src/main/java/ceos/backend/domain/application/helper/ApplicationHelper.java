@@ -11,12 +11,11 @@ import ceos.backend.domain.application.repository.ApplicationRepository;
 import ceos.backend.global.common.dto.AwsSESMail;
 import ceos.backend.global.common.dto.SlackUnavailableReason;
 import ceos.backend.global.common.event.Event;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -84,5 +83,4 @@ public class ApplicationHelper {
                             throw ApplicantNotFound.EXCEPTION;
                         });
     }
-
 }

@@ -67,8 +67,7 @@ public class ManagementService {
                 managementRepository.findManagementAllByRoleOrderByNameAsc(
                         ManagementRole.PRESIDENCY);
         List<Management> findAdvisors =
-                managementRepository.findManagementAllByRoleOrderByNameAsc(
-                        ManagementRole.ADVISOR);
+                managementRepository.findManagementAllByRoleOrderByNameAsc(ManagementRole.ADVISOR);
         List<Management> findGeneralAffairs =
                 managementRepository.findManagementAllByRoleOrderByNameAsc(
                         ManagementRole.GENERAL_AFFAIRS);
@@ -81,7 +80,11 @@ public class ManagementService {
 
         GetAllPartManagementsResponse response =
                 managementMapper.toPartManagementList(
-                        findPresidency, findAdvisors, findGeneralAffairs, findPartLeaders, findManagements);
+                        findPresidency,
+                        findAdvisors,
+                        findGeneralAffairs,
+                        findPartLeaders,
+                        findManagements);
 
         return response;
     }

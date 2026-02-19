@@ -1,12 +1,12 @@
 package ceos.backend.domain.startup.dto.response;
 
+
 import ceos.backend.domain.startup.domain.Startup;
 import ceos.backend.global.common.dto.PageInfo;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -22,9 +22,6 @@ public class StartupsResponse {
                         startups.getNumber(),
                         startups.getSize(),
                         startups.getTotalPages(),
-                        startups.getTotalElements()
-                )
-        );
+                        startups.getTotalElements()));
     }
-
 }

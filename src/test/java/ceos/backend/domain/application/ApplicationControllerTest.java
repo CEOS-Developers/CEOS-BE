@@ -31,9 +31,12 @@ public class ApplicationControllerTest {
     void getApplicationsWithZeroStrings() throws Exception {
         Authentication authentication = new TestingAuthenticationToken(null, null, "ROLE_ADMIN");
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/applications?part=&docPass=&finalPass=&applicantName=&pageNum=0&limit=7")
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get(
+                                        "/applications?part=&docPass=&finalPass=&applicantName=&pageNum=0&limit=7")
+                                .with(
+                                        SecurityMockMvcRequestPostProcessors.authentication(
+                                                authentication)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -42,9 +45,11 @@ public class ApplicationControllerTest {
     void getApplicationsWithoutRequiredFalse() throws Exception {
         Authentication authentication = new TestingAuthenticationToken(null, null, "ROLE_ADMIN");
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/applications?pageNum=0&limit=7")
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/applications?pageNum=0&limit=7")
+                                .with(
+                                        SecurityMockMvcRequestPostProcessors.authentication(
+                                                authentication)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -53,9 +58,12 @@ public class ApplicationControllerTest {
     void successGetApplications() throws Exception {
         Authentication authentication = new TestingAuthenticationToken(null, null, "ROLE_ADMIN");
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/applications?part=PRODUCT&docPass=PASS&finalPass=FAIL&applicantName=&pageNum=0&limit=7")
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get(
+                                        "/applications?part=PRODUCT&docPass=PASS&finalPass=FAIL&applicantName=&pageNum=0&limit=7")
+                                .with(
+                                        SecurityMockMvcRequestPostProcessors.authentication(
+                                                authentication)))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
@@ -64,9 +72,12 @@ public class ApplicationControllerTest {
     void failGetApplications() throws Exception {
         Authentication authentication = new TestingAuthenticationToken(null, null, "ROLE_ADMIN");
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get("/applications?part=기획&docPass=합격&finalPass=불합격&applicantName=&pageNum=0&limit=7")
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(authentication)))
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get(
+                                        "/applications?part=기획&docPass=합격&finalPass=불합격&applicantName=&pageNum=0&limit=7")
+                                .with(
+                                        SecurityMockMvcRequestPostProcessors.authentication(
+                                                authentication)))
                 .andExpect(MockMvcResultMatchers.status().is(400));
     }
 }

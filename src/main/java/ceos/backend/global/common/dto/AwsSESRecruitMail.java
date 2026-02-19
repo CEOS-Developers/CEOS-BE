@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class AwsSESRecruitMail {
-    //수정 예정 -> 이름을 받을 것인가 말 것인가...
+    // 수정 예정 -> 이름을 받을 것인가 말 것인가...
     private String email;
 
     @Builder
@@ -15,7 +15,6 @@ public class AwsSESRecruitMail {
     }
 
     public static AwsSESRecruitMail from(String email) {
-        return AwsSESRecruitMail.builder().email(email)
-                .build();
+        return AwsSESRecruitMail.builder().email(email).build();
     }
 }

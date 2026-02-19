@@ -1,5 +1,6 @@
 package ceos.backend.domain.startup;
 
+
 import ceos.backend.domain.startup.dto.request.StartupRequest;
 import ceos.backend.domain.startup.dto.response.StartupResponse;
 import ceos.backend.domain.startup.dto.response.StartupsResponse;
@@ -45,8 +46,9 @@ public class StartupController {
 
     @Operation(summary = "창업 리스트 수정")
     @PatchMapping(value = "/{startupId}")
-    public StartupResponse updateStartup(@PathVariable("startupId") Long startupId,
-                                         @RequestBody @Valid StartupRequest startupRequest) {
+    public StartupResponse updateStartup(
+            @PathVariable("startupId") Long startupId,
+            @RequestBody @Valid StartupRequest startupRequest) {
         log.info("창업 리스트 수정");
         return startupService.updateStartup(startupId, startupRequest);
     }
@@ -64,5 +66,4 @@ public class StartupController {
         log.info("서비스 이미지 url 생성하기");
         return startupService.getImageUrl();
     }
-
 }
