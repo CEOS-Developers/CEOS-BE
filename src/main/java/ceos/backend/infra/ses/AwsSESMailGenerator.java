@@ -1,11 +1,11 @@
 package ceos.backend.infra.ses;
 
 
-import ceos.backend.domain.application.domain.ApplicationQuestion;
-import ceos.backend.domain.application.domain.QuestionCategory;
+import ceos.backend.domain.application.domain.*;
 import ceos.backend.domain.application.dto.request.CreateApplicationRequest;
 import ceos.backend.domain.application.exception.exceptions.QuestionNotFound;
 import ceos.backend.domain.application.vo.AnswerVo;
+import ceos.backend.domain.application.vo.ApplicantInfoVo;
 import ceos.backend.domain.recruitment.domain.Recruitment;
 import ceos.backend.domain.recruitment.helper.RecruitmentHelper;
 import ceos.backend.global.common.dto.AwsSESMail;
@@ -14,6 +14,7 @@ import ceos.backend.global.common.dto.AwsSESRecruitMail;
 import ceos.backend.global.common.dto.ParsedDuration;
 import ceos.backend.global.common.dto.mail.*;
 import ceos.backend.global.common.entity.Part;
+import ceos.backend.global.util.InterviewConvertor;
 import ceos.backend.global.util.InterviewDateTimeConvertor;
 import ceos.backend.global.util.ParsedDurationConvertor;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,6 @@ import org.thymeleaf.context.Context;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -32,70 +32,198 @@ public class AwsSESMailGenerator {
 
     public Context generateApplicationMailContext(AwsSESMail awsSESMail) {
         final CreateApplicationRequest request = awsSESMail.getCreateApplicationRequest();
-        final List<ApplicationQuestion> questions = awsSESMail.getApplicationQuestions();
-        final String UUID = awsSESMail.getUUID();
-
-        List<String> commonQ = new ArrayList<>(), commonA = new ArrayList<>();
-        questions.stream()
-                .filter(question -> question.getCategory() == QuestionCategory.COMMON)
-                .sorted(Comparator.comparing(ApplicationQuestion::getNumber))
-                .forEach(
-                        question -> {
-                            commonQ.add(generateQuestion(question));
-                            commonA.add(generateAnswer(request.getCommonAnswers(), question));
-                        });
-
-        List<String> partQ = new ArrayList<>(), partA = new ArrayList<>();
         final Part part = request.getPart();
+        final MailQuestionSection questionSection =
+                buildQuestionSectionFromRequest(
+                        awsSESMail.getApplicationQuestions(),
+                        request.getCommonAnswers(),
+                        request.getPartAnswers(),
+                        part);
+
+        return createApplicationMailContext(
+                GreetInfo.of(request, awsSESMail.getGeneration()),
+                UuidInfo.of(request.getApplicantInfoVo(), awsSESMail.getUUID()),
+                PersonalInfo.from(request.getApplicantInfoVo()),
+                SchoolInfo.from(request.getApplicantInfoVo()),
+                CeosQuestionInfo.from(request),
+                CommonQuestionInfo.of(
+                        questionSection.commonQuestions(), questionSection.commonAnswers()),
+                PartQuestionInfo.of(
+                        part.getPart(),
+                        questionSection.partQuestions(),
+                        questionSection.partAnswers()),
+                buildInterviewDateInfo(
+                        InterviewDateTimeConvertor.toStringDuration(request.getUnableTimes())));
+    }
+
+    public Context generateApplicationMailContext(
+            Application application,
+            List<ApplicationAnswer> applicationAnswers,
+            List<ApplicationInterview> applicationInterviews) {
+
+        final Part part = application.getApplicationDetail().getPart();
+        final MailQuestionSection questionSection =
+                buildQuestionSectionFromSavedAnswers(applicationAnswers, part);
+        final List<String> unableTimes =
+                applicationInterviews.stream()
+                        .map(ApplicationInterview::getInterview)
+                        .filter(Objects::nonNull)
+                        .map(InterviewConvertor::interviewDateFormatter)
+                        .toList();
+
+        final ApplicantInfoVo applicantInfoVo = ApplicantInfoVo.from(application);
+
+        return createApplicationMailContext(
+                GreetInfo.builder()
+                        .name(applicantInfoVo.getName())
+                        .generation(
+                                Integer.toString(
+                                        application.getApplicationDetail().getGeneration()))
+                        .build(),
+                UuidInfo.of(applicantInfoVo, application.getApplicantInfo().getUuid()),
+                PersonalInfo.from(applicantInfoVo),
+                SchoolInfo.from(applicantInfoVo),
+                CeosQuestionInfo.builder()
+                        .otDate(
+                                application
+                                        .getApplicationDetail()
+                                        .getOtDate()
+                                        .format(DateTimeFormatter.ISO_DATE))
+                        .demodayDate(
+                                application
+                                        .getApplicationDetail()
+                                        .getDemodayDate()
+                                        .format(DateTimeFormatter.ISO_DATE))
+                        .otherActivities(application.getApplicationDetail().getOtherActivities())
+                        .build(),
+                CommonQuestionInfo.of(
+                        questionSection.commonQuestions(), questionSection.commonAnswers()),
+                PartQuestionInfo.of(
+                        part.getPart(),
+                        questionSection.partQuestions(),
+                        questionSection.partAnswers()),
+                buildInterviewDateInfo(unableTimes));
+    }
+
+    private MailQuestionSection buildQuestionSectionFromRequest(
+            List<ApplicationQuestion> questions,
+            List<AnswerVo> commonAnswers,
+            List<AnswerVo> partAnswers,
+            Part part) {
+        List<String> commonQ = new ArrayList<>();
+        List<String> commonA = new ArrayList<>();
+        List<String> partQ = new ArrayList<>();
+        List<String> partA = new ArrayList<>();
+
         questions.stream()
-                .filter(question -> question.getCategory().toString().equals(part.toString()))
-                .sorted(Comparator.comparing(ApplicationQuestion::getNumber))
+                .sorted(Comparator.comparingInt(ApplicationQuestion::getNumber))
                 .forEach(
                         question -> {
-                            partQ.add(generateQuestion(question));
-                            partA.add(generateAnswer(request.getPartAnswers(), question));
+                            if (isCommonQuestion(question)) {
+                                commonQ.add(generateQuestion(question));
+                                commonA.add(generateAnswer(commonAnswers, question));
+                                return;
+                            }
+                            if (isPartQuestion(question, part)) {
+                                partQ.add(generateQuestion(question));
+                                partA.add(generateAnswer(partAnswers, question));
+                            }
                         });
 
-        final List<String> unableTimes =
-                InterviewDateTimeConvertor.toStringDuration(request.getUnableTimes());
+        return new MailQuestionSection(commonQ, commonA, partQ, partA);
+    }
+
+    private MailQuestionSection buildQuestionSectionFromSavedAnswers(
+            List<ApplicationAnswer> applicationAnswers, Part part) {
+        List<String> commonQ = new ArrayList<>();
+        List<String> commonA = new ArrayList<>();
+        List<String> partQ = new ArrayList<>();
+        List<String> partA = new ArrayList<>();
+
+        applicationAnswers.stream()
+                .filter(answer -> answer.getApplicationQuestion() != null)
+                .sorted(
+                        Comparator.comparingInt(
+                                answer -> answer.getApplicationQuestion().getNumber()))
+                .forEach(
+                        answer -> {
+                            final ApplicationQuestion question = answer.getApplicationQuestion();
+                            if (isCommonQuestion(question)) {
+                                commonQ.add(generateQuestion(question));
+                                commonA.add(answer.getAnswer());
+                                return;
+                            }
+                            if (isPartQuestion(question, part)) {
+                                partQ.add(generateQuestion(question));
+                                partA.add(answer.getAnswer());
+                            }
+                        });
+
+        return new MailQuestionSection(commonQ, commonA, partQ, partA);
+    }
+
+    private InterviewDateInfo buildInterviewDateInfo(List<String> unableTimes) {
         List<ParsedDuration> parsedDurations =
                 unableTimes.stream()
                         .map(ParsedDurationConvertor::parsingDuration)
-                        .sorted(Comparator.comparing(ParsedDuration::getDuration))
-                        .sorted(Comparator.comparing(ParsedDuration::getDate))
+                        .sorted(
+                                Comparator.comparing(ParsedDuration::getDate)
+                                        .thenComparing(ParsedDuration::getDuration))
                         .toList();
 
         List<String> dates =
-                parsedDurations.stream()
-                        .map(ParsedDuration::getDate)
-                        .distinct()
-                        .collect(Collectors.toList());
+                parsedDurations.stream().map(ParsedDuration::getDate).distinct().toList();
+        List<List<String>> times =
+                dates.stream()
+                        .map(
+                                date ->
+                                        parsedDurations.stream()
+                                                .filter(
+                                                        parsedDuration ->
+                                                                Objects.equals(
+                                                                        parsedDuration.getDate(),
+                                                                        date))
+                                                .map(ParsedDuration::getDuration)
+                                                .toList())
+                        .toList();
 
-        List<List<String>> times = new ArrayList<>();
-        dates.forEach(
-                date ->
-                        times.add(
-                                parsedDurations.stream()
-                                        .filter(
-                                                parsedDuration ->
-                                                        Objects.equals(
-                                                                parsedDuration.getDate(), date))
-                                        .map(ParsedDuration::getDuration)
-                                        .collect(Collectors.toList())));
+        return InterviewDateInfo.of(times, dates);
+    }
 
+    private Context createApplicationMailContext(
+            GreetInfo greetInfo,
+            UuidInfo uuidInfo,
+            PersonalInfo personalInfo,
+            SchoolInfo schoolInfo,
+            CeosQuestionInfo ceosQuestionInfo,
+            CommonQuestionInfo commonQuestionInfo,
+            PartQuestionInfo partQuestionInfo,
+            InterviewDateInfo interviewDateInfo) {
         Context context = new Context();
-        context.setVariable("greetInfo", GreetInfo.of(request, awsSESMail.getGeneration()));
-        context.setVariable("uuidInfo", UuidInfo.of(request.getApplicantInfoVo(), UUID));
-        context.setVariable("personalInfo", PersonalInfo.from(request.getApplicantInfoVo()));
-        context.setVariable("schoolInfo", SchoolInfo.from(request.getApplicantInfoVo()));
-        context.setVariable("ceosQuestionInfo", CeosQuestionInfo.from(request));
-        context.setVariable("commonQuestionInfo", CommonQuestionInfo.of(commonQ, commonA));
-        context.setVariable(
-                "partQuestionInfo", PartQuestionInfo.of(request.getPart().getPart(), partQ, partA));
-        context.setVariable("interviewDateInfo", InterviewDateInfo.of(times, dates));
-
+        context.setVariable("greetInfo", greetInfo);
+        context.setVariable("uuidInfo", uuidInfo);
+        context.setVariable("personalInfo", personalInfo);
+        context.setVariable("schoolInfo", schoolInfo);
+        context.setVariable("ceosQuestionInfo", ceosQuestionInfo);
+        context.setVariable("commonQuestionInfo", commonQuestionInfo);
+        context.setVariable("partQuestionInfo", partQuestionInfo);
+        context.setVariable("interviewDateInfo", interviewDateInfo);
         return context;
     }
+
+    private boolean isCommonQuestion(ApplicationQuestion question) {
+        return question.getCategory() == QuestionCategory.COMMON;
+    }
+
+    private boolean isPartQuestion(ApplicationQuestion question, Part part) {
+        return question.getCategory().name().equals(part.name());
+    }
+
+    private record MailQuestionSection(
+            List<String> commonQuestions,
+            List<String> commonAnswers,
+            List<String> partQuestions,
+            List<String> partAnswers) {}
 
     private String generateQuestion(ApplicationQuestion applicationQuestion) {
         return applicationQuestion.getNumber() + " : " + applicationQuestion.getQuestion();
@@ -155,11 +283,9 @@ public class AwsSESMailGenerator {
         DateTimeFormatter dateTimeFormatter =
                 DateTimeFormatter.ofPattern("M월 d일 (E) HH:mm", Locale.KOREAN);
 
-        context.setVariable(
-                "startDateDoc", recruitment.getStartDateDoc().format(dateFormatter));
+        context.setVariable("startDateDoc", recruitment.getStartDateDoc().format(dateFormatter));
         context.setVariable("endDateDoc", recruitment.getEndDateDoc().format(dateTimeFormatter));
-        context.setVariable(
-                "resultDateDoc", recruitment.getResultDateDoc().format(dateFormatter));
+        context.setVariable("resultDateDoc", recruitment.getResultDateDoc().format(dateFormatter));
         context.setVariable(
                 "startDateInterview", recruitment.getStartDateInterview().format(dateFormatter));
         context.setVariable(
