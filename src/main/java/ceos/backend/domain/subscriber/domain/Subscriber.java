@@ -34,9 +34,6 @@ public class Subscriber extends BaseEntity {
     }
 
     public static Subscriber from(String email, String phoneNum) {
-        return Subscriber.builder()
-                .email(email)
-                .phoneNum(phoneNum)
-                .build();
+        return Subscriber.builder().email(email).phoneNum(phoneNum).build();
     }
 }

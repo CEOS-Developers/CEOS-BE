@@ -1,5 +1,6 @@
 package ceos.backend.domain.startup.dto.request;
 
+
 import ceos.backend.domain.startup.domain.Startup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -10,10 +11,10 @@ import lombok.Getter;
 public class StartupRequest {
 
     @NotBlank
-    @Schema(defaultValue = "Repick",description = "서비스명")
+    @Schema(defaultValue = "Repick", description = "서비스명")
     private String serviceName;
 
-    @Schema(defaultValue = "(주)Repick",description = "회사명(생략가능)")
+    @Schema(defaultValue = "(주)Repick", description = "회사명(생략가능)")
     private String companyName;
 
     @NotBlank
@@ -42,5 +43,4 @@ public class StartupRequest {
                 .founder(founder)
                 .build();
     }
-
 }

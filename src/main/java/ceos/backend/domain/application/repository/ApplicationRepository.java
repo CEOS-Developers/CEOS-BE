@@ -5,14 +5,13 @@ import ceos.backend.domain.application.domain.Application;
 import ceos.backend.domain.application.domain.Pass;
 import ceos.backend.global.common.entity.Part;
 import jakarta.persistence.LockModeType;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.Optional;
 
 public interface ApplicationRepository
         extends JpaRepository<Application, Long>, ApplicationRepositoryCustom {
@@ -21,7 +20,6 @@ public interface ApplicationRepository
 
     @Query("select distinct a from Application a" + " where a.applicantInfo.uuid = :uuid")
     Optional<Application> findByUuid(@Param("uuid") String uuid);
-
 
     @Query(
             "select a from Application a"
@@ -37,7 +35,6 @@ public interface ApplicationRepository
                     + " and a.applicantInfo.email = :email")
     Optional<Application> findByUuidAndEmailWithPessimisticLock(
             @Param("uuid") String uuid, @Param("email") String email);
-
 
     @Query("select count(a) > 0 from Application a" + " where a.applicantInfo.email = :email")
     boolean existsByEmail(@Param("email") String email);
@@ -77,9 +74,7 @@ public interface ApplicationRepository
             @Param("convertedFinalPass") Pass convertedFinalPass,
             PageRequest pageRequest);
 
-
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select a from Application a where a.id = :id")
     Optional<Application> findByIdWithPessimisticLock(@Param("id") Long id);
-
 }

@@ -36,7 +36,8 @@ public class AwsSESSendMailHandler {
         final String TO = awsSESPasswordMail.getEmail();
         final String SUBJECT = awsSESMailGenerator.generatePasswordMailSubject();
         final Context CONTEXT = awsSESMailGenerator.generatePasswordMailContext(awsSESPasswordMail);
-        awsSesUtils.singleEmailRequest(TO, SUBJECT, "sendPasswordMail", CONTEXT, EmailType.PASSWORD);
+        awsSesUtils.singleEmailRequest(
+                TO, SUBJECT, "sendPasswordMail", CONTEXT, EmailType.PASSWORD);
     }
 
     @EventListener(AwsSESRecruitMail.class)

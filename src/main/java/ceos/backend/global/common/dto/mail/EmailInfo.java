@@ -15,8 +15,6 @@ public class EmailInfo {
     }
 
     public static EmailInfo from(AwsSESRecruitMail awsSESRecruitMail) {
-        return EmailInfo.builder()
-                .email(awsSESRecruitMail.getEmail())
-                .build();
+        return EmailInfo.builder().email(awsSESRecruitMail.getEmail()).build();
     }
 }

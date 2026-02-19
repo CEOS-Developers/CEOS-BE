@@ -41,7 +41,8 @@ public class AdminController {
 
     @Operation(summary = "로그인")
     @PostMapping("/signin")
-    public TokenResponse signIn(HttpServletRequest request, @RequestBody @Valid SignInRequest signInRequest) {
+    public TokenResponse signIn(
+            HttpServletRequest request, @RequestBody @Valid SignInRequest signInRequest) {
         log.info("로그인");
         String device = request.getHeader("User-Agent").contains("mobile") ? MOBILE : WEB;
         return adminService.signIn(device, signInRequest);
@@ -72,7 +73,8 @@ public class AdminController {
 
     @Operation(summary = "로그아웃")
     @PostMapping("/logout")
-    public void logout(HttpServletRequest request, @AuthenticationPrincipal AdminDetails adminUser) {
+    public void logout(
+            HttpServletRequest request, @AuthenticationPrincipal AdminDetails adminUser) {
         log.info("로그아웃");
         String device = request.getHeader("User-Agent").contains("mobile") ? MOBILE : WEB;
         adminService.logout(device, adminUser);

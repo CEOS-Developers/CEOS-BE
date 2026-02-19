@@ -62,7 +62,8 @@ public class AdminService {
 
         // 토큰 발급
         final String accessToken = tokenProvider.createAccessToken(admin.getId(), authentication);
-        final String refreshToken = tokenProvider.createRefreshToken(admin.getId(), authentication, redisKey);
+        final String refreshToken =
+                tokenProvider.createRefreshToken(admin.getId(), authentication, redisKey);
 
         return adminMapper.toTokenResponse(accessToken, refreshToken);
     }
