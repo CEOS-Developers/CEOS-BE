@@ -159,6 +159,7 @@ public class ApplicationService {
 
         if (request.getAvailable() == AVAILABLE) {
             application.updateInterviewCheck(AVAILABLE);
+            application.updateInterviewUnableReason(null);
         } else {
             application.updateInterviewCheck(UNAVAILABLE);
             application.updateInterviewUnableReason(request.getReason());
@@ -189,6 +190,7 @@ public class ApplicationService {
 
         if (request.getAvailable() == AVAILABLE) {
             application.updateFinalCheck(AVAILABLE);
+            application.updateFinalUnableReason(null);
         } else {
             application.updateFinalCheck(UNAVAILABLE);
             application.updateFinalUnableReason(request.getReason());

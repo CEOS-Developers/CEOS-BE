@@ -48,13 +48,11 @@ public class ApplicationValidator {
 
     public void validateApplicantInterviewCheckStatus(Application application) {
         application.validateDocumentPass();
-        application.validateNotInterviewCheck();
     }
 
     public void validateApplicantActivityCheckStatus(Application application) {
         application.validateDocumentPass();
         application.validateFinalPass();
-        application.validateNotFinalCheck();
     }
 
     public void validateExistingApplicant(Long applicationId) {
