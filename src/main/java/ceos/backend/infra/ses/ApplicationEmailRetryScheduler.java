@@ -11,7 +11,6 @@ import ceos.backend.infra.ses.domain.EmailSendHistory;
 import ceos.backend.infra.ses.domain.EmailType;
 import ceos.backend.infra.ses.domain.SendStatus;
 import ceos.backend.infra.ses.repository.EmailSendHistoryRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -59,7 +60,8 @@ public class ApplicationEmailRetryScheduler {
                 final List<ApplicationAnswer> answers =
                         applicationAnswerRepository.findAllByApplication(application);
                 final List<ApplicationInterview> interviews =
-                        applicationInterviewRepository.findAllByApplication(application);
+                        applicationInterviewRepository.findAllByApplicationFetchInterview(
+                                application);
                 final Context context =
                         awsSESMailGenerator.generateApplicationMailContext(
                                 application, answers, interviews);
