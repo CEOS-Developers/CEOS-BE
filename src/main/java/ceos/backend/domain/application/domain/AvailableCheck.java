@@ -1,9 +1,10 @@
 package ceos.backend.domain.application.domain;
 
-
+import ceos.backend.domain.application.exception.exceptions.InvalidAvailableCheck;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.stream.Stream;
+
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -19,8 +20,8 @@ public enum AvailableCheck {
     @JsonCreator
     public static AvailableCheck parsing(String inputValue) {
         return Stream.of(AvailableCheck.values())
-                .filter(category -> category.getCheck().equals(inputValue))
+                .filter(category -> category.name().equals(inputValue))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> InvalidAvailableCheck.EXCEPTION);
     }
 }
