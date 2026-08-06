@@ -61,7 +61,7 @@ public class ProjectController {
     }
 
     @Operation(summary = "프로젝트 이미지 url 생성하기")
-    @GetMapping("/image")
+    @PostMapping("/image")
     public AwsS3Url getImageUrl() {
         log.info("프로젝트 이미지 url 생성하기");
         return projectService.getImageUrl();
