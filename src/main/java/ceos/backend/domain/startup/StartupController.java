@@ -61,7 +61,7 @@ public class StartupController {
     }
 
     @Operation(summary = "서비스 이미지 url 생성하기")
-    @GetMapping("/image")
+    @PostMapping("/image")
     public AwsS3Url getImageUrl() {
         log.info("서비스 이미지 url 생성하기");
         return startupService.getImageUrl();
