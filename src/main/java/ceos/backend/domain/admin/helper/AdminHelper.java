@@ -148,7 +148,7 @@ public class AdminHelper {
     }
 
     public void matchesRefreshToken(String refreshToken, Admin admin) {
-        String savedToken = redisTemplate.opsForValue().get(admin.getId().toString());
+        String savedToken = redisTemplate.opsForValue().get("refresh:" + admin.getId().toString());
         if (savedToken == null || !savedToken.equals(refreshToken)) {
             throw RefreshTokenNotFound.EXCEPTION;
         }
