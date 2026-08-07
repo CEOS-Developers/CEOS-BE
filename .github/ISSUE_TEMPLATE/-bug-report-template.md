@@ -7,8 +7,6 @@ assignees: ''
 
 ---
 
-# 🐞 Bug - <!--{ 작업 내용 }-->
-
 ### 🕵️‍♀️ Condition
 
 ---

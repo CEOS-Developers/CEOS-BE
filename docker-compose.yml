@@ -1,10 +1,17 @@
 version: "3"
 
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "20m"
+    max-file: "3"
+
 services:
   backend:
     image: ceos17/ceos-backend
     container_name: backend
     hostname: backend
+    logging: *default-logging
     env_file:
       - .env
     expose:
@@ -12,6 +19,7 @@ services:
 
   nginx:
     image: ceos17/ceos-nginx
+    logging: *default-logging
     depends_on:
       - backend
     restart: always
@@ -22,5 +30,6 @@ services:
     image: redis:latest
     container_name: redis
     hostname: redis
+    logging: *default-logging
     ports:
       - "6379:6379"

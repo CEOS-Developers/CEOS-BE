@@ -71,7 +71,7 @@ public class ManagementController {
     }
 
     @Operation(summary = "임원진 이미지 url 생성하기")
-    @GetMapping("/image")
+    @PostMapping("/image")
     public AwsS3Url getImageUrl() {
         log.info("임원진 이미지 url 생성하기");
         return managementService.getImageUrl();

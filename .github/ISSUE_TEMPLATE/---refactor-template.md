@@ -7,8 +7,6 @@ assignees: ''
 
 ---
 
-# 🔨 Refactor - <!--{ 작업 내용 }-->
-
 ### 📝 Description
 
 ---

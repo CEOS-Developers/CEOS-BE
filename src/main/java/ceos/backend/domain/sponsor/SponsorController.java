@@ -60,7 +60,7 @@ public class SponsorController {
     }
 
     @Operation(summary = "스폰서 이미지 url 생성하기")
-    @GetMapping("/image")
+    @PostMapping("/image")
     public AwsS3Url getImageUrl() {
         log.info("스폰서 이미지 url 생성하기");
         return sponsorService.getImageUrl();

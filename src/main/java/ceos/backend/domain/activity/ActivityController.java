@@ -60,7 +60,7 @@ public class ActivityController {
     }
 
     @Operation(summary = "활동 이미지 url 생성하기")
-    @GetMapping("/image")
+    @PostMapping("/image")
     public AwsS3Url getImageUrl() {
         log.info("활동 이미지 url 생성하기");
         return activityService.getImageUrl();
