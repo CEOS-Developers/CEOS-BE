@@ -285,12 +285,12 @@ public class AwsSESMailGenerator {
 
         context.setVariable("startDateDoc", recruitment.getStartDateDoc().format(dateFormatter));
         context.setVariable("endDateDoc", recruitment.getEndDateDoc().format(dateTimeFormatter));
-        context.setVariable("resultDateDoc", recruitment.getResultDateDoc().format(dateFormatter));
+        context.setVariable("resultDateDoc", recruitment.getResultDateDoc().format(dateTimeFormatter));
         context.setVariable(
                 "startDateInterview", recruitment.getStartDateInterview().format(dateFormatter));
         context.setVariable(
                 "endDateInterview", recruitment.getEndDateInterview().format(dateFormatter));
         context.setVariable(
-                "resultDateFinal", recruitment.getResultDateFinal().format(dateFormatter));
+                "resultDateFinal", recruitment.getResultDateFinal().format(dateTimeFormatter));
     }
 }
