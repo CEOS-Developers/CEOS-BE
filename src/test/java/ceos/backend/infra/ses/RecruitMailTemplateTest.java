@@ -12,7 +12,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 class RecruitMailTemplateTest {
 
     @Test
-    void rendersResponsiveRecruitMail() {
+    void rendersFixedWidthRecruitMailForClientScaling() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setPrefix("templates/");
         templateResolver.setSuffix(".html");
@@ -34,13 +34,19 @@ class RecruitMailTemplateTest {
         String html = templateEngine.process("sendRecruitMail", context);
 
         assertThat(html)
-                .contains("name=\"viewport\"")
+                .contains("name=\"viewport\" content=\"width=680\"")
                 .contains("class=\"email-container\"")
-                .contains("max-width: 720px")
+                .contains("width=\"680\"")
+                .contains("style=\"width: 680px; margin: 0 auto;\"")
                 .contains("CEOS ", ">24<", "기 리크루팅을 시작합니다!")
-                .doesNotContainPattern("(?<!max-)width\\s*:\\s*680px")
+                .doesNotContain("width=device-width")
+                .doesNotContain("@media only screen")
+                .doesNotContain("max-width: 720px")
                 .doesNotContain("display: flex")
                 .doesNotContain("width: fit-content");
+        assertThat(html)
+                .contains("height=\"26\"")
+                .doesNotContain("width=\"82\"");
         assertThat(html.indexOf("<html", html.indexOf("<html") + 1)).isEqualTo(-1);
     }
 }
