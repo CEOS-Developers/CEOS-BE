@@ -5,40 +5,73 @@
 >
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.cdnfonts.com/css/gilroy-bold" rel="stylesheet">
-    <title></title>
+    <meta name="viewport" content="width=680" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <title>CEOS Recruitment</title>
     <style>
-        * {
+        html,
+        body {
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        body,
+        table,
+        td,
+        a,
+        span {
             font-family: Pretendard ,AppleSDGothic, apple sd gothic neo, noto sans korean,
             noto sans korean regular, noto sans cjk kr, noto sans cjk,
             nanum gothic, malgun gothic, dotum, arial, helvetica, MS Gothic,
             sans-serif !important;
             mso-line-height-rule: exactly;
-            -ms-text-size-adjust: 100%;
-            -webkit-text-size-adjust: 100%;
-            word-break: break-word;
+            -ms-text-size-adjust: 100% !important;
+            -webkit-text-size-adjust: 100% !important;
+        }
+
+        table,
+        td {
+            border-collapse: collapse !important;
+            border-spacing: 0 !important;
+        }
+
+        img {
+            display: block;
+            border: 0;
+        }
+
+        .email-container,
+        .mail-fluid {
+            width: 680px !important;
         }
     </style>
 </head>
-<body style="width: 100%;
-    margin: 0;
-    padding: 0;">
-<div style="width: 680px;
-    margin: 0 auto;
-    padding: 0;">
-    <div th:replace="~{component/title}">title</div>
-    <div th:replace="~{component/divider}">divider</div>
-    <div th:replace="~{component/recruitGreeting :: greetInfo(greetInfo=${greetInfo})}">greeting</div>
-    <div style="height: 30px; width: 680px"></div>
-    <div th:replace="~{component/recruit}">recruit</div>
-    <div th:replace="~{component/divider}">divider</div>
-    <div style="height: 90px; width: 680px"></div>
-    <div th:replace="~{component/recruitButton}">
-        button
-    </div>
-    <div style="height: 40px; width: 680px"></div>
-    <div th:replace="~{component/copyright}">copyright</div>
-</div>
+<body style="width: 100%; margin: 0; padding: 0; background-color: #FFFFFF;" bgcolor="#FFFFFF">
+<table role="presentation" width="100%" border="0" cellpadding="0" cellspacing="0"
+       style="width: 100%; margin: 0; padding: 0; background-color: #FFFFFF;" bgcolor="#FFFFFF">
+    <tr>
+        <td align="center" style="padding: 0;">
+            <table class="email-container" role="presentation" width="680" border="0" cellpadding="0" cellspacing="0"
+                   style="width: 680px; margin: 0 auto;">
+                <tr>
+                    <td class="email-content" width="680" style="width: 680px; padding: 0;">
+                        <div th:replace="~{component/title :: title}">title</div>
+                        <div th:replace="~{component/divider :: divider}">divider</div>
+                        <div th:replace="~{component/recruitGreeting :: greetInfo(greetInfo=${greetInfo})}">greeting</div>
+                        <div style="height: 30px; line-height: 30px; font-size: 0;">&nbsp;</div>
+                        <div th:replace="~{component/recruit :: recruit}">recruit</div>
+                        <div th:replace="~{component/divider :: divider}">divider</div>
+                        <div style="height: 90px; line-height: 90px; font-size: 0;">&nbsp;</div>
+                        <div th:replace="~{component/recruitButton :: button}">button</div>
+                        <div style="height: 40px; line-height: 40px; font-size: 0;">&nbsp;</div>
+                        <div th:replace="~{component/copyright :: copyright}">copyright</div>
+                        <div style="height: 24px; line-height: 24px; font-size: 0;">&nbsp;</div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 </body>
 </html>

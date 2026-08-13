@@ -24,12 +24,8 @@
 
         <div style="height: 16px; width: 680px"></div>
 
-        <div th:each="times, index: ${interviewDateInfo.notAvailabletime}">
-            <div style="
-                display: flex;
-                flex-direction: row;
-                width: 680px;
-                ">
+        <div th:each="times, index: ${interviewDateInfo.notAvailabletime}"
+             style="width: 680px;">
                 <span style="
                     text-decoration: none;
                     outline: 0px;
@@ -51,7 +47,7 @@
                     color: #232527;">
                     &nbsp;:&nbsp;
                 </span>
-                <div th:each="time, innerIndex: ${times}">
+                <span th:each="time, innerIndex: ${times}">
                     <span style="
                         text-decoration: none;
                         outline: 0px;
@@ -74,8 +70,7 @@
                           th:text="${time}">
                             시간
                     </span>
-                </div>
-            </div>
+                </span>
         </div>
     </div>
 </div>
